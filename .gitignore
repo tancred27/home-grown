@@ -1,0 +1,14 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+*.log
+out/
+requirements.lock.txt.tmp
+
+# Fetched corpora are untrusted data and live outside the repo by convention.
+# If you must keep them inside, use these paths so they are never committed.
+corpora/
+repos/
+npm/
