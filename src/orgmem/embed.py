@@ -18,12 +18,34 @@ from .config import settings
 def _model(name: str):
     from fastembed import TextEmbedding
 
-    return TextEmbedding(model_name=name)
+    from .device import providers
+
+    return TextEmbedding(model_name=name, providers=providers())
 
 
-def embed_texts(texts: list[str], model: str | None = None) -> np.ndarray:
-    """(n, dim) float32, L2-normalised so cosine distance == dot product."""
-    name = model or settings.embed_model
+_RETRIEVE = "Represent this sentence for searching relevant passages: "
+
+# (query prefix, document prefix), from each model's own documentation. Using a model
+# without its prefixes is a broken configuration, not a weaker one.
+PREFIXES: dict[str, tuple[str, str]] = {
+    "BAAI/bge-base-en-v1.5": (_RETRIEVE, ""),
+    "BAAI/bge-large-en-v1.5": (_RETRIEVE, ""),
+    "mixedbread-ai/mxbai-embed-large-v1": (_RETRIEVE, ""),
+    "snowflake/snowflake-arctic-embed-l": (_RETRIEVE, ""),
+    "snowflake/snowflake-arctic-embed-m": (_RETRIEVE, ""),
+    "thenlper/gte-large": ("", ""),
+    "thenlper/gte-base": ("", ""),
+    "nomic-ai/nomic-embed-text-v1.5": ("search_query: ", "search_document: "),
+}
+
+
+def _prefixes(name: str) -> tuple[str, str]:
+    if name in PREFIXES:
+        return PREFIXES[name]
+    return (_RETRIEVE, "") if "bge" in name.lower() else ("", "")
+
+
+def _encode(texts: list[str], name: str) -> np.ndarray:
     if not texts:
         return np.zeros((0, settings.embed_dim), dtype="float32")
     vecs = np.array(list(_model(name).embed(texts)), dtype="float32")
@@ -31,12 +53,18 @@ def embed_texts(texts: list[str], model: str | None = None) -> np.ndarray:
     return vecs / np.clip(norms, 1e-9, None)
 
 
-def embed_query(text: str, model: str | None = None) -> np.ndarray:
-    """BGE models expect a prefix on the query side but not the document side."""
+def embed_texts(texts: list[str], model: str | None = None) -> np.ndarray:
+    """Documents. (n, dim) float32, L2-normalised so cosine distance == dot product."""
     name = model or settings.embed_model
-    prefix = "Represent this sentence for searching relevant passages: " \
-        if "bge" in name.lower() else ""
-    return embed_texts([prefix + text], name)[0]
+    _, dp = _prefixes(name)
+    return _encode([dp + t for t in texts], name)
+
+
+def embed_query(text: str, model: str | None = None) -> np.ndarray:
+    """Queries get the model's query-side prefix; documents get its document prefix."""
+    name = model or settings.embed_model
+    qp, _ = _prefixes(name)
+    return _encode([qp + text], name)[0]
 
 
 def asset_text(name: str, summary: str | None, aliases: list[str],

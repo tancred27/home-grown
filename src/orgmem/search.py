@@ -116,17 +116,26 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
             )
             lexical = [(r[0], r[1], float(r[2]) + 0.5 * float(r[3])) for r in cur.fetchall()]
 
+        # One row per ASSET, scored by its best-matching embedding field. Assets now
+        # carry several fields ("card": name+summary+claims, "summary": name+summary
+        # only), and an ungrouped ORDER BY would return the same asset twice and push
+        # other candidates out of the list.
         cur.execute(
             """
-            select a.id, a.name, 1 - (e.vec <=> %s) as sim
+            select a.id, a.name, 1 - min(e.vec <=> %s) as sim
               from embedding e
               join asset a on a.id = e.asset_id
-             order by e.vec <=> %s
+             where e.model = %s          -- never compare across models
+             group by a.id, a.name
+             order by min(e.vec <=> %s)
              limit %s
             """,
-            (qvec, qvec, limit),
+            (qvec, settings.embed_model, qvec, limit),
         )
         semantic = [(r[0], r[1], float(r[2])) for r in cur.fetchall()]
+
+    if settings.fusion == "interleave":
+        return _interleave(semantic, lexical, conn, terms, rerank)
 
     # Fusion by MAX of reciprocal ranks, not sum.
     #
@@ -175,6 +184,39 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
     tail = ordered[settings.rerank_depth :]
     texts = [candidate_text(conn, r["asset_id"]) for r in head]
     return rr.apply(terms, head, texts) + tail
+
+
+def _interleave(semantic: list[tuple], lexical: list[tuple], conn, terms: str,
+                rerank: bool | None) -> list[dict]:
+    """Max-fusion with ties broken toward the stronger retriever.
+
+    Under max-fusion semantic #1 and lexical #1 score an identical 1/61, so which comes
+    first is arbitrary, and lexical #1 is often noise -- recall@1 collapsed to ~0.33 for
+    every max-fused variant on the tuning set while semantic alone held ~0.58. Breaking
+    that tie toward semantic, the measured-stronger retriever, is the same as
+    interleaving the two ranked lists: s1, l1, s2, l2, ...
+    """
+    out: list[dict] = []
+    seen: dict = {}
+    sem = {aid: s for aid, _, s in semantic}
+    lex = {aid: s for aid, _, s in lexical}
+    for i in range(max(len(semantic), len(lexical))):
+        for lst in (semantic, lexical):
+            if i < len(lst):
+                aid, name, _ = lst[i]
+                if aid in seen:
+                    continue
+                seen[aid] = True
+                out.append({"asset_id": aid, "name": name,
+                            "score": 1.0 / (61.0 + len(out)),
+                            "semantic": sem.get(aid), "lexical": lex.get(aid)})
+    use_rerank = settings.rerank_enabled if rerank is None else rerank
+    if not use_rerank or len(out) < 2:
+        return out
+    from . import rerank as rr
+
+    head, tail = out[: settings.rerank_depth], out[settings.rerank_depth :]
+    return rr.apply(terms, head, [candidate_text(conn, r["asset_id"]) for r in head]) + tail
 
 
 def load_claims(conn: psycopg.Connection, asset_id) -> list[dict]:

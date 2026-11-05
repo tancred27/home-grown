@@ -148,6 +148,45 @@ result matters. **Not decided, and deliberately so**: choosing between them by l
 these numbers would spend the held-out set as a tuning set. Any further method choice
 needs a third query set.
 
+## Run 3: closing the gap, with a third query set
+
+Run 2 looked at the held-out set, so it can no longer choose anything. Dev + held-out
+(106 queries) became the **tuning set**, and a third set — `queries_test.json`, 52
+queries, each carrying the `keywords` an agent would pass — was committed in `76e6b4e`
+**before any run-3 method was tried**. Pre-registered in that commit: the test set runs
+once, with the method the tuning set selects; the keywords effect is reported as a
+with/without comparison whichever way it goes.
+
+### Variants, on the tuning set (n=106, 56 low-overlap)
+
+| variant | r@1 | r@5 | r@10 | MRR | low r@5 |
+|---|---|---|---|---|---|
+| A vec, `card` field (run-2 semantic) | 0.53 | 0.74 | 0.85 | 0.63 | 0.68 |
+| B vec, `summary` field only | 0.56 | 0.75 | 0.82 | 0.65 | 0.68 |
+| C vec, max over both fields | **0.58** | 0.78 | 0.86 | 0.67 | **0.71** |
+| D max-fusion lexical + A (run-2 hybrid) | 0.33 | 0.79 | 0.88 | 0.54 | 0.71 |
+| E max-fusion lexical + C | 0.34 | **0.81** | 0.89 | 0.56 | 0.71 |
+| F weighted RRF (w=0.75) | 0.48 | 0.74 | **0.90** | 0.61 | 0.55 |
+| **H interleave C then lexical** | **0.58** | 0.80 | 0.89 | **0.68** | 0.70 |
+| G = H + bge-reranker-base | 0.40 | 0.61 | 0.77 | 0.50 | 0.43 |
+
+**The clean `summary` field helped a little.** The `card` vector embeds name + summary +
+up to 20 claim bodies, mostly test names — the same dilution that broke the reranker's
+input. Taking the best of the two fields per asset lifted semantic recall@5 0.74 → 0.78.
+
+**Max-fusion's recall@1 collapse has a mechanical cause.** Semantic #1 and lexical #1
+both score exactly 1/61, so which comes first is arbitrary, and lexical #1 is often
+noise. Breaking the tie toward semantic — the measured-stronger retriever — is the same
+as interleaving the two lists (H). It keeps max-fusion's recall@5 and restores
+semantic's recall@1: the best MRR of any variant.
+
+**A third reranker made things worse.** bge-reranker-base (1GB) cut recall@5 from 0.80
+to 0.61. With jina-tiny and two broken ms-marco exports before it, that is every
+cross-encoder tried. They are trained on web passages and question answering; these
+documents are one-line capability descriptions plus test names, and the queries are
+requirements. That domain mismatch is the likely cause, and it would not be fixed by
+running them faster on a GPU.
+
 ## What is needed to actually pass
 
 1. A **held-out** query set, written before the method is tuned.

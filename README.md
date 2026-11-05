@@ -63,3 +63,22 @@ python -I scripts/bench_vector.py 50000 384 768 1024
 
 One synthetic team per repo, each user in their own team only — so cross-team
 discovery is blocked by row-level security rather than by convention.
+
+### GPU (optional)
+
+Embedding and reranking run on onnxruntime. The CPU build lives in `.venv`; the CUDA
+build needs its own environment, because `onnxruntime` and `onnxruntime-gpu` install the
+same module and cannot coexist:
+
+```bash
+py -3.13 -m venv .venv-gpu
+.venv-gpu/Scripts/python -m pip install "onnxruntime-gpu[cuda,cudnn]==1.31.1" "fastembed-gpu==0.9.1"
+.venv-gpu/Scripts/python -m pip install -e . --no-deps      # don't pull CPU onnxruntime back in
+.venv-gpu/Scripts/python -m pip install fastapi "uvicorn[standard]" "psycopg[binary]" pgvector \
+    pydantic pydantic-settings httpx langgraph langgraph-checkpoint-postgres numpy pytest pytest-asyncio
+.venv-gpu/Scripts/python -I scripts/check_gpu.py            # confirms the ACTIVE provider
+```
+
+The code is the same in both: `ORGMEM_DEVICE=auto` (default) uses CUDA when it is
+available and CPU otherwise. Always run `check_gpu.py` after setup — onnxruntime falls
+back to CPU silently when a CUDA or cuDNN DLL is missing, so "it ran" is not proof.

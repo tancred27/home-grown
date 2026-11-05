@@ -22,7 +22,9 @@ from .config import settings
 def _encoder(name: str):
     from fastembed.rerank.cross_encoder import TextCrossEncoder
 
-    return TextCrossEncoder(model_name=name)
+    from .device import providers
+
+    return TextCrossEncoder(model_name=name, providers=providers())
 
 
 def rerank(query: str, docs: list[str], model: str | None = None) -> list[float]:

@@ -34,6 +34,7 @@ import sys
 import uuid
 from pathlib import Path
 
+from orgmem.config import settings
 from orgmem.db import admin_conn, as_user
 from orgmem.embed import embed_query
 from orgmem.search import _FORCE_EXACT
@@ -114,8 +115,11 @@ def vec_only(conn, terms: str, limit: int) -> list[dict]:
     q = embed_query(terms)
     with conn.cursor() as cur:
         cur.execute(_FORCE_EXACT)
-        cur.execute("select a.id from embedding e join asset a on a.id=e.asset_id "
-                    "order by e.vec <=> %s limit %s", (q, limit))
+        # One row per asset (assets carry several fields), one model only.
+        cur.execute("select e.asset_id from embedding e join asset a on a.id=e.asset_id "
+                    "where e.model = %s group by e.asset_id "
+                    "order by min(e.vec <=> %s) limit %s",
+                    (settings.embed_model, q, limit))
         return [{"asset_id": r[0]} for r in cur.fetchall()]
 
 
@@ -159,6 +163,15 @@ def main() -> int:
                 "vec": rank_of(vec_only(conn, q["query"], 20), q["gold"]),
                 "hyb": rank_of(search(conn, q["query"], limit=20)[:20], q["gold"]),
             }
+            # Pre-registered ablation: the same product search, plus the synonyms an
+            # agent would pass in `keywords`. Their overlap with the gold asset's text
+            # is measured too, because the author wrote them knowing the answer.
+            if q.get("keywords"):
+                kt = toks(" ".join(q["keywords"]))
+                r["kw_overlap"] = len(kt & at) / max(1, len(kt))
+                r["hyb_kw"] = rank_of(
+                    search(conn, q["query"], keywords=q["keywords"], limit=20)[:20],
+                    q["gold"])
             rows.append(r)
 
     def recall(rs, key, k):
@@ -201,6 +214,22 @@ def main() -> int:
     if low:
         print(f"  low-overlap stratum (n={len(low)}): hybrid recall@5 = "
               f"{recall(low,'hyb',5):.2f}  <- the honest number")
+
+    kw = [r for r in rows if "hyb_kw" in r]
+    if kw:
+        print(f"\npre-registered ablation: + agent keywords (n={len(kw)})")
+        print(f"{'':>18} {'recall@1':>9} {'recall@5':>9} {'recall@10':>10} {'MRR':>7}")
+        for key, label in (("hyb", "without keywords"), ("hyb_kw", "with keywords")):
+            print(f"{label:>18} {recall(kw,key,1):>9.2f} {recall(kw,key,5):>9.2f} "
+                  f"{recall(kw,key,10):>10.2f} {mrr(kw,key):>7.2f}")
+        lowk = [r for r in kw if r["overlap"] < 0.20]
+        print(f"  low-overlap (n={len(lowk)}): without {recall(lowk,'hyb',5):.2f} "
+              f"-> with {recall(lowk,'hyb_kw',5):.2f}")
+        mko = sum(r["kw_overlap"] for r in kw) / len(kw)
+        clean = [r for r in kw if r["kw_overlap"] < 0.20]
+        print(f"  keyword/gold overlap: mean {mko:.2f}; on the {len(clean)} queries whose "
+              f"keywords barely touch the gold text: without {recall(clean,'hyb',5):.2f} "
+              f"-> with {recall(clean,'hyb_kw',5):.2f}")
     return 0
 
 

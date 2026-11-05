@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     admin_dsn: str = "postgresql://orgmem:orgmem_dev_only@localhost:5433/orgmem"
     app_dsn: str = "postgresql://orgmem_app:orgmem_app_dev_only@localhost:5433/orgmem"
 
+    # "auto" uses CUDA when the installed onnxruntime can see it (.venv-gpu), else CPU.
+    # "cpu" / "cuda" force it; "cuda" raises rather than silently falling back.
+    device: str = "auto"
+
     embed_model: str = "BAAI/bge-base-en-v1.5"
     embed_dim: int = 768
     # Small cross-encoder (~130MB, onnxruntime). NOT the Xenova ms-marco exports: in
@@ -23,6 +27,10 @@ class Settings(BaseSettings):
     # without reranking and 0.62 with it. See experiments/gate1/RESULTS.md.
     rerank_enabled: bool = False
     rerank_depth: int = 30          # how many fused candidates get cross-encoded
+    # How lexical and semantic candidates are combined: "max" (max-fusion with a
+    # both-signals tie-break) or "interleave" (ties broken toward semantic).
+    # Selected on the tuning set; see experiments/gate1/RESULTS.md.
+    fusion: str = "max"
 
     # Discussion ingestion is a funnel. These are the gates, and they are settings
     # rather than constants because run E2 showed the length gate does NOT generalise:
