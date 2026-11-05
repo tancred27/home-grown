@@ -12,6 +12,7 @@ than a slow scan.
 
 from __future__ import annotations
 
+import json
 import re
 import uuid
 
@@ -300,6 +301,19 @@ _JUDGE_SCHEMA = {
 }
 
 
+def _candidate_letter(label: str, letters: list[str], names: list[str]) -> str | None:
+    """'A', 'a', 'Candidate A', '(A)', 'A: retry-client' or the candidate's name -> 'A'.
+    Anything ambiguous returns None (that candidate becomes 'unknown', never a guess)."""
+    s = (label or "").strip()
+    if s.upper() in letters:
+        return s.upper()
+    m = re.fullmatch(r"(?i)\(?\s*(?:candidate\s+)?([A-J])\s*\)?(?:\s*[:\-.].*)?", s)
+    if m and m.group(1).upper() in letters:
+        return m.group(1).upper()
+    hits = [letters[i] for i, n in enumerate(names) if n and n.lower() == s.lower()]
+    return hits[0] if len(hits) == 1 else None
+
+
 def judge_with_model(intent: str, cards: list[dict]) -> list[dict]:
     """One model call judging every candidate against the request.
 
@@ -314,17 +328,33 @@ def judge_with_model(intent: str, cards: list[dict]) -> list[dict]:
     letters = "ABCDEFGHIJ"
     body = "\n\n".join(
         f"Candidate {letters[i]}: {c['name']}\n  description: {c.get('summary') or '-'}\n"
+        + (f"  purpose: {c['purpose']}\n" if c.get("purpose") else "")
         + "\n".join(f"  evidence: {e}" for e in c.get("evidence", [])[:6])
         for i, c in enumerate(cards))
+    used = list(letters[:len(cards)])
+    # Constrain the label to exactly the letters shown. The original schema allowed any
+    # string, and a model that wrote "Candidate A" was parsed by its first character,
+    # "C" -- scrambling every verdict onto the wrong candidate (caught on Gemini).
+    schema = json.loads(json.dumps(_JUDGE_SCHEMA))
+    schema["properties"]["verdicts"]["items"]["properties"]["candidate"]["enum"] = used
     try:
-        out = structured(_JUDGE_SYSTEM, f"Request: {intent}\n\n{body}", _JUDGE_SCHEMA)
-        by_letter = {v["candidate"].strip().upper()[:1]: v for v in out["verdicts"]}
+        out = structured(_JUDGE_SYSTEM, f"Request: {intent}\n\n{body}\n\n"
+                         f"Answer once for each candidate, labelled with its letter only "
+                         f"({', '.join(used)}).", schema)
+        by_letter: dict[str, dict] = {}
+        for v in out["verdicts"]:
+            letter = _candidate_letter(v.get("candidate", ""), used,
+                                       [c["name"] for c in cards])
+            if letter and letter not in by_letter:
+                by_letter[letter] = v
         return [by_letter.get(letters[i], {"verdict": "unknown",
                                            "reason": "judge returned no verdict"})
                 for i in range(len(cards))]
     except Exception as e:
-        return [{"verdict": "unknown",
-                 "reason": f"model verdict unavailable ({type(e).__name__})"}
+        # The reason names the failure (e.g. "429: quota") so an outage is diagnosable;
+        # error text from the provider never contains the key.
+        why = f"{type(e).__name__}: {str(e)[:100]}".replace("\n", " ")
+        return [{"verdict": "unknown", "reason": f"model verdict unavailable ({why})"}
                 for _ in cards]
 
 

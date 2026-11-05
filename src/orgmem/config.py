@@ -37,6 +37,14 @@ class Settings(BaseSettings):
     # "unknown". See experiments/gate2/RESULTS.md.
     verdict_mode: str = "rules"
 
+    # Which LLM. "anthropic" | "gemini" | "local" (any OpenAI-compatible server).
+    # The Gemini FREE tier may use prompts to improve Google's products: acceptable for
+    # this project's public repos, never for private code.
+    llm_provider: str = "anthropic"
+    llm_model: str = ""                  # empty = auto (Gemini: newest stable flash)
+    llm_base_url: str = "http://localhost:11434/v1"    # for "local" (Ollama)
+    gemini_key_file: str = ""
+
     # Discussion ingestion is a funnel. These are the gates, and they are settings
     # rather than constants because run E2 showed the length gate does NOT generalise:
     # comments >=500 chars held 79% of signal in popular repos but only 37% in obscure

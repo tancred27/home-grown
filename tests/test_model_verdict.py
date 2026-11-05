@@ -34,3 +34,24 @@ def test_any_failure_fails_safe_to_unknown(monkeypatch):
     out = judge_with_model("add retries", CARDS)
     assert all(o["verdict"] == "unknown" for o in out)
     assert "unavailable" in out[0]["reason"]
+
+
+def test_labels_like_candidate_a_map_to_the_right_candidate(monkeypatch):
+    """Regression: 'Candidate B' was parsed by its first character, 'C'."""
+    seen = {}
+
+    def fake(system, user, schema, max_tokens=2000):
+        seen["enum"] = schema["properties"]["verdicts"]["items"]["properties"][
+            "candidate"]["enum"]
+        return {"verdicts": [{"candidate": "Candidate B", "verdict": "not_a_fit", "reason": "x"},
+                             {"candidate": "(A)", "verdict": "use_as_is", "reason": "y"}]}
+    monkeypatch.setattr(llm, "structured", fake)
+    out = judge_with_model("add retries", CARDS)
+    assert [o["verdict"] for o in out] == ["use_as_is", "not_a_fit"]
+    assert seen["enum"] == ["A", "B"], "the schema must allow only the letters shown"
+
+
+def test_unparseable_label_is_unknown_not_a_guess(monkeypatch):
+    monkeypatch.setattr(llm, "structured", lambda *a, **k: {"verdicts": [
+        {"candidate": "the first one", "verdict": "use_as_is", "reason": "y"}]})
+    assert all(o["verdict"] == "unknown" for o in judge_with_model("add retries", CARDS))
