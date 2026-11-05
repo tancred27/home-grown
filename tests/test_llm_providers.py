@@ -51,3 +51,14 @@ def test_judge_fails_safe_when_the_provider_is_down(monkeypatch):
     monkeypatch.setattr(llm.settings, "gemini_key_file", "")
     out = judge_with_model("add retries", [{"name": "x", "summary": "y", "evidence": []}])
     assert out[0]["verdict"] == "unknown"
+
+
+def test_groq_provider_routes_and_defaults(monkeypatch):
+    monkeypatch.setattr(llm.settings, "llm_provider", "groq")
+    monkeypatch.setattr(llm.settings, "llm_model", "")
+    assert llm._base() == llm.GROQ_BASE
+    assert llm.resolve_model() == "openai/gpt-oss-120b"
+    monkeypatch.delenv("GROQ_API_KEY", raising=False)
+    monkeypatch.setattr(llm.settings, "groq_key_file", "")
+    with pytest.raises(llm.LLMUnavailable):
+        llm._headers()

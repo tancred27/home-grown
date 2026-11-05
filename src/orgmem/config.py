@@ -44,6 +44,7 @@ class Settings(BaseSettings):
     llm_model: str = ""                  # empty = auto (Gemini: newest stable flash)
     llm_base_url: str = "http://localhost:11434/v1"    # for "local" (Ollama)
     gemini_key_file: str = ""
+    groq_key_file: str = ""
 
     # Discussion ingestion is a funnel. These are the gates, and they are settings
     # rather than constants because run E2 showed the length gate does NOT generalise:

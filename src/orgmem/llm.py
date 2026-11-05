@@ -11,6 +11,9 @@ Providers (settings.llm_provider):
   gemini      Google's OpenAI-compatible endpoint. The FREE TIER may use prompts to
               improve Google's products: fine for this project's public repositories,
               never for private code. Production needs the paid tier or `local`.
+  groq        Groq's OpenAI-compatible endpoint; default model openai/gpt-oss-120b
+              (OpenAI's open-weight model). FREE tier: same rule as Gemini -- public
+              repositories only.
   local       any OpenAI-compatible server, e.g. Ollama at http://localhost:11434/v1.
               Nothing leaves the machine.
 
@@ -36,6 +39,8 @@ from .config import settings
 
 ANTHROPIC_MODEL = "claude-opus-5-5"
 GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/openai"
+GROQ_BASE = "https://api.groq.com/openai/v1"
+GROQ_DEFAULT_MODEL = "openai/gpt-oss-120b"
 
 
 class LLMRefusal(RuntimeError):
@@ -69,6 +74,14 @@ def _gemini_key() -> str:
     return key
 
 
+def _groq_key() -> str:
+    import os
+    key = os.environ.get("GROQ_API_KEY") or _read_key_file(settings.groq_key_file)
+    if not key:
+        raise LLMUnavailable("no Groq key: set GROQ_API_KEY or ORGMEM_GROQ_KEY_FILE")
+    return key
+
+
 _model_cache: dict[str, str] = {}
 
 
@@ -81,6 +94,8 @@ def resolve_model() -> str:
     p = settings.llm_provider
     if p == "anthropic":
         return ANTHROPIC_MODEL
+    if p == "groq":
+        return GROQ_DEFAULT_MODEL
     if p in _model_cache:
         return _model_cache[p]
     if p == "gemini":
@@ -104,12 +119,15 @@ def _version_key(model_id: str):
 
 
 def _base() -> str:
-    return GEMINI_BASE if settings.llm_provider == "gemini" else settings.llm_base_url
+    return {"gemini": GEMINI_BASE, "groq": GROQ_BASE}.get(settings.llm_provider,
+                                                          settings.llm_base_url)
 
 
 def _headers() -> dict:
     if settings.llm_provider == "gemini":
         return {"Authorization": f"Bearer {_gemini_key()}"}
+    if settings.llm_provider == "groq":
+        return {"Authorization": f"Bearer {_groq_key()}"}
     return {"Authorization": "Bearer local"}
 
 
