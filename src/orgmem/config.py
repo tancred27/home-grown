@@ -32,6 +32,10 @@ class Settings(BaseSettings):
     # Selected on the tuning set and confirmed on the untouched test set (recall@5 0.82,
     # recall@1 0.59); see experiments/gate1/RESULTS.md run 3.
     fusion: str = "interleave"
+    # "rules": the original rule-based verdict, which never looks at relevance.
+    # "model": an LLM judges each candidate against the request and fails safe to
+    # "unknown". See experiments/gate2/RESULTS.md.
+    verdict_mode: str = "rules"
 
     # Discussion ingestion is a funnel. These are the gates, and they are settings
     # rather than constants because run E2 showed the length gate does NOT generalise:

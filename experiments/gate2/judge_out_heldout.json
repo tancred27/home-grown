@@ -1,0 +1,100 @@
+[
+ {"ticket_id": "h01", "verdicts": [
+  {"candidate": "A", "verdict": "use_as_is", "reason": "Shared Go package for AWS config/auth for plugins, with assume-role and credential tests."},
+  {"candidate": "B", "verdict": "not_a_fit", "reason": "Interactive onboarding wizard, unrelated to AWS session setup."},
+  {"candidate": "C", "verdict": "not_a_fit", "reason": "Web UI for OpenTelemetry Collector configs, not AWS credentials."},
+  {"candidate": "D", "verdict": "not_a_fit", "reason": "Grafana authn/authz with JWT and RBAC, not AWS sessions."},
+  {"candidate": "E", "verdict": "not_a_fit", "reason": "ClickHouse data source plugin, not shared AWS module."}
+ ]},
+ {"ticket_id": "h02", "verdicts": [
+  {"candidate": "A", "verdict": "extend", "reason": "Generates policy-bot configs, but from workflows; needs CODEOWNERS-based approval rules added."},
+  {"candidate": "B", "verdict": "not_a_fit", "reason": "Auto-applies metrics recommendations via PRs; unrelated to review bot config."},
+  {"candidate": "C", "verdict": "not_a_fit", "reason": "OpenTelemetry Collector config editor, not PR review bot."},
+  {"candidate": "D", "verdict": "not_a_fit", "reason": "Helm chart for GitHub rate limit exporter."},
+  {"candidate": "E", "verdict": "not_a_fit", "reason": "Frontend RUM telemetry models, unrelated."}
+ ]},
+ {"ticket_id": "h03", "verdicts": [
+  {"candidate": "A", "verdict": "use_as_is", "reason": "k6 extension for producing and consuming Kafka messages in load test scripts."},
+  {"candidate": "B", "verdict": "not_a_fit", "reason": "Helm chart for canary load-testing webhook, no Kafka support."},
+  {"candidate": "C", "verdict": "not_a_fit", "reason": "Canary gating webhook, not Kafka messaging in k6."},
+  {"candidate": "D", "verdict": "not_a_fit", "reason": "Schema code generator, unrelated."},
+  {"candidate": "E", "verdict": "not_a_fit", "reason": "Test helpers for Rust time series library."}
+ ]},
+ {"ticket_id": "h04", "verdicts": [
+  {"candidate": "A", "verdict": "use_as_is", "reason": "Rust changepoint detection library for time series, exactly the need."},
+  {"candidate": "B", "verdict": "use_as_is", "reason": "JS/WASM bindings for changepoint detection in time series."},
+  {"candidate": "C", "verdict": "use_as_is", "reason": "Umbrella crate includes changepoint detection behind feature flag."},
+  {"candidate": "D", "verdict": "not_a_fit", "reason": "Detects outlier series within a group, not shifts within one series."},
+  {"candidate": "E", "verdict": "not_a_fit", "reason": "JS bindings for group outlier detection, not changepoints."}
+ ]},
+ {"ticket_id": "h05", "verdicts": [
+  {"candidate": "A", "verdict": "not_a_fit", "reason": "Purpose is a tool-version lock directory; description conflicts and seems mislabeled."},
+  {"candidate": "B", "verdict": "use_as_is", "reason": "Single Docker image with OTel Collector plus metrics, logs, traces backends for local dev."},
+  {"candidate": "C", "verdict": "not_a_fit", "reason": "Example instrumented Java service, not a backend image."},
+  {"candidate": "D", "verdict": "not_a_fit", "reason": "Example Node.js service pushing metrics, not a backend."},
+  {"candidate": "E", "verdict": "not_a_fit", "reason": "Example Go service demo, not a backend image."}
+ ]},
+ {"ticket_id": "h06", "verdicts": [
+  {"candidate": "A", "verdict": "extend", "reason": "Installs fault-recovery signal handlers only; reading routine itself lives elsewhere."},
+  {"candidate": "B", "verdict": "use_as_is", "reason": "Signal-safe arbitrary memory reads returning errors on SIGSEGV/SIGBUS."},
+  {"candidate": "C", "verdict": "use_as_is", "reason": "Workspace for signal-safe memory reading that recovers from faults."},
+  {"candidate": "D", "verdict": "not_a_fit", "reason": "Alerting libraries, unrelated."},
+  {"candidate": "E", "verdict": "not_a_fit", "reason": "URL route normalization, unrelated."}
+ ]},
+ {"ticket_id": "k01", "verdicts": [
+  {"candidate": "A", "verdict": "not_a_fit", "reason": "Test package for time series JS bindings."},
+  {"candidate": "B", "verdict": "not_a_fit", "reason": "Signal-safe memory reading, unrelated to palindromes."},
+  {"candidate": "C", "verdict": "not_a_fit", "reason": "Policy bot config generator, unrelated."},
+  {"candidate": "D", "verdict": "not_a_fit", "reason": "Time series core bindings, no string utilities."},
+  {"candidate": "E", "verdict": "not_a_fit", "reason": "Seasonality detection bindings, unrelated."}
+ ]},
+ {"ticket_id": "k02", "verdicts": [
+  {"candidate": "A", "verdict": "not_a_fit", "reason": "Schema code generator, not CSV serialization."},
+  {"candidate": "B", "verdict": "not_a_fit", "reason": "Dashboard table panel UI; export not a reusable dict-to-CSV helper."},
+  {"candidate": "C", "verdict": "not_a_fit", "reason": "URL clustering, unrelated."},
+  {"candidate": "D", "verdict": "not_a_fit", "reason": "Distributed systems utilities, no CSV helper."},
+  {"candidate": "E", "verdict": "not_a_fit", "reason": "Markdown/Handlebars text panel, unrelated."}
+ ]},
+ {"ticket_id": "k03", "verdicts": [
+  {"candidate": "A", "verdict": "not_a_fit", "reason": "Calendar panel displaying events, not business-day counting."},
+  {"candidate": "B", "verdict": "not_a_fit", "reason": "Seasonality detection, unrelated."},
+  {"candidate": "C", "verdict": "not_a_fit", "reason": "Text rendering panel, unrelated."},
+  {"candidate": "D", "verdict": "not_a_fit", "reason": "Time series forecasting, unrelated."},
+  {"candidate": "E", "verdict": "not_a_fit", "reason": "Data entry forms panel, unrelated."}
+ ]},
+ {"ticket_id": "k04", "verdicts": [
+  {"candidate": "A", "verdict": "not_a_fit", "reason": "Policy bot config generator, unrelated."},
+  {"candidate": "B", "verdict": "not_a_fit", "reason": "Canvas visualization panel, no masking."},
+  {"candidate": "C", "verdict": "not_a_fit", "reason": "Schema code generator, unrelated."},
+  {"candidate": "D", "verdict": "not_a_fit", "reason": "Table panel UI, no card masking helper."},
+  {"candidate": "E", "verdict": "not_a_fit", "reason": "Chromium process supervisor, unrelated."}
+ ]},
+ {"ticket_id": "k05", "verdicts": [
+  {"candidate": "A", "verdict": "not_a_fit", "reason": "Generates random alert rules, not secure tokens."},
+  {"candidate": "B", "verdict": "not_a_fit", "reason": "Signal-safe memory reading, unrelated."},
+  {"candidate": "C", "verdict": "not_a_fit", "reason": "Policy bot config generator, unrelated."},
+  {"candidate": "D", "verdict": "not_a_fit", "reason": "JWT identity and RBAC; no password reset token generation described."},
+  {"candidate": "E", "verdict": "not_a_fit", "reason": "Signal-safe memory reading, unrelated."}
+ ]},
+ {"ticket_id": "k06", "verdicts": [
+  {"candidate": "A", "verdict": "not_a_fit", "reason": "Schema code generator, unrelated."},
+  {"candidate": "B", "verdict": "not_a_fit", "reason": "Time series core bindings, no colour utilities."},
+  {"candidate": "C", "verdict": "not_a_fit", "reason": "Signal-safe memory reading, unrelated."},
+  {"candidate": "D", "verdict": "not_a_fit", "reason": "Signal-safe memory reading, unrelated."},
+  {"candidate": "E", "verdict": "not_a_fit", "reason": "URL clustering, unrelated."}
+ ]},
+ {"ticket_id": "k07", "verdicts": [
+  {"candidate": "A", "verdict": "not_a_fit", "reason": "Dashboard linter; internal dedup is not a reusable list helper."},
+  {"candidate": "B", "verdict": "not_a_fit", "reason": "Time series core bindings, unrelated."},
+  {"candidate": "C", "verdict": "not_a_fit", "reason": "Policy bot config generator, unrelated."},
+  {"candidate": "D", "verdict": "not_a_fit", "reason": "Signal-safe memory reading, unrelated."},
+  {"candidate": "E", "verdict": "not_a_fit", "reason": "URL clustering, unrelated."}
+ ]},
+ {"ticket_id": "k08", "verdicts": [
+  {"candidate": "A", "verdict": "not_a_fit", "reason": "Text panel with templates; no pluralisation helper described."},
+  {"candidate": "B", "verdict": "not_a_fit", "reason": "Table panel UI, unrelated."},
+  {"candidate": "C", "verdict": "not_a_fit", "reason": "Schema code generator, unrelated."},
+  {"candidate": "D", "verdict": "not_a_fit", "reason": "Forms panel, unrelated."},
+  {"candidate": "E", "verdict": "not_a_fit", "reason": "Cloud cost exporter Helm chart, unrelated."}
+ ]}
+]

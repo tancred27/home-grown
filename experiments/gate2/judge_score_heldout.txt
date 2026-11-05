@@ -1,0 +1,17 @@
+  h01 dup  HIT   strong=['grafana-aws-sdk:use_as_is']
+  h02 dup  HIT   strong=['generate-policy-bot-config:extend']
+  h03 dup  HIT   strong=['xk6-kafka:use_as_is']
+  h04 dup  HIT   strong=['augurs-changepoint:use_as_is', 'augurs-changepoint-js:use_as_is', 'augurs:use_as_is']
+  h05 dup  HIT   strong=['docker-otel-lgtm:use_as_is']
+  h06 dup  HIT   strong=['kindasafe_init:extend', 'kindasafe:use_as_is', 'pyroscope-kinda-safe:use_as_is']
+  k01 ctrl quiet       strong=[]
+  k02 ctrl quiet       strong=[]
+  k03 ctrl quiet       strong=[]
+  k04 ctrl quiet       strong=[]
+  k05 ctrl quiet       strong=[]
+  k06 ctrl quiet       strong=[]
+  k07 ctrl quiet       strong=[]
+  k08 ctrl quiet       strong=[]
+
+model judge: duplicates found and flagged 6/6, wrong-asset reuse suggestions 4, false alarms on controls 0/8
+rule judge (baseline, same tickets): flagged 4/6, false alarms 8/8
