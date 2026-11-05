@@ -1,0 +1,34 @@
+{
+  "_about": "Held-out gate-2 tickets, written and committed BEFORE the verdict relevance threshold was calibrated. Used once, to evaluate it. 'duplicate' tickets have an existing asset (gold_unit_id); 'control' tickets have none.",
+  "tasks": [
+    {"id": "h01", "kind": "duplicate", "gold_unit_id": "github:grafana-aws-sdk:.",
+     "ticket": "Every one of our plugins reimplements AWS session setup. Write a shared module that handles credentials, assume-role and region configuration for all of them."},
+    {"id": "h02", "kind": "duplicate", "gold_unit_id": "github:generate-policy-bot-config:.",
+     "ticket": "Generate the configuration file for our pull-request review bot from CODEOWNERS, so each directory requires approval from its owners."},
+    {"id": "h03", "kind": "duplicate", "gold_unit_id": "github:xk6-kafka:.",
+     "ticket": "Add the ability to produce and consume Kafka messages from our k6 load-test scripts."},
+    {"id": "h04", "kind": "duplicate", "gold_unit_id": "github:augurs:crates/augurs-changepoint",
+     "ticket": "Write a function that detects the points in a latency series where its behaviour shifts."},
+    {"id": "h05", "kind": "duplicate", "gold_unit_id": "github:docker-otel-lgtm:.",
+     "ticket": "Create a single Docker image with an OpenTelemetry backend for traces, logs and metrics so developers can test locally."},
+    {"id": "h06", "kind": "duplicate", "gold_unit_id": "github:pyroscope-kinda-safe:kindasafe",
+     "ticket": "Write a routine that safely reads memory at an arbitrary address from inside a signal handler without crashing the process."},
+
+    {"id": "k01", "kind": "control", "gold_unit_id": null,
+     "ticket": "Write a function that checks whether a string is a palindrome, ignoring punctuation and case."},
+    {"id": "k02", "kind": "control", "gold_unit_id": null,
+     "ticket": "Add a helper that converts a list of dicts to a CSV string with a header row."},
+    {"id": "k03", "kind": "control", "gold_unit_id": null,
+     "ticket": "Write a function that counts the business days between two dates, skipping weekends."},
+    {"id": "k04", "kind": "control", "gold_unit_id": null,
+     "ticket": "Add a helper that masks all but the last four digits of a credit card number."},
+    {"id": "k05", "kind": "control", "gold_unit_id": null,
+     "ticket": "Write a function that generates a random, URL-safe password reset token."},
+    {"id": "k06", "kind": "control", "gold_unit_id": null,
+     "ticket": "Add a function that converts a hex colour such as #ff8800 into an RGB tuple."},
+    {"id": "k07", "kind": "control", "gold_unit_id": null,
+     "ticket": "Write a function that removes duplicates from a list while keeping the original order."},
+    {"id": "k08", "kind": "control", "gold_unit_id": null,
+     "ticket": "Add a helper that pluralises an English noun for labels in the UI."}
+  ]
+}
