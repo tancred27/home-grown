@@ -12,12 +12,39 @@ than a slow scan.
 
 from __future__ import annotations
 
+import re
 import uuid
 
 import psycopg
 
 from .embed import embed_query
 from .models import Verdict
+
+# Stop words are dropped before building the tsquery; Postgres would drop them anyway,
+# but removing them here keeps the OR query from being all noise.
+_STOP = frozenset("""a an the and or but if then than that this these those is are was
+were be been being to of in on at by for with from as it its into over under about can
+could will would should may might must do does did done have has had so such no not
+only own same too very just now we i you they our your their them us me my what which
+who when where why how all any both each few more most other some want need get got
+make made use used using write writing new several""".split())
+
+
+def _tsquery_or(text: str) -> str:
+    """Build an OR'd tsquery from free text.
+
+    plainto_tsquery() ANDs every term, so a sentence-length intent like "join several
+    running processes into a ring" requires all eight words to appear and matches
+    nothing. That made the lexical half of this search contribute exactly zero on all
+    51 gate-1 queries while the vector half silently carried the result -- the kind of
+    failure that looks like a working system until something measures it.
+    """
+    words = [w for w in re.findall(r"[a-z0-9]{3,}", text.lower()) if w not in _STOP]
+    seen: list[str] = []
+    for w in words:
+        if w not in seen:
+            seen.append(w)
+    return " | ".join(seen[:40])
 
 # pgvector will happily use an HNSW index here and silently lose most rows once RLS
 # narrows the visible set. Disabling index scans for this statement forces the exact
@@ -35,29 +62,32 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
     """
     terms = " ".join([intent, *(keywords or [])])
     qvec = embed_query(terms)
+    tsq = _tsquery_or(terms)
 
     with conn.cursor() as cur:
         cur.execute(_FORCE_EXACT)
 
         # Lexical: asset name/aliases/summary, plus claim bodies, since the useful
         # query is often about behaviour rather than about a package name.
-        cur.execute(
-            """
-            select a.id, a.name,
-                   max(ts_rank(a.tsv, plainto_tsquery('english', %s))) as arank,
-                   max(coalesce(ts_rank(to_tsvector('english', c.body),
-                                        plainto_tsquery('english', %s)), 0)) as crank
-              from asset a
-              left join claim c on c.asset_id = a.id and c.valid_to is null
-             where a.tsv @@ plainto_tsquery('english', %s)
-                or to_tsvector('english', coalesce(c.body,'')) @@ plainto_tsquery('english', %s)
-             group by a.id, a.name
-             order by 3 desc, 4 desc
-             limit %s
-            """,
-            (terms, terms, terms, terms, limit),
-        )
-        lexical = [(r[0], r[1], float(r[2]) + 0.5 * float(r[3])) for r in cur.fetchall()]
+        lexical: list[tuple] = []
+        if tsq:
+            cur.execute(
+                """
+                select a.id, a.name,
+                       max(ts_rank(a.tsv, to_tsquery('english', %s))) as arank,
+                       max(coalesce(ts_rank(to_tsvector('english', c.body),
+                                            to_tsquery('english', %s)), 0)) as crank
+                  from asset a
+                  left join claim c on c.asset_id = a.id and c.valid_to is null
+                 where a.tsv @@ to_tsquery('english', %s)
+                    or to_tsvector('english', coalesce(c.body,'')) @@ to_tsquery('english', %s)
+                 group by a.id, a.name
+                 order by 3 desc, 4 desc
+                 limit %s
+                """,
+                (tsq, tsq, tsq, tsq, limit),
+            )
+            lexical = [(r[0], r[1], float(r[2]) + 0.5 * float(r[3])) for r in cur.fetchall()]
 
         cur.execute(
             """
@@ -71,21 +101,39 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
         )
         semantic = [(r[0], r[1], float(r[2])) for r in cur.fetchall()]
 
-    # Reciprocal rank fusion: robust to the two scorers being on different scales.
+    # Fusion by MAX of reciprocal ranks, not sum.
+    #
+    # Summing (textbook RRF) measurably hurt on the gate-1 set: hybrid recall@5 fell
+    # to 0.61 against 0.71 for semantic alone on low-overlap queries, and one gold
+    # asset ranked #1 by vector search was pushed to #11. With K=60 and 20 candidates
+    # every reciprocal rank sits between 1/61 and 1/81, so "appears in both lists"
+    # almost always outscores "ranked first by the better list" -- which is the wrong
+    # trade when the two retrievers are not equally good, and here they are not.
+    #
+    # Max-fusion takes the best evidence for a candidate instead of rewarding
+    # agreement, so a strong single signal survives. Chosen after seeing the failure,
+    # which means the post-fix number on this same query set is optimistic; it needs a
+    # held-out set to confirm.
     K = 60.0
     fused: dict[uuid.UUID, dict] = {}
-    for rank, (aid, name, score) in enumerate(lexical):
-        fused.setdefault(aid, {"asset_id": aid, "name": name, "score": 0.0,
-                               "lexical": None, "semantic": None})
-        fused[aid]["score"] += 1.0 / (K + rank + 1)
-        fused[aid]["lexical"] = score
-    for rank, (aid, name, score) in enumerate(semantic):
-        fused.setdefault(aid, {"asset_id": aid, "name": name, "score": 0.0,
-                               "lexical": None, "semantic": None})
-        fused[aid]["score"] += 1.0 / (K + rank + 1)
-        fused[aid]["semantic"] = score
 
-    return sorted(fused.values(), key=lambda r: -r["score"])
+    def _put(aid, name, rank, which, raw):
+        row = fused.setdefault(aid, {"asset_id": aid, "name": name, "score": 0.0,
+                                     "lexical": None, "semantic": None})
+        row["score"] = max(row["score"], 1.0 / (K + rank + 1))
+        row[which] = raw
+
+    for rank, (aid, name, score) in enumerate(lexical):
+        _put(aid, name, rank, "lexical", score)
+    for rank, (aid, name, score) in enumerate(semantic):
+        _put(aid, name, rank, "semantic", score)
+
+    # Tie-break on having both signals, which recovers the complementarity that
+    # max-fusion gives up without letting it override a strong single signal.
+    return sorted(
+        fused.values(),
+        key=lambda r: (-r["score"], -(r["lexical"] is not None and r["semantic"] is not None)),
+    )
 
 
 def load_claims(conn: psycopg.Connection, asset_id) -> list[dict]:
