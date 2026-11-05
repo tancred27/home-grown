@@ -1,0 +1,38 @@
+{
+  "_about": "Gate-2 tickets. 'duplicate' tickets ask for something an asset in the corpus already does (gold_unit_id). 'control' tickets have no duplicate in the corpus: they measure needless interruptions. Tickets are written as a developer would file them, including implementation detail, and were written without running retrieval on them.",
+  "tasks": [
+    {"id": "d01", "kind": "duplicate", "gold_unit_id": "github:clusterurl:.",
+     "ticket": "Our API metrics are exploding because every request path contains user and order ids. Add a function to metrics.py that turns a path like /users/123/orders/456 into a route template before we use it as a label."},
+    {"id": "d02", "kind": "duplicate", "gold_unit_id": "github:cloudcost-exporter:.",
+     "ticket": "Finance wants our AWS and GCP spend as Prometheus metrics. Write a small exporter that pulls cost and pricing data from both providers and serves it on /metrics."},
+    {"id": "d03", "kind": "duplicate", "gold_unit_id": "github:celery-exporter:.",
+     "ticket": "Add Prometheus metrics for our Celery workers: queue length plus task success and failure counts, exposed for scraping."},
+    {"id": "d04", "kind": "duplicate", "gold_unit_id": "github:github-rate-limits-prometheus-exporter:.",
+     "ticket": "Our CI bots keep hitting GitHub API limits. Write a script that polls the rate-limit endpoint for our GitHub App and exposes the remaining calls as a metric so we can alert."},
+    {"id": "d05", "kind": "duplicate", "gold_unit_id": "github:dashboard-linter:.",
+     "ticket": "Add a CI step that checks our exported dashboard JSON files for common mistakes and fails the build if it finds any."},
+    {"id": "d06", "kind": "duplicate", "gold_unit_id": "github:crocochrome:.",
+     "ticket": "Our synthetic monitoring leaks Chromium processes. Write a supervisor that starts headless Chromium on demand and reaps the ones that die."},
+    {"id": "d07", "kind": "duplicate", "gold_unit_id": "github:authlib:.",
+     "ticket": "Add request middleware that validates incoming access tokens and checks the caller is allowed to perform the action before the handler runs."},
+    {"id": "d08", "kind": "duplicate", "gold_unit_id": "github:augurs:crates/augurs-outlier",
+     "ticket": "Write a function that takes CPU usage series for all our hosts and flags the hosts whose series looks different from the rest."},
+    {"id": "d09", "kind": "duplicate", "gold_unit_id": "github:ckit:.",
+     "ticket": "Our worker processes need to discover each other and split the work between them with consistent hashing. Implement the membership and hashing piece."},
+    {"id": "d10", "kind": "duplicate", "gold_unit_id": "github:carbon-relay-ng:.",
+     "ticket": "Write a relay that accepts Graphite plaintext metrics, aggregates them, and forwards them to our storage cluster."},
+    {"id": "d11", "kind": "duplicate", "gold_unit_id": "github:alerting:testing/alerting-gen",
+     "ticket": "Write a script that generates a few hundred random alert rules so we can load-test the alerting service."},
+    {"id": "d12", "kind": "duplicate", "gold_unit_id": "github:augurs:crates/augurs-seasons",
+     "ticket": "Add a helper that works out the dominant period of a metric automatically, so we can set the forecasting window."},
+
+    {"id": "c01", "kind": "control", "gold_unit_id": null,
+     "ticket": "Add a function that converts a temperature from Celsius to Fahrenheit, rounded to one decimal place."},
+    {"id": "c02", "kind": "control", "gold_unit_id": null,
+     "ticket": "Write a function that validates the format of an email address for our signup form."},
+    {"id": "c03", "kind": "control", "gold_unit_id": null,
+     "ticket": "Add a helper that formats a duration in seconds as a human string such as 1h 3m 5s."},
+    {"id": "c04", "kind": "control", "gold_unit_id": null,
+     "ticket": "Write a function that splits a full name into first and last name, handling middle names."}
+  ]
+}
