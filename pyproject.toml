@@ -11,6 +11,7 @@ dependencies = [
     "pydantic>=2.9",
     "pydantic-settings>=2.6",
     "httpx>=0.28",
+    "anthropic>=1.0",
     "langgraph>=1.0",
     "langgraph-checkpoint-postgres>=2.0",
     # fastembed (onnxruntime) rather than sentence-transformers: same BGE models,

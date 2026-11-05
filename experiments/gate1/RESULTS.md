@@ -278,6 +278,39 @@ design predicted, but the size of the effect for an agent that does *not* know t
 is unmeasured. Measuring it needs keywords generated blind — by an agent given only the
 query.
 
+## Run 4: pre-registration (committed before any run-4 result exists)
+
+Run 3's selected system is frozen: bge-base-en-v1.5, `card` + `summary` fields,
+interleaved fusion, no reranker. Run 4 measures three things about it, under these rules:
+
+**4a — blind keywords.** The run-3 keyword ablation was inflated because the author of
+the gold labels wrote the keywords. Here the 52 test requirements — text only, no gold
+labels, no keywords — go to a fresh LLM that has never seen the corpus or the answers,
+which writes the 3-6 keywords an agent would add. The test set is then scored with and
+without those keywords, and **both numbers are reported whichever is higher**. This
+measures an input of the frozen system; it does not change the system.
+
+**4b — LLM-written purpose lines.** A fresh LLM that has never seen any query writes one
+"what is this for" sentence per asset, from that asset's own name, description and README
+only. It is stored as a third embedding field (`purpose`). Whether to adopt it is
+decided **on the tuning set only** (dev + held-out). If the tuning set says adopt, the
+test set gets **exactly one more look**, with the adopted system, and that number is
+reported as a second use of the test set. If the tuning set says don't adopt, the test
+set is not run again.
+
+**4c — scale.** Recall@5 of the frozen system on the test set as real distractors are
+added: public repositories from the same and other organisations, not in the corpus,
+indexed from their name and description only. Corpus sizes ~86, ~600 and ~2,500. This
+measures degradation of a fixed system and changes nothing.
+
+**How the blind LLM calls were made.** The project's own Anthropic API key had no
+credit at the time (`400: credit balance is too low`), so the calls in `src/orgmem/llm.py`
+could not run. Both jobs were instead given to fresh Claude subagents, each allowed to
+read exactly one input file and write one output file, with no access to the queries or
+labels. Blindness here is by instruction and by what the input file contains, not by
+enforcement — the subagents had file-system tools available. Their outputs are committed
+so the scores can be re-derived without them.
+
 ## Status of the run-1 to-do list
 
 | item from run 1 | outcome |
