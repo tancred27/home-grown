@@ -1,0 +1,263 @@
+{
+ "_about": "Hand labels for documentation-page triage, written BEFORE the LLM page decider. One rater. KEEP if another team would want the page before building something: a solution or approach, a design decision, a policy, a limitation or compatibility boundary, a migration guide, or a reusable how-to / runbook. IGNORE usage and reference pages for one tool's own features, contributor or release-process docs, and pages that only restate what the asset is.",
+ "pages": [
+  {
+   "object_ref": "docs:grafana/athena-datasource/docs/sources/alerting.md",
+   "title": "Amazon Athena alerting",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/athena-datasource/docs/sources/annotations.md",
+   "title": "Amazon Athena annotations",
+   "keep": false,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/athena-datasource/docs/sources/_index.md",
+   "title": "Amazon Athena data source",
+   "keep": false,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/authlib/docs/authentication/grpc.md",
+   "title": "Authentication using GRPC",
+   "keep": true,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/authlib/docs/authorization/single-tenant.md",
+   "title": "How it works for Grafana Plugins",
+   "keep": true,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/business-calendar/docs/sources/basic-config.md",
+   "title": "Basic configuration",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/business-calendar/docs/sources/configuration/_index.md",
+   "title": "Configuration",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/business-calendar/docs/sources/_index.md",
+   "title": "Business Calendar",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/business-forms/docs/sources/custom-code/context-parameters.md",
+   "title": "Context parameters",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/business-forms/docs/sources/custom-code/_index.md",
+   "title": "Custom code",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/business-forms/docs/sources/_index.md",
+   "title": "Business Forms",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/business-table/docs/sources/editable-data/add.md",
+   "title": "Add data",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/business-table/docs/sources/editable-data/_index.md",
+   "title": "Editable data/data flow",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/business-table/docs/sources/_index.md",
+   "title": "Business Table",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/business-text/docs/sources/exploring-eventbus.md",
+   "title": "Exploring Grafana events",
+   "keep": true,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/business-text/docs/sources/exploring-variables.md",
+   "title": "Exploring variables",
+   "keep": false,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/business-text/docs/sources/_index.md",
+   "title": "Business Text",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/carbon-relay-ng/docs/aggregation.md",
+   "title": "input",
+   "keep": false,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/carbon-relay-ng/docs/config.md",
+   "title": "Blocklist",
+   "keep": false,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/carbon-relay-ng/docs/deploying-on-k8s.md",
+   "title": "Deploying Carbon-Relay-Ng on Kubernetes",
+   "keep": true,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/clickhouse-datasource/docs/sources/alerting.md",
+   "title": "ClickHouse alerting",
+   "keep": false,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/clickhouse-datasource/docs/sources/annotations.md",
+   "title": "ClickHouse annotations",
+   "keep": false,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/clickhouse-datasource/docs/sources/_index.md",
+   "title": "ClickHouse data source",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/cloudcost-exporter/docs/contribute/creating-a-new-module.md",
+   "title": "Creating a New Module",
+   "keep": true,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/cloudcost-exporter/docs/contribute/deprecation-policy.md",
+   "title": "Deprecation Policy",
+   "keep": true,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/cloudcost-exporter/docs/contribute/developer-guide.md",
+   "title": "Developer Guide",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/cog/docs/index.md",
+   "title": "Cog",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/cog/docs/pipelines/builder_transformations.md",
+   "title": "Applying builder transformations",
+   "keep": false,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/cog/docs/pipelines/creating_pipeline.md",
+   "title": "Creating a codegen pipeline",
+   "keep": false,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/crossplane-provider-grafana/docs/contributing.md",
+   "title": "Contributing",
+   "keep": false,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/crossplane-provider-grafana/docs/kubeconform.md",
+   "title": "Validating manifests with kubeconform",
+   "keep": true,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/crossplane-provider-grafana/docs/observed-resources.md",
+   "title": "Observed Resources (TF Data Sources as Crossplane Resources)",
+   "keep": true,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/dashboard-linter/docs/index.md",
+   "title": "Usage",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/dashboard-linter/docs/rules/element-reference-rule.md",
+   "title": "element-reference-rule",
+   "keep": false,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/dashboard-linter/docs/rules/panel-datasource-rule.md",
+   "title": "panel-datasource-rule",
+   "keep": false,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/dataplane/docs/contract/contract.md",
+   "title": "Introduction to the Grafana data structure",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/dataplane/docs/contract/contract-spec.md",
+   "title": "Data Plane Contract - Technical Specification",
+   "keep": true,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/dataplane/docs/contract/dataframes.md",
+   "title": "Data frames",
+   "keep": false,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/docker-otel-lgtm/docs/gcx-integration.md",
+   "title": "Query and troubleshoot local telemetry with gcx",
+   "keep": true,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/docker-otel-lgtm/docs/gcx-migration.md",
+   "title": "Migration: generated MCP setup replaced by gcx guidance",
+   "keep": true,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/flagger-k6-webhook/docs/internal/release-process.md",
+   "title": "Release process",
+   "keep": false,
+   "rules_kept": false
+  },
+  {
+   "object_ref": "docs:grafana/xk6-kafka/docs/COMPATIBILITY.md",
+   "title": "Compatibility matrix",
+   "keep": true,
+   "rules_kept": true
+  },
+  {
+   "object_ref": "docs:grafana/xk6-kafka/docs/MIGRATION.md",
+   "title": "Migrating from `mostafa/xk6-kafka`",
+   "keep": true,
+   "rules_kept": false
+  }
+ ]
+}
