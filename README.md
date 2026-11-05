@@ -45,3 +45,21 @@ trustworthy — see `docs/INVENTORY.md`.
 
 First real task: rebuild D properly for gate 1 — a real embedding model, and 50
 paraphrase queries with human-judged relevance over real tool descriptions.
+
+## Running it
+
+```bash
+docker compose up -d                       # Postgres 16 + pgvector 0.8, schema auto-applied
+python -m venv .venv && .venv/Scripts/python -m pip install -e ".[dev]"
+
+# Build a corpus. Both dirs are untrusted data; keep them outside the repo.
+experiments/density/fetch.sh  <comments-dir>
+python -I scripts/ingest.py   <repos-dir> <comments-dir>
+
+python -I scripts/demo_boundary.py "reject a payload that is too large"
+python -I scripts/bench_vector.py 50000 384 768 1024
+.venv/Scripts/python -m pytest -q           # includes the permission leakage gate
+```
+
+One synthetic team per repo, each user in their own team only — so cross-team
+discovery is blocked by row-level security rather than by convention.

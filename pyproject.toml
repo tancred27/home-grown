@@ -1,0 +1,40 @@
+[project]
+name = "orgmem"
+version = "0.1.0"
+description = "Org Capability Memory - answers 'has someone here already solved this?' across team access boundaries"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "psycopg[binary]>=3.2",
+    "pgvector>=0.3.6",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+    "httpx>=0.28",
+    "langgraph>=1.0",
+    "langgraph-checkpoint-postgres>=2.0",
+    # fastembed (onnxruntime) rather than sentence-transformers: same BGE models,
+    # ~100MB install instead of pulling ~2.5GB of torch.
+    "fastembed>=0.4",
+    "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3", "pytest-asyncio>=0.24", "ruff>=0.8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/orgmem"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
