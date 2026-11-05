@@ -12,3 +12,4 @@ requirements.lock.txt.tmp
 corpora/
 repos/
 npm/
+.cache/

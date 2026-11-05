@@ -81,24 +81,73 @@ def _read_manifest(d: Path) -> tuple[str | None, str | None, list[str]]:
     return name, summary, eco
 
 
-def _readme(d: Path) -> tuple[str | None, str | None]:
-    """(filename, first meaningful paragraph)."""
+# Lines that look like prose but say nothing about what the thing does. Gate 1 showed
+# the old "first non-heading line" rule returning the repo's own title
+# ("carbon-relay-ng"), a markdown admonition ("> [!NOTE]") and an experimental-status
+# notice -- and no retrieval method can find a thing described by its own name.
+_BADGE = re.compile(r"^\s*(\[!\[|!\[|\[\!\[|<img|<p|<div|<a\s|</)", re.I)
+_ADMONITION = re.compile(r"^\s*>\s*(\[!\w+\])?", re.I)
+_NOISE_LINE = re.compile(
+    r"^\s*(\||---|===|```|<!--|\d+\.\s|[-*+]\s|table of contents|toc\b"
+    r"|installation\b|usage\b|license\b|contributing\b|getting started\b"
+    r"|status:|note:|warning:|deprecated:)", re.I)
+_STATUS_NOTICE = re.compile(
+    r"\b(experimental|work in progress|wip|unmaintained|archived|do not use|"
+    r"still in|may break|under development|pre-?release|unstable)\b", re.I)
+
+
+def _looks_like_name(line: str, *candidates: str | None) -> bool:
+    """Is this line just the project's own name (possibly slugified)?"""
+    norm = re.sub(r"[^a-z0-9]+", "", line.lower())
+    if len(norm) < 3:
+        return True
+    for c in candidates:
+        if c and norm == re.sub(r"[^a-z0-9]+", "", c.lower()):
+            return True
+    return False
+
+
+def _readme(d: Path, *names: str | None) -> tuple[str | None, str | None]:
+    """(filename, a line that actually describes the thing).
+
+    Scans the first ~60 lines and returns the first that survives every filter, rather
+    than the first non-heading line.
+    """
     for f in sorted(d.iterdir()) if d.is_dir() else []:
-        if f.is_file() and f.name.lower().startswith("readme"):
-            try:
-                text = f.read_text(encoding="utf-8", errors="ignore")
-            except OSError:
-                return f.name, None
-            for line in text.splitlines():
-                s = line.strip()
-                if s and not s.startswith(("#", "!", "[!", "<", "---", "=")):
-                    return f.name, s[:400]
+        if not (f.is_file() and f.name.lower().startswith("readme")):
+            continue
+        try:
+            text = f.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
             return f.name, None
+        for line in text.splitlines()[:60]:
+            s = line.strip()
+            if not s or s.startswith(("#", "=")):
+                continue
+            if _BADGE.match(s) or _ADMONITION.match(s) or _NOISE_LINE.match(s):
+                continue
+            s = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", s)      # unwrap md links
+            s = re.sub(r"[`*_]", "", s).strip()
+            if len(s) < 40 or " " not in s:
+                continue
+            if _looks_like_name(s, *names):
+                continue
+            if _STATUS_NOTICE.search(s) and len(s) < 160:
+                continue      # a status banner, not a description
+            return f.name, s[:400]
+        return f.name, None
     return None, None
 
 
-def detect(repo_root: Path, repo: str, commit: str = "HEAD") -> list[tuple[Unit, list[Claim]]]:
-    """Find units in a repo and the layer-1 claims that come free with them."""
+def detect(repo_root: Path, repo: str, commit: str = "HEAD",
+           repo_description: str | None = None) -> list[tuple[Unit, list[Claim]]]:
+    """Find units in a repo and the layer-1 claims that come free with them.
+
+    `repo_description` is the source system's own one-line description (for GitHub, the
+    repo's `description` field). It is human-written, purpose-focused and almost always
+    better than anything scraped out of a README, so it wins for the repo-level unit.
+    Sub-packages keep their manifest description, which is more specific to them.
+    """
     found: dict[str, set[str]] = {}
     for d, dirs, files in __import__("os").walk(repo_root):
         dirs[:] = [x for x in dirs if x not in SKIP_DIRS]
@@ -115,9 +164,17 @@ def detect(repo_root: Path, repo: str, commit: str = "HEAD") -> list[tuple[Unit,
             continue
         d = repo_root / rel if rel != "." else repo_root
         name, summary, eco2 = _read_manifest(d)
-        readme_name, readme_line = _readme(d)
+        readme_name, readme_line = _readme(d, name, repo, rel.rsplit("/", 1)[-1])
         name = name or (repo if rel == "." else rel.rsplit("/", 1)[-1])
-        summary = summary or readme_line
+
+        # A manifest description that is just the package name tells us nothing.
+        if summary and _looks_like_name(summary, name, repo):
+            summary = None
+        # Order of preference, best first.
+        if rel == ".":
+            summary = summary or repo_description or readme_line
+        else:
+            summary = summary or readme_line or repo_description
 
         kind = "service" if SERVICE_HINT.search(rel) else "library"
         unit = Unit(

@@ -17,6 +17,7 @@ import uuid
 
 import psycopg
 
+from .config import settings
 from .embed import embed_query
 from .models import Verdict
 
@@ -53,8 +54,34 @@ def _tsquery_or(text: str) -> str:
 _FORCE_EXACT = "set local enable_indexscan = off; set local enable_bitmapscan = off;"
 
 
+def candidate_text(conn: psycopg.Connection, asset_id) -> str:
+    """What the cross-encoder reads for one candidate.
+
+    Lead with the description and keep claims few and short. The first version fed
+    name + summary + 12 claim bodies: the layer-1 claim body IS the summary, so the
+    description appeared twice, and then a dozen "Asserted by its own tests: escapes
+    backslashes in label names" lines buried it. A cross-encoder reads the pair as a
+    passage; give it a passage, not a test log.
+    """
+    with conn.cursor() as cur:
+        cur.execute("select name, coalesce(summary,'') from asset where id = %s",
+                    (asset_id,))
+        r = cur.fetchone()
+        if not r:
+            return ""
+        name, summary = r
+        cur.execute(
+            "select body from claim where asset_id = %s and valid_to is null "
+            "and layer > 1 order by layer desc, confidence desc limit 4", (asset_id,))
+        bodies = [b[0].replace("Asserted by its own tests: ", "")
+                  .replace("From a discussion ", "") for b in cur.fetchall()]
+    parts = [f"{name}: {summary}" if summary else name]
+    parts += [b for b in bodies if b and b not in summary]
+    return ". ".join(parts)[:900]
+
+
 def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = None,
-           limit: int = 50) -> list[dict]:
+           limit: int = 50, rerank: bool | None = None) -> list[dict]:
     """Full-text and vector search in one pass, fused by reciprocal rank.
 
     `keywords` exists because agent-written synonyms moved retrieval quality more than
@@ -130,10 +157,24 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
 
     # Tie-break on having both signals, which recovers the complementarity that
     # max-fusion gives up without letting it override a strong single signal.
-    return sorted(
+    ordered = sorted(
         fused.values(),
         key=lambda r: (-r["score"], -(r["lexical"] is not None and r["semantic"] is not None)),
     )
+
+    use_rerank = settings.rerank_enabled if rerank is None else rerank
+    if not use_rerank or len(ordered) < 2:
+        return ordered
+
+    # Rerank only the head: the cross-encoder is the expensive step, and recall@10 was
+    # already 0.86 before reranking, so the right answer is usually near the top of
+    # the fused list even when it is not in the top 5.
+    from . import rerank as rr
+
+    head = ordered[: settings.rerank_depth]
+    tail = ordered[settings.rerank_depth :]
+    texts = [candidate_text(conn, r["asset_id"]) for r in head]
+    return rr.apply(terms, head, texts) + tail
 
 
 def load_claims(conn: psycopg.Connection, asset_id) -> list[dict]:

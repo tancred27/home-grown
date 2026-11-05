@@ -14,6 +14,15 @@ class Settings(BaseSettings):
 
     embed_model: str = "BAAI/bge-base-en-v1.5"
     embed_dim: int = 768
+    # Small cross-encoder (~130MB, onnxruntime). NOT the Xenova ms-marco exports: in
+    # this fastembed build both the L-6 and L-12 variants returned scores that rose
+    # monotonically with document POSITION regardless of content (-11.44, -11.40,
+    # -11.32 on a trivial case), ranking the correct answer last.
+    rerank_model: str = "jinaai/jina-reranker-v1-tiny-en"
+    # OFF by default: measured to hurt. On the held-out set, hybrid recall@5 was 0.73
+    # without reranking and 0.62 with it. See experiments/gate1/RESULTS.md.
+    rerank_enabled: bool = False
+    rerank_depth: int = 30          # how many fused candidates get cross-encoded
 
     # Discussion ingestion is a funnel. These are the gates, and they are settings
     # rather than constants because run E2 showed the length gate does NOT generalise:

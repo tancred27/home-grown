@@ -19,6 +19,7 @@ import sys
 from pathlib import Path
 
 from orgmem.config import settings
+from orgmem.corpus.github import fetch_org_repos
 from orgmem.db import admin_conn
 from orgmem.embed import asset_text, embed_texts
 from orgmem.extract import discussions, units
@@ -60,6 +61,16 @@ def main() -> int:
     print(f"comment corpus: {sum(len(v) for v in comments.values())} raw across "
           f"{len(comments)} repos")
 
+    # The source system's own one-line description is the best layer-1 summary we can
+    # get; gate 1 showed README scraping producing titles and notices instead.
+    try:
+        meta = fetch_org_repos()
+        print(f"repo metadata: {len(meta)} repos "
+              f"({sum(1 for v in meta.values() if v.get('description'))} with a description)")
+    except Exception as e:
+        print(f"repo metadata unavailable ({type(e).__name__}); falling back to READMEs")
+        meta = {}
+
     stats = {"assets": 0, "l1": 0, "l2": 0, "l3": 0}
 
     with admin_conn() as conn:
@@ -71,7 +82,9 @@ def main() -> int:
             grant_membership(conn, dev, team)
             grant_source_access(conn, dev, f"github:{repo}")
 
-            detected = units.detect(repo_path, repo)
+            detected = units.detect(
+                repo_path, repo,
+                repo_description=(meta.get(repo) or {}).get("description"))
             test_claims = tx.extract_repo(repo_path, commit="HEAD")
             repo_comment_claims = discussions.extract_comments(
                 comments.get(repo, []), min_chars=settings.min_comment_chars)

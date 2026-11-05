@@ -82,6 +82,72 @@ No retrieval method can find a thing described by its own name. **Fixing the sum
 extractor is likely worth more than any retrieval tuning** — it is the cheapest
 available gain and it was invisible until the gate ran.
 
+## Run 2: summary fix, reranker, and a held-out set
+
+The held-out set (`queries_heldout.json`, 58 fresh phrasings, 55 resolvable) was
+**committed before either fix was written** — see commit `3f28728` — so neither fix
+could have been shaped to it. The original 51 queries are now the dev set.
+
+### Fix 1 — better layer-1 summaries: kept, it helped
+
+The source system's own repo description is now preferred for the repo-level unit, and
+the README fallback skips titles, badges, admonitions and status notices. All 86 assets
+now have a real summary (`carbon-relay-ng` went from `"carbon-relay-ng"` to "Fast
+carbon relay+aggregator with admin interfaces for making changes online"). On the dev
+set, semantic recall@5 on low-overlap queries rose from 0.71 to 0.79.
+
+### Fix 2 — a cross-encoder reranker: rejected, it hurt
+
+| | dev hybrid@5 | held-out hybrid@5 | held-out low-overlap |
+|---|---|---|---|
+| with reranker (jina-tiny) | 0.61 | 0.62 | 0.46 |
+| **without reranker** | **0.86** | **0.73** | **0.61** |
+
+Two of the three small cross-encoders available locally were broken in this build:
+both Xenova ms-marco exports (L-6 and L-12) returned scores that rose monotonically
+with the document's **position**, regardless of content — -11.44, -11.40, -11.32 on a
+case with one obviously right answer, which they ranked last. In the first rerank run
+this pushed an asset ranked #1 by *both* retrievers down to #15. The working model
+(jina-reranker-v1-tiny) ranked trivial cases correctly but with a weak margin, and on
+real queries still lost 11 points of recall@5. The reranker is kept in the code, off by
+default, as a negative result. A larger reranker might behave differently; that is
+untested.
+
+### The result
+
+| held-out set (n=55) | recall@1 | recall@5 | recall@10 | MRR | misses |
+|---|---|---|---|---|---|
+| keyword | 0.24 | 0.56 | 0.76 | 0.37 | 12 |
+| semantic | **0.49** | 0.71 | **0.85** | **0.60** | 4 |
+| hybrid (max-fusion) | 0.24 | **0.73** | 0.84 | 0.46 | **3** |
+
+| held-out, by measured overlap | n | keyword@5 | semantic@5 | hybrid@5 |
+|---|---|---|---|---|
+| low < 0.20 | 28 | 0.36 | 0.57 | **0.61** |
+| mid 0.20–0.45 | 21 | 0.76 | 0.86 | 0.86 |
+| high ≥ 0.45 | 6 | 0.83 | 0.83 | 0.83 |
+
+**Gate 1: FAIL. Held-out hybrid recall@5 = 0.73 against a line of 0.80. The low-overlap
+stratum is 0.61.**
+
+### The most useful number here is the gap
+
+The same system scores **0.86 on the dev set and 0.73 on the held-out set** — a
+13-point gap, and 0.82 vs 0.61 on the low-overlap stratum. Nothing changed between those
+two numbers except whether the queries were seen while choosing the method. That gap is
+the cost of tuning on your evaluation set, measured directly, and it is the error that
+invalidated experiment D. Without the held-out set this project would currently be
+reporting a pass.
+
+### An unresolved trade-off
+
+Max-fusion buys a little recall@5 (0.73 vs 0.71 — one query out of 55) at a large cost
+in recall@1 (0.24 vs 0.49) and MRR (0.46 vs 0.60). For the verdict step, which reads the
+top few candidates, recall@5 is what matters; for a person scanning results, the top
+result matters. **Not decided, and deliberately so**: choosing between them by looking at
+these numbers would spend the held-out set as a tuning set. Any further method choice
+needs a third query set.
+
 ## What is needed to actually pass
 
 1. A **held-out** query set, written before the method is tuned.
