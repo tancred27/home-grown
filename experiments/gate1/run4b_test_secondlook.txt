@@ -1,0 +1,27 @@
+WARNING: 1 queries reference assets not in the corpus:
+  github:adaptive-metrics-autoapply:.
+corpus: 86 assets | queries: 51
+
+    method  recall@1  recall@5  recall@10     MRR  misses
+   keyword      0.43      0.69       0.78    0.54       8
+  semantic      0.75      0.98       1.00    0.85       0
+    hybrid      0.75      0.98       1.00    0.84       0
+
+by measured query/asset lexical overlap:
+            band    n  keyword@5  semantic@5  hybrid@5
+      low  <0.20   23       0.48        0.96      0.96
+  mid  0.20-0.45   21       0.81        1.00      1.00
+     high >=0.45    7       1.00        1.00      1.00
+
+queries where hybrid missed the gold asset in the top 5:
+  overlap=0.00 fts=None vec=7 hyb=10  derive required reviewers configuration from code ownership
+
+GATE 1: hybrid recall@5 = 0.98 (PASS, line is 0.80)
+  low-overlap stratum (n=23): hybrid recall@5 = 0.96  <- the honest number
+
+pre-registered ablation: + agent keywords (n=51)
+                    recall@1  recall@5  recall@10     MRR
+  without keywords      0.75      0.98       1.00    0.84
+     with keywords      0.84      1.00       1.00    0.92
+  low-overlap (n=23): without 0.96 -> with 1.00
+  keyword/gold overlap: mean 0.37; on the 9 queries whose keywords barely touch the gold text: without 1.00 -> with 1.00

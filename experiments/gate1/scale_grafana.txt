@@ -1,0 +1,45 @@
+WARNING: 1 queries reference assets not in the corpus:
+  github:adaptive-metrics-autoapply:.
+corpus: 492 assets | queries: 51
+
+    method  recall@1  recall@5  recall@10     MRR  misses
+   keyword      0.31      0.59       0.67    0.44      12
+  semantic      0.45      0.63       0.71    0.54       8
+    hybrid      0.45      0.63       0.71    0.53       9
+
+by measured query/asset lexical overlap:
+            band    n  keyword@5  semantic@5  hybrid@5
+      low  <0.20   23       0.35        0.35      0.35
+  mid  0.20-0.45   21       0.71        0.81      0.81
+     high >=0.45    7       1.00        1.00      1.00
+
+queries where hybrid missed the gold asset in the top 5:
+  overlap=0.33 fts=None vec=14 hyb=None  dashboards over a fast columnar warehouse used for log analytics
+  overlap=0.00 fts=None vec=None hyb=None  library of building blocks for horizontally scaled go servers
+  overlap=0.00 fts=None vec=13 hyb=17  peer discovery and consistent hashing between replicas
+  overlap=0.00 fts=None vec=8 hyb=13  keep a pool of browser processes alive for synthetic checks
+  overlap=0.00 fts=None vec=None hyb=None  catch bad patterns in exported monitoring board definitions
+  overlap=0.00 fts=6 vec=None hyb=16  a proxy for a legacy metrics protocol that can aggregate and fan out
+  overlap=0.29 fts=3 vec=4 hyb=7  generate sdk types for several languages from one schema
+  overlap=0.12 fts=12 vec=18 hyb=14  an elastic distance between two time series of different lengths
+  overlap=0.00 fts=None vec=None hyb=None  find which of many hosts is behaving differently from the rest
+  overlap=0.00 fts=None vec=6 hyb=8  simple exponential state space forecasting
+  overlap=0.00 fts=None vec=None hyb=None  run bayesian forecasting inside a web page
+  overlap=0.17 fts=18 vec=None hyb=None  build an interactive diagram that reacts to live data
+  overlap=0.00 fts=9 vec=7 hyb=11  performance test an event streaming platform
+  overlap=0.00 fts=None vec=None hyb=None  derive required reviewers configuration from code ownership
+  overlap=0.12 fts=12 vec=6 hyb=7  alert before our automation runs out of github api quota
+  overlap=0.17 fts=None vec=None hyb=None  gitops management of observability config through kubernetes
+  overlap=0.40 fts=3 vec=18 hyb=6  a backend receiver for frontend observability telemetry
+  overlap=0.00 fts=2 vec=12 hyb=19  explore cpu and memory profiles in dashboards
+  overlap=0.25 fts=None vec=19 hyb=None  build an opentelemetry collector config in a ui
+
+GATE 1: hybrid recall@5 = 0.63 (FAIL, line is 0.80)
+  low-overlap stratum (n=23): hybrid recall@5 = 0.35  <- the honest number
+
+pre-registered ablation: + agent keywords (n=51)
+                    recall@1  recall@5  recall@10     MRR
+  without keywords      0.45      0.63       0.71    0.53
+     with keywords      0.59      0.86       0.94    0.71
+  low-overlap (n=23): without 0.35 -> with 0.83
+  keyword/gold overlap: mean 0.44; on the 3 queries whose keywords barely touch the gold text: without 0.33 -> with 0.33

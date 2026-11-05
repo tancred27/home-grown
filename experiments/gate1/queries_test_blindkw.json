@@ -1,0 +1,581 @@
+[
+ {
+  "query": "dashboards over a fast columnar warehouse used for log analytics",
+  "keywords": [
+   "clickhouse",
+   "datasource plugin",
+   "OLAP database",
+   "log analytics",
+   "columnar store"
+  ],
+  "gold_unit_id": "github:clickhouse-datasource:."
+ },
+ {
+  "query": "ad hoc SQL against a data lake hosted on amazon",
+  "keywords": [
+   "athena",
+   "s3 query",
+   "presto",
+   "trino",
+   "datasource plugin",
+   "aws"
+  ],
+  "gold_unit_id": "github:athena-datasource:."
+ },
+ {
+  "query": "library of building blocks for horizontally scaled go servers",
+  "keywords": [
+   "distributed systems",
+   "microservices toolkit",
+   "hash ring",
+   "go library",
+   "cluster utilities"
+  ],
+  "gold_unit_id": "github:dskit:."
+ },
+ {
+  "query": "peer discovery and consistent hashing between replicas",
+  "keywords": [
+   "hash ring",
+   "memberlist",
+   "gossip protocol",
+   "sharding",
+   "service discovery",
+   "consistent hashing"
+  ],
+  "gold_unit_id": "github:ckit:."
+ },
+ {
+  "query": "monitor cloud bills broken down by service and region",
+  "keywords": [
+   "cost management",
+   "billing exporter",
+   "cloud cost",
+   "finops",
+   "cost explorer",
+   "prometheus exporter"
+  ],
+  "gold_unit_id": "github:cloudcost-exporter:."
+ },
+ {
+  "query": "metrics for a pool of distributed task workers written in python",
+  "keywords": [
+   "celery exporter",
+   "task queue",
+   "prometheus exporter",
+   "worker monitoring",
+   "job queue metrics"
+  ],
+  "gold_unit_id": "github:celery-exporter:."
+ },
+ {
+  "query": "group similar http routes so per-url metrics stay bounded",
+  "keywords": [
+   "route normalization",
+   "cardinality reduction",
+   "url templating",
+   "path clustering",
+   "high cardinality"
+  ],
+  "gold_unit_id": "github:clusterurl:."
+ },
+ {
+  "query": "a library for checking access tokens and enforcing role based permissions",
+  "keywords": [
+   "jwt validation",
+   "rbac",
+   "authorization",
+   "access control",
+   "oauth middleware",
+   "authz"
+  ],
+  "gold_unit_id": "github:authlib:."
+ },
+ {
+  "query": "keep a pool of browser processes alive for synthetic checks",
+  "keywords": [
+   "headless chrome",
+   "puppeteer",
+   "playwright",
+   "browser pool",
+   "synthetic monitoring"
+  ],
+  "gold_unit_id": "github:crocochrome:."
+ },
+ {
+  "query": "catch bad patterns in exported monitoring board definitions",
+  "keywords": [
+   "dashboard linter",
+   "lint rules",
+   "dashboard json",
+   "static analysis",
+   "best practices"
+  ],
+  "gold_unit_id": "github:dashboard-linter:."
+ },
+ {
+  "query": "a proxy for a legacy metrics protocol that can aggregate and fan out",
+  "keywords": [
+   "graphite",
+   "carbon relay",
+   "statsd",
+   "metrics relay",
+   "aggregator"
+  ],
+  "gold_unit_id": "github:carbon-relay-ng:."
+ },
+ {
+  "query": "generate sdk types for several languages from one schema",
+  "keywords": [
+   "code generation",
+   "codegen",
+   "schema",
+   "cue",
+   "openapi",
+   "typescript go types"
+  ],
+  "gold_unit_id": "github:cog:."
+ },
+ {
+  "query": "the engine behind alert rules, notifications and silencing",
+  "keywords": [
+   "alertmanager",
+   "alerting",
+   "notification routing",
+   "silences",
+   "rule evaluation"
+  ],
+  "gold_unit_id": "github:alerting:."
+ },
+ {
+  "query": "seed a test instance with lots of fake alert rules",
+  "keywords": [
+   "load generator",
+   "test data",
+   "alert rule generator",
+   "fixtures",
+   "provisioning script"
+  ],
+  "gold_unit_id": "github:alerting:testing/alerting-gen"
+ },
+ {
+  "query": "an elastic distance between two time series of different lengths",
+  "keywords": [
+   "dynamic time warping",
+   "dtw",
+   "time series similarity",
+   "distance metric"
+  ],
+  "gold_unit_id": "github:augurs:crates/augurs-dtw"
+ },
+ {
+  "query": "estimate the period of a seasonal metric",
+  "keywords": [
+   "periodicity detection",
+   "seasonality",
+   "autocorrelation",
+   "fft",
+   "period estimation"
+  ],
+  "gold_unit_id": "github:augurs:crates/augurs-seasons"
+ },
+ {
+  "query": "find which of many hosts is behaving differently from the rest",
+  "keywords": [
+   "outlier detection",
+   "dbscan",
+   "median absolute deviation",
+   "anomaly detection",
+   "peer comparison"
+  ],
+  "gold_unit_id": "github:augurs:crates/augurs-outlier"
+ },
+ {
+  "query": "segment a metric at the points where its mean or variance changes",
+  "keywords": [
+   "changepoint detection",
+   "pelt",
+   "change point",
+   "segmentation",
+   "bayesian online changepoint"
+  ],
+  "gold_unit_id": "github:augurs:crates/augurs-changepoint"
+ },
+ {
+  "query": "cluster similar series into groups without any labels",
+  "keywords": [
+   "time series clustering",
+   "dbscan",
+   "unsupervised clustering",
+   "k-means",
+   "dtw"
+  ],
+  "gold_unit_id": "github:augurs:crates/augurs-clustering"
+ },
+ {
+  "query": "facebook-style forecasting with yearly and weekly effects",
+  "keywords": [
+   "prophet",
+   "time series forecasting",
+   "seasonality",
+   "holidays",
+   "stan"
+  ],
+  "gold_unit_id": "github:augurs:crates/augurs-prophet"
+ },
+ {
+  "query": "simple exponential state space forecasting",
+  "keywords": [
+   "ets",
+   "exponential smoothing",
+   "holt-winters",
+   "autoets",
+   "forecasting"
+  ],
+  "gold_unit_id": "github:augurs:crates/augurs-ets"
+ },
+ {
+  "query": "seasonal trend decomposition for data with daily and weekly cycles",
+  "keywords": [
+   "mstl",
+   "stl decomposition",
+   "multiple seasonality",
+   "trend",
+   "loess"
+  ],
+  "gold_unit_id": "github:augurs:crates/augurs-mstl"
+ },
+ {
+  "query": "a high level forecasting api combining transforms and models",
+  "keywords": [
+   "forecasting pipeline",
+   "forecaster",
+   "transforms",
+   "model wrapper",
+   "time series library"
+  ],
+  "gold_unit_id": "github:augurs:crates/augurs-forecaster"
+ },
+ {
+  "query": "use the time series toolkit from python",
+  "keywords": [
+   "python bindings",
+   "pyo3",
+   "time series library",
+   "maturin",
+   "wheel"
+  ],
+  "gold_unit_id": "github:augurs:crates/pyaugurs"
+ },
+ {
+  "query": "run bayesian forecasting inside a web page",
+  "keywords": [
+   "wasm",
+   "webassembly",
+   "prophet",
+   "javascript bindings",
+   "browser forecasting"
+  ],
+  "gold_unit_id": "github:augurs:components/js/prophet-wasmstan"
+ },
+ {
+  "query": "base traits shared by all the forecasting crates",
+  "keywords": [
+   "core traits",
+   "rust crate",
+   "forecast trait",
+   "fit predict",
+   "common types"
+  ],
+  "gold_unit_id": "github:augurs:crates/augurs-core"
+ },
+ {
+  "query": "javascript anomaly detection for metrics",
+  "keywords": [
+   "outlier detection",
+   "wasm",
+   "npm package",
+   "time series anomaly",
+   "typescript"
+  ],
+  "gold_unit_id": "github:augurs:js/augurs-outlier-js"
+ },
+ {
+  "query": "build a data entry form inside a dashboard",
+  "keywords": [
+   "form panel",
+   "panel plugin",
+   "input form",
+   "rest api submit",
+   "data manipulation"
+  ],
+  "gold_unit_id": "github:business-forms:."
+ },
+ {
+  "query": "a templated text panel driven by query data",
+  "keywords": [
+   "handlebars",
+   "dynamic text",
+   "markdown panel",
+   "template panel",
+   "html panel"
+  ],
+  "gold_unit_id": "github:business-text:."
+ },
+ {
+  "query": "a rich table panel with editing",
+  "keywords": [
+   "data grid",
+   "table panel",
+   "editable table",
+   "panel plugin",
+   "inline editing"
+  ],
+  "gold_unit_id": "github:business-table:."
+ },
+ {
+  "query": "show scheduled events from a datasource on a calendar",
+  "keywords": [
+   "calendar panel",
+   "event calendar",
+   "panel plugin",
+   "annotations",
+   "fullcalendar"
+  ],
+  "gold_unit_id": "github:business-calendar:."
+ },
+ {
+  "query": "a countdown or clock widget for a big screen",
+  "keywords": [
+   "clock panel",
+   "countdown timer",
+   "panel plugin",
+   "wall display",
+   "kiosk"
+  ],
+  "gold_unit_id": "github:clock-panel:."
+ },
+ {
+  "query": "build an interactive diagram that reacts to live data",
+  "keywords": [
+   "svg panel",
+   "flowchart",
+   "diagram panel",
+   "canvas",
+   "mermaid",
+   "dynamic visualization"
+  ],
+  "gold_unit_id": "github:grafana-canvas-panel:."
+ },
+ {
+  "query": "performance test an event streaming platform",
+  "keywords": [
+   "kafka",
+   "load testing",
+   "benchmark",
+   "k6 extension",
+   "producer consumer"
+  ],
+  "gold_unit_id": "github:xk6-kafka:."
+ },
+ {
+  "query": "an automated load testing step inside canary analysis",
+  "keywords": [
+   "k6",
+   "kayenta",
+   "spinnaker",
+   "progressive delivery",
+   "load test"
+  ],
+  "gold_unit_id": "github:flagger-k6-webhook:."
+ },
+ {
+  "query": "common aws session and auth setup shared by plugins",
+  "keywords": [
+   "aws sdk",
+   "sigv4",
+   "credentials provider",
+   "assume role",
+   "aws auth"
+  ],
+  "gold_unit_id": "github:grafana-aws-sdk:."
+ },
+ {
+  "query": "derive required reviewers configuration from code ownership",
+  "keywords": [
+   "codeowners",
+   "branch protection",
+   "required reviewers",
+   "github",
+   "pull request approval"
+  ],
+  "gold_unit_id": "github:generate-policy-bot-config:."
+ },
+ {
+  "query": "alert before our automation runs out of github api quota",
+  "keywords": [
+   "rate limit",
+   "github api",
+   "rate limit exporter",
+   "quota monitoring",
+   "github token"
+  ],
+  "gold_unit_id": "github:github-rate-limits-prometheus-exporter:."
+ },
+ {
+  "query": "record struct layouts across go versions for instrumentation",
+  "keywords": [
+   "struct offsets",
+   "ebpf",
+   "dwarf",
+   "go runtime",
+   "offset tracker",
+   "auto-instrumentation"
+  ],
+  "gold_unit_id": "github:go-offsets-tracker:."
+ },
+ {
+  "query": "safely probe memory addresses from inside a signal handler",
+  "keywords": [
+   "async-signal-safe",
+   "memory read",
+   "sigsegv",
+   "process_vm_readv",
+   "profiler",
+   "safe memory access"
+  ],
+  "gold_unit_id": "github:pyroscope-kinda-safe:kindasafe"
+ },
+ {
+  "query": "gitops management of observability config through kubernetes",
+  "keywords": [
+   "kubernetes operator",
+   "crd",
+   "controller",
+   "declarative config",
+   "argocd"
+  ],
+  "gold_unit_id": "github:crossplane-provider-grafana:."
+ },
+ {
+  "query": "helpers to construct well-formed data frames",
+  "keywords": [
+   "dataframe",
+   "data frame builder",
+   "plugin sdk",
+   "arrow",
+   "frame helpers"
+  ],
+  "gold_unit_id": "github:dataplane:sdata"
+ },
+ {
+  "query": "docs and tooling describing the data frame contract",
+  "keywords": [
+   "data types",
+   "specification",
+   "dataframe schema",
+   "contract",
+   "data plane"
+  ],
+  "gold_unit_id": "github:dataplane:."
+ },
+ {
+  "query": "a backend receiver for frontend observability telemetry",
+  "keywords": [
+   "rum",
+   "real user monitoring",
+   "collector receiver",
+   "browser telemetry",
+   "web sdk"
+  ],
+  "gold_unit_id": "github:faro:pkg/go"
+ },
+ {
+  "query": "an interactive getting started experience for a new account",
+  "keywords": [
+   "onboarding",
+   "tutorial",
+   "guided setup",
+   "walkthrough",
+   "welcome flow"
+  ],
+  "gold_unit_id": "github:cloud-setup:."
+ },
+ {
+  "query": "explore cpu and memory profiles in dashboards",
+  "keywords": [
+   "continuous profiling",
+   "pyroscope",
+   "flame graph",
+   "pprof",
+   "profiling app"
+  ],
+  "gold_unit_id": "github:grafana-pyroscope-datasource:."
+ },
+ {
+  "query": "audit which plugins need migrating off an old ui framework",
+  "keywords": [
+   "angular deprecation",
+   "plugin migration",
+   "react migration",
+   "detect angular",
+   "plugin scanner"
+  ],
+  "gold_unit_id": "github:detect-angular-dashboards:."
+ },
+ {
+  "query": "build an opentelemetry collector config in a ui",
+  "keywords": [
+   "otel collector",
+   "pipeline builder",
+   "config generator",
+   "visual editor",
+   "yaml config"
+  ],
+  "gold_unit_id": "github:collector-configurator:."
+ },
+ {
+  "query": "spin up a local telemetry backend with one docker run",
+  "keywords": [
+   "docker image",
+   "all-in-one",
+   "opentelemetry backend",
+   "local dev environment",
+   "otlp"
+  ],
+  "gold_unit_id": "github:docker-otel-lgtm:."
+ },
+ {
+  "query": "periodically apply recommended aggregation rules to cut metrics cost",
+  "keywords": [
+   "recording rules",
+   "aggregation rules",
+   "cardinality reduction",
+   "cron job",
+   "metrics cost"
+  ],
+  "gold_unit_id": "github:adaptive-metrics-autoapply:."
+ },
+ {
+  "query": "a sample javascript app emitting distributed traces",
+  "keywords": [
+   "opentelemetry",
+   "tracing demo",
+   "nodejs example",
+   "jaeger",
+   "tempo"
+  ],
+  "gold_unit_id": "github:alloy-scenarios:app-instrumentation/traces/opentelemetry-sdk/node"
+ },
+ {
+  "query": "a sample javascript app exposing metrics with the native client",
+  "keywords": [
+   "prom-client",
+   "prometheus",
+   "nodejs example",
+   "metrics endpoint",
+   "demo app"
+  ],
+  "gold_unit_id": "github:alloy-scenarios:app-instrumentation/metrics/prometheus-client/node"
+ }
+]

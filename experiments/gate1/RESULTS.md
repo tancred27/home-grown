@@ -311,6 +311,98 @@ labels. Blindness here is by instruction and by what the input file contains, no
 enforcement — the subagents had file-system tools available. Their outputs are committed
 so the scores can be re-derived without them.
 
+## Run 4: results
+
+### 4c — scale, measured first (frozen run-3 system, test set)
+
+| corpus | what was added | hybrid r@5 | semantic r@5 | low-overlap r@5 | raw output |
+|---|---|---|---|---|---|
+| 86 | — | **0.82** | 0.84 | 0.61 | `test_run_output.txt` |
+| 492 | 406 other Grafana repos | 0.63 | 0.63 | 0.35 | `scale_grafana.txt` |
+| 1,307 | + 815 from open-telemetry, prometheus, kubernetes-sigs, hashicorp | 0.59 | 0.59 | 0.30 | `scale_multiorg.txt` |
+| 1,909 | + 602 from apache | 0.55 | 0.57 | 0.30 | `scale_2500.txt` |
+
+The pre-registered target was ~2,500; the five orgs yielded 1,909 active, described repos,
+and that is what was measured. **Retrieval degrades badly with size, and the damage is
+done by near neighbours, not by volume.** The first 406 distractors — Grafana's own other
+repositories, the same kind of thing as the gold assets — cost 19 points of recall@5 and
+nearly halved low-overlap recall. The next 1,417 from four unrelated organisations cost 8
+points more. A real org's corpus is mostly near neighbours, so the 86-asset numbers are
+optimistic by a wide margin.
+
+### 4a — blind keywords (test set; both numbers reported, as pre-registered)
+
+| | recall@1 | recall@5 | low-overlap r@5 |
+|---|---|---|---|
+| 86 assets, without keywords | 0.59 | 0.82 | 0.61 |
+| 86 assets, **with blind keywords** | 0.75 | **0.94** | **0.87** |
+| 1,909 assets, without keywords | 0.41 | 0.55 | 0.30 |
+| 1,909 assets, **with blind keywords** | 0.55 | **0.76** | **0.70** |
+
+Keywords came from a subagent that saw only the requirement text (`blind_keywords.json`).
+It reported removing its own first guesses at actual Grafana project names (`augurs`,
+`dskit`, `faro`); widely known public tool names (`clickhouse`, `prophet`, `k6`) remain,
+as they would for any real agent. Mean keyword/gold-text overlap is **0.37**, against 0.44
+for the run-3 author-written keywords. **The gain is real and it comes from the agent's
+general knowledge** — translating "columnar warehouse for log analytics" into `clickhouse`,
+`OLAP` — not from leaked answers: on the 9 queries whose keywords barely touch the gold
+text, the 86-asset score does not move (0.78 → 0.78). At 1,909 assets, keywords recover
+most of the scale loss (0.55 → 0.76) — the largest single effect in the project.
+
+### 4b — LLM-written purpose lines
+
+Written by a subagent from each asset's own name, description and README only
+(`purpose_summaries.json`; 16 of 86 self-rated low confidence), embedded as field
+`purpose`.
+
+**Tuning set (n=106), the decision:**
+
+| | r@1 | r@5 | r@10 | MRR | low r@5 |
+|---|---|---|---|---|---|
+| frozen (card, summary), hybrid | 0.58 | 0.80 | 0.89 | 0.68 | 0.70 |
+| **+ purpose, hybrid** | **0.64** | **0.93** | **0.97** | **0.76** | **0.89** |
+| purpose only, semantic | 0.63 | 0.93 | 0.95 | 0.76 | 0.95 |
+
+Pre-registered rule: adopt if hybrid r@5 rises and low-overlap r@5 does not fall.
+0.80 → 0.93 and 0.70 → 0.89: **adopted.**
+
+**Test set, its second and pre-registered last look (n=51, 86 assets):**
+
+| | recall@1 | recall@5 | recall@10 | MRR | low-overlap r@5 |
+|---|---|---|---|---|---|
+| run 3 system | 0.59 | 0.82 | 0.88 | 0.69 | 0.61 |
+| **+ purpose lines** | **0.75** | **0.98** | **1.00** | **0.84** | **0.96** |
+| + purpose + blind keywords | 0.84 | 1.00 | 1.00 | 0.92 | 1.00 |
+
+One miss out of 51: "derive required reviewers configuration from code ownership" (gold
+ranked 10th).
+
+### What that number does not mean
+
+The jump is large enough that its limits matter as much as it does:
+
+1. **The low-overlap stratum has lost its meaning.** Overlap is measured against the
+   original indexed text, which does not include the purpose lines — and the purpose
+   lines are written in exactly the plain register the queries are. The stratum no
+   longer isolates queries that share nothing with what is indexed. That is the
+   mechanism working as designed (bridge vocabulary on the document side), but 0.96
+   should not be read as "solved the hard case".
+2. **Both sides are model-written.** Every query was written by Claude and every purpose
+   line by a Claude subagent. Shared phrasing habits — the same plain-language
+   paraphrase of "what a thing is for" — plausibly inflate the match. Real developer
+   queries are the test this cannot stand in for.
+3. **86 assets, and the scale test cannot be rerun fairly yet.** The distractors have no
+   purpose lines; adding the field to gold assets only would hand them an extra signal
+   their competitors lack. Measuring purpose lines at scale needs them written for all
+   1,909 assets — about 1,800 more blind LLM calls.
+4. **The test set has now been used twice.** Both uses were pre-registered and the
+   second was gated on a tuning-set decision, but it is no longer pristine. A further
+   method change needs a fresh query set — ideally written by people, not models.
+
+**Gate 1 is passed** on the terms the design set — ≥0.80 recall@5 on held-out queries —
+at the corpus size it was specified for. The open problems that matter next are scale and
+real queries, not the retriever.
+
 ## Status of the run-1 to-do list
 
 | item from run 1 | outcome |
