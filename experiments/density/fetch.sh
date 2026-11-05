@@ -11,8 +11,17 @@ UA="org-memory-density-check/0.1"
 ORG="${ORG:-grafana}"
 REPOS="${REPOS:-grafana loki tempo mimir k6}"
 PAGES="${PAGES:-3}"
+# Token, in order of preference: $GITHUB_TOKEN, then a token file ($GH_TOKEN_FILE or
+# ~/.gh_token). Keep the file outside the repo. A token with NO scopes is enough for
+# public repositories and lifts the limit from 60 to 5,000 requests/hour.
+TOK="${GITHUB_TOKEN:-}"
+TOKFILE="${GH_TOKEN_FILE:-$HOME/.gh_token}"
+if [ -z "$TOK" ] && [ -r "$TOKFILE" ]; then
+  TOK=$(tr -d ' \t\r\n' < "$TOKFILE")
+fi
 AUTH=()
-[ -n "${GITHUB_TOKEN:-}" ] && AUTH=(-H "Authorization: Bearer $GITHUB_TOKEN")
+[ -n "$TOK" ] && AUTH=(-H "Authorization: Bearer $TOK")
+echo "auth: $([ -n "$TOK" ] && echo "token (${#TOK} chars)" || echo "none — 60 req/hour")"
 
 for r in $REPOS; do
   for p in $(seq 1 "$PAGES"); do
