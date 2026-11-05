@@ -11,6 +11,8 @@ Triggered by every pushed commit and every created or updated documentation page
                decider (fails safe to the rules).
   extract      layer-1 (what it is), layer-2 (tests), layer-3 (discussion, docs, commit
                messages), every claim with evidence.
+  update_map   rewrite the unit's one-line "what is this for" -- only when the change
+               plausibly alters what it does; most commits skip this at no cost.
   attribute    who built it -> pseudonymous person -> team -> LOB -> manager.
   assess_stage dev / beta / prod / retired, inferred from evidence, unconfirmed.
   validate     every claim has evidence; personnel data is dropped.
@@ -76,6 +78,9 @@ class Deps:
     releases: Callable[[str], list[dict]] = lambda full: []
     contributors: Callable[[str, str], list[dict]] = lambda full, path: []
     decider: Callable[[dict, list[dict]], list[dict]] | None = None
+    # (name, description, readme) -> {"purpose", "confidence"}; None = use the LLM via
+    # collector.purpose.write_line. Tests inject a stub.
+    purpose_writer: Callable[[str, str | None, str], dict] | None = None
     org: str = "grafana"
     extra: dict = field(default_factory=dict)
 
@@ -95,6 +100,7 @@ class CollectState(TypedDict, total=False):
     claims: dict                  # unit_id -> [claim dict]
     contributors: dict            # unit_id -> [{login, commits, first_at, last_at}]
     stages: dict                  # unit_id -> Stage dict
+    purposes: dict                # unit_id -> {purpose, confidence, model, ref, readme}
     questions: list
     answers: dict
     log: Annotated[list, operator.add]
@@ -252,6 +258,44 @@ def build_collector(deps: Deps, checkpointer=None):
             out[t["unit_id"]] = [c.model_dump(mode="json") for c in claims]
         return {"claims": out,
                 "log": [{"node": "extract", "claims": {k: len(v) for k, v in out.items()}}]}
+
+    # ------------------------------------------------------------ update_map
+    def update_map(state: CollectState) -> dict:
+        """Rewrite a unit's purpose line only when the change plausibly alters what the
+        unit DOES (README / manifest / docs touched, a new unit, or an explicit
+        regeneration). Most commits do not, and pay nothing here."""
+        from . import purpose as P
+        ev = Event.model_validate(state["event"])
+        paths = [f.path for f in ev.files]
+        regen = ev.kind == "reconcile" and bool(ev.extra.get("regenerate"))
+        out, skipped, failed = {}, 0, 0
+        for t in state["targets"]:
+            if t["kind"] == "solved_problem":
+                continue
+            with admin_conn() as conn, conn.cursor() as cur:
+                cur.execute("select purpose from asset where unit_id = %s", (t["unit_id"],))
+                r = cur.fetchone()
+            has_line = bool(r and r[0])
+            if not P.needs_refresh(paths, t["path"], has_line, regenerate=regen):
+                skipped += 1
+                continue
+            root = deps.clone(t["repo"])
+            unit_dir = root if t["path"] == "." else root / t["path"]
+            readme, rname = P.readme_excerpt(unit_dir)
+            try:
+                writer = deps.purpose_writer or P.write_line
+                line = writer(t["name"], t.get("summary"), readme)
+                from ..llm import resolve_model
+                model = "stub" if deps.purpose_writer else resolve_model()
+            except Exception as e:      # keep the previous line; never block the event
+                failed += 1
+                t["purpose_error"] = f"{type(e).__name__}"
+                continue
+            ref = f"{t['repo']}/{t['path']}/{rname}".replace("/./", "/") if rname else None
+            out[t["unit_id"]] = {**line, "model": model, "ref": ref, "readme": readme}
+        return {"purposes": out,
+                "log": [{"node": "update_map", "written": len(out), "unchanged": skipped,
+                         "failed": failed}]}
 
     # ------------------------------------------------------------ attribute
     def attribute(state: CollectState) -> dict:
@@ -414,6 +458,10 @@ def build_collector(deps: Deps, checkpointer=None):
                         "insert into audit (action, target, reason) values (%s,%s,%s)",
                         (f"collector:{t['action']}", aid,
                          f"{ev.source}:{ev.kind} {ev.version[:12]} -> {n} new claims"))
+                pl = (state.get("purposes") or {}).get(t["unit_id"])
+                if pl:
+                    from .purpose import store as store_purpose
+                    store_purpose(conn, aid, pl, pl["model"], pl["ref"], pl["readme"])
                 rebuild_card(conn, aid)
                 emb_rows.append((aid, unit, claims))
                 written[t["unit_id"]] = {"asset_id": str(aid), "action": t["action"],
@@ -437,7 +485,8 @@ def build_collector(deps: Deps, checkpointer=None):
 
     g = StateGraph(CollectState)
     for name, fn in (("triage", triage), ("locate", locate), ("decide", decide),
-                     ("extract", extract), ("attribute", attribute),
+                     ("extract", extract), ("update_map", update_map),
+                     ("attribute", attribute),
                      ("assess_stage", assess_stage), ("validate", validate),
                      ("owner_gate", owner_gate), ("apply", apply)):
         g.add_node(name, fn)
@@ -445,7 +494,8 @@ def build_collector(deps: Deps, checkpointer=None):
     g.add_conditional_edges("triage", lambda s: after(s, "locate"), ["locate", END])
     g.add_conditional_edges("locate", lambda s: after(s, "decide"), ["decide", END])
     g.add_conditional_edges("decide", lambda s: after(s, "extract"), ["extract", END])
-    g.add_edge("extract", "attribute")
+    g.add_edge("extract", "update_map")
+    g.add_edge("update_map", "attribute")
     g.add_edge("attribute", "assess_stage")
     g.add_edge("assess_stage", "validate")
     g.add_edge("validate", "owner_gate")

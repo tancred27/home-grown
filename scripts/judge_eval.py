@@ -46,16 +46,21 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("tasks", nargs="+")
     ap.add_argument("--top", type=int, default=5)
+    ap.add_argument("--purpose", choices=["db", "json", "none"], default="db",
+                    help="purpose lines from the DB map (the product path), the run-4 "
+                         "subagent file, or none")
+    ap.add_argument("--label", default="", help="suffix for the output file")
     ap.add_argument("--cached-only", action="store_true",
                     help="score only tickets already judged; make no API calls")
     args = ap.parse_args()
 
     model = llm.resolve_model()
     cache = ROOT / "experiments" / "gate2" / f"judge_cache_{settings.llm_provider}.json"
-    purpose = {p["unit_id"]: p["purpose"] for p in json.loads(
+    purpose_json = {p["unit_id"]: p["purpose"] for p in json.loads(
         (ROOT / "experiments" / "gate1" / "purpose_summaries.json").read_text("utf-8"))}
     user = dev_user()
-    print(f"judge: provider={settings.llm_provider} model={model} top={args.top}\n")
+    print(f"judge: provider={settings.llm_provider} model={model} top={args.top} "
+          f"purpose={args.purpose}\n")
 
     totals = {"dup": 0, "dup_hit": 0, "dup_retrieved": 0, "wrong": 0, "sibling": 0,
               "ctl": 0, "ctl_alarm": 0, "failed": 0}
@@ -66,12 +71,15 @@ def main() -> int:
                 cands = search(conn, t["ticket"])[:args.top]
                 cards, units = [], []
                 for r in cands:
-                    cur.execute("select unit_id, name, coalesce(summary,'') from asset "
-                                "where id = %s", (r["asset_id"],))
-                    unit_id, name, summary = cur.fetchone()
+                    cur.execute("select unit_id, name, coalesce(summary,''), "
+                                "coalesce(purpose,'') from asset where id = %s",
+                                (r["asset_id"],))
+                    unit_id, name, summary, db_purpose = cur.fetchone()
                     units.append(unit_id)
+                    pl = {"db": db_purpose, "json": purpose_json.get(unit_id, ""),
+                          "none": ""}[args.purpose]
                     cards.append({"name": display_name(name), "summary": summary,
-                                  "purpose": purpose.get(unit_id, ""),
+                                  "purpose": pl,
                                   "evidence": [c["body"] for c in load_claims(
                                       conn, r["asset_id"]) if c["layer"] > 1][:6]})
             def make(t=t, cards=cards):
@@ -120,7 +128,8 @@ def main() -> int:
             print(f"  {t['id']:4s} {t['kind']:9s} {outcome:22s} "
                   f"strong={[u.split(':', 1)[1] for u in strong]}")
 
-    out = ROOT / "experiments" / "gate2" / f"judge_eval_{settings.llm_provider}.json"
+    tag = f"_top{args.top}_{args.purpose}" + (f"_{args.label}" if args.label else "")
+    out = ROOT / "experiments" / "gate2" / f"judge_eval_{settings.llm_provider}{tag}.json"
     out.write_text(json.dumps({"model": model, "served_by": dict(llm.last_model_served),
                                "totals": totals, "rows": rows}, indent=1),
                    encoding="utf-8")

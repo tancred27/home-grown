@@ -1,0 +1,12 @@
+model groq/openai/gpt-oss-120b: 86 of 86 units
+  10 written (21s)
+  20 written (44s)
+  30 written (109s)
+  40 written (229s)
+  50 written (303s)
+  60 written (380s)
+  70 written (431s)
+  80 written (484s)
+
+written 86, failed 0, in 514s
+confidence: {'high': 83, 'low': 1, 'medium': 2}

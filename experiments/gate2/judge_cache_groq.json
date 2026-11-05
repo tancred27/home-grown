@@ -882,5 +882,73 @@
     "reason": "Chromium supervisor service, unrelated to front‑end theming."
    }
   ]
+ },
+ "af20ceec4d42653d75ba": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Every backend team keeps rewriting ring membership, rate limiting and service lifecycle code. Is there a shared Go library for that?",
+   "[{\"evidence\": [\"Asserted by its own tests: Rate Limiter Tokens At.\", \"Asserted by its own tests: Get Cluster From Incoming Context.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Concurrency Limit.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Returns When All Tokens Are Inflight.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Calls Only Not In Flight Tokens.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Returns When Tokens Are Empty.\"], \"name\": \"dskit\", \"purpose\": \"Utilities for building distributed Go services, providing backoff retries, cache, key\\u2011value store, request hedging, RPC middleware, and service lifecycle management.\", \"summary\": \"Distributed systems kit\"}, {\"evidence\": [], \"name\": \"github-rate-limits-prometheus-exporter\", \"purpose\": \"Deploy a Prometheus exporter to monitor GitHub API rate limits using a Helm chart with PAT or GitHub App credentials.\", \"summary\": \"This helm chart helps to install and configure github-rate-limits-prometheus-exporter\"}, {\"evidence\": [\"Asserted by its own tests: Path Trie Soft Threshold.\", \"Asserted by its own tests: Path Trie Hard Threshold.\", \"Asserted by its own tests: Path Trie Depth Based Thresholds.\", \"Asserted by its own tests: Path Trie No Limit With Minus One.\", \"Asserted by its own tests: Path Trie Max Patterns Under Limit.\", \"Asserted by its own tests: Path Trie Hard Threshold Unique Segment Counting.\"], \"name\": \"clusterurl\", \"purpose\": \"Extract a generic route from URLs to group similar pages for analytics or routing, using rule\\u2011based parsing and gibberish detection.\", \"summary\": \"A simple Go package for processing and clustering a URL to extract a generic page route from it\"}, {\"evidence\": [], \"name\": \"Custom code\", \"purpose\": \"\", \"summary\": \"description: Learn how to use custom code to access panel options, REST API responses, form elements, and Grafana services in Business Forms.\"}, {\"evidence\": [\"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Concrete Reference With Discriminator Field And Mapping Set.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Scalar Discriminator Non Constant Reference.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Concrete Discriminator.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Unknown Discriminator Field.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Scalar With Discriminator Field Set.\"], \"name\": \"cog\", \"purpose\": \"Generate typed code and builder libraries from schemas (CUE, JSON Schema, OpenAPI, etc.) for multiple languages such as Go, Java, Python, TypeScript, and more.\", \"summary\": \"Code Generation with a human touch\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "extend",
+    "reason": "Provides rate limiting and lifecycle utilities but lacks ring‑membership support"
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Helm chart for GitHub rate‑limit exporter, unrelated to Go library needs"
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "URL clustering package, not relevant to ring membership or rate limiting"
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Custom Grafana‑related code, unrelated to shared Go library for distributed services"
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Code‑generation tool, does not provide runtime ring or rate‑limit functionality"
+   }
+  ]
+ },
+ "ac1e5e594c7dad1a6558": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Our browser-based checks need a sidecar that launches Chrome on request and kills hung instances.",
+   "[{\"evidence\": [\"Asserted by its own tests: New Launch Payload.\", \"Asserted by its own tests: Bad Payload.\"], \"name\": \"flagger-k6-webhook\", \"purpose\": \"Run k6 load tests on a canary deployment via a pre\\u2011rollout webhook to verify performance thresholds before promoting traffic.\", \"summary\": \"Using k6 to do load testing of the canary before rolling out traffic\"}, {\"evidence\": [], \"name\": \"How it works for Grafana Plugins\", \"purpose\": \"\", \"summary\": \"This library empowers your Grafana plugins with straightforward access control mechanisms using the `EnforcementClient`. This client simplifies the enforcement of Grafana's Role-Based Access Control (RBAC) within your plugin.\"}, {\"evidence\": [\"Asserted by its own tests: Integration Missing Capabilities.\", \"A test is disabled with the reason: Skipping integration test due to -short\", \"A test is disabled with the reason: skipping long tests\", \"Asserted by its own tests: Check Capabilities.\", \"Asserted by its own tests: Chromium Process Type missing Cmdline.\"], \"name\": \"crocochrome\", \"purpose\": \"Launch and supervise Chromium inside a container, automatically starting and reaping processes without sandboxing\", \"summary\": \"Chromium supervisor\"}, {\"evidence\": [], \"name\": \"Query and troubleshoot local telemetry with gcx\", \"purpose\": \"\", \"summary\": \"Use gcx from your host to query telemetry in a local LGTM instance, then use one\"}, {\"evidence\": [], \"name\": \"k6-loadtester\", \"purpose\": \"Execute k6 load tests on a canary version before traffic is shifted to verify performance thresholds.\", \"summary\": \"Using k6 to do load testing of the canary before rolling out traffic\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "flagger-k6-webhook is for k6 load testing, unrelated to launching or supervising Chrome instances."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Grafana plugin RBAC library does not provide Chrome launch or supervision capabilities."
+   },
+   {
+    "candidate": "C",
+    "verdict": "use_as_is",
+    "reason": "crocochrome is a Chromium supervisor that launches and reaps Chrome processes, matching the sidecar requirement."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "gcx is a telemetry query tool, not related to Chrome process management."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "k6-loadtester is a load testing tool, unrelated to Chrome sidecar functionality."
+   }
+  ]
  }
 }

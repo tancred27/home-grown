@@ -36,6 +36,8 @@ class Settings(BaseSettings):
     # "model": an LLM judges each candidate against the request and fails safe to
     # "unknown". See experiments/gate2/RESULTS.md.
     verdict_mode: str = "rules"
+    # How many search results the model judge reads per question (only in "model" mode).
+    verdict_shortlist: int = 15
 
     # Which LLM. "anthropic" | "gemini" | "local" (any OpenAI-compatible server).
     # The Gemini FREE tier may use prompts to improve Google's products: acceptable for

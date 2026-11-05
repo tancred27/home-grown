@@ -213,3 +213,72 @@ def test_stage_flags_deprecation_for_the_owner_instead_of_applying_it():
     st = infer(releases=[{"tag": "v3.0.0", "prerelease": False}],
                change_text="Deprecate this package")
     assert st.needs_owner and st.proposed == "deprecated" and st.stage == "prod"
+
+
+# ---------------------------------------------------------------- the map
+
+def _with_writer(deps, calls, fail=False):
+    from dataclasses import replace
+
+    def writer(name, desc, readme):
+        calls.append(name)
+        if fail:
+            raise RuntimeError("model down")
+        return {"purpose": f"Retries failed calls ({len(calls)})", "confidence": "high"}
+    return replace(deps, purpose_writer=writer)
+
+
+def _purpose(uid):
+    with admin_conn() as conn, conn.cursor() as cur:
+        cur.execute("select a.purpose, (select count(*) from embedding e where "
+                    "e.asset_id = a.id and e.field = 'purpose') from asset a "
+                    "where a.unit_id = %s", (uid,))
+        return cur.fetchone()
+
+
+def test_map_line_written_for_new_unit_and_only_refreshed_on_capability_changes(env):
+    from langgraph.checkpoint.memory import InMemorySaver
+    name, deps, _ = env
+    calls = []
+    g = build_collector(_with_writer(deps, calls), checkpointer=InMemorySaver())
+    team_only = lambda qs: {f"{q['unit_id']}:{q['ask']}": "team-only" for q in qs}  # noqa: E731
+
+    out = run_event(g, commit(name, "Add retry", [("package.json", "added")]),
+                    uuid.uuid4().hex, owner_policy=team_only)
+    (uid, _), = out["result"].items()
+    line, embedded = _purpose(uid)
+    assert line == "Retries failed calls (1)" and embedded == 1
+
+    run_event(g, commit(name, "Tweak jitter", [("retry.ts", "modified")]),
+              uuid.uuid4().hex, owner_policy=team_only)
+    assert len(calls) == 1, "a code-only commit must not rewrite the line"
+
+    run_event(g, commit(name, "Document backoff", [("README.md", "modified")]),
+              uuid.uuid4().hex, owner_policy=team_only)
+    assert len(calls) == 2 and _purpose(uid)[0] == "Retries failed calls (2)"
+
+
+def test_failed_map_write_keeps_the_previous_line(env):
+    from langgraph.checkpoint.memory import InMemorySaver
+    name, deps, _ = env
+    calls = []
+    team_only = lambda qs: {f"{q['unit_id']}:{q['ask']}": "team-only" for q in qs}  # noqa: E731
+    g = build_collector(_with_writer(deps, calls), checkpointer=InMemorySaver())
+    out = run_event(g, commit(name, "Add retry", [("package.json", "added")]),
+                    uuid.uuid4().hex, owner_policy=team_only)
+    (uid, _), = out["result"].items()
+    g2 = build_collector(_with_writer(deps, calls, fail=True), checkpointer=InMemorySaver())
+    out2 = run_event(g2, commit(name, "Rewrite README", [("README.md", "modified")]),
+                     uuid.uuid4().hex, owner_policy=team_only)
+    assert out2["status"] == "applied", "a model outage must not block the event"
+    assert _purpose(uid)[0] == "Retries failed calls (1)"
+
+
+def test_needs_refresh_rules():
+    from orgmem.collector.purpose import needs_refresh
+    assert needs_refresh([], "pkg", has_line=False)
+    assert not needs_refresh(["pkg/src/a.go"], "pkg", has_line=True)
+    assert needs_refresh(["pkg/README.md"], "pkg", has_line=True)
+    assert needs_refresh(["pkg/go.mod"], "pkg", has_line=True)
+    assert not needs_refresh(["other/README.md"], "pkg", has_line=True)
+    assert needs_refresh(["a.go"], ".", has_line=True, regenerate=True)

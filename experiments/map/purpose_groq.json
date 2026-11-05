@@ -1,0 +1,986 @@
+{
+ "dc0bfb1f55ebc4aa20bc": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/adaptive-metrics-autoapply/docker",
+   "A template repository for enabling auto-apply of Adaptive Metrics recommendations",
+   "# Automatically apply recommendations from Adaptive Metrics Use this template repository to set up auto-apply mode for Adaptive Metrics in Grafana Cloud. > [!NOTE] > Auto-apply mode for Adaptive Metrics is currently in public preview. This feature is still under development and support is limited at this time. ## What to expect By default, auto-apply mode runs at 04:00 UTC Monday through Friday. To configure this setting, edit the `schedule` parameter in the `.github/workflows/pull_recommendations.yml` file. At the scheduled time, the GitHub Action pulls the latest recommendations and creates "
+  ],
+  "out": {
+   "purpose": "Automatically fetch and apply Adaptive Metrics recommendations on a schedule in Grafana Cloud using a GitHub Actions template repository.",
+   "confidence": "high"
+  }
+ },
+ "74d57e2a8394e48b9fe2": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/alerting",
+   "Set of libraries used to build alerting systems at Grafana - including the Alertmanager.",
+   "# Alerting This library contains utilities that are useful for building Alerting systems. ## Current state This library is still in development. ## Mimir compatibility The Legacy (`v0mimir1`/`v0mimir2`) integrations are compatible with Grafana Mimir up to 3.0.x. Mimir 3.1 and later use newer upstream Prometheus Alertmanager versions. Their configurations can include integrations and fields that the Legacy integrations do not yet support. See compatibility tracking. ## Contributing If you're interested in contributing to this project: - Start by reading the Contributing guide. ## License AGPL-3.0"
+  ],
+  "out": {
+   "purpose": "Utilities for building alerting systems, including Alertmanager integration, for Grafana and Mimir compatibility.",
+   "confidence": "high"
+  }
+ },
+ "f15433720095b94587cc": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/alerting/apps/historian",
+   "Set of libraries used to build alerting systems at Grafana - including the Alertmanager.",
+   "# Alerting This library contains utilities that are useful for building Alerting systems. ## Current state This library is still in development. ## Mimir compatibility The Legacy (`v0mimir1`/`v0mimir2`) integrations are compatible with Grafana Mimir up to 3.0.x. Mimir 3.1 and later use newer upstream Prometheus Alertmanager versions. Their configurations can include integrations and fields that the Legacy integrations do not yet support. See compatibility tracking. ## Contributing If you're interested in contributing to this project: - Start by reading the Contributing guide. ## License AGPL-3"
+  ],
+  "out": {
+   "purpose": "Libraries for building Grafana alerting systems with Alertmanager integration and Mimir compatibility",
+   "confidence": "high"
+  }
+ },
+ "5357b30daa3d04ef4f45": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/alerting/testing/alerting-gen",
+   "A tiny CLI to generate random Grafana Alerting rules and Recording rules using:",
+   "# alerting-gen A tiny CLI to generate random Grafana Alerting rules and Recording rules using: - Grafana OpenAPI Go models (`github.com/grafana/grafana-openapi-client-go/models`) - Property-based generators (`pgregory.net/rapid`) for realistic, reproducible data It outputs a list of valid `AlertingRuleGroup` JSON that you can inspect. Optionally, it can push the generated rules directly to Grafana via the provisioning API. ## Install [code] ## Usage [code] Flags: - `-alerts` number of alerting rules to generate - `-recordings` number of recording rules to generate - `-query-ds` datasource UID to query from (e.g., `__expr__` or a Prometheus UID) - `-write-ds` datasource UID to write recording rule metrics to (Prometheus UID) - `-rules-per-group` how many rules to pack per group - `-groups-per-folder` how many groups to place per folder before cycling to the next provided `-folder-uids` - `-seed` seed for deterministic generation; re-use to reproduce the same output - `-out` output file; if empty, prints JSON to stdout and the seed to stderr Provisioning flags (optional): - `-grafana-url` Grafana base URL; when set, the tool will send rule groups via the provisioning API - `-username` Grafana admin account user name (required with `-grafana-url`) - `-password` Grafana admin account password (required with `-grafana-url`) - `-token` Grafana service account token (alternative to us"
+  ],
+  "out": {
+   "purpose": "Generate realistic random Grafana alerting and recording rule groups for testing or prototyping, with optional push to Grafana via provisioning API.",
+   "confidence": "high"
+  }
+ },
+ "4f02d7dc267ddb846083": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "logging-example",
+   "A collection of working Alloy scenarios",
+   "# Grafana Alloy scenarios This repository provides self-contained, runnable scenarios that show how to use Grafana Alloy for telemetry collection and processing. Most scenarios include Docker Compose files for Alloy and the backends that demo needs, such as Loki, Grafana, Prometheus, and Tempo. Most scenarios configure Grafana with the data sources the stack needs, and some also ship pre-built dashboards. ## Before you begin Ensure you have the following: - Docker and Docker Compose. - Git, to clone the repository. ## Start a scenario Clone the repository: [code] Navigate to the scenario direc"
+  ],
+  "out": {
+   "purpose": "Run ready-to-use Grafana Alloy telemetry collection scenarios with Docker Compose for testing or learning.",
+   "confidence": "high"
+  }
+ },
+ "c9cb43e1daa5f777fea9": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "store/inventory",
+   "A collection of working Alloy scenarios",
+   "# Grafana Alloy scenarios This repository provides self-contained, runnable scenarios that show how to use Grafana Alloy for telemetry collection and processing. Most scenarios include Docker Compose files for Alloy and the backends that demo needs, such as Loki, Grafana, Prometheus, and Tempo. Most scenarios configure Grafana with the data sources the stack needs, and some also ship pre-built dashboards. ## Before you begin Ensure you have the following: - Docker and Docker Compose. - Git, to clone the repository. ## Start a scenario Clone the repository: [code] Navigate to the scenario direc"
+  ],
+  "out": {
+   "purpose": "Run ready-made Grafana Alloy telemetry collection scenarios with Docker Compose to test and demo data pipelines",
+   "confidence": "high"
+  }
+ },
+ "85ca032f7f465d3379a1": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "java",
+   "A collection of working Alloy scenarios",
+   "# Grafana Alloy scenarios This repository provides self-contained, runnable scenarios that show how to use Grafana Alloy for telemetry collection and processing. Most scenarios include Docker Compose files for Alloy and the backends that demo needs, such as Loki, Grafana, Prometheus, and Tempo. Most scenarios configure Grafana with the data sources the stack needs, and some also ship pre-built dashboards. ## Before you begin Ensure you have the following: - Docker and Docker Compose. - Git, to clone the repository. ## Start a scenario Clone the repository: [code] Navigate to the scenario direc"
+  ],
+  "out": {
+   "purpose": "Ready-to-run Docker Compose scenarios demonstrating Grafana Alloy telemetry collection and processing with Loki, Prometheus, Tempo, etc.",
+   "confidence": "high"
+  }
+ },
+ "c9d951db3281dd6f3130": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "catalog-otel-metrics",
+   "Catalog service that pushes metrics via the OpenTelemetry SDK over OTLP/HTTP",
+   "# Grafana Alloy scenarios This repository provides self-contained, runnable scenarios that show how to use Grafana Alloy for telemetry collection and processing. Most scenarios include Docker Compose files for Alloy and the backends that demo needs, such as Loki, Grafana, Prometheus, and Tempo. Most scenarios configure Grafana with the data sources the stack needs, and some also ship pre-built dashboards. ## Before you begin Ensure you have the following: - Docker and Docker Compose. - Git, to clone the repository. ## Start a scenario Clone the repository: [code] Navigate to the scenario direc"
+  ],
+  "out": {
+   "purpose": "Export catalog service metrics to a monitoring backend via OpenTelemetry’s OTLP over HTTP.",
+   "confidence": "high"
+  }
+ },
+ "f8745e0a9a0f1a6dbee6": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "catalog-prom-client",
+   "Catalog service that exposes /metrics via the native Prometheus client for Alloy to scrape",
+   "# Grafana Alloy scenarios This repository provides self-contained, runnable scenarios that show how to use Grafana Alloy for telemetry collection and processing. Most scenarios include Docker Compose files for Alloy and the backends that demo needs, such as Loki, Grafana, Prometheus, and Tempo. Most scenarios configure Grafana with the data sources the stack needs, and some also ship pre-built dashboards. ## Before you begin Ensure you have the following: - Docker and Docker Compose. - Git, to clone the repository. ## Start a scenario Clone the repository: [code] Navigate to the scenario direc"
+  ],
+  "out": {
+   "purpose": "Need to expose catalog service metrics at /metrics for Grafana Alloy to scrape using the Prometheus client.",
+   "confidence": "high"
+  }
+ },
+ "ae4abcc2440c87caa9d8": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "catalog-otel-traces",
+   "Catalog service that emits traces via the OpenTelemetry SDK over OTLP/HTTP",
+   "# Grafana Alloy scenarios This repository provides self-contained, runnable scenarios that show how to use Grafana Alloy for telemetry collection and processing. Most scenarios include Docker Compose files for Alloy and the backends that demo needs, such as Loki, Grafana, Prometheus, and Tempo. Most scenarios configure Grafana with the data sources the stack needs, and some also ship pre-built dashboards. ## Before you begin Ensure you have the following: - Docker and Docker Compose. - Git, to clone the repository. ## Start a scenario Clone the repository: [code] Navigate to the scenario direc"
+  ],
+  "out": {
+   "purpose": "Send OpenTelemetry trace data from a catalog service to an OTLP/HTTP endpoint for observability.",
+   "confidence": "high"
+  }
+ },
+ "c4a19b1e7aeb1355eb3d": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "demo-app",
+   "A collection of working Alloy scenarios",
+   "# Grafana Alloy scenarios This repository provides self-contained, runnable scenarios that show how to use Grafana Alloy for telemetry collection and processing. Most scenarios include Docker Compose files for Alloy and the backends that demo needs, such as Loki, Grafana, Prometheus, and Tempo. Most scenarios configure Grafana with the data sources the stack needs, and some also ship pre-built dashboards. ## Before you begin Ensure you have the following: - Docker and Docker Compose. - Git, to clone the repository. ## Start a scenario Clone the repository: [code] Navigate to the scenario direc"
+  ],
+  "out": {
+   "purpose": "Need a ready-to-run example of Grafana Alloy telemetry pipelines with Docker Compose for Loki, Prometheus, Grafana, and Tempo.",
+   "confidence": "high"
+  }
+ },
+ "495651800b33e06a59b0": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "demo",
+   "A collection of working Alloy scenarios",
+   "# Grafana Alloy scenarios This repository provides self-contained, runnable scenarios that show how to use Grafana Alloy for telemetry collection and processing. Most scenarios include Docker Compose files for Alloy and the backends that demo needs, such as Loki, Grafana, Prometheus, and Tempo. Most scenarios configure Grafana with the data sources the stack needs, and some also ship pre-built dashboards. ## Before you begin Ensure you have the following: - Docker and Docker Compose. - Git, to clone the repository. ## Start a scenario Clone the repository: [code] Navigate to the scenario direc"
+  ],
+  "out": {
+   "purpose": "Use this repository to quickly spin up ready‑made Grafana Alloy demo scenarios with Docker Compose for testing telemetry collection pipelines.",
+   "confidence": "high"
+  }
+ },
+ "fa8746b336c318d18ac6": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "workload",
+   "A collection of working Alloy scenarios",
+   "# Grafana Alloy scenarios This repository provides self-contained, runnable scenarios that show how to use Grafana Alloy for telemetry collection and processing. Most scenarios include Docker Compose files for Alloy and the backends that demo needs, such as Loki, Grafana, Prometheus, and Tempo. Most scenarios configure Grafana with the data sources the stack needs, and some also ship pre-built dashboards. ## Before you begin Ensure you have the following: - Docker and Docker Compose. - Git, to clone the repository. ## Start a scenario Clone the repository: [code] Navigate to the scenario direc"
+  ],
+  "out": {
+   "purpose": "Run ready-to-use Grafana Alloy telemetry collection and processing demos with Docker Compose backends like Loki, Prometheus, and Tempo.",
+   "confidence": "high"
+  }
+ },
+ "bd4fc5b46ff8f7c71ab5": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "grafana-athena-datasource",
+   "Use Amazon Athena with Grafana",
+   "# Amazon Athena data source plugin Access data source plugin documentation here Instructions for plugin setup, testing, and contributing can be found in Contributing.md"
+  ],
+  "out": {
+   "purpose": "Query Amazon Athena data directly from Grafana dashboards",
+   "confidence": "high"
+  }
+ },
+ "7e0fbe0878373d97df16": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs",
+   "Time series analysis for Rust, with bindings to Python and Javascript",
+   "# augurs - a time series toolkit for Rust This repository contains `augurs`, a time series toolkit built in Rust. It aims to provide some useful primitives for working with time series, as well as the main functionality: heavily optimized models for forecasting, outlier detection, clustering, seasonality detection, changepoint detection and more. Most algorithms are based on existing R or Python implementations. As well as the core Rust library, augurs will provide bindings to other languages such as Python and Javascript (via WASM). [Check out the demo][demo] to see what augurs can do! > [!IMPORTANT] > Please note that this is not an official Grafana project, so > maintenance may be a bit slower than usual. It's still early days too > so expect some rough edges and changes to APIs! ## Crate descriptions | Name | Purpose | | ------------------------ | ---------------------------------------------------------------------------- | | [`augurs`] | Wrapper crate exposing functionality of all main crates behind feature flags | | [`augurs-changepoint`][] | Changepoint detection for time series | | [`augurs-clustering`][] | Time series clustering algorithms | | [`augurs-core`][] | Common structs and traits | | [`augurs-dtw`][] | Dynamic Time Warping (DTW) | | [`augurs-ets`][] | Automatic exponential smoothing models | | [`augurs-mstl`][] | Multiple Seasonal Trend Decomposition using LO"
+  ],
+  "out": {
+   "purpose": "Perform fast Rust-based time series forecasting, anomaly detection, clustering, seasonality and changepoint analysis, with Python/JS bindings.",
+   "confidence": "high"
+  }
+ },
+ "c9c50142d298d7c9022d": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "@bsull/augurs-prophet-wasmstan",
+   "Prophet's Stan model, compiled to WASM, for use with the @bsull/augurs library.",
+   "# Prophet Stan model, compiled to WASM This is a WASM-compiled version of the Prophet Stan model, for use with the @bsull/augurs library. ## Usage [code] See the documentation for `@bsull/augurs` for more details. ## Troubleshooting ### Webpack The generated Javascript bindings in this package may require some additional Webpack configuration to work. Adding this to your `webpack.config.js` should be enough: [code]"
+  ],
+  "out": {
+   "purpose": "Run Prophet time-series forecasting via a Stan model in WebAssembly for use with the @bsull/augurs JavaScript library.",
+   "confidence": "high"
+  }
+ },
+ "c6190759c66a4fa19870": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs",
+   "A time-series toolkit for forecasting, outlier detection, clustering and more.",
+   "# augurs - a time series toolkit for Rust `augurs` is a time series toolkit built in Rust. It contains functionality for outlier detection, clustering, seasonality detection, changepoint detection and more. If you're looking for the Python package, see [augurs on PyPI], which provides Python bindings for `augurs`' functionality. Similarly, if you're looking for the JavaScript package, see the [augurs npm package], which provides Javascript bindings using WASM. This crate can be used to access the functionality of all other crates in the `augurs` ecosystem, as it re-exports them under a single namespace. The following feature flags can be enabled to include only the functionality you need: - `changepoint`: changepoint detection - `clustering`: clustering algorithms - `dtw`: dynamic time warping - `ets`: exponential smoothing models - `forecaster`: forecasting - `mstl`: multiple seasonal trend decomposition - `outlier`: outlier detection - `parallel`: enable parallel processing of algorithms, where available - `prophet`: the Prophet time series forecasting model - `prophet-cmdstan`: the `cmdstan` optimizer for the Prophet time series forecasting model - `prophet-compile-cmdstan`: as above, but with the `prophet` `cmdstan` binary compiled and embedded at build-time - `prophet-wasmstan`: a WASM-compiled version of the Stan model used to optimize Prophet, with WASM embedded in the c"
+  ],
+  "out": {
+   "purpose": "Perform time series forecasting, outlier detection, clustering, seasonality and changepoint analysis in Rust.",
+   "confidence": "high"
+  }
+ },
+ "959bbc0273474fff4361": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-changepoint",
+   "Changepoint detection using Bayesian Online Change Point Detection and more.",
+   "# Changepoint detection models Changepoint detection of time series. For now it is mostly just a wrapper around the [`changepoint`] crate, with a common `Detector` trait to allow for more implementations in future. ## Example [code] ## Credits The bulk of the actual work is done by the [`changepoint`][changepoint] crate. [changepoint]: https://crates.io/crates/changepoint"
+  ],
+  "out": {
+   "purpose": "Detect change points in time series data using Bayesian online change point detection.",
+   "confidence": "high"
+  }
+ },
+ "8afc04e68bfc511c3845": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-clustering",
+   "Time series clustering.",
+   "# Time series clustering algorithms Time series clustering algorithms. So far, only DBSCAN is implemented, and the distance matrix must be passed directly. A crate such as [`augurs-dtw`] must be used to calculate the distance matrix for now. ## Usage [code] ## Credits This implementation is based heavily on to the implementation in [`linfa-clustering`] and [`scikit-learn`]. The main difference between these is that we operate directly on the distance matrix rather than calculating it as part of the clustering algorithm. [`augurs-dtw`]: https://crates.io/crates/augurs-dtw [`linfa-clustering`]: https://crates.io/crates/linfa-clustering [`scikit-learn`]: https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html ## License Dual-licensed to be compatible with the Rust project. Licensed under the Apache License, Version 2.0 ` ` or the MIT license ` `, at your option."
+  ],
+  "out": {
+   "purpose": "Cluster time series data with DBSCAN by supplying a precomputed distance matrix",
+   "confidence": "high"
+  }
+ },
+ "43d55afc391f13ea6d13": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-core",
+   "Core data structures and traits for the augurs time series library.",
+   "# Core functionality for the augurs time series framework This crate contains structs and traits that are shared throughout the framework."
+  ],
+  "out": {
+   "purpose": "Provides shared structs and traits for building time-series analysis pipelines in the augurs framework",
+   "confidence": "high"
+  }
+ },
+ "0a6910939372444f2377": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-dtw",
+   "Dynamic Time Warping (DTW) algorithm for Rust",
+   "# Dynamic Time Warping (DTW) Implementation of the dynamic time warping (DTW) algorithm. DTW can be used to compare two sequences that may vary in time or speed. This implementation has built-in support for both Euclidean and Manhattan distance, and can be extended to support other distance functions by implementing the [`Distance`] trait and using the [`Dtw::new`] constructor. ## Features - [x] DTW distance between two sequences - [x] optimized scalar implementation influenced by the [UCR Suite][ucr-suite] - [ ] SIMD optimized implementation - [ ] Z-normalization - [x] distance matrix calculations between N sequences - [x] parallelized distance matrix calculations - [ ] early stopping using `LB_Kim` (semi-implemented) - [ ] early stopping using `LB_Keogh` (semi-implemented) - [x] early stopping using the Euclidean upper bound Pull requests for missing features would be very welcome. ## Usage [code] ## Credits The algorithm is based on the code from the [UCR Suite][ucr-suite]. Benchmarks show similar or faster timings compared to [`dtaidistance`]'s C implementation, but note that `dtaidistance` is much more full featured! [ucr-suite]: https://www.cs.ucr.edu/~eamonn/UCRsuite.html [`dtaidistance`]: https://dtaidistance.readthedocs.io/ ## License Dual-licensed to be compatible with the Rust project. Licensed under the Apache License, Version 2.0 ` ` or the MIT license ` `, at your"
+  ],
+  "out": {
+   "purpose": "Compute similarity between time‑varying sequences using Dynamic Time Warping with Euclidean or Manhattan distance, including parallel distance matrices, in Rust.",
+   "confidence": "high"
+  }
+ },
+ "15f780d69ed02f8392f1": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-ets",
+   "ETS models for augurs",
+   "# Exponential smoothing models This crate provides exponential smoothing models for time series forecasting in the `augurs` framework. The models are implemented entirely in Rust and are based on the [statsforecast][] Python package. **Important**: This crate is still in development and the API is subject to change. Seasonal models are not yet implemented, and some model types have not been tested. # Example [code] ## Credits This implementation is based heavily on the [statsforecast implementation][statsforecast-impl]. ## References - [Rob J. Hyndman, Yeasmin Khandakar (2008). “Automatic Time Series Forecasting: The forecast package for R”.][hyndman-khandakar] - [Hyndman, Rob, et al (2008). “Forecasting with exponential smoothing: the state space approach”.][hyndman-et-al] [hyndman-khandakar]: https://www.jstatsoft.org/article/view/v027i03 [hyndman-et-al]: https://robjhyndman.com/expsmooth/ [statsforecast]: https://nixtla.github.io/statsforecast/ [statsforecast-impl]: https://nixtla.github.io/statsforecast/models.html#autoets"
+  ],
+  "out": {
+   "purpose": "Add exponential smoothing (ETS) time‑series forecasting models to augurs pipelines in Rust.",
+   "confidence": "high"
+  }
+ },
+ "c5c57021c563fd07d98a": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-forecaster",
+   "A high-level API for the augurs forecasting library.",
+   "# High level forecasting API for augurs `augurs-forecaster` contains a high-level API for training and predicting with time series models. It currently allows you to combine a model with a set of transformations (such as imputation of missing data, min-max scaling, and log/logit transforms) and fit the model on the transformed data, automatically handling back-transformation of forecasts and prediction intervals. ## Usage First add this crate and any required model crates to your `Cargo.toml`: [code] [code]"
+  ],
+  "out": {
+   "purpose": "High-level API to train and predict time series models with preprocessing (imputation, scaling, transforms) and automatic back‑transformation of forecasts and intervals.",
+   "confidence": "high"
+  }
+ },
+ "f5e52aee6f8d253082df": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-mstl",
+   "Multiple Seasonal-Trend decomposition with LOESS (MSTL) using the augurs time series library.",
+   "# Multiple Seasonal-Trend decomposition with LOESS (MSTL) Fast, effective forecasting of time series exhibiting multiple seasonality and trend. ## Introduction The MSTL algorithm, introduced in [this paper][mstl-paper], provides a way of applying Seasonal-Trend decomposition to multiple seasonalities. This allows effective modelling of time series with multiple complex components. As well as the MSTL algorithm this crate also provides the [`MSTLModel`] struct, which is capable of running the MSTL algorithm over some time series data, then modelling the final trend component using a given trend forecaster. It can then recombine the forecasted trend with the decomposed seasonalities to generate in-sample and out-of-sample forecasts. The latter use case is the main entrypoint of this crate. ## Usage [code] ### Using alternative trend models The `MSTLModel` is generic over the trend model used. As long as the model passed implements the `TrendModel` trait from this crate, it can be used to model the trend after decomposition. For example, the `AutoETS` struct from the `ets` crate can be used instead. First, add the `augurs_ets` crate to your `Cargo.toml` with the `mstl` feature enabled: [code] [code] (Note that the above example doesn't compile for this crate due to a circular dependency, but would work in a separate crate!) ### Implementing a trend model To use your own trend mode"
+  ],
+  "out": {
+   "purpose": "Decompose time series with multiple seasonalities and forecast trend using MSTL with customizable trend models.",
+   "confidence": "high"
+  }
+ },
+ "880a99edc171a655d109": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-outlier",
+   "Outlier detection for time series.",
+   "# Outlier detection This crate provides implementations of time series _outlier detection_, the problem of determining whether one time series behaves differently to others in a group. (This is different to _anomaly detection_, which aims to determine if one or more samples appears to be different within a time series). Two implementations are planned: - DBSCAN: implemented - Median Absolute Difference (MAD): not yet implemented (see GitHub issue) # Example [code]"
+  ],
+  "out": {
+   "purpose": "Detect when a time series deviates from a group of similar series (time series outlier detection).",
+   "confidence": "high"
+  }
+ },
+ "5d2e8b89df14220e9b67": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-prophet",
+   "Prophet: time-series forecasting at scale, in Rust.",
+   "# Prophet: forecasting at scale `augurs-prophet` contains an implementation of the [Prophet] time series forecasting library. **Caveats** This crate has been tested fairly thoroughly but Prophet contains a lot of options - please [report any bugs][bugs] you find! Currently, only MLE/MAP based optimization is supported. This means that uncertainty in seasonality components isn't modeled. Contributions to add sampling capabilities are welcome - please get in touch in the [issue tracker][feature request] if you're interested in this. ## Example (WASM-compiled Stan) First enable the `wasmstan` feature of this crate. Then: [code] ## Example (cmdstan) First, download the Prophet Stan model using the included binary: [code] Then enable the `cmdstan` feature of this crate and use the `Prophet` model as follows: [code] Note that the `CmdstanOptimizer` needs to know the path to the Prophet model binary. This crate aims to be low-dependency to enable it to run in as many places as possible. With that said, we need to talk about optimizers… ## Optimizers The original Prophet library uses [Stan] to handle optimization and MCMC sampling. Stan is a platform for statistical modeling which can perform Bayesian statistical inference as well as maximum likelihood estimation using optimizers such as L-BFGS. However, it is written in C++ and has non-trivial dependencies, which makes it difficult to"
+  ],
+  "out": {
+   "purpose": "Forecast large time‑series datasets in Rust using Prophet's MLE/MAP optimization for scalable predictions.",
+   "confidence": "high"
+  }
+ },
+ "dd79d6bcc2f12bc75fdd": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-seasons",
+   "Seasonality detection using periodograms",
+   "# Seasonality detection for time series `augurs-seasons` contains methods for detecting seasonality or periodicity in time series. It currently contains implementations to do so using periodograms, similar to the [`seasonal`] Python package. ## Usage [code] ## Credits This implementation is based heavily on the [`seasonal`] Python package. It also makes heavy use of the [`welch-sde`] crate. [`seasonal`]: https://github.com/welch/seasonal [`welch-sde`]: https://crates.io/crates/welch-sde ## License Dual-licensed to be compatible with the Rust project. Licensed under the Apache License, Version 2.0 ` ` or the MIT license ` `, at your option."
+  ],
+  "out": {
+   "purpose": "Detect seasonality or periodic patterns in time series using periodograms.",
+   "confidence": "high"
+  }
+ },
+ "1684357819823b3609ea": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-testing",
+   "Test framework and data for the augurs library.",
+   "# augurs - a time series toolkit for Rust This repository contains `augurs`, a time series toolkit built in Rust. It aims to provide some useful primitives for working with time series, as well as the main functionality: heavily optimized models for forecasting, outlier detection, clustering, seasonality detection, changepoint detection and more. Most algorithms are based on existing R or Python implementations. As well as the core Rust library, augurs will provide bindings to other languages such as Python and Javascript (via WASM). [Check out the demo][demo] to see what augurs can do! > [!IM"
+  ],
+  "out": {
+   "purpose": "Provides a test framework and sample data for validating augurs time series models and utilities.",
+   "confidence": "medium"
+  }
+ },
+ "639c3f3caa52352090d8": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs",
+   "Python bindings for the augurs time series library.",
+   "# Python bindings to the augurs time series framework ## Installation Wheels are provided on PyPI for all major platforms. Just run: [code] You'll probably want numpy as well: [code] ## Usage ### Multiple Seasonal Trend Decomposition with LOESS (MSTL) models [code] ### Exponential smoothing models [code] ### Dynamic Time Warping [code] More to come!"
+  ],
+  "out": {
+   "purpose": "Python time series analysis with MSTL decomposition, exponential smoothing forecasts, and dynamic time warping via augurs library bindings.",
+   "confidence": "high"
+  }
+ },
+ "de521c034f36c414ff99": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-changepoint-js",
+   "JavaScript bindings for the augurs-changepoint library.",
+   "# augurs - a time series toolkit for Rust This repository contains `augurs`, a time series toolkit built in Rust. It aims to provide some useful primitives for working with time series, as well as the main functionality: heavily optimized models for forecasting, outlier detection, clustering, seasonality detection, changepoint detection and more. Most algorithms are based on existing R or Python implementations. As well as the core Rust library, augurs will provide bindings to other languages such as Python and Javascript (via WASM). [Check out the demo][demo] to see what augurs can do! > [!IM"
+  ],
+  "out": {
+   "purpose": "Detect structural changes in time-series data from JavaScript using Rust‑optimized changepoint detection via WebAssembly bindings.",
+   "confidence": "high"
+  }
+ },
+ "e2e5a8eb9ecdf75339e8": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-clustering-js",
+   "JavaScript bindings for the augurs-clustering library.",
+   "# augurs - a time series toolkit for Rust This repository contains `augurs`, a time series toolkit built in Rust. It aims to provide some useful primitives for working with time series, as well as the main functionality: heavily optimized models for forecasting, outlier detection, clustering, seasonality detection, changepoint detection and more. Most algorithms are based on existing R or Python implementations. As well as the core Rust library, augurs will provide bindings to other languages such as Python and Javascript (via WASM). [Check out the demo][demo] to see what augurs can do! > [!IM"
+  ],
+  "out": {
+   "purpose": "Cluster time series data in JavaScript using augurs‑clustering via WebAssembly bindings.",
+   "confidence": "high"
+  }
+ },
+ "4c47b242d63681877230": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-core-js",
+   "JavaScript bindings for core augurs functionality.",
+   "# augurs - a time series toolkit for Rust This repository contains `augurs`, a time series toolkit built in Rust. It aims to provide some useful primitives for working with time series, as well as the main functionality: heavily optimized models for forecasting, outlier detection, clustering, seasonality detection, changepoint detection and more. Most algorithms are based on existing R or Python implementations. As well as the core Rust library, augurs will provide bindings to other languages such as Python and Javascript (via WASM). [Check out the demo][demo] to see what augurs can do! > [!IM"
+  ],
+  "out": {
+   "purpose": "Use it to perform time-series forecasting, anomaly detection, clustering, seasonality and changepoint analysis in JavaScript via WebAssembly.",
+   "confidence": "high"
+  }
+ },
+ "67befd3fb5c2eb013c2a": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-dtw-js",
+   "JavaScript bindings for the augurs-dtw library.",
+   "# augurs - a time series toolkit for Rust This repository contains `augurs`, a time series toolkit built in Rust. It aims to provide some useful primitives for working with time series, as well as the main functionality: heavily optimized models for forecasting, outlier detection, clustering, seasonality detection, changepoint detection and more. Most algorithms are based on existing R or Python implementations. As well as the core Rust library, augurs will provide bindings to other languages such as Python and Javascript (via WASM). [Check out the demo][demo] to see what augurs can do! > [!IM"
+  ],
+  "out": {
+   "purpose": "Run fast Dynamic Time Warping distance calculations on time-series data from JavaScript via WebAssembly.",
+   "confidence": "high"
+  }
+ },
+ "3a6c3aa2635cbfcaef1d": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-ets-js",
+   "JavaScript bindings for the augurs-ets library.",
+   "# augurs - a time series toolkit for Rust This repository contains `augurs`, a time series toolkit built in Rust. It aims to provide some useful primitives for working with time series, as well as the main functionality: heavily optimized models for forecasting, outlier detection, clustering, seasonality detection, changepoint detection and more. Most algorithms are based on existing R or Python implementations. As well as the core Rust library, augurs will provide bindings to other languages such as Python and Javascript (via WASM). [Check out the demo][demo] to see what augurs can do! > [!IM"
+  ],
+  "out": {
+   "purpose": "Use JavaScript bindings to run augurs-ets time series forecasting, anomaly detection, and seasonality analysis in a web or Node.js app.",
+   "confidence": "high"
+  }
+ },
+ "bed9b88d08d6ad999eee": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-mstl-js",
+   "JavaScript bindings for the augurs-mstl library.",
+   "# augurs - a time series toolkit for Rust This repository contains `augurs`, a time series toolkit built in Rust. It aims to provide some useful primitives for working with time series, as well as the main functionality: heavily optimized models for forecasting, outlier detection, clustering, seasonality detection, changepoint detection and more. Most algorithms are based on existing R or Python implementations. As well as the core Rust library, augurs will provide bindings to other languages such as Python and Javascript (via WASM). [Check out the demo][demo] to see what augurs can do! > [!IM"
+  ],
+  "out": {
+   "purpose": "Run Rust‑powered time‑series forecasting, outlier detection, clustering, and seasonality analysis directly in JavaScript via WebAssembly bindings.",
+   "confidence": "high"
+  }
+ },
+ "12d257e43b72e0697a89": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-outlier-js",
+   "JavaScript bindings for the augurs-outlier library.",
+   "# augurs - a time series toolkit for Rust This repository contains `augurs`, a time series toolkit built in Rust. It aims to provide some useful primitives for working with time series, as well as the main functionality: heavily optimized models for forecasting, outlier detection, clustering, seasonality detection, changepoint detection and more. Most algorithms are based on existing R or Python implementations. As well as the core Rust library, augurs will provide bindings to other languages such as Python and Javascript (via WASM). [Check out the demo][demo] to see what augurs can do! > [!IM"
+  ],
+  "out": {
+   "purpose": "Detect outliers in time series data from JavaScript using optimized Rust-based algorithms via WebAssembly.",
+   "confidence": "high"
+  }
+ },
+ "5a67dfd4a7a35457800d": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-prophet-js",
+   "JavaScript bindings for the augurs-prophet library.",
+   "# augurs - a time series toolkit for Rust This repository contains `augurs`, a time series toolkit built in Rust. It aims to provide some useful primitives for working with time series, as well as the main functionality: heavily optimized models for forecasting, outlier detection, clustering, seasonality detection, changepoint detection and more. Most algorithms are based on existing R or Python implementations. As well as the core Rust library, augurs will provide bindings to other languages such as Python and Javascript (via WASM). [Check out the demo][demo] to see what augurs can do! > [!IM"
+  ],
+  "out": {
+   "purpose": "Forecast time series data in JavaScript using optimized Prophet models via WebAssembly.",
+   "confidence": "high"
+  }
+ },
+ "60ea3992e0185ed1bf01": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-seasons-js",
+   "JavaScript bindings for the augurs-seasons library.",
+   "# augurs - a time series toolkit for Rust This repository contains `augurs`, a time series toolkit built in Rust. It aims to provide some useful primitives for working with time series, as well as the main functionality: heavily optimized models for forecasting, outlier detection, clustering, seasonality detection, changepoint detection and more. Most algorithms are based on existing R or Python implementations. As well as the core Rust library, augurs will provide bindings to other languages such as Python and Javascript (via WASM). [Check out the demo][demo] to see what augurs can do! > [!IM"
+  ],
+  "out": {
+   "purpose": "Add seasonality detection to JavaScript projects using the augurs‑seasons Rust library via WebAssembly.",
+   "confidence": "high"
+  }
+ },
+ "bd745b5cc084baf998fe": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "augurs-transforms-js",
+   "JavaScript bindings for augurs' data transformations.",
+   "# augurs - a time series toolkit for Rust This repository contains `augurs`, a time series toolkit built in Rust. It aims to provide some useful primitives for working with time series, as well as the main functionality: heavily optimized models for forecasting, outlier detection, clustering, seasonality detection, changepoint detection and more. Most algorithms are based on existing R or Python implementations. As well as the core Rust library, augurs will provide bindings to other languages such as Python and Javascript (via WASM). [Check out the demo][demo] to see what augurs can do! > [!IM"
+  ],
+  "out": {
+   "purpose": "Enable JavaScript developers to apply Augurs' Rust-based time series data transformations via WebAssembly bindings.",
+   "confidence": "high"
+  }
+ },
+ "f07c0a9a8dd3e2e284c8": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "@bsull/augurs-js-testpkg",
+   "Time series analysis for Rust, with bindings to Python and Javascript",
+   "# augurs - a time series toolkit for Rust This repository contains `augurs`, a time series toolkit built in Rust. It aims to provide some useful primitives for working with time series, as well as the main functionality: heavily optimized models for forecasting, outlier detection, clustering, seasonality detection, changepoint detection and more. Most algorithms are based on existing R or Python implementations. As well as the core Rust library, augurs will provide bindings to other languages such as Python and Javascript (via WASM). [Check out the demo][demo] to see what augurs can do! > [!IM"
+  ],
+  "out": {
+   "purpose": "Perform forecasting, anomaly detection, clustering, and seasonality analysis on time series data using a high‑performance Rust library with Python and JavaScript bindings.",
+   "confidence": "high"
+  }
+ },
+ "e7b7ea866a76619164f3": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/authlib",
+   "Common utilities for grafana authnz",
+   "# Authlib ## Overview The `Authlib` library provides a modular and secure approach to handling authentication and authorization within the Grafana ecosystem. It's designed to be flexible and easily adaptable to different deployment scenarios. ### Key Features - **Composability:** Deploy in various configurations: in-process, on-premises gRPC, or Cloud gRPC. - **OAuth2-Inspired Security:** Leverages familiar JWT-based authentication and authorization for robust security. - **Modular Design:** Built with three core packages: - **`types`:** The types package is a dependency free set of types and interfaces that most consumers should depend on. - **`authn`:** Varius components to handle authentication and identity propagation. - **`authz`:** Authz client to perform authorization. - Single-tenant RBAC client, typically used by plugins to query Grafana for user permissions and control their access. - **[unstable / under development]** Multi-tenant client, typically used by multi-tenant applications to enforce service and user access. ## Documentation Please see the docs directory for documentation ### License This project is licensed under the Apache-2.0 license - see the LICENSE file for details."
+  ],
+  "out": {
+   "purpose": "Need a reusable Grafana auth library to handle JWT authentication, propagate identities, and query RBAC permissions for plugins or services.",
+   "confidence": "high"
+  }
+ },
+ "ae44b1b86a0b97815d5b": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/authlib/types",
+   "The types package is a dependency free set of types and interfaces that most consumers",
+   "# Authlib types The types package is a dependency free set of types and interfaces that most consumers should depend on. Using this package will avoid accidentally relying on internal implementation details and interfaces."
+  ],
+  "out": {
+   "purpose": "A dependency‑free collection of shared types and interfaces to standardize contracts and prevent reliance on internal implementation details.",
+   "confidence": "high"
+  }
+ },
+ "f1653294ab9f5d9dfd79": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "business-panel",
+   "Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration",
+   "# Business Calendar for Grafana > This project was originally contributed by > Volkov Labs — thanks for all your great work! > > We have republished under the same plugin ID, keeping the community signature. This means you can > simply update your plugin version. A new ID would have required manual updates to your dashboards. > For additional information on the changes, see the > Notices. This project is currently maintained by Grafana Labs. We welcome pull requests and will review them on a best-effort basis. If you're interested in taking on this project long-term, contact integrations@grafana.com. We're eager to work with new maintainers and eventually hand over the project. **Business Calendar** is a powerful Grafana plugin that transforms your data into an intuitive calendar view. Seamlessly visualize schedules, deadlines, and time-based metrics from any Grafana-supported data source. ## 🚀 Features - **Multi-Language Toolbar**: Switch between Day, Week, Month, Work Week, Year, and Agenda views with ease. Navigate to today’s events or browse time ranges. - **Data Flexibility**: Integrate and display events from any Grafana data source. - **Time Range Filtering**: Zoom in on specific periods for focused analysis. - **Threshold Coloring**: Highlight events with customizable colors using Grafana thresholds. - **Quick Links**: Click events to access data links directly (bypassi"
+  ],
+  "out": {
+   "purpose": "Render schedules, deadlines, and time-based metrics as an interactive calendar, pulling events from any Grafana data source with day/week/month views.",
+   "confidence": "high"
+  }
+ },
+ "7d786dfbd83d67c38553": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "business-forms",
+   "Insert, update application data, and modify configuration",
+   "# Business Forms for Grafana >This project was originally contributed by Volkov Labs - thanks for all your great work! > >We have republished under the same plugin ID, keeping the community signature. This means you can simply update your plugin version. A new ID would have required manual updates to your dashboards. For additional information on the changes, see the Notices. This project is currently maintained by Grafana Labs. We welcome pull requests and will review them on a best-effort basis. If you're interested in taking on this project long-term, contact integrations@grafana.com. We're eager to work with new maintainers and eventually hand over the project. The **Business Forms panel** is a groundbreaking plugin for Grafana, designed to empower users by allowing direct interaction with application data and configurations within dashboards. Whether you're managing data or customizing settings, this plugin streamlines workflows with an intuitive interface. ## 📋 Requirements Ensure your Grafana version meets the following requirements for compatibility with Business Forms: - **Business Forms 6.X**: Grafana 11 or 12 - **Business Forms 4.X, 5.X**: Grafana 10.3 or 11 - **Data Manipulation 3.X**: Grafana 9 or 10 - **Data Manipulation 2.X**: Grafana 8.5 or 9 - **Data Manipulation 1.X**: Grafana 8 ## 🛠️ Getting Started Install the Business Forms panel easily via the Grafana Plug"
+  ],
+  "out": {
+   "purpose": "Enable inserting, updating, and modifying application data and configuration directly within Grafana dashboards",
+   "confidence": "high"
+  }
+ },
+ "914f3db6fa92b3e0e69f": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "volkovlabs-table-panel",
+   "Simplify data visualization in table format",
+   "# Business Table Panel for Grafana > This project was originally contributed by > Volkov Labs — > thanks for all your great work! > > We have republished under the same plugin ID, keeping the community signature. > This means you can simply update your plugin version. A new ID would have > required manual updates to your dashboards. For additional information on the > changes, see the > Notices. ## 📋 Introduction The **Business Table Panel** is a powerful and flexible Grafana plugin designed to elevate data visualization in table format. Tailored for business analytics and reporting dashboards, it offers advanced features like tree views, custom cell rendering, data editing, and export capabilities. ## 📋 Requirements - **Business Table Panel 3.x** requires **Grafana 11** or **Grafana 12**. - **Business Table Panel 1.x, 2.x** requires **Grafana 10.3** or **Grafana 11**. ## 🚀 Installation Choose one of the following methods to install the plugin: ### Grafana Plugins Catalog Visit the official plugin page at grafana.com/plugins/volkovlabs-table-panel and follow the provided instructions. ### Grafana CLI Run the following command in your terminal: [code] ## ✨ Key Features - **Tree View**: Display hierarchical data with expandable and collapsible rows. - **Tabbed Views**: Switch between multiple data frames within a single panel. - **Dynamic Filtering**: Filter table data using dash"
+  ],
+  "out": {
+   "purpose": "Display and interact with hierarchical and multi-frame data in Grafana tables, with filtering, editing, and export features.",
+   "confidence": "high"
+  }
+ },
+ "8c9d1a510147e1b52c3e": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "business-text",
+   "Data-driven text with Markdown and Handlebars support",
+   "# Business Text for Grafana > This project was originally contributed by > Volkov Labs - > thanks for all your great work! > > We have republished under the same plugin ID, keeping the community signature. > This means you can simply update your plugin version. A new ID would have > required manual updates to your dashboards. For additional information on the > changes, see the > Notices. The Business Text panel plugin allows you to construct a text visualization template from the values of a dataset returned by a data source query. ## Requirements - Business Text panel 6.X requires **Grafana 11** or **Grafana 12**. - Business Text panel 5.X requires **Grafana 10** or **Grafana 11**. - Dynamic Text panel 4.X requires **Grafana 9.2** or **Grafana 10**. - Dynamic Text panel 2.X and 3.X require **Grafana 8.5** or **Grafana 9**. - Dynamic Text panel 1.X requires **Grafana 7**. ## Getting Started You can install the Business Text panel from the Grafana Plugins catalog or use the Grafana command line tool. For the latter, please use the following command: [code] ## Highlights - Uses Monaco Code Editor with automatic JavaScript code formatting. - Supports Markdown and Handlebars. - Renders markdown-it into HTML elements. - Supports the highlighting of code syntax using A11Y styles. - Provides code sanitization: - HTML inside templates is sanitized using XSS. - Can be disabled in the G"
+  ],
+  "out": {
+   "purpose": "Create dynamic text panels in Grafana using Markdown or Handlebars templates populated with query data.",
+   "confidence": "high"
+  }
+ },
+ "6b0ff55efa29343f3e4c": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/carbon-relay-ng",
+   "Fast carbon relay+aggregator with admin interfaces for making changes online - production ready",
+   "carbon-relay-ng =============== A relay for carbon streams, in go. Like carbon-relay from the graphite project, except it: * performs better: should be able to do about 100k ~ 1M million metrics per second depending on configuration and CPU speed. * you can adjust the routing table at runtime, in real time using the web or telnet interface (this feature has rough edges and is **not production ready**) * has aggregator functionality built-in for cross-series, cross-time and cross-time-and-series aggregations. * supports plaintext and pickle graphite routes (output) and metrics2.0/grafana.net, as well as kafka, Google PubSub and Amazon CloudWatch. * graphite routes supports a per-route spooling policy. (i.e. in case of an endpoint outage, we can temporarily queue the data up to disk and resume later) * performs validation on all incoming metrics (see below) * supported inputs: plaintext, pickle and AMQP (rabbitmq) This makes it easy to fanout to other tools that feed in on the metrics. Or balance/split load, or provide redundancy, or partition the data, etc. This pattern allows alerting and event processing systems to act on the data as it is received (which is much better than repeated reading from your storage) Documentation ============= * configuration * input * validation * rewriting * aggregation * monitoring * TCP admin interface * current changelog and official releasess "
+  ],
+  "out": {
+   "purpose": "Fast, high-throughput carbon metric relay and aggregator that routes, validates, and aggregates incoming metrics with dynamic runtime routing and supports multiple output formats.",
+   "confidence": "high"
+  }
+ },
+ "d9d690fec5d1f5d5c5cd": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "celery-exporter",
+   "Prometheus metrics exporter for Celery 5",
+   "# Celery Exporter Celery Exporter is a Prometheus metrics exporter for Celery 4, written in python. Here the list of exposed metrics: * `celery_tasks_total` exposes the number of tasks currently known to the queue labeled by `name`, `state`, `queue` and `namespace`. * `celery_tasks_runtime_seconds` tracks the number of seconds tasks take until completed as histogram labeled by `name`, `queue` and `namespace` * `celery_tasks_latency_seconds` exposes a histogram of task latency, i.e. the time until tasks are picked up by a worker * `celery_workers` exposes the number of currently probably alive workers --- ## Requirements ### Dependencies The project comes with `redis` lib already installed, you have to install any other dependency in case you are using other brokers. ### Celery app Celery workers have to be configured to send task-related events: http://docs.celeryproject.org/en/latest/userguide/configuration.html#worker-send-task-events. Celery Exporter is able to enable events on your workers (see _Command Options_). --- ## Install and Run ### Manual Setup [code] ### Docker [code] ### Command Options [code] If you then look at the exposed metrics, you should see something like this: [code] ### Inspired by @zerok work https://github.com/zerok/celery-prometheus-exporter"
+  ],
+  "out": {
+   "purpose": "Export Celery task and worker metrics to Prometheus for monitoring",
+   "confidence": "high"
+  }
+ },
+ "b8a7332ef4fa9d5281b3": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/ckit",
+   "Lightweight library for clustering and workload distribution",
+   "# ckit ckit (clustering toolkit) is a lightweight package for creating clusters that use [consistent hashing][] for workload distribution. ckit works by gossiping member state over HTTP/2, and locally generating hashing algorithms based on the state of nodes in the cluster. Because gossip is used, the hashing algorithms are eventually consistent as cluster state takes time to converge. > **NOTE**: ckit is still in development; breaking changes to the API may > happen. [consistent hashing]: https://en.wikipedia.org/wiki/Consistent_hashing ## Features * Low-overhead: on a 151 node cluster, ckit uses ~20MB of memory and ~50Bps of network traffic per node. * HTTP/2 transport: nodes communicate over plain HTTP/2 without needing to open up extra ports. ## Packages ckit has two main packages: * The top-level package handles establishing a cluster. * The `shard` package handles creating consistent hashing algorithms based on cluster state. There are also some utility packages: * The `advertise` package contains utilities for a node to determine what IP address to advertise to its peers. * The `memconn` package contains utilities for a node to create an in-memory connection to itself without using the network. ## Comparison to grafana/dskit [grafana/dskit][dskit] is a mature library with utilities for building distributed systems in general. Its clustering mechanism works by gossiping a"
+  ],
+  "out": {
+   "purpose": "Create a lightweight cluster that uses consistent hashing over HTTP/2 gossip for efficient workload distribution.",
+   "confidence": "high"
+  }
+ },
+ "6778f2433de8a4b419b4": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "clickhouse-datasource",
+   "Grafana Plugin for ClickHouse",
+   "### ClickHouse Support Grafana supports ClickHouse through a plugin. You can perform a variety of simple or complex ClickHouse queries to visualize logs or metrics stored in ClickHouse. You can also annotate your graphs with events stored in ClickHouse. Read more about it here: Grafana ClickHouse Documentation"
+  ],
+  "out": {
+   "purpose": "Query ClickHouse data in Grafana to build dashboards and annotate graphs with stored events",
+   "confidence": "high"
+  }
+ },
+ "4e3f15663c4b8ba557ce": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "clock-panel",
+   "Clock Panel Plugin for Grafana",
+   "## Clock Panel Plugin for Grafana The Clock Panel shows either the current time or a countdown/countup. It updates every second. You can use the Clock Panel to display the time in another office, or to track a count-down or count-up to an important event. ### Plugin options #### Options - **Mode**: The default mode is Time. If you want to use countdown mode, then set the End Time to start the count-down. If you want to use countup mode, then set the Begin Time to start the count-up. - **Clock Type**: To display time choose between the following formats: 24 Hour, 12 Hour, or Custom. - **Timezone**: Timezones are supplied by the moment timezone library. You can specify your Timezone or leave it as default to moment's guess using your computer's settings. Timezone is also used to calculate countdown deadline in countdown mode. - **Locale**: Locales for date-formatting are supplied by the moment library. You can specify your Locale or leave it as default to moment's guess using your computer's settings. - **End Time** (Countdown mode): Used in conjunction with mode when set to countdown. Choose a date and time to count down to. This field also supports dashboard (constant) variables (e.g. `${countdown_target}`) to dynamically set the countdown deadline for the Dashboard. - **End Text** (Countdown mode): The text to show when the countdown ends. E.g. LIFTOFF - **Begin Time** (Countu"
+  ],
+  "out": {
+   "purpose": "Display a live clock or countdown/countup timer in Grafana dashboards.",
+   "confidence": "high"
+  }
+ },
+ "39c1cf67929e9e9a5231": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/cloudcost-exporter",
+   "Prometheus Exporter for Cloud Provider agnostic cost metrics",
+   "# Cloud Cost Exporter Cloud Cost Exporter is a Prometheus exporter that collects cost and pricing data from cloud providers (AWS, GCP, Azure) in real-time. **Quick Links:** - Docker Hub - Official Docker images - Helm Chart - Helm Chart for Kubernetes deployment - Documentation - Detailed guides and references - KubeCon Talk on monitoring cloud costs at scale ## Overview Cloud Cost Exporter provides near real-time cost visibility by exporting resource pricing rates as Prometheus metrics. The cost data can be combined with usage metrics from tools like Stackdriver, YACE, Grafana AWS CloudWatch Metric Streams, and Promitor to calculate granular spending. Cloud provider billing data takes hours to days to become fully accurate. This exporter bridges that gap by providing per-minute cost rate visibility for both Kubernetes and non-Kubernetes resources across multiple cloud providers. ### Primary Goals - **Multi-cloud support** - Collect cost rates from AWS, GCP, and Azure through a consistent interface - **Real-time rates** - Export per-minute pricing rates (e.g., $/cpu/hr) for cloud resources - **Prometheus native** - Export metrics in Prometheus format for easy integration with monitoring stacks ### Non-Goals - **Billing accuracy** - This is not a replacement for official cloud billing reports - **Spend calculation** - Exports rates, not total spend (use Prometheus queries & reco"
+  ],
+  "out": {
+   "purpose": "Export real-time per-minute cloud cost rates from AWS, GCP, and Azure as Prometheus metrics for monitoring and budgeting",
+   "confidence": "high"
+  }
+ },
+ "f3b6190f2a94b8d74b76": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "cloudcost-exporter",
+   "{{ template \"chart.versionBadge\" . }}{{ template \"chart.typeBadge\" . }}{{ template \"chart.appVersionBadge\" . }}",
+   "{{ template \"chart.header\" . }} {{ template \"chart.description\" . }} {{ template \"chart.versionBadge\" . }}{{ template \"chart.typeBadge\" . }}{{ template \"chart.appVersionBadge\" . }} ## Installing the Chart To install the chart with the release name `my-release`: [code] > **Note**: Starting with chart version 1.0.7, the Helm chart is maintained in the > cloudcost-exporter repository. > Previous versions (1.0.6 and earlier) are available in the > helm-charts repository. {{ template \"chart.requirementsSection\" . }} ## Configuration per cloud service provider (CSP) The Helm chart can be used with the general `values.yaml` manifest. The project includes CSP-specific configuration (e.g. `values. .yaml`) that can be used in combination with the general values. The deployment itself will depend on each deployment pipeline and tooling available. Documentation per CSP will vary (especially when it comes to authentication). Below are links to docs to help with this: * AWS {{ template \"chart.valuesSection\" . }} {{ template \"helm-docs.versionFooter\" . }} ## Contribute Check out the docs for more information on how to contribute to the `cloudcost-explorer`'s Helm chart."
+  ],
+  "out": {
+   "purpose": "Export and expose cloud provider cost metrics in Kubernetes via a Helm chart for integration with monitoring tools.",
+   "confidence": "low"
+  }
+ },
+ "12964498b5de484e40fe": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "@grafana/cloud-setup",
+   "Grafana Cloud's interactive setup wizard, powered by Grafana Assistant.",
+   "# 🦕 @grafana/cloud-setup > [!IMPORTANT] > This tool is in _public preview_ and may change in future releases. Grafana Cloud's interactive setup wizard, powered by Grafana Assistant. Sets up **Synthetics** or **Frontend Observability** in your project, installing gcx and agent skills along the way. ### Requirements - Node.js >= 22.6.0 - A Grafana Cloud stack (e.g. `https://my-team.grafana.net`) - Don't have one? Sign up for free ### Usage [code] ### How is this different from `gcx`? This wizard is interactive and built for humans. It walks you through onboarding a new product, step by step. `gcx` is the non-interactive CLI underneath, built for agents and automation to work with our products continuously. You'll be relying on it directly from day 2 onward, which is why this wizard sets it up for you. ## Reference ### `synthetics` Set up Synthetic Monitoring checks. [code] | Flag | Description | | ----------------- | -------------------------------------------------------------------------- | | `--url ` | Target URL to check (required) | | `--stack ` | Grafana Cloud stack slug, e.g. `my-team` (URLs also accepted) | | `--folder ` | Project directory to set up (default: `.`) | | `--debug` | Log raw Assistant tool calls/responses to a temp file, for troubleshooting | ### `frontend` Instrument local app with Frontend Observability. [code] | Flag | Description | | ----------------- | "
+  ],
+  "out": {
+   "purpose": "Interactively set up Grafana Cloud Synthetics or Frontend Observability, installing required agents and skills",
+   "confidence": "high"
+  }
+ },
+ "3da1125a58070d268b33": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/clusterurl",
+   "A simple Go package for processing and clustering a URL to extract a generic page route from it",
+   "# ClusterURL The goal of this package is to provide a simple way to process and cluster a URL to extract a generic page route from it. These generic routes can then be used to aggregate data from multiple URLs under a single route. This is done by a combination of a rules-based parser combined with a ML model trained to determine if a string is gibberish or not."
+  ],
+  "out": {
+   "purpose": "Extract a generic route from URLs to group similar pages for analytics or routing, using rule‑based parsing and gibberish detection.",
+   "confidence": "high"
+  }
+ },
+ "6ab760aa1eb090f81804": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/cog",
+   "Code Generation with a human touch",
+   "# cog `cog` is a **Co**de **g**enerator created with the following objectives in mind: * Support multiple schema formats: CUE, JSON Schema, OpenAPI, ... * Generate code in a wide range of languages: Golang, Java, PHP, Python, Typescript, … * Generate *types* described by schemas * Generate developer-friendly *builder libraries*, allowing the creation of complex objects as-code ## Example use-cases * The Grafana Foundation SDK is fully generated by `cog`, from a collection of schemas exposed by Grafana * Grafana itself uses `cog` to enable a *schema-first* approach where some resources (example: dashboards) are schematized first, then code is generated both for the frontend and backend from those schemas. * The `grafana-app-sdk` uses `cog` as a library for some of its code generation needs. > [!TIP] > While `cog` is built and maintained by Grafana Labs, it is **completely schema-agnostic**. ## Usage ### As a CLI Download the `cog` binary from our releases, and run the codegen pipeline: [code] ### As a Go Library See the Go documentation for more example and a complete API reference. [code] ## Maturity Cog should be considered as \"public preview\". While it is used by Grafana Labs in production, it still is under active development. Additional information can be found in Release life cycle for Grafana Labs. > [!NOTE] > Bugs and issues are handled solely by Engineering teams. On-ca"
+  ],
+  "out": {
+   "purpose": "Generate typed code and builder libraries from schemas (CUE, JSON Schema, OpenAPI, etc.) for multiple languages such as Go, Java, Python, TypeScript, and more.",
+   "confidence": "high"
+  }
+ },
+ "c1071228e4be3bb6d547": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "collector-configurator",
+   "Fork of the agent configurator to work with otel",
+   "# Collector Configurator Tool The _Collector Configuration Generator_ is an easy to use web interface for creating and editing OpenTelemetry Collector configuration files. Try it out here: grafana.github.io/collector-configurator/ # Setup 1. Run `npm install` to install all dependencies. * Due to incompatibilities in react dependencies, you will need to use `--force` to avoid a dependency conflict 2. Run `npm start` to start the server. 3. Access the config generator on localhost:3000."
+  ],
+  "out": {
+   "purpose": "Web UI for creating and editing OpenTelemetry Collector configuration files",
+   "confidence": "high"
+  }
+ },
+ "dfe5d95fe8932d10a187": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/crocochrome",
+   "Chromium supervisor",
+   "# Crocochrome Crocochrome is a chromium supervisor, which runs and reaps chromium processes on demand. Crocochrome needs to be granted certain linux capabilities to funciton, see docs/capabilities.md for details. An unprivileged image, tagged ` -unprivileged`, needs no capabilities at the cost of weaker isolation between crocochrome and chromium; see Unprivileged image. Crocochrome runs chromium with `--no-sandbox`. The reason for this is that to run with sandboxing enabled, chromium needs user namespaces to work, which are not available everywhere. Moreover, chromium's sandbox focuses on isolating the processes running untrusted code from other processes, the network, and the filesystem. Regarding process isolation, we only run one chromium process concurrently, and that's the only process in the container running as the (unprivileged) container. Therefore we do not see much value in this isolation. Regarding filesystem access, the whole container is run with a read-only filesystem. The Crocochrome binary is not readable or runnable by the user chromium is running on, and there should be no sensitive files to be accessed whatsoever. Regarding the network, we can use `NetworkPolicy` objects to forbid the Crocochrome container from accessing private IP ranges. ## Manual testing The `manualtest` folder includes some simple scripts that use browser and can be used to test Crocochr"
+  ],
+  "out": {
+   "purpose": "Launch and supervise Chromium inside a container, automatically starting and reaping processes without sandboxing",
+   "confidence": "high"
+  }
+ },
+ "2a5501a29bd29f1515ba": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/crossplane-provider-grafana/v2",
+   "Crossplane provider of https://github.com/grafana/terraform-provider-grafana",
+   "# Provider Grafana `provider-grafana` is a Crossplane provider that is built using Upjet code generation tools and exposes XRM-conformant managed resources for the Grafana API. > **This tool is experimental** > > The code in this repository should be considered experimental. Documentation is only > available alongside the code. It comes without support, but we are keen to receive > feedback on the product and suggestions on how to improve it, though we cannot commit to > resolution of any particular issue. No SLAs are available. It is not meant to be used in > production environments, and the risks are unknown/high. > > Additional information can be found in Release life cycle for Grafana Labs. ## Getting Started Install the provider by using the following command after changing the image tag to the latest release: [code] Alternatively, you can use declarative installation: [code] You can optionally customize the provider's runtime configuration using a DeploymentRuntimeConfig if you need to modify pod settings, add arguments, or configure resource limits. You can see the API reference here. For information on configuring provider credentials and ProviderConfig secret fields, see the ProviderConfig Secret Fields documentation. ## Signature Verification Published packages are cryptographically signed. See docs/signature-verification.md for verification instructions. ## Contribut"
+  ],
+  "out": {
+   "purpose": "Provision and manage Grafana resources declaratively through Crossplane as XRM‑conformant managed resources",
+   "confidence": "high"
+  }
+ },
+ "7110b92094b3c33bca4d": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/dashboard-linter",
+   "A tool to lint Grafana dashboards",
+   "# Grafana Dashboard Linter This tool is a command-line application to lint Grafana dashboards for common mistakes, and suggest best practices. ## Install ### Prebuilt binaries (recommended) Download a release archive from the releases page and extract the `dashboard-linter` binary onto your `PATH`. Example for Linux on amd64: [code] The archive name uses the version without the leading `v`. Each release also publishes a `checksums.txt` you can verify against. ### GitHub Action Pin the action to a release tag, or to the commit that tag points at. It downloads that release's binary for the runner's OS and architecture, verifies `checksums.txt`, and adds `dashboard-linter` to `PATH`. [code] A workflow that pins actions to a commit can leave `version` unset. The action uses the release tag that points at that commit: [code] Renovate updates the sha and the `# vX.Y.Z` comment together. That comment is where the workflow records the release. The action is on tags created after this file is merged, and that same tag is the binary that gets installed. The calling workflow only needs `permissions: contents: read`. `files` is newline-separated dashboard files, directories, or globs such as `dashboards/*.json`. A directory is searched recursively for `*.json` (`node_modules` is skipped), and each file is linted with its own process. With no `--config`, each dashboard still uses a `.lint` "
+  ],
+  "out": {
+   "purpose": "Lint Grafana dashboard JSON files to catch common errors and enforce best‑practice conventions.",
+   "confidence": "high"
+  }
+ },
+ "37ddeb2971c0c15c966c": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "@grafana/dataplane",
+   "Grafana data plane tools and docs",
+   "Grafana Data Plane Grafana data plane tools and docs This is a monorepo of Grafana dataplane tools and docs ## Docs - Data Plane Contract - Technical Specification ## backend packages - sdata (**experimental** Structural way of building typed dataframes) - examples (Examples of dataplane typed dataframes in json files, and a go library for using them in tests)"
+  ],
+  "out": {
+   "purpose": "Create and test typed Dataframe structures for Grafana's data plane using Go utilities and example JSON specifications.",
+   "confidence": "high"
+  }
+ },
+ "5b265f12907d98178d9b": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "@grafana/dataplane-website",
+   "Grafana data plane tools and docs",
+   "Grafana Data Plane Grafana data plane tools and docs This is a monorepo of Grafana dataplane tools and docs ## Docs - Data Plane Contract - Technical Specification ## backend packages - sdata (**experimental** Structural way of building typed dataframes) - examples (Examples of dataplane typed dataframes in json files, and a go library for using them in tests)"
+  ],
+  "out": {
+   "purpose": "Create and test typed dataframes for Grafana data plane pipelines using Go and JSON specifications.",
+   "confidence": "high"
+  }
+ },
+ "3aa1fb9d81a021e9c6a1": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "@grafana/sdata",
+   "sdata package provides utilities to build data frames in a structural way and ensure the data frames adhere to data frame contract.",
+   "# Grafana dataplane sdata > This `sdata` package is still in **experimental** stage. Things may break **sdata** package provides utilities to build data frames in a structural way and ensure the data frames adhere to data frame contract."
+  ],
+  "out": {
+   "purpose": "Create and validate structured data frames that conform to a predefined contract.",
+   "confidence": "medium"
+  }
+ },
+ "43086e69de024335b1fd": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/detect-angular-dashboards",
+   "Detect dashboards depending on Angular data source and panel plugins on a running Grafana instance using the Grafana API.",
+   "# detect-angular-dashboards Detect dashboards depending on Angular data source and panel plugins on a running Grafana instance using the Grafana API. Compatible with Grafana OSS, Grafana Enterprise, On-Prem and Grafana Cloud. Read more about Angular support deprecation in our documentation. ## Configuration The program requires a service account and API key to work properly. Configuration changes slightly depending on your version of Grafana. We recommend using Grafana >= 10.1.0, otherwise Angular private plugins (that are not in Grafana's catalog) won't be detected. ### Grafana >= 10.1.0 Create a service account with `Viewer` role. Then, create a service account token for the newly created service account and set it to the `GRAFANA_TOKEN` env var. ### Grafana Warning, Angular private plugins won't be detected from the scan when using Grafana Pass flag `-server` to run the program in server mode. Value must be a valid listen address ex. \"0.0.0.0:8080\". > Pass optional flag `-max-concurrency` to the program to limit the max concurrency when downloading dashboards from Grafana, otherwise default value is used. > Pass optional flag `-interval` to the program to set the detection refresh interval when running in server mode, otherwise default value is used. [code] ### CLI Mode - Readable output [code] ### CLI Mode - JSON output > Pass flag -j to the program to output in JSON format"
+  ],
+  "out": {
+   "purpose": "Identify Grafana dashboards that rely on Angular data sources or panel plugins to assess migration or deprecation needs.",
+   "confidence": "high"
+  }
+ },
+ "8db7f3e961091e112e42": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/docker-otel-lgtm",
+   "An OpenTelemetry backend in a Docker container image",
+   "# docker-otel-lgtm [![Docker latest][docker-latest]][docker-hub] [![Docker pulls][docker-pulls]][docker-hub] An OpenTelemetry backend in a Docker image. It bundles the **OpenTelemetry Collector**, **Prometheus** (metrics), **Tempo** (traces), **Loki** (logs), **Pyroscope** (profiles), and **Grafana** into a single container — with optional **OBI** (eBPF auto-instrumentation). The `grafana/otel-lgtm` Docker image is an open source backend for OpenTelemetry that's intended for development, demo, and testing environments. > [!IMPORTANT] > If you are looking for a **production-ready**, out-of-the box solution to monitor applications > and minimize MTTR (mean time to resolution) with OpenTelemetry and Prometheus, > you should try [Grafana Cloud Application Observability][app-o11y]. ## Documentation - Blog posts: - [_An OpenTelemetry backend in a Docker image: Introducing grafana/otel-lgtm_][otel-lgtm] - [_Observability in under 5 seconds: Reflecting on a year of grafana/otel-lgtm_][otel-lgtm-one-year] ## Get the Docker image The Docker image is available on [Docker Hub][docker-hub]. [code] ## Run the Docker image ### Linux/Unix [code] ### Windows (PowerShell) [code] ### macOS With docker/podman: [code] With Apple Container: Before building or running, ensure Apple Container's services is started with `container system start`: [code] The build and run scripts automatically select Pod"
+  ],
+  "out": {
+   "purpose": "Run a full OpenTelemetry observability stack (metrics, traces, logs, profiles) locally via a single Docker container for development or testing",
+   "confidence": "high"
+  }
+ },
+ "cb5b14afc1aa0fcd1171": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "mise-npm-install",
+   "An OpenTelemetry backend in a Docker container image",
+   "# docker-otel-lgtm [![Docker latest][docker-latest]][docker-hub] [![Docker pulls][docker-pulls]][docker-hub] An OpenTelemetry backend in a Docker image. It bundles the **OpenTelemetry Collector**, **Prometheus** (metrics), **Tempo** (traces), **Loki** (logs), **Pyroscope** (profiles), and **Grafana** into a single container — with optional **OBI** (eBPF auto-instrumentation). The `grafana/otel-lgtm` Docker image is an open source backend for OpenTelemetry that's intended for development, demo, and testing environments. > [!IMPORTANT] > If you are looking for a **production-ready**, out-of-the "
+  ],
+  "out": {
+   "purpose": "Run a complete OpenTelemetry observability stack (collector, metrics, traces, logs, profiling, Grafana) in a Docker container for development, demo, or testing environments.",
+   "confidence": "high"
+  }
+ },
+ "8f62fb9e0f04e02e135d": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/dskit",
+   "Distributed systems kit",
+   "# Grafana Dskit This library contains utilities that are useful for building distributed services, including: - Exponential backoff for retries. - A common cache API and Memcached implementation. - Hedging, sending extra duplicate requests to improve the chance that one succeeds. - A common key-value API, implemented for Consul, Etcd and Memberlist. - RPC middlewares, for metrics, logging, etc. - A services model, to manage start-up and shut-down. ## Current state This library is used at scale in production at Grafana Labs. A number of packages were collected here from database-related projects: - [Mimir] - [Loki] - [Tempo] - [Pyroscope] [Mimir]: https://github.com/grafana/mimir [Loki]: https://github.com/grafana/loki [Tempo]: https://github.com/grafana/tempo [Pyroscope]: https://github.com/grafana/pyroscope ## Go version compatibility This library aims to support at least the two latest Go minor releases. ## Contributing If you're interested in contributing to this project: - Start by reading the Contributing guide. - Pull request titles must follow Conventional Commits format. ## Release History This project uses conventional commit messages to maintain a clear history of changes. No separate changelog is maintained - please refer to the commit history for information about releases and changes. ## License Apache 2.0 License"
+  ],
+  "out": {
+   "purpose": "Utilities for building distributed Go services, providing backoff retries, cache, key‑value store, request hedging, RPC middleware, and service lifecycle management.",
+   "confidence": "high"
+  }
+ },
+ "e63c310efee81ec35125": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "fake-data-gen",
+   "fake data generator for different TSDB's",
+   "fake-data-gen ============= Fake data writer for Grafana datasources. The writer target different datasources based on two environment variables. FD_DATASOURCE and FD_PORT. The ip to write to is assumed to be local host. If you want to add a new datasource please use the metrics found in /data to produce metrics like the other datasources. This will make it easier for grafana developers to get up to speed faster with your datasource. The container build by this repo is used by datasource containers in grafana/grafana/docker/blocks"
+  ],
+  "out": {
+   "purpose": "Generate synthetic time-series data for Grafana-supported TSDBs to test and develop datasource integrations.",
+   "confidence": "high"
+  }
+ },
+ "fbca8401639c2b954813": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/faro/pkg/go",
+   "Grafana Faro is a project for frontend application observability. It includes a highly configurable web SDK that instruments browser frontend applications to capture observability signals.",
+   "# Grafana Faro ## About A project for frontend application observability, Grafana Faro includes a highly configurable web SDK for real user monitoring (RUM) that instruments browser frontend applications to capture observability signals. The frontend telemetry can then be correlated with backend and infrastructure data for seamless, full-stack observability. For the Grafana Faro Web SDK, please go to https://github.com/grafana/faro-web-sdk. The repository consists of - OpenAPI specification - Packages with HTTP Models generated from the OpenAPI specification ## Building ### With Docker (recomm"
+  ],
+  "out": {
+   "purpose": "Instrument browser frontend applications to collect real‑user monitoring telemetry for full‑stack observability.",
+   "confidence": "high"
+  }
+ },
+ "98219c83e2617e0b4140": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/flagger-k6-webhook",
+   "Using k6 to do load testing of the canary before rolling out traffic",
+   "# flagger-k6-webhook Using k6 to do load testing of the canary before rolling out traffic Here's a demo (sped up): ## Configuration Here's what the `Canary` webhook can look like. This is `pre-rollout` webhook, so it happens before any traffic is placed on the canary. If the webhook passes the thresholds, the rest of the Flagger analysis and promotion process occurs See the k6 docs for a full description of options available in scripts [code] ### Injecting secrets and configuration Use the [k6 environment variables feature to inject configurations and secrets to your script. To do so, mount your configs as environment variables onto the load tester and reference them with `${__ENV. }` You can also refer to other secrets by using the `kubernetes_secrets` setting in metadata. This is useful if your secrets are not located in the same namespace as the load tester or if you wish to limit the amount of secret to mount to the load tester. Note that you will need to assign a Kubernetes service account that can read the secrets in question to the load tester deployment ### Using K6 Cloud In order to send results to K6 cloud, the following conditions must be met: 1. The script itself must support it. As shown above, in the `ext.loadimpact`, your script must define a test name and, optionally, a project ID 2. You must pass the `upload_to_cloud: \"true\"` attribute in your Canary's metadata"
+  ],
+  "out": {
+   "purpose": "Run k6 load tests on a canary deployment via a pre‑rollout webhook to verify performance thresholds before promoting traffic.",
+   "confidence": "high"
+  }
+ },
+ "779c6d6fa23cc083d0dd": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "k6-loadtester",
+   "Using k6 to do load testing of the canary before rolling out traffic",
+   "# flagger-k6-webhook Using k6 to do load testing of the canary before rolling out traffic Here's a demo (sped up): ## Configuration Here's what the `Canary` webhook can look like. This is `pre-rollout` webhook, so it happens before any traffic is placed on the canary. If the webhook passes the thresholds, the rest of the Flagger analysis and promotion process occurs See the k6 docs for a full description of options available in scripts [code] ### Injecting secrets and configuration Use the [k6 environment variables feature to inject configurations and secrets to your script. To do so, mount yo"
+  ],
+  "out": {
+   "purpose": "Execute k6 load tests on a canary version before traffic is shifted to verify performance thresholds.",
+   "confidence": "high"
+  }
+ },
+ "bd9c48b60062dcb96b23": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/generate-policy-bot-config",
+   "Generate a config file for `palantir/policy-bot` to help you enforce conditional workflows have passed",
+   "# `generate-policy-bot-config` This script generates the [Policy Bot][policy-bot] configuration file. It looks at all the GitHub Actions workflows in `.github/workflows`, finds the ones which are triggered on the `pull_request` or `pull_request_target` events, and generates a configuration file which requires them to pass if they are triggered. If there are path filters, those are copied to the configuration file. This is needed because GitHub does not support checkes which are required _if triggered_. We need to implement it externally. [policy-bot]: https://github.com/palantir/policy-bot ## Usage _We're assuming Policy Bot is already configured and working for your organisation._ Generate a configuration file like this: ### Running from a Docker image We push a Docker image to the GitHub Container Registry: [code] Semver-tagged images are also available, as is `main` for the latest commit on the `main` branch. These docker images are attested using [GitHub Artifact Attestations][attest]. You can verify our container images by using the `gh` CLI: [code] Attestations can also be viewed on the [attestation page] of this repository. What this lets you do is trace a container image back to a build in this repository. You'll still need to verify the build steps that were used to build the image to ensure that the image is safe to use. [attest]: https://docs.github.com/en/actions/se"
+  ],
+  "out": {
+   "purpose": "Generate a Policy Bot config that automatically requires any GitHub Actions workflow triggered on pull requests to pass, respecting path filters.",
+   "confidence": "high"
+  }
+ },
+ "dd964a1dd30f0fac4e23": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/github-rate-limits-prometheus-exporter",
+   "GitHub Rate Limits Prometheus exporter. Works with both App and PAT credentials ",
+   "# GitHub Rate Limit Prometheus Exporter A Prometheus exporter which scrapes GitHub API for the rate limits used by PAT/GitHub App. ## History This repository started as a fork of kalgurn/github-rate-limits-prometheus-exporter and has since diverged substantially from upstream. For that reason it is now maintained as a standalone project. Huge thanks to @kalgurn for the original work that this exporter is built on."
+  ],
+  "out": {
+   "purpose": "Export GitHub API rate limit metrics to Prometheus for monitoring using PAT or GitHub App credentials",
+   "confidence": "high"
+  }
+ },
+ "272174406a5e143bd292": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github-rate-limits-prometheus-exporter",
+   "This helm chart helps to install and configure github-rate-limits-prometheus-exporter",
+   "# Github Rate Limit prometheus exporter helm chart This helm chart helps to install and configure github-rate-limits-prometheus-exporter The helm chart itself is a simplified version of a generated helm chart for 'any' service. Values which can be configured can be viewed here To add a repository to your local helm repos [code] To install the chart [code] ## Application specific configuration GitHub PAT [code] GitHub App [code] Example values file [code] ## Prerequisites For the application to run the Kubernetes secrets should be installed in the same namespace. E.g., for GitHub App you can create a secret from the key.pem with the command below. [code] It will create a secret with a name __github-key__ and a private key stored within the keys `data[\"key.pem\"]` For the PAT the easiest way would be [code] The command above will create a secret __gh-token__ in the current namespace and a token stored within keys `data[\"token\"]`"
+  ],
+  "out": {
+   "purpose": "Deploy a Prometheus exporter to monitor GitHub API rate limits using a Helm chart with PAT or GitHub App credentials.",
+   "confidence": "high"
+  }
+ },
+ "179f8e4b28f30adf2e01": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/go-offsets-tracker",
+   "Track byte offsets of different struct fields, for different versions",
+   "# Go offsets tracker This tool allows generating a JSON description of the byte offsets of a set of field structs, for each version or Go or third-party library. It is useful to inspect some known fields in executable files that do not embed Debug information. This is a standalone, modified version of the Open Telemetry offsets tracker tool, and both are licensed under Apache Software License 2.0. ## How to install [code] ## How to generate offsets Specify the library/struct/field that you want to track, for a version range in an input JSON file. Check examples/input_file.json to understand the schema: [code] If the output file (examples/offsets.json) in the above example) already exists, the program will reuse these known offsets as a cache, to not have to retrieve the information again from the internet. If you need to regenerate completely the output file, remove it or use an output file that does not exist. ## How to read offsets from a program Use `offsets.Open` or `offsets.Read` to load an (`offsets.Track`). Use the `Find` method of the `offsets.Track` to get the offsets, given the struct, field and version names: [code] Output: [code]"
+  ],
+  "out": {
+   "purpose": "Generate and query JSON of struct field byte offsets per Go/library version to locate fields in binaries lacking debug symbols.",
+   "confidence": "high"
+  }
+ },
+ "3f7e42a82ae17ce2fca5": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/grafana-aws-sdk",
+   "Common AWS configs for plugins",
+   "# Grafana AWS SDK This is a common package that can be used for all amazon plugins. ## Backend plugins (go sdk) see the ./pkg folder ## Frontend configuration Frontend code has been moved to https://github.com/grafana/grafana-aws-sdk-react ## Drone configuration Drone signs the Drone configuration file. This needs to be run every time the drone.yml file is modified. See https://github.com/grafana/deployment_tools/blob/master/docs/infrastructure/drone/signing.md for more info. ### Update drone build If you have not installed drone CLI follow these instructions To sign the `.drone.yml` file: [code]"
+  ],
+  "out": {
+   "purpose": "Need shared AWS configuration utilities for building Grafana plugins that interact with Amazon services.",
+   "confidence": "high"
+  }
+ },
+ "000a4bfc74556bf0c263": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "canvas",
+   "Draw pictures with the Canvas visualization panel plugin, then paint by numbers with your Grafana metrics data!",
+   "# Canvas panel plugin Draw pictures with the Canvas visualization panel plugin, then paint by numbers with your Grafana metrics data! ## Overview Canvas is a composable panel where you place and style elements — rectangles, text, icons, images, and more — freely on a grid, then bind their properties (position, color, text, visibility) to fields from your Grafana data. It's well suited to building custom infographics, floor plans, network diagrams, and other visualizations that don't fit a standard chart type. This plugin is the externalized version of the Canvas panel that was previously built into Grafana core. ## Showcase | | | | --- | --- | | | | | Service status board — connected nodes with live-bound status and latency | Floor plan sensor overlay — rooms as shapes, live data-bound status icons | | | | | Turbine and drone fleet monitor — custom elements bound to live data | Interactive action buttons — Canvas elements can trigger API calls, not just display data | The provisioned dashboards behind these screenshots live under `provisioning/dashboards/` (`canvas_showcase*.json`) — run `npm run server` to load them locally. ## Documentation - See complete documentation at grafana.com ## Changelog - `CHANGELOG.md` — release history ## Contributing - `CONTRIBUTING.md` — development setup, building, testing, and linting"
+  ],
+  "out": {
+   "purpose": "Create custom, data-bound visual dashboards by placing and styling elements on a canvas and linking their properties to Grafana metric fields",
+   "confidence": "high"
+  }
+ },
+ "5af9b15a4641d9052770": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "grafana-pyroscope-datasource",
+   "Data source for Grafana Pyroscope, horizontally-scalable, highly-available, multi-tenant continuous profiling aggregation system.",
+   "# Pyroscope data source for Grafana > **Note**: This core plugin was extracted from the > grafana/grafana repository and is now > developed and released from this repository. ## Overview Grafana Pyroscope is an open-source, horizontally scalable continuous profiling backend. The Pyroscope data source plugin lets Grafana query and visualize CPU, memory, goroutine, and other profiles stored in a Pyroscope server, so engineers can investigate performance regressions alongside metrics, logs, and traces. This repository hosts the standalone Pyroscope plugin built from `pkg/main.go` and the frontend in `src/`, distributed through the Grafana plugin catalog. The legacy plugin id `phlare` is retained as an alias for backwards compatibility with existing dashboards and provisioning. ## Requirements - Grafana 12.3.0 or later (see `dependencies.grafanaDependency` in `src/plugin.json`). ## Getting started This plugin is bundled with Grafana — no installation is required for standard Grafana deployments. 1. Navigate to **Connections > Data sources** in Grafana. 2. Click **Add data source** and search for \"Pyroscope\". 3. Configure the connection settings and click **Save & test**. For detailed setup instructions, see the Pyroscope data source documentation. ### Custom Grafana distributions If you are building a custom Grafana binary or distribution that excludes bundled plugins, you can inst"
+  ],
+  "out": {
+   "purpose": "Query and visualize continuous profiling data (CPU, memory, goroutine, etc.) from a Pyroscope server within Grafana.",
+   "confidence": "high"
+  }
+ },
+ "c809d2558f7896e77cc0": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "pyroscope-kinda-safe",
+   "Signal-safe memory reading for x8664 and aarch64 on Linux.",
+   "# pyroscope-kinda-safe Signal-safe memory reading for x86_64 and aarch64 on Linux. This workspace contains two crates: - `kindasafe` — core read primitives using naked assembly with crash recovery - `kindasafe_init` — signal handler initialization ## License Apache-2.0"
+  ],
+  "out": {
+   "purpose": "Signal-safe memory read primitives for x86_64 and aarch64 Linux, enabling crash-recoverable reads from signal handlers.",
+   "confidence": "high"
+  }
+ },
+ "11edd5f15460507ae3c6": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "kindasafe",
+   "Signal-safe memory reading for x86_64 and aarch64 using naked functions and crash recovery",
+   "# kindasafe Signal-safe memory reading for x86_64 and aarch64 on Linux. Uses naked assembly functions to read memory, with crash recovery via SIGSEGV/SIGBUS signal handlers. When a read faults, the signal handler adjusts the program counter to skip past the faulting instruction and reports the error instead of crashing. This is a `no_std` crate providing the core read primitives. Use `kindasafe_init` to install the required signal handlers. ## Usage [code] ## Supported architectures - x86_64 - aarch64 ## License Apache-2.0"
+  ],
+  "out": {
+   "purpose": "Perform signal‑safe memory reads on Linux x86_64/aarch64, preventing crashes by catching SIGSEGV/SIGBUS and skipping faulting instructions.",
+   "confidence": "high"
+  }
+ },
+ "2c8ff9aadab3ad1daf64": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "kindasafe_init",
+   "Signal handler initialization for the kindasafe signal-safe memory reading library",
+   "# kindasafe_init Signal handler initialization for the kindasafe signal-safe memory reading library. Installs SIGSEGV and SIGBUS signal handlers that enable `kindasafe` to recover from memory access faults instead of crashing. Preserves any previously installed signal handlers as fallbacks. ## Usage [code] ## License Apache-2.0"
+  ],
+  "out": {
+   "purpose": "Install SIGSEGV and SIGBUS handlers to enable kindasafe’s signal‑safe memory reads without crashing.",
+   "confidence": "high"
+  }
+ },
+ "f1eac07ff4e4e5fed15f": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "github.com/grafana/xk6-kafka",
+   "Official pure-Go k6 extension for load testing Apache Kafka",
+   "# xk6-kafka > [!NOTE] > **Pre-1.0 (`v0.x`).** The API targets the community `mostafa/xk6-kafka` v1 surface and is stabilizing; minor changes are possible before `v1.0.0`. `grafana/xk6-kafka` is the official, Grafana-owned, pure-Go k6 extension for load testing Apache Kafka: producing and consuming messages, managing topics, authenticating, and working with Schema Registry. It is designed as a **100% pure-Go** extension (`CGO_ENABLED=0`): no C toolchain, no `confluentinc/librdkafka`, so it can run in lightweight containers, strict CI/CD pipelines, and Grafana Cloud k6. ## Goals - **Official Grafana support** — owned and maintained by Grafana, with a clear path for security patches and releases. - **Pure Go** — compiles without CGO, so it fits scratch containers, cross-compilation, and pure-Go build pipelines. - **Familiar API** — aims to be a near-drop-in replacement for community `mostafa/xk6-kafka` v1 scripts: same import and API shape, so common producer, consumer, admin, auth, and Schema Registry scripts run with little or no change. See RATIONALE.md for the problem, goals, and scope, the migration guide to port a community `mostafa/xk6-kafka` v1 script, and the compatibility matrix for the full feature list. ## Build Use xk6 to build a k6 binary with the extension: [code] This produces a `k6` binary in the current directory. No C toolchain required. This builds from the lat"
+  ],
+  "out": {
+   "purpose": "Load test Apache Kafka with k6, producing/consuming messages, managing topics and schema registry, all in pure Go without a C toolchain",
+   "confidence": "high"
+  }
+ }
+}

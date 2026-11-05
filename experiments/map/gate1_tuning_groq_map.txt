@@ -1,0 +1,9 @@
+TUNING SET: 106 queries, 55 low-overlap
+variant                                       r@1   r@5  r@10   MRR  low@5
+frozen: vec(card,summary)              vec   0.51  0.75  0.84  0.62   0.65
+                                       hyb   0.51  0.73  0.86  0.62   0.58
++purpose: vec(card,summary,purpose)    vec   0.72  0.91  0.93  0.80   0.87
+                                       hyb   0.72  0.89  0.96  0.79   0.84
+purpose only: vec(purpose)             vec   0.73  0.92  0.94  0.81   0.89
+                                       hyb   0.73  0.91  0.96  0.80   0.85
+DECISION (pre-registered rule): hybrid r@5 0.73 -> 0.89, low-overlap 0.58 -> 0.84  =>  ADOPT purpose field

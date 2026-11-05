@@ -368,26 +368,38 @@ def find_existing(user_id: uuid.UUID | str, intent: str,
     """
     from .db import as_user
 
+    model_mode = settings.verdict_mode == "model"
+    # With a model judge, judge a wider SHORTLIST than we return: search ranks the right
+    # asset near the top but, as the corpus grows, often not in the top 5 (recall@5 fell
+    # to 0.55 at 1,909 assets). The judge, not the rank, decides what comes back.
+    depth = max(top, settings.verdict_shortlist) if model_mode else top
+
     out: list[Verdict] = []
     with as_user(user_id) as conn:
-        rows = search(conn, intent, keywords)[:top]
+        # Runs as the asker: the judge only ever sees candidates this user may discover.
+        rows = search(conn, intent, keywords)[:depth]
         claims_by = {r["asset_id"]: load_claims(conn, r["asset_id"]) for r in rows}
-        summaries = {}
+        summaries, purposes = {}, {}
         with conn.cursor() as cur:
             for r in rows:
-                cur.execute("select coalesce(summary,'') from asset where id = %s",
-                            (r["asset_id"],))
-                summaries[r["asset_id"]] = cur.fetchone()[0]
+                cur.execute("select coalesce(summary,''), coalesce(purpose,'') from asset "
+                            "where id = %s", (r["asset_id"],))
+                summaries[r["asset_id"]], purposes[r["asset_id"]] = cur.fetchone()
     for row in rows:
         v = judge(intent, row["name"], claims_by[row["asset_id"]], row["score"])
         v.asset_id = str(row["asset_id"])
         out.append(v)
 
-    if settings.verdict_mode == "model" and out:
+    if model_mode and out:
         cards = [{"name": display_name(r["name"]), "summary": summaries[r["asset_id"]],
+                  "purpose": purposes[r["asset_id"]],
                   "evidence": [c["body"] for c in claims_by[r["asset_id"]]
                                if c["layer"] > 1]} for r in rows]
         for v, mv in zip(out, judge_with_model(intent, cards), strict=True):
             v.verdict = mv["verdict"]
             v.unknowns = [mv["reason"]] + [u for u in v.unknowns if u != mv["reason"]]
-    return out
+        # Judged fits first, then unknowns, then not-a-fit; retrieval rank breaks ties.
+        order = {"use_as_is": 0, "extend": 1, "unknown": 2, "not_a_fit": 3}
+        out = [v for _, v in sorted(enumerate(out),
+                                    key=lambda iv: (order.get(iv[1].verdict, 2), iv[0]))]
+    return out[:top]
