@@ -27,6 +27,7 @@ from mcp.types import ToolAnnotations
 
 from .cli import log_question, resolve_user
 from .db import as_user
+from .models import display_name
 from .search import find_existing as _find
 from .tools_text import FIND_EXISTING_DESCRIPTION
 
@@ -53,7 +54,7 @@ def find_existing(intent: str, keywords: list[str] | None = None,
     verdicts = _find(user, intent, keywords or [])
     log_question(user, intent, keywords or [], "mcp", verdicts)
     return json.dumps({"results": [{
-        "asset_id": v.asset_id, "name": v.name.rsplit("/", 1)[-1], "verdict": v.verdict,
+        "asset_id": v.asset_id, "name": display_name(v.name), "verdict": v.verdict,
         "reasons": [r["text"] for r in v.reasons[:3]], "unknowns": v.unknowns[:3],
     } for v in verdicts], "note": None if verdicts else "nothing found"}, indent=1)
 

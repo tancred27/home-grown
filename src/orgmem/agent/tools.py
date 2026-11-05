@@ -21,6 +21,7 @@ from pathlib import Path
 
 from langchain_core.tools import StructuredTool
 
+from ..models import display_name
 from ..tools_text import FIND_EXISTING_DESCRIPTION
 
 VARIANTS = ("none", "description", "instruction", "all", "hook")
@@ -68,7 +69,7 @@ def compact_verdicts(verdicts) -> list[dict]:
     for v in verdicts:
         out.append({
             "asset_id": v.asset_id,
-            "name": v.name.rsplit("/", 1)[-1],
+            "name": display_name(v.name),
             "verdict": v.verdict,
             "reasons": [r["text"][:160] for r in v.reasons[:3]],
             "unknowns": v.unknowns[:2],

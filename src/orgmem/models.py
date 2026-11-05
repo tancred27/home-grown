@@ -13,6 +13,17 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 
+def display_name(name: str) -> str:
+    """'github.com/grafana/crossplane-provider-grafana/v2' -> 'crossplane-provider-grafana'.
+
+    Takes the last path segment, but skips a Go major-version suffix (/v2, /v3...), which
+    is otherwise all that is left of a module path."""
+    parts = [p for p in (name or "").rstrip("/").split("/") if p]
+    while len(parts) > 1 and parts[-1][:1] == "v" and parts[-1][1:].isdigit():
+        parts.pop()
+    return parts[-1] if parts else name
+
+
 class Layer(IntEnum):
     """The three knowledge layers. They fail independently -- see docs/design.md 2.
 

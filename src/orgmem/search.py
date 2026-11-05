@@ -19,7 +19,7 @@ import psycopg
 
 from .config import settings
 from .embed import embed_query
-from .models import Verdict
+from .models import Verdict, display_name
 
 # Stop words are dropped before building the tsquery; Postgres would drop them anyway,
 # but removing them here keeps the OR query from being all noise.
@@ -354,7 +354,7 @@ def find_existing(user_id: uuid.UUID | str, intent: str,
         out.append(v)
 
     if settings.verdict_mode == "model" and out:
-        cards = [{"name": r["name"].rsplit("/", 1)[-1], "summary": summaries[r["asset_id"]],
+        cards = [{"name": display_name(r["name"]), "summary": summaries[r["asset_id"]],
                   "evidence": [c["body"] for c in claims_by[r["asset_id"]]
                                if c["layer"] > 1]} for r in rows]
         for v, mv in zip(out, judge_with_model(intent, cards), strict=True):

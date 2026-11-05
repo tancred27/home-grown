@@ -1,0 +1,23 @@
+queued 116 events (83 duplicates skipped by idempotency key)
+
+events by kind and outcome:
+  asset_create                 23
+  asset_update                 129
+  commit:applied               43
+  commit:ignored               74
+  page_updated:applied         23
+  page_updated:ignored         20
+  reconcile:applied            38
+  reconcile:ignored            1
+
+why events were ignored:
+    47  bot actor (renovate-sh-app[bot])
+    19  page does not describe a solution, decision or pitfall
+    10  only lockfiles, CI config or generated files changed
+     7  no reusable unit touched
+     2  bot actor (renovate-auto-merger[bot])
+     2  bot actor (github-actions[bot])
+     2  bot actor (sm-release-app[bot])
+     1  dependency bump: chore(deps): track stan submodule by releas
+     1  dependency bump: chore: update & pin deps (#102)
+     1  dependency bump: chore: bump Go version to 1.26.9 (#865)

@@ -30,6 +30,7 @@ from langgraph.graph import END, START, StateGraph
 
 from ..config import settings
 from ..db import as_user
+from ..models import display_name
 from ..search import find_existing
 
 STRONG = ("use_as_is", "extend")
@@ -48,7 +49,7 @@ class AnswerState(TypedDict, total=False):
 
 def _retrieve_and_judge(state: AnswerState) -> dict:
     vs = find_existing(state["user_id"], state["question"], state.get("keywords") or [])
-    cands = [{"asset_id": v.asset_id, "name": v.name.rsplit("/", 1)[-1],
+    cands = [{"asset_id": v.asset_id, "name": display_name(v.name),
               "verdict": v.verdict, "reasons": [r["text"] for r in v.reasons[:3]],
               "unknowns": v.unknowns[:2]} for v in vs]
     return {"candidates": cands, "verdict_source": settings.verdict_mode}
