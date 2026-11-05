@@ -187,15 +187,121 @@ documents are one-line capability descriptions plus test names, and the queries 
 requirements. That domain mismatch is the likely cause, and it would not be fixed by
 running them faster on a GPU.
 
-## What is needed to actually pass
+### Embedding models, on the tuning set
 
-1. A **held-out** query set, written before the method is tuned.
-2. A better layer-1 summary extractor (above).
-3. A **reranker** — the design calls for one in section 7 and it is not built. Scoring
-   the top ~50 with a cross-encoder is the standard fix for exactly this gap.
-4. A larger corpus, to see how the number moves with scale.
-5. `keywords`-augmented queries, measured separately. The design exposes a `keywords`
-   input on `find_existing` for the caller's synonyms; its value is untested here.
+Semantic retrieval carries almost all of the low-overlap recall, so the largest
+remaining lever looked like the embedding model. `scripts/gate1_models.py` compares
+models in memory (numpy exact scan over 86 assets, identical to the database's exact
+scan) so models of different dimension need no schema change, and gives each model its
+own documented query/document prefixes. Retrieval as variant H: max over the `card` and
+`summary` texts, interleaved with lexical. The bge-base row reproduces variants C and H
+exactly, which confirms the in-memory path measures the same thing as the database.
+
+| model | dim | r@1 | r@5 | r@10 | MRR | low r@5 | hybrid r@5 | CPU encode |
+|---|---|---|---|---|---|---|---|---|
+| **BAAI/bge-base-en-v1.5** (current, quantized) | 768 | **0.58** | **0.78** | 0.86 | **0.67** | **0.71** | **0.80** | 16 s |
+| BAAI/bge-large-en-v1.5 | 1024 | 0.50 | 0.75 | 0.88 | 0.62 | 0.61 | 0.76 | 398 s |
+| mixedbread-ai/mxbai-embed-large-v1 | 1024 | 0.51 | 0.73 | **0.92** | 0.62 | 0.61 | 0.75 | 662 s |
+| nomic-ai/nomic-embed-text-v1.5 | 768 | 0.40 | 0.62 | 0.76 | 0.51 | 0.43 | 0.65 | 168 s |
+| snowflake/snowflake-arctic-embed-l | 1024 | 0.49 | 0.70 | 0.81 | 0.59 | 0.59 | 0.74 | 628 s |
+| thenlper/gte-large | 1024 | *not run — skipped to save a 1.2 GB download on a ~0.3 MB/s link* | | | | | | |
+
+**Bigger was not better.** All three large models lost to the base model — bge-large,
+mxbai and arctic-l fell to 0.61, 0.61 and 0.59 on the low-overlap queries, the case the
+design exists for, against 0.71. Every alternative tried lost on every summary metric
+except mxbai's recall@10.
+
+**Selected on the tuning set: bge-base-en-v1.5, variant H** (max over `card`/`summary`
+fields, interleaved with lexical, semantic first). It was already in place, so the test
+set runs with the configuration the project had before run 3 began, plus the two
+retrieval changes above.
+mxbai has the best recall@10 (0.92) but ranks the right answer lower. One confound:
+the bge-base in use is fastembed's quantized export and bge-large is full precision, so
+bge-base vs bge-large is not a pure size comparison. nomic was given its required
+`search_query:` / `search_document:` prefixes and was still the weakest by a wide margin.
+
+### The test set, run once
+
+`queries_test.json`, unchanged since `76e6b4e` (verified with `git diff` before the
+run). 52 queries, 51 resolvable — `adaptive-metrics-autoapply` has no detected unit, as
+in the held-out set. Configuration: bge-base-en-v1.5, `card` + `summary` fields,
+`ORGMEM_FUSION=interleave`, reranker off. Raw output: `test_run_output.txt`.
+
+| test set (n=51) | recall@1 | recall@5 | recall@10 | MRR | misses |
+|---|---|---|---|---|---|
+| keyword | 0.43 | 0.69 | 0.78 | 0.54 | 8 |
+| semantic | 0.59 | **0.84** | **0.92** | 0.69 | **1** |
+| **hybrid (selected)** | **0.59** | **0.82** | 0.88 | **0.69** | 2 |
+
+| by measured overlap | n | keyword@5 | semantic@5 | hybrid@5 |
+|---|---|---|---|---|
+| low < 0.20 | 23 | 0.48 | 0.65 | 0.61 |
+| mid 0.20–0.45 | 21 | 0.81 | 1.00 | 1.00 |
+| high ≥ 0.45 | 7 | 1.00 | 1.00 | 1.00 |
+
+**Gate 1: PASS, narrowly. Hybrid recall@5 = 0.82 against a line of 0.80, on a set that
+was never used to choose anything.** This is the first gate-1 number in the project that
+can be quoted, and it should be quoted with three qualifications:
+
+1. **The margin is one query.** 0.82 vs 0.80 on 51 queries is the difference between 42
+   and 41 hits. The confidence interval comfortably spans the line.
+2. **The low-overlap stratum is still 0.61** — below the line, and it is the case the
+   design exists for. Where the asker shares the asset's vocabulary even a little,
+   retrieval is near perfect (1.00 in the mid band); where they share none, it finds the
+   right thing about three times in five.
+3. **Hybrid did not beat plain semantic here** (0.82 vs 0.84; identical recall@1 and
+   MRR). The lexical half contributes no measurable gain at recall@5 on this set. It was
+   not removed after seeing this, because that would make the test set a tuning set.
+
+**What run 3 got right, by comparison with run 2:** the tuning-set score for the chosen
+method was 0.80 and the test-set score is 0.82 — no dev/test gap this time, against a
+13-point gap in run 2. Run 2 picked its fusion method after looking at the result; run 3
+made a few principled changes, chose on tuning data only, and committed the test set
+before trying anything. The absence of a gap is the evidence that the method was not fit
+to the queries.
+
+### Pre-registered ablation: agent keywords
+
+| test set (n=51) | recall@1 | recall@5 | recall@10 | MRR |
+|---|---|---|---|---|
+| without keywords | 0.59 | 0.82 | 0.88 | 0.69 |
+| with keywords | **0.80** | **1.00** | **1.00** | **0.88** |
+
+Low-overlap stratum: 0.61 → 1.00.
+
+**Do not read that as "keywords solve retrieval".** The keywords were written by the same
+author who chose the gold assets, and their mean overlap with the gold asset's text is
+**0.44** — they leak the answer. Only 3 of 51 queries have keywords that barely touch the
+gold text, which is too few to say anything. The honest conclusion is narrower: the
+`keywords` input is wired correctly and moves results strongly in the direction the
+design predicted, but the size of the effect for an agent that does *not* know the corpus
+is unmeasured. Measuring it needs keywords generated blind — by an agent given only the
+query.
+
+## Status of the run-1 to-do list
+
+| item from run 1 | outcome |
+|---|---|
+| A held-out query set | **Done**, and then a third: the test set above |
+| A better layer-1 summary extractor | **Done**, kept — it helped |
+| A reranker | **Tried and rejected** — four cross-encoders, every one hurt |
+| Agent `keywords`, measured separately | **Measured, but inflated** — the keywords leak the answer |
+| A larger corpus | **Still open** |
+
+## What is still open
+
+1. **The low-overlap stratum (0.61).** The remaining failure is specific: queries that
+   share no vocabulary with the asset. Better embeddings were the obvious lever and
+   every alternative model lost, so the next candidates are on the document side —
+   richer summaries (an LLM-written one-line "what is this for", stored as a layer-1
+   claim with evidence) — rather than the retriever.
+2. **Blind keywords.** Have an agent that has never seen the corpus write the keywords
+   from the query alone, then re-measure the ablation. That is the realistic version
+   of the `find_existing` call, and it is the one number here most likely to be large.
+3. **Scale.** 86 assets makes recall@5 easy. The same test at a few thousand assets is
+   the number a real organisation would see.
+4. **A second rater** for gold labels, and separating the ~20 near-identical `augurs`
+   sub-crates, which make some labels genuinely ambiguous.
 
 ## Caveats
 

@@ -29,8 +29,9 @@ class Settings(BaseSettings):
     rerank_depth: int = 30          # how many fused candidates get cross-encoded
     # How lexical and semantic candidates are combined: "max" (max-fusion with a
     # both-signals tie-break) or "interleave" (ties broken toward semantic).
-    # Selected on the tuning set; see experiments/gate1/RESULTS.md.
-    fusion: str = "max"
+    # Selected on the tuning set and confirmed on the untouched test set (recall@5 0.82,
+    # recall@1 0.59); see experiments/gate1/RESULTS.md run 3.
+    fusion: str = "interleave"
 
     # Discussion ingestion is a funnel. These are the gates, and they are settings
     # rather than constants because run E2 showed the length gate does NOT generalise:

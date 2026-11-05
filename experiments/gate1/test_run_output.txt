@@ -1,0 +1,35 @@
+WARNING: 1 queries reference assets not in the corpus:
+  github:adaptive-metrics-autoapply:.
+corpus: 86 assets | queries: 51
+
+    method  recall@1  recall@5  recall@10     MRR  misses
+   keyword      0.43      0.69       0.78    0.54       8
+  semantic      0.59      0.84       0.92    0.69       1
+    hybrid      0.59      0.82       0.88    0.69       2
+
+by measured query/asset lexical overlap:
+            band    n  keyword@5  semantic@5  hybrid@5
+      low  <0.20   23       0.48        0.65      0.61
+  mid  0.20-0.45   21       0.81        1.00      1.00
+     high >=0.45    7       1.00        1.00      1.00
+
+queries where hybrid missed the gold asset in the top 5:
+  overlap=0.00 fts=None vec=4 hyb=7  library of building blocks for horizontally scaled go servers
+  overlap=0.00 fts=None vec=8 hyb=14  catch bad patterns in exported monitoring board definitions
+  overlap=0.12 fts=12 vec=12 hyb=14  an elastic distance between two time series of different lengths
+  overlap=0.00 fts=None vec=14 hyb=19  find which of many hosts is behaving differently from the rest
+  overlap=0.00 fts=None vec=6 hyb=8  simple exponential state space forecasting
+  overlap=0.00 fts=None vec=None hyb=None  run bayesian forecasting inside a web page
+  overlap=0.17 fts=6 vec=4 hyb=7  build an interactive diagram that reacts to live data
+  overlap=0.00 fts=None vec=9 hyb=13  derive required reviewers configuration from code ownership
+  overlap=0.17 fts=12 vec=20 hyb=None  gitops management of observability config through kubernetes
+
+GATE 1: hybrid recall@5 = 0.82 (PASS, line is 0.80)
+  low-overlap stratum (n=23): hybrid recall@5 = 0.61  <- the honest number
+
+pre-registered ablation: + agent keywords (n=51)
+                    recall@1  recall@5  recall@10     MRR
+  without keywords      0.59      0.82       0.88    0.69
+     with keywords      0.80      1.00       1.00    0.88
+  low-overlap (n=23): without 0.61 -> with 1.00
+  keyword/gold overlap: mean 0.44; on the 3 queries whose keywords barely touch the gold text: without 1.00 -> with 1.00
