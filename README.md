@@ -9,16 +9,16 @@ permission boundary, not a search problem, and it is tightening. A permission-aw
 memory is the only thing positioned to answer across it.
 
 Contents
-- `docs/SCOPE.md` – **the current plan.** Problem, storage model, expansion path, the
-  POC, and how we know it works. Supersedes the milestone plan in `docs/design.md`.
+- `docs/design.md` – **start here.** The design: problem, solution, HLD and LLD, with
+  every number linked to the experiment that produced it.
+- `docs/SCOPE.md` – what is in the first build and what is deliberately cut.
 - `CLAUDE.md` – standing rules for coding sessions in this repo.
 - `docs/INVENTORY.md` – what carries forward from the starter bundle,
   which findings are trustworthy, which must be redone, and what is still missing.
 - `docs/HANDOFF.md` – everything decided and learned in the design session, including
   rejected ideas and sandbox anomalies.
-- `docs/design.md` – the full design document (HLD + LLD). Sections 5 (data model),
-  6 (ingestion agent) and 8 (visibility) stand; sections 9–10 are superseded by
-  `docs/SCOPE.md`.
+- `docs/design-v1.md` – the original design from the first session, kept for history.
+  Superseded by `docs/design.md`; read it only to see what changed and why.
 - `experiments/` – scripts, outputs and `RESULTS.md` from the feasibility runs. Read
   `docs/INVENTORY.md` before trusting any number in `RESULTS.md`.
 

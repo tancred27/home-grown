@@ -1,6 +1,6 @@
 # Org Capability Memory
 
-An agent-maintained memory of what an organization has already built, so engineers and coding agents check before rebuilding. Design: `docs/design.md` (export from the design doc); full context: `docs/HANDOFF.md`.
+An agent-maintained memory of what an organization has already built, so engineers and coding agents check before rebuilding. Design: `docs/design.md`; full context: `docs/HANDOFF.md`.
 
 ## Rules for this repo
 - Use only public organizations and public repositories as the stand-in org. Never use employer data, internal names or credentials anywhere in code, fixtures or docs.
