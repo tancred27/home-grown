@@ -244,6 +244,71 @@ which this project cannot use. **It stays a declared assumption, not a measured 
    the repository at all. This question shifts the weight between artifact-shaped and
    experience-shaped records; it does not decide whether the system is worth building.
 
+### Run E3: what if there are no discussions at all? (2026-11-05)
+
+The hardest version of the objection. Many internal repos have no issue discussion
+whatsoever: code is pushed, PRs get "LGTM", tickets live in Jira, conversation happens
+in Slack. So: take the repos from E2 that produced **zero** discussion claims and see
+what is recoverable from the code alone. Five repos shallow-cloned, 375 code files.
+
+`code_claims.py` counts four discussion-independent sources.
+
+| repo | code files | tests | **boundary tests** | skip-with-reason | TODO-style | **strong warnings** | deprecations |
+|---|---|---|---|---|---|---|---|
+| cloud-setup | 76 | 5 | 0 | 0 | 0 | 0 | 0 |
+| grafana-canvas-panel | 178 | 406 | 45 | 0 | 53 | 4 | 0 |
+| grafana-pyroscope-datasource | 71 | 140 | 13 | 0 | 7 | 1 | 0 |
+| pyroscope-kinda-safe | 4 | 14 | 2 | 0 | 2 | 0 | 0 |
+| xk6-kafka | 46 | 82 | 21 | 0 | 0 | 0 | 0 |
+| **TOTAL** | **375** | **647** | **81** | **0** | **62** | **5** | **0** |
+
+**86 discussion-independent candidates against 2 claims from all of these repos'
+discussion — roughly 40x more.**
+
+**Tests are the real source, and they are higher precision than discussions ever were.**
+Of 9 sampled boundary tests, 8 were genuine capability facts (~89%, against 41–50% for
+the discussion screen) — because a test name exists to describe one specific behaviour,
+so it is structured by convention rather than by someone's mood:
+
+- "returns an empty assumed dimension when field mode is used but the field is not in
+  the frame"
+- "should clamp `copy.fixed` to `options.min` when below range and no field configured"
+- `TestConsumeAfterCloseErrors`, `TestAdminRejectsInitContext`
+- "escapes double quotes in label name on empty input"
+
+Only "should render without error" was noise. And unlike prose, these stay true or the
+build breaks.
+
+**Code comments turned out to be nearly worthless, which contradicts run E2's
+speculation.** 62 TODO/FIXME-style comments yielded 5 strong hits, all implementation
+notes rather than capability boundaries ("this is a workaround to apply styles after the
+size update"). Skip-reasons and deprecation markers were entirely absent — plausibly an
+artefact of young TypeScript/Go plugin repos; worth re-checking on a mature internal
+library.
+
+### What this means: three layers, not one
+
+| layer | source | availability | answers |
+|---|---|---|---|
+| Artifact | code, manifests, ownership | **always** | what exists, what its API is, who owns it |
+| Behavioural boundary | **tests** | **nearly always** — CI enforces it | what it handles, what it refuses, at what limits |
+| Experience | discussions, people | **scarce and uneven** | who tried it, who gave up, why, access friction, cost/benefit |
+
+"No discussions" costs the third layer only. Two of three survive, and the middle one is
+the higher-precision of the two measured. Tests can answer *does this fit my
+requirement*; they cannot answer *did anyone try this and regret it*.
+
+Note also that "no discussions in the repo" usually means "discussions in Jira, Confluence
+or Slack" — an adapter problem, not an absence. The Confluence adapter in `design.md`
+section 4 exists for exactly this and was cut from the POC for public-data reasons, not
+because it is unimportant in a real org.
+
+**Design consequence — demand-driven elicitation.** Where the third layer is genuinely
+absent, do not try to fill it up front. A developer asking about a capability *is* the
+signal that it matters, so use that question to justify interrupting its owner exactly
+once. The memory then warms where it is actually used, and cost scales with demand
+rather than with corpus size.
+
 ## Caveats
 
 - One organization, one sampling strategy, recent comments only. See the
