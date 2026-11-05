@@ -60,9 +60,20 @@ def main(argv: list[str] | None = None) -> int:
     f.add_argument("--user", default=os.environ.get("ORGMEM_USER", "gate2-dev"))
     f.add_argument("--json", action="store_true")
     f.add_argument("--top", type=int, default=5)
+    a = sub.add_parser("ask", help="has someone done X? who, which team/LOB, what stage?")
+    a.add_argument("question")
+    a.add_argument("-k", "--keywords", default="")
+    a.add_argument("--user", default=os.environ.get("ORGMEM_USER", "gate2-dev"))
+    a.add_argument("--json", action="store_true")
     args = ap.parse_args(argv)
 
     user = resolve_user(args.user)
+    if args.cmd == "ask":
+        from .answer import ask
+        kws = [k.strip() for k in args.keywords.split(",") if k.strip()]
+        out = ask(user, args.question, kws)
+        print(json.dumps(out, indent=1, default=str) if args.json else out["text"])
+        return 0
     kws = [k.strip() for k in args.keywords.split(",") if k.strip()]
     verdicts = find_existing(user, args.intent, kws, top=args.top)
     log_question(user, args.intent, kws, "cli", verdicts)

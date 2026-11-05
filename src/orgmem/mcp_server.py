@@ -58,6 +58,19 @@ def find_existing(intent: str, keywords: list[str] | None = None,
     } for v in verdicts], "note": None if verdicts else "nothing found"}, indent=1)
 
 
+@server.tool(name="ask",
+             description=("Has someone in the organization already done this or solved "
+                          "this problem? Answers yes / no / unknown / possibly, and for "
+                          "each match: who built it, their team, line of business and "
+                          "manager, whether it is in dev or prod, and how to get access."),
+             annotations=ToolAnnotations(read_only_hint=True, open_world_hint=False))
+def ask_tool(question: str, keywords: list[str] | None = None) -> str:
+    from .answer import ask
+    out = ask(_user(), question, keywords or [])
+    return json.dumps({k: out[k] for k in ("answer", "verdict_source", "matches")},
+                      indent=1, default=str)
+
+
 @server.tool(name="get_asset", description="Fetch one asset's card by id.",
              annotations=ToolAnnotations(read_only_hint=True, open_world_hint=False))
 def get_asset(asset_id: str) -> str:

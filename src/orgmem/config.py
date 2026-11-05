@@ -50,6 +50,9 @@ class Settings(BaseSettings):
     rerank_floor: float = 0.0            # below this, return nothing
 
     github_token_file: str = ""          # path to a file holding a GitHub token
+    # Webhook secrets. Empty = every delivery is rejected (fail closed).
+    github_webhook_secret: str = ""
+    docs_webhook_secret: str = ""
     github_org: str = "grafana"
 
     def github_token(self) -> str | None:
