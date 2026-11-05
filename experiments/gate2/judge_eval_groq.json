@@ -1,0 +1,899 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "served_by": {
+  "openai/gpt-oss-120b": "openai/gpt-oss-120b"
+ },
+ "totals": {
+  "dup": 10,
+  "dup_hit": 9,
+  "dup_retrieved": 10,
+  "wrong": 0,
+  "sibling": 5,
+  "ctl": 16,
+  "ctl_alarm": 0,
+  "failed": 0
+ },
+ "rows": [
+  {
+   "task": "h01",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:grafana-aws-sdk:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "use_as_is",
+     "reason": "Provides a shared Go package for common AWS configuration, credentials, assume\u2011role and region handling suitable for plugins."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Focuses on RBAC enforcement, not AWS session setup."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Interactive setup wizard for cloud services, unrelated to AWS credential handling."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Describes configuration categories for a specific plugin, not AWS session management."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Auth library for JWT/RBAC, does not address AWS session or credentials."
+    }
+   ]
+  },
+  {
+   "task": "h02",
+   "kind": "duplicate",
+   "outcome": "MISS (retrieved)",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Generates policy-bot config for workflow checks, not CODEOWNERS owner approvals."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Template for adaptive metrics auto-apply, unrelated to pull-request review bot config."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "OpenTelemetry collector configurator, unrelated to CODEOWNERS based review bot."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Helm chart for GitHub rate-limit exporter, unrelated to review bot configuration."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Documentation of Business Calendar plugin configuration, not applicable."
+    }
+   ]
+  },
+  {
+   "task": "h03",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:xk6-kafka:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "use_as_is",
+     "reason": "xk6-kafka is a pure\u2011Go k6 extension that already supports producing and consuming Kafka messages directly in k6 scripts."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "k6-loadtester is a Helm chart for a load\u2011testing webhook service, unrelated to Kafka integration in k6 scripts."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "flagger-k6-webhook runs k6 load tests as a webhook for canary deployments; it does not provide Kafka message support."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Compatibility matrix is only documentation comparing xk6\u2011kafka implementations, not a functional component for Kafka messaging."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "augurs-testing is a Rust test framework for a time\u2011series library, unrelated to k6 or Kafka functionality."
+    }
+   ]
+  },
+  {
+   "task": "h04",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:augurs:crates/augurs-changepoint",
+    "github:augurs:js/augurs-changepoint-js",
+    "github:augurs:crates/augurs"
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "use_as_is",
+     "reason": "Provides Bayesian online changepoint detection for time series, directly fits the need to locate behaviour shifts."
+    },
+    {
+     "candidate": "B",
+     "verdict": "use_as_is",
+     "reason": "JavaScript/WASM bindings to the same changepoint detection library, allowing reuse in JS environments."
+    },
+    {
+     "candidate": "C",
+     "verdict": "use_as_is",
+     "reason": "Umbrella crate includes changepoint detection feature (behind a flag) that can be enabled to detect shifts."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Library focuses on outlier detection across multiple series, not on changepoint detection within a single series."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "JavaScript bindings for outlier detection, unrelated to changepoint detection."
+    }
+   ]
+  },
+  {
+   "task": "h05",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:docker-otel-lgtm:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Provides only a pinned npm install tool; not a full OpenTelemetry backend for traces, logs and metrics."
+    },
+    {
+     "candidate": "B",
+     "verdict": "use_as_is",
+     "reason": "Single Docker image already bundles an OpenTelemetry Collector with traces, logs, metrics and dashboards for local testing."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Only an example Java service; does not supply a backend Docker image."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Example Node.js service emitting traces, not a backend collector image."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Example Go service sending metrics; does not provide a complete backend Docker image."
+    }
+   ]
+  },
+  {
+   "task": "h06",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:pyroscope-kinda-safe:kindasafe",
+    "github:pyroscope-kinda-safe:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Provides only handler initialization, not the memory\u2011reading routine itself."
+    },
+    {
+     "candidate": "B",
+     "verdict": "use_as_is",
+     "reason": "Implements signal\u2011safe arbitrary memory reads with crash recovery, exactly matching the request."
+    },
+    {
+     "candidate": "C",
+     "verdict": "use_as_is",
+     "reason": "A Rust workspace that offers signal\u2011safe memory reading on Linux, fulfilling the requested functionality."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Tool for tracking struct field offsets, unrelated to safe memory reads in signal handlers."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Grafana Faro SDK for observability, unrelated to signal\u2011handler memory reading."
+    }
+   ]
+  },
+  {
+   "task": "k01",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "The asset generates policy\u2011bot config files; it does not provide palindrome checking functionality."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Describes Grafana context parameters, unrelated to string palindrome logic."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "A test package for time\u2011series analysis bindings, not applicable to palindrome checks."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "JavaScript bindings for time\u2011series core utilities, not relevant to palindrome functionality."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "A code generator for schemas; it does not directly provide a palindrome\u2011checking function."
+    }
+   ]
+  },
+  {
+   "task": "k02",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Description is about visual text rendering, unrelated to CSV conversion."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Focuses on adding rows to a table panel, not converting dicts to CSV."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Dashboard text panel, no CSV helper functionality."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Discusses Grafana data frames, not a CSV conversion helper."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Code generator for schemas, unrelated to CSV conversion."
+    }
+   ]
+  },
+  {
+   "task": "k03",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "A is a Grafana dashboard panel for displaying events; it does not provide date calculations or business\u2011day logic."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "B describes data\u2011flow editing in a Business Table panel, unrelated to computing business days."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "C is a JavaScript/WASM binding for seasonality detection, not a utility for counting weekdays."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "D provides time\u2011series forecasting bindings, which do not include simple business\u2011day counting."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "E is a Grafana Business Forms panel for data entry, not a code library for date arithmetic."
+    }
+   ]
+  },
+  {
+   "task": "k04",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "The asset generates policy\u2011bot config files; it does not provide or help build a credit\u2011card masking helper."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "The asset is about adding rows to a Business Table panel, unrelated to masking credit\u2011card numbers."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Cog is a code\u2011generation tool for schemas; it does not directly supply a credit\u2011card masking helper and would require custom schema design."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Business Text converts text to visual cards; it has no relevance to credit\u2011card digit masking."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "The Grafana data\u2011structure introduction is unrelated to implementing a credit\u2011card masking utility."
+    }
+   ]
+  },
+  {
+   "task": "k05",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "CLI for Grafana alerting rules unrelated to token generation."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Rust crate for signal\u2011safe memory reading, not for generating URL\u2011safe tokens."
+    },
+    {
+     "candidate": "C",
+     "verdict": "unknown",
+     "reason": "Auth library may include token utilities but description lacks specifics about random password reset tokens."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Tool for generating policy\u2011bot config, unrelated to token generation."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Signal\u2011safe memory reading crate, not relevant to token creation."
+    }
+   ]
+  },
+  {
+   "task": "k06",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "cog generates code from schemas, unrelated to colour conversion"
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Add data deals with table rows, not colour handling"
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "clusterurl processes URLs, not colour conversion"
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "data flow is about table editing, unrelated to colour conversion"
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "business-panel is a calendar UI plugin, not colour conversion"
+    }
+   ]
+  },
+  {
+   "task": "k07",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "The asset generates policy bot config, unrelated to list deduplication."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "The asset describes Business Table data editing, unrelated to duplicate removal."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "JavaScript bindings for outlier detection, not relevant to removing duplicates."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "JavaScript bindings for core time series utilities, not relevant to list deduplication."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Go package for URL clustering, unrelated to duplicate removal."
+    }
+   ]
+  },
+  {
+   "task": "k08",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Provides UI text rendering via Markdown/Handlebars but lacks noun pluralisation functionality."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Focuses on adding data rows to a table panel, unrelated to pluralising nouns."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "A code generator for schemas; does not address UI label pluralisation."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Documentation about Grafana data structures, not a reusable pluralisation helper."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Helm chart for a cloud cost exporter; no relevance to noun pluralisation."
+    }
+   ]
+  },
+  {
+   "task": "f01",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:clock-panel:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "use_as_is",
+     "reason": "Provides a clock panel that can display current time for any timezone, matching the need for Tokyo, London and New York."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Shows calendar events, not a simple time\u2011of\u2011day display."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Table panel visualizes tabular data, not a clock display."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Canvas panel requires custom drawing; it does not provide a ready\u2011made clock."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "A time\u2011series analysis library, not a visual clock component."
+    }
+   ]
+  },
+  {
+   "task": "f02",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:business-forms:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Provides only text rendering, no form or API submission capability."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Only scans dashboards for Angular plugins, unrelated to request submission."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "A linter tool; does not enable user\u2011driven ticket creation."
+    },
+    {
+     "candidate": "D",
+     "verdict": "extend",
+     "reason": "Offers dashboard forms for data entry, but would need additional code to send maintenance requests to the ticketing API."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Command\u2011line linter, not a dashboard integration for submitting tickets."
+    }
+   ]
+  },
+  {
+   "task": "f03",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:augurs:crates/augurs-mstl",
+    "github:augurs:js/augurs-mstl-js"
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "use_as_is",
+     "reason": "Provides MSTL decomposition with multiple seasonalities (daily, weekly) and trend extraction, matching the request."
+    },
+    {
+     "candidate": "B",
+     "verdict": "use_as_is",
+     "reason": "JS/WASM bindings to augurs-mstl, offering the same decomposition capabilities for JavaScript environments."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Only detects seasonality via periodograms; does not perform trend/seasonal decomposition."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "JS bindings for seasonality detection, lacking decomposition into trend and seasonal components."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Helm chart for a Prometheus exporter; unrelated to time-series decomposition."
+    }
+   ]
+  },
+  {
+   "task": "f04",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:cloudcost-exporter:.",
+    "github:cloudcost-exporter:charts/cloudcost-exporter"
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "use_as_is",
+     "reason": "Exports AWS and GCP cost metrics suitable for daily dashboard."
+    },
+    {
+     "candidate": "B",
+     "verdict": "extend",
+     "reason": "Helm chart deploys the exporter; may need configuration for per\u2011team metrics."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Only lints Grafana dashboards, does not provide cost data."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Grafana datasource for ClickHouse, unrelated to cloud cost metrics."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Example OpenTelemetry metric source, not cloud cost related."
+    }
+   ]
+  },
+  {
+   "task": "g01",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Provides a UI panel for displaying calendar events; does not include functionality for parsing ISO week dates into calendar dates."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Describes a calendar display plugin; lacks any date\u2011parsing utilities needed for ISO week\u2011date conversion."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Offers bindings for seasonality detection, not for general date parsing such as ISO week\u2011date to calendar date conversion."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Relates to configuration settings for a calendar plugin and does not provide date\u2011parsing logic."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Focuses on time\u2011series data transformations; does not contain utilities for converting ISO week dates to calendar dates."
+    }
+   ]
+  },
+  {
+   "task": "g02",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Provides a Docker template for metrics recommendations, unrelated to image processing."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Describes adding data rows to a Business Table panel, not image resizing or cropping."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "A dashboard form plugin for data entry, no image manipulation capabilities."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Data source plugin for profiling data, unrelated to image processing."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Canvas visualization panel for drawing, but does not offer built\u2011in image resize/crop helper."
+    }
+   ]
+  },
+  {
+   "task": "g03",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "cog is a schema\u2011to\u2011code generator, not a Roman numeral conversion library"
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Business Text focuses on visualizing text/tables, unrelated to numeral conversion"
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "augurs\u2011transforms\u2011js provides time\u2011series data transforms, not numeral utilities"
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "data flow deals with table editing features, not numeral conversion"
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "augurs\u2011core\u2011js offers core time\u2011series utilities, not Roman numeral functions"
+    }
+   ]
+  },
+  {
+   "task": "g04",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Business\u2011forms is a Grafana panel plugin for UI forms, not a server\u2011side postcode validation library."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Business\u2011text renders markdown, unrelated to postcode validation."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Custom code example is about accessing panel options, not server validation of postcodes."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Business Forms panel focuses on UI data entry, not server\u2011side postcode validation."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "augurs\u2011js\u2011testpkg is a time\u2011series analysis test package, unrelated to postcode validation."
+    }
+   ]
+  },
+  {
+   "task": "g05",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Generates Grafana alerting rules; unrelated to emailing employees."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Grafana ClickHouse datasource plugin; does not provide email functionality."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Code generator for schemas; not suited for birthday email script."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Dashboard text rendering plugin; not for sending emails."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Generates policy\u2011bot config; unrelated to email automation."
+    }
+   ]
+  },
+  {
+   "task": "g06",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Provides JavaScript/WASM bindings for outlier detection in time series, unrelated to geographic distance calculations."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Describes adding rows to a Business Table UI, not related to geodesic computations."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Bindings for changepoint detection in time series, no functionality for great-circle distance."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Core utilities for a time series library; does not appear to include geographic distance functions."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Bindings for exponential smoothing models, unrelated to computing distances between lat/long points."
+    }
+   ]
+  },
+  {
+   "task": "g07",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Provides Markdown/Handlebars rendering for dashboards, not a line\u2011wrapping utility."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Describes converting text to cards with Markdown/Handlebars, unrelated to word\u2011preserving line wrapping."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Generates policy\u2011bot config files; does not address text wrapping."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "CLI tool for linting Grafana dashboards, unrelated to wrapping text."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Alerting libraries for Grafana; no functionality for line wrapping."
+    }
+   ]
+  },
+  {
+   "task": "g08",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Library for changepoint detection, unrelated to UI theming."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Demo app for eBPF telemetry, does not provide theme switching functionality."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Calendar panel plugin with color options, but not a general web\u2011app theme system."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Focuses on adding data rows to a table panel, not related to theme management."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Chromium supervisor service, unrelated to front\u2011end theming."
+    }
+   ]
+  }
+ ]
+}

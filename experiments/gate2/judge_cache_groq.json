@@ -1,0 +1,886 @@
+{
+ "f7431ec88f40e32e6229": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Every one of our plugins reimplements AWS session setup. Write a shared module that handles credentials, assume-role and region configuration for all of them.",
+   "[{\"evidence\": [\"Asserted by its own tests: Get AWSConfig Unknown Or Missing.\", \"Asserted by its own tests: Get AWSConfig Grafana Assume Role Uses Shared Credentials When Files Are Missing.\", \"Asserted by its own tests: Query Data Malformed JSON Falls Back To Sync.\", \"Asserted by its own tests: Grafana Assume Role Provider Rejects Empty Credential File.\", \"Asserted by its own tests: Get AWSConfig Auth Type Not Allowed.\", \"Asserted by its own tests: Signer Round Tripper invalid Sig V4 JSONIs Downstream.\"], \"name\": \"grafana-aws-sdk\", \"purpose\": \"Shared Go package providing common AWS configuration and authentication for backend data source plugins that talk to Amazon services.\", \"summary\": \"Common AWS configs for plugins\"}, {\"evidence\": [], \"name\": \"How it works for Grafana Plugins\", \"purpose\": \"\", \"summary\": \"This library empowers your Grafana plugins with straightforward access control mechanisms using the `EnforcementClient`. This client simplifies the enforcement of Grafana's Role-Based Access Control (RBAC) within your plugin.\"}, {\"evidence\": [\"Asserted by its own tests: run Task does not retry a deliberate terminal state.\", \"Asserted by its own tests: commands without URL flags reach the interactive-terminal gate.\", \"Asserted by its own tests: partial wiring and a failed package install both remain in the recovery details.\", \"Asserted by its own tests: any non-empty NO COLOR value opts out, per the spec.\", \"Asserted by its own tests: list dir returns a non-empty placeholder for an empty directory.\", \"Asserted by its own tests: an existing browser check missing the v2 channel is updated, not a noop.\"], \"name\": \"cloud-setup\", \"purpose\": \"Interactive AI-assisted Node.js setup wizard that onboards synthetic monitoring checks or frontend observability instrumentation into a project for a hosted observability stack.\", \"summary\": \"Grafana Cloud's interactive setup wizard, powered by Grafana Assistant.\"}, {\"evidence\": [], \"name\": \"Configuration\", \"purpose\": \"\", \"summary\": \"description: Learn about the configuration categories available in the Business Calendar plugin.\"}, {\"evidence\": [\"Asserted by its own tests: Filter Authorized Early Termination.\", \"Asserted by its own tests: Client Get User Permissions Accepts Empty Stream.\", \"Asserted by its own tests: Filter Authorized Missing Auth Info.\", \"Asserted by its own tests: Filter Authorized Empty Input.\", \"Asserted by its own tests: Client Invalidate User Permissions Evicts Cached Snapshot.\", \"Asserted by its own tests: Client Get User Permissions Rejects Caller Without Delegated Permission.\"], \"name\": \"authlib\", \"purpose\": \"Go library for authentication and authorization with JWT-based identity propagation and RBAC permission checks, deployable in-process or over gRPC.\", \"summary\": \"Common utilities for grafana authnz\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "use_as_is",
+    "reason": "Provides a shared Go package for common AWS configuration, credentials, assume‑role and region handling suitable for plugins."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Focuses on RBAC enforcement, not AWS session setup."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Interactive setup wizard for cloud services, unrelated to AWS credential handling."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Describes configuration categories for a specific plugin, not AWS session management."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Auth library for JWT/RBAC, does not address AWS session or credentials."
+   }
+  ]
+ },
+ "33378ec0e953a70dd117": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Generate the configuration file for our pull-request review bot from CODEOWNERS, so each directory requires approval from its owners.",
+   "[{\"evidence\": [\"Asserted by its own tests: Renaming Writer Multiple Calls.\", \"Asserted by its own tests: Renaming Writer Mem FS.\", \"Asserted by its own tests: Renaming Writer File.\", \"Asserted by its own tests: Renaming Writer Abort.\", \"Asserted by its own tests: Renaming Writer Abort Ignores Close Error.\", \"Asserted by its own tests: Merge Configs Preserves Explicitly Empty Values.\"], \"name\": \"generate-policy-bot-config\", \"purpose\": \"Generates a pull request policy bot config requiring GitHub Actions workflows to pass only when triggered, respecting path filters.\", \"summary\": \"Generate a config file for `palantir/policy-bot` to help you enforce conditional workflows have passed\"}, {\"evidence\": [], \"name\": \"docker\", \"purpose\": \"Automatically pull and apply metrics cardinality-reduction recommendations on a schedule via a GitHub Actions workflow that opens pull requests.\", \"summary\": \"A template repository for enabling auto-apply of Adaptive Metrics recommendations\"}, {\"evidence\": [], \"name\": \"collector-configurator\", \"purpose\": \"Web UI for creating and editing OpenTelemetry Collector configuration files.\", \"summary\": \"Fork of the agent configurator to work with otel\"}, {\"evidence\": [], \"name\": \"github-rate-limits-prometheus-exporter\", \"purpose\": \"Helm chart to install and configure a GitHub API rate limit Prometheus exporter on Kubernetes using PAT or App secrets.\", \"summary\": \"This helm chart helps to install and configure github-rate-limits-prometheus-exporter\"}, {\"evidence\": [], \"name\": \"Configuration\", \"purpose\": \"\", \"summary\": \"description: Learn about the configuration categories available in the Business Calendar plugin.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Generates policy-bot config for workflow checks, not CODEOWNERS owner approvals."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Template for adaptive metrics auto-apply, unrelated to pull-request review bot config."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "OpenTelemetry collector configurator, unrelated to CODEOWNERS based review bot."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Helm chart for GitHub rate-limit exporter, unrelated to review bot configuration."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Documentation of Business Calendar plugin configuration, not applicable."
+   }
+  ]
+ },
+ "1298382699ba2a9afb25": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Add the ability to produce and consume Kafka messages from our k6 load-test scripts.",
+   "[{\"evidence\": [\"Asserted by its own tests: Acks From Int.\", \"Asserted by its own tests: Timing Metrics Are Untagged.\", \"Asserted by its own tests: Encode Wire Format Out Of Range.\", \"Asserted by its own tests: Req Context Nil VU.\", \"Asserted by its own tests: Flush Nil VUAnd Nil Collector.\", \"Asserted by its own tests: JKSTo PEMRejects Non JKS.\"], \"name\": \"xk6-kafka\", \"purpose\": \"Pure-Go load testing extension for producing and consuming Apache Kafka messages, managing topics, authentication and Schema Registry in load test scripts.\", \"summary\": \"Official pure-Go k6 extension for load testing Apache Kafka\"}, {\"evidence\": [], \"name\": \"k6-loadtester\", \"purpose\": \"Helm chart to deploy a load-testing webhook service that tests canary deployments before traffic rollout on Kubernetes.\", \"summary\": \"Using k6 to do load testing of the canary before rolling out traffic\"}, {\"evidence\": [\"Asserted by its own tests: New Launch Payload.\", \"Asserted by its own tests: Bad Payload.\"], \"name\": \"flagger-k6-webhook\", \"purpose\": \"Webhook that runs load tests against a canary deployment before progressive rollout, gating promotion on test thresholds.\", \"summary\": \"Using k6 to do load testing of the canary before rolling out traffic\"}, {\"evidence\": [], \"name\": \"Compatibility matrix\", \"purpose\": \"\", \"summary\": \"How `grafana/xk6-kafka` compares to the community\"}, {\"evidence\": [], \"name\": \"augurs-testing\", \"purpose\": \"Shared test helpers and sample data for testing a Rust time series analysis library.\", \"summary\": \"Test framework and data for the augurs library.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "use_as_is",
+    "reason": "xk6-kafka is a pure‑Go k6 extension that already supports producing and consuming Kafka messages directly in k6 scripts."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "k6-loadtester is a Helm chart for a load‑testing webhook service, unrelated to Kafka integration in k6 scripts."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "flagger-k6-webhook runs k6 load tests as a webhook for canary deployments; it does not provide Kafka message support."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Compatibility matrix is only documentation comparing xk6‑kafka implementations, not a functional component for Kafka messaging."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "augurs-testing is a Rust test framework for a time‑series library, unrelated to k6 or Kafka functionality."
+   }
+  ]
+ },
+ "6451b5f89fb889f73dc9": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Write a function that detects the points in a latency series where its behaviour shifts.",
+   "[{\"evidence\": [], \"name\": \"augurs-changepoint\", \"purpose\": \"Rust library for detecting changepoints in time series, such as with Bayesian online changepoint detection, behind a common detector trait.\", \"summary\": \"Changepoint detection using Bayesian Online Change Point Detection and more.\"}, {\"evidence\": [], \"name\": \"augurs-changepoint-js\", \"purpose\": \"JavaScript/WASM bindings for detecting changepoints in time series data.\", \"summary\": \"JavaScript bindings for the augurs-changepoint library.\"}, {\"evidence\": [], \"name\": \"augurs\", \"purpose\": \"Rust umbrella crate exposing time series forecasting, outlier detection, clustering, seasonality, changepoint detection and DTW behind feature flags.\", \"summary\": \"A time-series toolkit for forecasting, outlier detection, clustering and more.\"}, {\"evidence\": [], \"name\": \"augurs-outlier\", \"purpose\": \"Rust library to detect which time series in a group behave differently from the others, using DBSCAN-based outlier detection.\", \"summary\": \"Outlier detection for time series.\"}, {\"evidence\": [], \"name\": \"augurs-outlier-js\", \"purpose\": \"JavaScript/WASM bindings for detecting outlier time series within a group.\", \"summary\": \"JavaScript bindings for the augurs-outlier library.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "use_as_is",
+    "reason": "Provides Bayesian online changepoint detection for time series, directly fits the need to locate behaviour shifts."
+   },
+   {
+    "candidate": "B",
+    "verdict": "use_as_is",
+    "reason": "JavaScript/WASM bindings to the same changepoint detection library, allowing reuse in JS environments."
+   },
+   {
+    "candidate": "C",
+    "verdict": "use_as_is",
+    "reason": "Umbrella crate includes changepoint detection feature (behind a flag) that can be enabled to detect shifts."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Library focuses on outlier detection across multiple series, not on changepoint detection within a single series."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "JavaScript bindings for outlier detection, unrelated to changepoint detection."
+   }
+  ]
+ },
+ "5abc67d638aa1e11d847": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Create a single Docker image with an OpenTelemetry backend for traces, logs and metrics so developers can test locally.",
+   "[{\"evidence\": [], \"name\": \"mise-npm-install\", \"purpose\": \"Pinned tool-version lock directory for installing a dependency-update bot npm package in a repository's dev tooling.\", \"summary\": \"An OpenTelemetry backend in a Docker container image\"}, {\"evidence\": [], \"name\": \"docker-otel-lgtm\", \"purpose\": \"Single Docker image bundling an OpenTelemetry Collector with metrics, logs, traces and profiles backends plus dashboards for local development and testing.\", \"summary\": \"An OpenTelemetry backend in a Docker container image\"}, {\"evidence\": [], \"name\": \"java\", \"purpose\": \"Example Java service instrumented with the OpenTelemetry SDK to export application metrics to a telemetry collector in a runnable Docker Compose demo.\", \"summary\": \"A collection of working Alloy scenarios\"}, {\"evidence\": [], \"name\": \"catalog-otel-traces\", \"purpose\": \"Example Node.js catalog service that emits distributed traces via the OpenTelemetry SDK over OTLP/HTTP to a telemetry collector.\", \"summary\": \"Catalog service that emits traces via the OpenTelemetry SDK over OTLP/HTTP\"}, {\"evidence\": [], \"name\": \"inventory\", \"purpose\": \"Example Go inventory service instrumented with the OpenTelemetry SDK to send metrics to a telemetry collector in a runnable Docker Compose demo.\", \"summary\": \"A collection of working Alloy scenarios\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Provides only a pinned npm install tool; not a full OpenTelemetry backend for traces, logs and metrics."
+   },
+   {
+    "candidate": "B",
+    "verdict": "use_as_is",
+    "reason": "Single Docker image already bundles an OpenTelemetry Collector with traces, logs, metrics and dashboards for local testing."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Only an example Java service; does not supply a backend Docker image."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Example Node.js service emitting traces, not a backend collector image."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Example Go service sending metrics; does not provide a complete backend Docker image."
+   }
+  ]
+ },
+ "1f73437979aabaa8218d": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Write a routine that safely reads memory at an arbitrary address from inside a signal handler without crashing the process.",
+   "[{\"evidence\": [], \"name\": \"kindasafe_init\", \"purpose\": \"Rust crate that installs SIGSEGV and SIGBUS handlers enabling safe memory reads to recover from access faults, preserving previous handlers.\", \"summary\": \"Signal handler initialization for the kindasafe signal-safe memory reading library\"}, {\"evidence\": [\"Asserted by its own tests: u64 unaligned page boundary.\", \"Asserted by its own tests: vec sigsegv page boundary.\", \"Asserted by its own tests: u64 unaligned page boundary.\", \"Asserted by its own tests: vec sigsegv page boundary.\"], \"name\": \"kindasafe\", \"purpose\": \"no_std Rust crate for reading arbitrary memory safely using naked assembly and SIGSEGV/SIGBUS recovery so bad reads return errors.\", \"summary\": \"Signal-safe memory reading for x86_64 and aarch64 using naked functions and crash recovery\"}, {\"evidence\": [\"Asserted by its own tests: u64 unaligned page boundary.\", \"Asserted by its own tests: vec sigsegv page boundary.\"], \"name\": \"pyroscope-kinda-safe\", \"purpose\": \"Rust workspace for signal-safe memory reading on Linux x86_64 and aarch64 that recovers from faults instead of crashing.\", \"summary\": \"Signal-safe memory reading for x8664 and aarch64 on Linux.\"}, {\"evidence\": [], \"name\": \"go-offsets-tracker\", \"purpose\": \"Tool that generates JSON of struct field byte offsets across Go and library versions, for inspecting binaries without debug info.\", \"summary\": \"Track byte offsets of different struct fields, for different versions\"}, {\"evidence\": [\"Asserted by its own tests: Meta Sampling Absent Is Nil.\", \"Asserted by its own tests: Meta Sampling Partial Decodes.\", \"Asserted by its own tests: Meta Sampling Absent Is Nil.\", \"Asserted by its own tests: Meta Sampling Partial Decodes.\"], \"name\": \"go\", \"purpose\": \"Go HTTP models generated from an OpenAPI spec for receiving frontend real user monitoring telemetry.\", \"summary\": \"Grafana Faro is a project for frontend application observability. It includes a highly configurable web SDK that instruments browser frontend applications to capture observability signals.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Provides only handler initialization, not the memory‑reading routine itself."
+   },
+   {
+    "candidate": "B",
+    "verdict": "use_as_is",
+    "reason": "Implements signal‑safe arbitrary memory reads with crash recovery, exactly matching the request."
+   },
+   {
+    "candidate": "C",
+    "verdict": "use_as_is",
+    "reason": "A Rust workspace that offers signal‑safe memory reading on Linux, fulfilling the requested functionality."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Tool for tracking struct field offsets, unrelated to safe memory reads in signal handlers."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Grafana Faro SDK for observability, unrelated to signal‑handler memory reading."
+   }
+  ]
+ },
+ "3e521fad75f82e96fe70": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Write a function that checks whether a string is a palindrome, ignoring punctuation and case.",
+   "[{\"evidence\": [\"Asserted by its own tests: Renaming Writer Multiple Calls.\", \"Asserted by its own tests: Renaming Writer Mem FS.\", \"Asserted by its own tests: Renaming Writer File.\", \"Asserted by its own tests: Renaming Writer Abort.\", \"Asserted by its own tests: Renaming Writer Abort Ignores Close Error.\", \"Asserted by its own tests: Merge Configs Preserves Explicitly Empty Values.\"], \"name\": \"generate-policy-bot-config\", \"purpose\": \"Generates a pull request policy bot config requiring GitHub Actions workflows to pass only when triggered, respecting path filters.\", \"summary\": \"Generate a config file for `palantir/policy-bot` to help you enforce conditional workflows have passed\"}, {\"evidence\": [], \"name\": \"Context parameters\", \"purpose\": \"\", \"summary\": \"description: Learn how to use context parameters to access panel data, form elements, Grafana services, and other functionality in custom code.\"}, {\"evidence\": [\"Asserted by its own tests: can be instantiated with a custom max distance.\", \"Asserted by its own tests: can be instantiated with a custom max distance.\", \"Asserted by its own tests: accepts cap/floor.\", \"Asserted by its own tests: accepts cap/floor.\", \"Asserted by its own tests: handles empty pipeline.\", \"Asserted by its own tests: handles empty pipeline.\"], \"name\": \"augurs-js-testpkg\", \"purpose\": \"Internal test package for verifying the JavaScript bindings of a time series analysis library work correctly.\", \"summary\": \"Time series analysis for Rust, with bindings to Python and Javascript\"}, {\"evidence\": [], \"name\": \"augurs-core-js\", \"purpose\": \"JavaScript/WASM bindings for the core shared types and utilities of a time series analysis library.\", \"summary\": \"JavaScript bindings for core augurs functionality.\"}, {\"evidence\": [\"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Concrete Reference With Discriminator Field And Mapping Set.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Scalar Discriminator Non Constant Reference.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Concrete Discriminator.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Unknown Discriminator Field.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Scalar With Discriminator Field Set.\"], \"name\": \"cog\", \"purpose\": \"Code generator that turns CUE, JSON Schema or OpenAPI schemas into types and builder libraries for Go, Java, PHP, Python and TypeScript.\", \"summary\": \"Code Generation with a human touch\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "The asset generates policy‑bot config files; it does not provide palindrome checking functionality."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Describes Grafana context parameters, unrelated to string palindrome logic."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "A test package for time‑series analysis bindings, not applicable to palindrome checks."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "JavaScript bindings for time‑series core utilities, not relevant to palindrome functionality."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "A code generator for schemas; it does not directly provide a palindrome‑checking function."
+   }
+  ]
+ },
+ "d6c435b04868d92074d0": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Add a helper that converts a list of dicts to a CSV string with a header row.",
+   "[{\"evidence\": [], \"name\": \"Business Text\", \"purpose\": \"\", \"summary\": \"description: Learn how to convert plain text and table data into visually appealing information cards using Markdown, Handlebars, CSS, and JavaScript.\"}, {\"evidence\": [], \"name\": \"Add data\", \"purpose\": \"\", \"summary\": \"description: Learn how to add new rows to your Business Table panel with configurable data entry options.\"}, {\"evidence\": [\"Asserted by its own tests: Should not show mini map button when value is short.\", \"Asserted by its own tests: Should return undefined if the index is out of range.\", \"Asserted by its own tests: Should show mini map button when value exceeds 100 characters.\", \"Asserted by its own tests: Should unescape value for display when is Escaping is true.\", \"Asserted by its own tests: Should pass value as-is when is Escaping is false.\", \"Asserted by its own tests: Should escape newlines in on Change when is Escaping is true.\"], \"name\": \"business-text\", \"purpose\": \"Dashboard panel plugin that renders query results as data-driven text using Markdown and Handlebars templates with JavaScript and sanitization.\", \"summary\": \"Data-driven text with Markdown and Handlebars support\"}, {\"evidence\": [], \"name\": \"Introduction to the Grafana data structure\", \"purpose\": \"\", \"summary\": \"Grafana supports a variety of different data sources, each with its own data model. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a **data frame**. The **data plane** adds a property layer to the data frame with i\"}, {\"evidence\": [\"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Concrete Reference With Discriminator Field And Mapping Set.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Scalar Discriminator Non Constant Reference.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Concrete Discriminator.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Unknown Discriminator Field.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Scalar With Discriminator Field Set.\"], \"name\": \"cog\", \"purpose\": \"Code generator that turns CUE, JSON Schema or OpenAPI schemas into types and builder libraries for Go, Java, PHP, Python and TypeScript.\", \"summary\": \"Code Generation with a human touch\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Description is about visual text rendering, unrelated to CSV conversion."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Focuses on adding rows to a table panel, not converting dicts to CSV."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Dashboard text panel, no CSV helper functionality."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Discusses Grafana data frames, not a CSV conversion helper."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Code generator for schemas, unrelated to CSV conversion."
+   }
+  ]
+ },
+ "62829cb55a8ca68e7691": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Write a function that counts the business days between two dates, skipping weekends.",
+   "[{\"evidence\": [\"Asserted by its own tests: Should update colors options correctly via thresholds.\", \"Asserted by its own tests: Should not update colors options if set only base threshold value.\", \"Asserted by its own tests: Should show color Field if thresholds is selected.\", \"Asserted by its own tests: Should render view for duration more or equal 45 minutes.\", \"Asserted by its own tests: Should return event with color if thresholds is not specified.\", \"Asserted by its own tests: Should recompute minutes Offset when time Range changes.\"], \"name\": \"business-panel\", \"purpose\": \"Dashboard panel plugin that displays events, schedules and deadlines from any data source in a day, week, month, year or agenda calendar view.\", \"summary\": \"Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration\"}, {\"evidence\": [], \"name\": \"data flow\", \"purpose\": \"\", \"summary\": \"description: Learn how to use the multifarious editing data functionality in the Business Table panel to provide extensive capabilities for working with table data.\"}, {\"evidence\": [], \"name\": \"augurs-seasons-js\", \"purpose\": \"JavaScript/WASM bindings for detecting seasonality or periodicity in time series.\", \"summary\": \"JavaScript bindings for the augurs-seasons library.\"}, {\"evidence\": [], \"name\": \"augurs-mstl-js\", \"purpose\": \"JavaScript/WASM bindings for forecasting multi-seasonal time series with MSTL decomposition.\", \"summary\": \"JavaScript bindings for the augurs-mstl library.\"}, {\"evidence\": [], \"name\": \"Business Forms\", \"purpose\": \"\", \"summary\": \"description: Learn how to insert and update application data and modify configuration directly from your Grafana dashboard using the Business Forms panel.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "A is a Grafana dashboard panel for displaying events; it does not provide date calculations or business‑day logic."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "B describes data‑flow editing in a Business Table panel, unrelated to computing business days."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "C is a JavaScript/WASM binding for seasonality detection, not a utility for counting weekdays."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "D provides time‑series forecasting bindings, which do not include simple business‑day counting."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "E is a Grafana Business Forms panel for data entry, not a code library for date arithmetic."
+   }
+  ]
+ },
+ "19d1202cca4c91de1933": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Add a helper that masks all but the last four digits of a credit card number.",
+   "[{\"evidence\": [\"Asserted by its own tests: Renaming Writer Multiple Calls.\", \"Asserted by its own tests: Renaming Writer Mem FS.\", \"Asserted by its own tests: Renaming Writer File.\", \"Asserted by its own tests: Renaming Writer Abort.\", \"Asserted by its own tests: Renaming Writer Abort Ignores Close Error.\", \"Asserted by its own tests: Merge Configs Preserves Explicitly Empty Values.\"], \"name\": \"generate-policy-bot-config\", \"purpose\": \"Generates a pull request policy bot config requiring GitHub Actions workflows to pass only when triggered, respecting path filters.\", \"summary\": \"Generate a config file for `palantir/policy-bot` to help you enforce conditional workflows have passed\"}, {\"evidence\": [], \"name\": \"Add data\", \"purpose\": \"\", \"summary\": \"description: Learn how to add new rows to your Business Table panel with configurable data entry options.\"}, {\"evidence\": [\"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Concrete Reference With Discriminator Field And Mapping Set.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Scalar Discriminator Non Constant Reference.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Concrete Discriminator.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Unknown Discriminator Field.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Scalar With Discriminator Field Set.\"], \"name\": \"cog\", \"purpose\": \"Code generator that turns CUE, JSON Schema or OpenAPI schemas into types and builder libraries for Go, Java, PHP, Python and TypeScript.\", \"summary\": \"Code Generation with a human touch\"}, {\"evidence\": [], \"name\": \"Business Text\", \"purpose\": \"\", \"summary\": \"description: Learn how to convert plain text and table data into visually appealing information cards using Markdown, Handlebars, CSS, and JavaScript.\"}, {\"evidence\": [], \"name\": \"Introduction to the Grafana data structure\", \"purpose\": \"\", \"summary\": \"Grafana supports a variety of different data sources, each with its own data model. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a **data frame**. The **data plane** adds a property layer to the data frame with i\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "The asset generates policy‑bot config files; it does not provide or help build a credit‑card masking helper."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "The asset is about adding rows to a Business Table panel, unrelated to masking credit‑card numbers."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Cog is a code‑generation tool for schemas; it does not directly supply a credit‑card masking helper and would require custom schema design."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Business Text converts text to visual cards; it has no relevance to credit‑card digit masking."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "The Grafana data‑structure introduction is unrelated to implementing a credit‑card masking utility."
+   }
+  ]
+ },
+ "7e174f34bff011f5869e": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Write a function that generates a random, URL-safe password reset token.",
+   "[{\"evidence\": [\"Asserted by its own tests: Generate Rules Determinism With Seed.\", \"Asserted by its own tests: Generate Rules Determinism With Seed.\", \"Asserted by its own tests: Group Rules Groups Per Folder Greater Than One.\", \"Asserted by its own tests: Group Rules Defaults When Zero Or Empty.\", \"Asserted by its own tests: Group Rules Defaults When Zero Or Empty.\", \"Asserted by its own tests: Group Rules Non Even Partition.\"], \"name\": \"alerting-gen\", \"purpose\": \"CLI that generates random, reproducible alerting and recording rules as JSON for testing, optionally pushing them to a dashboard server via its provisioning API.\", \"summary\": \"A tiny CLI to generate random Grafana Alerting rules and Recording rules using:\"}, {\"evidence\": [\"Asserted by its own tests: u64 unaligned page boundary.\", \"Asserted by its own tests: vec sigsegv page boundary.\", \"Asserted by its own tests: u64 unaligned page boundary.\", \"Asserted by its own tests: vec sigsegv page boundary.\"], \"name\": \"kindasafe\", \"purpose\": \"no_std Rust crate for reading arbitrary memory safely using naked assembly and SIGSEGV/SIGBUS recovery so bad reads return errors.\", \"summary\": \"Signal-safe memory reading for x86_64 and aarch64 using naked functions and crash recovery\"}, {\"evidence\": [\"Asserted by its own tests: Filter Authorized Early Termination.\", \"Asserted by its own tests: Client Get User Permissions Accepts Empty Stream.\", \"Asserted by its own tests: Filter Authorized Missing Auth Info.\", \"Asserted by its own tests: Filter Authorized Empty Input.\", \"Asserted by its own tests: Client Invalidate User Permissions Evicts Cached Snapshot.\", \"Asserted by its own tests: Client Get User Permissions Rejects Caller Without Delegated Permission.\"], \"name\": \"authlib\", \"purpose\": \"Go library for authentication and authorization with JWT-based identity propagation and RBAC permission checks, deployable in-process or over gRPC.\", \"summary\": \"Common utilities for grafana authnz\"}, {\"evidence\": [\"Asserted by its own tests: Renaming Writer Multiple Calls.\", \"Asserted by its own tests: Renaming Writer Mem FS.\", \"Asserted by its own tests: Renaming Writer File.\", \"Asserted by its own tests: Renaming Writer Abort.\", \"Asserted by its own tests: Renaming Writer Abort Ignores Close Error.\", \"Asserted by its own tests: Merge Configs Preserves Explicitly Empty Values.\"], \"name\": \"generate-policy-bot-config\", \"purpose\": \"Generates a pull request policy bot config requiring GitHub Actions workflows to pass only when triggered, respecting path filters.\", \"summary\": \"Generate a config file for `palantir/policy-bot` to help you enforce conditional workflows have passed\"}, {\"evidence\": [\"Asserted by its own tests: u64 unaligned page boundary.\", \"Asserted by its own tests: vec sigsegv page boundary.\"], \"name\": \"pyroscope-kinda-safe\", \"purpose\": \"Rust workspace for signal-safe memory reading on Linux x86_64 and aarch64 that recovers from faults instead of crashing.\", \"summary\": \"Signal-safe memory reading for x8664 and aarch64 on Linux.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "CLI for Grafana alerting rules unrelated to token generation."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Rust crate for signal‑safe memory reading, not for generating URL‑safe tokens."
+   },
+   {
+    "candidate": "C",
+    "verdict": "unknown",
+    "reason": "Auth library may include token utilities but description lacks specifics about random password reset tokens."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Tool for generating policy‑bot config, unrelated to token generation."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Signal‑safe memory reading crate, not relevant to token creation."
+   }
+  ]
+ },
+ "10b944707e26cc73623d": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Add a function that converts a hex colour such as #ff8800 into an RGB tuple.",
+   "[{\"evidence\": [\"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Concrete Reference With Discriminator Field And Mapping Set.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Scalar Discriminator Non Constant Reference.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Concrete Discriminator.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Unknown Discriminator Field.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Scalar With Discriminator Field Set.\"], \"name\": \"cog\", \"purpose\": \"Code generator that turns CUE, JSON Schema or OpenAPI schemas into types and builder libraries for Go, Java, PHP, Python and TypeScript.\", \"summary\": \"Code Generation with a human touch\"}, {\"evidence\": [], \"name\": \"Add data\", \"purpose\": \"\", \"summary\": \"description: Learn how to add new rows to your Business Table panel with configurable data entry options.\"}, {\"evidence\": [\"Asserted by its own tests: Path Trie Soft Threshold.\", \"Asserted by its own tests: Path Trie Hard Threshold.\", \"Asserted by its own tests: Path Trie Depth Based Thresholds.\", \"Asserted by its own tests: Path Trie No Limit With Minus One.\", \"Asserted by its own tests: Path Trie Max Patterns Under Limit.\", \"Asserted by its own tests: Path Trie Hard Threshold Unique Segment Counting.\"], \"name\": \"clusterurl\", \"purpose\": \"Go package that normalizes URLs into generic page routes by stripping IDs and gibberish segments so data can be aggregated per route.\", \"summary\": \"A simple Go package for processing and clustering a URL to extract a generic page route from it\"}, {\"evidence\": [], \"name\": \"data flow\", \"purpose\": \"\", \"summary\": \"description: Learn how to use the multifarious editing data functionality in the Business Table panel to provide extensive capabilities for working with table data.\"}, {\"evidence\": [\"Asserted by its own tests: Should update colors options correctly via thresholds.\", \"Asserted by its own tests: Should not update colors options if set only base threshold value.\", \"Asserted by its own tests: Should show color Field if thresholds is selected.\", \"Asserted by its own tests: Should render view for duration more or equal 45 minutes.\", \"Asserted by its own tests: Should return event with color if thresholds is not specified.\", \"Asserted by its own tests: Should recompute minutes Offset when time Range changes.\"], \"name\": \"business-panel\", \"purpose\": \"Dashboard panel plugin that displays events, schedules and deadlines from any data source in a day, week, month, year or agenda calendar view.\", \"summary\": \"Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "cog generates code from schemas, unrelated to colour conversion"
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Add data deals with table rows, not colour handling"
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "clusterurl processes URLs, not colour conversion"
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "data flow is about table editing, unrelated to colour conversion"
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "business-panel is a calendar UI plugin, not colour conversion"
+   }
+  ]
+ },
+ "b72466852757d0c553a2": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Write a function that removes duplicates from a list while keeping the original order.",
+   "[{\"evidence\": [\"Asserted by its own tests: Renaming Writer Multiple Calls.\", \"Asserted by its own tests: Renaming Writer Mem FS.\", \"Asserted by its own tests: Renaming Writer File.\", \"Asserted by its own tests: Renaming Writer Abort.\", \"Asserted by its own tests: Renaming Writer Abort Ignores Close Error.\", \"Asserted by its own tests: Merge Configs Preserves Explicitly Empty Values.\"], \"name\": \"generate-policy-bot-config\", \"purpose\": \"Generates a pull request policy bot config requiring GitHub Actions workflows to pass only when triggered, respecting path filters.\", \"summary\": \"Generate a config file for `palantir/policy-bot` to help you enforce conditional workflows have passed\"}, {\"evidence\": [], \"name\": \"data flow\", \"purpose\": \"\", \"summary\": \"description: Learn how to use the multifarious editing data functionality in the Business Table panel to provide extensive capabilities for working with table data.\"}, {\"evidence\": [], \"name\": \"augurs-outlier-js\", \"purpose\": \"JavaScript/WASM bindings for detecting outlier time series within a group.\", \"summary\": \"JavaScript bindings for the augurs-outlier library.\"}, {\"evidence\": [], \"name\": \"augurs-core-js\", \"purpose\": \"JavaScript/WASM bindings for the core shared types and utilities of a time series analysis library.\", \"summary\": \"JavaScript bindings for core augurs functionality.\"}, {\"evidence\": [\"Asserted by its own tests: Path Trie Soft Threshold.\", \"Asserted by its own tests: Path Trie Hard Threshold.\", \"Asserted by its own tests: Path Trie Depth Based Thresholds.\", \"Asserted by its own tests: Path Trie No Limit With Minus One.\", \"Asserted by its own tests: Path Trie Max Patterns Under Limit.\", \"Asserted by its own tests: Path Trie Hard Threshold Unique Segment Counting.\"], \"name\": \"clusterurl\", \"purpose\": \"Go package that normalizes URLs into generic page routes by stripping IDs and gibberish segments so data can be aggregated per route.\", \"summary\": \"A simple Go package for processing and clustering a URL to extract a generic page route from it\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "The asset generates policy bot config, unrelated to list deduplication."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "The asset describes Business Table data editing, unrelated to duplicate removal."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "JavaScript bindings for outlier detection, not relevant to removing duplicates."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "JavaScript bindings for core time series utilities, not relevant to list deduplication."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Go package for URL clustering, unrelated to duplicate removal."
+   }
+  ]
+ },
+ "0515979804670ca6cb34": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Add a helper that pluralises an English noun for labels in the UI.",
+   "[{\"evidence\": [\"Asserted by its own tests: Should not show mini map button when value is short.\", \"Asserted by its own tests: Should return undefined if the index is out of range.\", \"Asserted by its own tests: Should show mini map button when value exceeds 100 characters.\", \"Asserted by its own tests: Should unescape value for display when is Escaping is true.\", \"Asserted by its own tests: Should pass value as-is when is Escaping is false.\", \"Asserted by its own tests: Should escape newlines in on Change when is Escaping is true.\"], \"name\": \"business-text\", \"purpose\": \"Dashboard panel plugin that renders query results as data-driven text using Markdown and Handlebars templates with JavaScript and sanitization.\", \"summary\": \"Data-driven text with Markdown and Handlebars support\"}, {\"evidence\": [], \"name\": \"Add data\", \"purpose\": \"\", \"summary\": \"description: Learn how to add new rows to your Business Table panel with configurable data entry options.\"}, {\"evidence\": [\"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Concrete Reference With Discriminator Field And Mapping Set.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Scalar Discriminator Non Constant Reference.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Concrete Discriminator.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Unknown Discriminator Field.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Scalar With Discriminator Field Set.\"], \"name\": \"cog\", \"purpose\": \"Code generator that turns CUE, JSON Schema or OpenAPI schemas into types and builder libraries for Go, Java, PHP, Python and TypeScript.\", \"summary\": \"Code Generation with a human touch\"}, {\"evidence\": [], \"name\": \"Introduction to the Grafana data structure\", \"purpose\": \"\", \"summary\": \"Grafana supports a variety of different data sources, each with its own data model. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a **data frame**. The **data plane** adds a property layer to the data frame with i\"}, {\"evidence\": [], \"name\": \"cloudcost-exporter\", \"purpose\": \"Helm chart to deploy and configure a cloud cost Prometheus exporter on Kubernetes with per-cloud-provider values.\", \"summary\": \"{{ template \\\"chart.versionBadge\\\" . }}{{ template \\\"chart.typeBadge\\\" . }}{{ template \\\"chart.appVersionBadge\\\" . }}\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Provides UI text rendering via Markdown/Handlebars but lacks noun pluralisation functionality."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Focuses on adding data rows to a table panel, unrelated to pluralising nouns."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "A code generator for schemas; does not address UI label pluralisation."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Documentation about Grafana data structures, not a reusable pluralisation helper."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Helm chart for a cloud cost exporter; no relevance to noun pluralisation."
+   }
+  ]
+ },
+ "05cf87be3b0a0bdbc9e4": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Our NOC wall screens need a big panel showing the current time in Tokyo, London and New York.",
+   "[{\"evidence\": [\"Asserted by its own tests: max Past Query Calculation from query field.\", \"Asserted by its own tests: max Query Calculation from query field.\", \"Asserted by its own tests: min Query Calculation from query field.\", \"Asserted by its own tests: min Future Query Calculation from query field.\", \"Asserted by its own tests: should have no description height when description options are missing.\", \"Asserted by its own tests: undefined as input from query field.\"], \"name\": \"clock-panel\", \"purpose\": \"Dashboard panel plugin that shows the current time in any timezone or a countdown/count-up to an event.\", \"summary\": \"Clock Panel Plugin for Grafana\"}, {\"evidence\": [\"Asserted by its own tests: Should update colors options correctly via thresholds.\", \"Asserted by its own tests: Should not update colors options if set only base threshold value.\", \"Asserted by its own tests: Should show color Field if thresholds is selected.\", \"Asserted by its own tests: Should render view for duration more or equal 45 minutes.\", \"Asserted by its own tests: Should return event with color if thresholds is not specified.\", \"Asserted by its own tests: Should recompute minutes Offset when time Range changes.\"], \"name\": \"business-panel\", \"purpose\": \"Dashboard panel plugin that displays events, schedules and deadlines from any data source in a day, week, month, year or agenda calendar view.\", \"summary\": \"Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration\"}, {\"evidence\": [\"Asserted by its own tests: Should show red threshold.\", \"Asserted by its own tests: Should render value for min aggregation type.\", \"Asserted by its own tests: Should cancel by escape click.\", \"Asserted by its own tests: Should show green threshold.\", \"Asserted by its own tests: Should show orange threshold.\", \"Asserted by its own tests: Should allow to set min in config.\"], \"name\": \"volkovlabs-table-panel\", \"purpose\": \"Dashboard table panel plugin with tree views, tabs, filtering, custom cell rendering, inline data editing and export.\", \"summary\": \"Simplify data visualization in table format\"}, {\"evidence\": [\"Asserted by its own tests: clamps to config.min when the field has no value range.\", \"Asserted by its own tests: corrects input as per min and max.\", \"Asserted by its own tests: does not call hide Popper for non-Escape keys but still stops propagation.\", \"Asserted by its own tests: clamps out of range values.\", \"Asserted by its own tests: keeps remainder after divisible by max.\", \"Asserted by its own tests: maps each value through thresholds for a by-value field.\"], \"name\": \"canvas\", \"purpose\": \"Dashboard panel plugin for building custom infographics, floor plans and diagrams by placing elements whose properties bind to live data.\", \"summary\": \"Draw pictures with the Canvas visualization panel plugin, then paint by numbers with your Grafana metrics data!\"}, {\"evidence\": [\"Asserted by its own tests: can be instantiated with a custom max distance.\", \"Asserted by its own tests: with threshold.\", \"Asserted by its own tests: accepts cap/floor.\", \"Asserted by its own tests: different min cluster sizes.\", \"Asserted by its own tests: with min period.\", \"Asserted by its own tests: with max period.\"], \"name\": \"augurs\", \"purpose\": \"Rust time series toolkit with Python and JavaScript bindings for forecasting, outlier detection, clustering, seasonality and changepoint detection.\", \"summary\": \"Time series analysis for Rust, with bindings to Python and Javascript\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "use_as_is",
+    "reason": "Provides a clock panel that can display current time for any timezone, matching the need for Tokyo, London and New York."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Shows calendar events, not a simple time‑of‑day display."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Table panel visualizes tabular data, not a clock display."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Canvas panel requires custom drawing; it does not provide a ready‑made clock."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "A time‑series analysis library, not a visual clock component."
+   }
+  ]
+ },
+ "b95c5dadb588108367e9": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Operators want to submit maintenance requests from inside a dashboard and have them written to our ticketing API.",
+   "[{\"evidence\": [\"Asserted by its own tests: Should not show mini map button when value is short.\", \"Asserted by its own tests: Should return undefined if the index is out of range.\", \"Asserted by its own tests: Should show mini map button when value exceeds 100 characters.\", \"Asserted by its own tests: Should unescape value for display when is Escaping is true.\", \"Asserted by its own tests: Should pass value as-is when is Escaping is false.\", \"Asserted by its own tests: Should escape newlines in on Change when is Escaping is true.\"], \"name\": \"business-text\", \"purpose\": \"Dashboard panel plugin that renders query results as data-driven text using Markdown and Handlebars templates with JavaScript and sanitization.\", \"summary\": \"Data-driven text with Markdown and Handlebars support\"}, {\"evidence\": [], \"name\": \"detect-angular-dashboards\", \"purpose\": \"Tool that scans a running dashboard server via its API to find dashboards that depend on deprecated Angular panel or data source plugins.\", \"summary\": \"Detect dashboards depending on Angular data source and panel plugins on a running Grafana instance using the Grafana API.\"}, {\"evidence\": [\"Asserted by its own tests: Element Reference Rule Reports Missing Elements.\", \"Asserted by its own tests: Element Reference Rule Sorts And Deduplicates Missing Elements.\", \"Asserted by its own tests: Element Reference Rule Reports Missing And Orphaned Together.\", \"Asserted by its own tests: V2 Required Fields Rule Missing Fields.\", \"Asserted by its own tests: Template On Time Range Reload Rule.\"], \"name\": \"dashboard-linter\", \"purpose\": \"Command-line tool and GitHub Action that lints dashboard JSON files for common mistakes and best-practice violations.\", \"summary\": \"A tool to lint Grafana dashboards\"}, {\"evidence\": [\"Asserted by its own tests: Should update slider value when min and max are not set.\", \"Asserted by its own tests: Should update date min.\", \"Asserted by its own tests: Should make initial datasource request for streaming data state.\", \"Asserted by its own tests: Should normalize is Escaping for code and textarea elements.\", \"Asserted by its own tests: Should update date max.\", \"Asserted by its own tests: Should show mini map if value more than 100 symbols.\"], \"name\": \"business-forms\", \"purpose\": \"Dashboard panel plugin providing forms to insert or update application data and modify configuration directly from a dashboard.\", \"summary\": \"Insert, update application data, and modify configuration\"}, {\"evidence\": [], \"name\": \"Usage\", \"purpose\": \"\", \"summary\": \"A command-line application to lint Grafana dashboards.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Provides only text rendering, no form or API submission capability."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Only scans dashboards for Angular plugins, unrelated to request submission."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "A linter tool; does not enable user‑driven ticket creation."
+   },
+   {
+    "candidate": "D",
+    "verdict": "extend",
+    "reason": "Offers dashboard forms for data entry, but would need additional code to send maintenance requests to the ticketing API."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Command‑line linter, not a dashboard integration for submitting tickets."
+   }
+  ]
+ },
+ "a4ad32e2aed6ae7a5df9": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Split our request-rate series into trend plus daily and weekly seasonal parts so we can alert on the residual.",
+   "[{\"evidence\": [], \"name\": \"augurs-mstl\", \"purpose\": \"Rust library for forecasting time series with multiple seasonalities using MSTL decomposition plus a pluggable trend model.\", \"summary\": \"Multiple Seasonal-Trend decomposition with LOESS (MSTL) using the augurs time series library.\"}, {\"evidence\": [], \"name\": \"augurs-mstl-js\", \"purpose\": \"JavaScript/WASM bindings for forecasting multi-seasonal time series with MSTL decomposition.\", \"summary\": \"JavaScript bindings for the augurs-mstl library.\"}, {\"evidence\": [], \"name\": \"augurs-seasons\", \"purpose\": \"Rust library to detect seasonality or periodicity in time series using periodograms.\", \"summary\": \"Seasonality detection using periodograms\"}, {\"evidence\": [], \"name\": \"augurs-seasons-js\", \"purpose\": \"JavaScript/WASM bindings for detecting seasonality or periodicity in time series.\", \"summary\": \"JavaScript bindings for the augurs-seasons library.\"}, {\"evidence\": [], \"name\": \"github-rate-limits-prometheus-exporter\", \"purpose\": \"Helm chart to install and configure a GitHub API rate limit Prometheus exporter on Kubernetes using PAT or App secrets.\", \"summary\": \"This helm chart helps to install and configure github-rate-limits-prometheus-exporter\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "use_as_is",
+    "reason": "Provides MSTL decomposition with multiple seasonalities (daily, weekly) and trend extraction, matching the request."
+   },
+   {
+    "candidate": "B",
+    "verdict": "use_as_is",
+    "reason": "JS/WASM bindings to augurs-mstl, offering the same decomposition capabilities for JavaScript environments."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Only detects seasonality via periodograms; does not perform trend/seasonal decomposition."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "JS bindings for seasonality detection, lacking decomposition into trend and seasonal components."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Helm chart for a Prometheus exporter; unrelated to time-series decomposition."
+   }
+  ]
+ },
+ "7994415c98ce203187e4": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Show each team what its GCP and AWS usage costs per day, as metrics we can put on a dashboard.",
+   "[{\"evidence\": [\"Asserted by its own tests: Machine Type Cache Warm Respects Concurrency Limit.\", \"Asserted by its own tests: Generate Capacity Block Pricing Map splits Same Day Same Type Reservations.\", \"Asserted by its own tests: Node Store Populate Concurrency Limit.\", \"Asserted by its own tests: parse Capacity Block Usage Type.\", \"Asserted by its own tests: parse Capacity Block Costs nets Refunds.\", \"Asserted by its own tests: cluster Name From Instance.\"], \"name\": \"cloudcost-exporter\", \"purpose\": \"Prometheus exporter that exports near real-time cloud resource pricing rates from AWS, GCP and Azure as metrics for cost visibility.\", \"summary\": \"Prometheus Exporter for Cloud Provider agnostic cost metrics\"}, {\"evidence\": [], \"name\": \"cloudcost-exporter\", \"purpose\": \"Helm chart to deploy and configure a cloud cost Prometheus exporter on Kubernetes with per-cloud-provider values.\", \"summary\": \"{{ template \\\"chart.versionBadge\\\" . }}{{ template \\\"chart.typeBadge\\\" . }}{{ template \\\"chart.appVersionBadge\\\" . }}\"}, {\"evidence\": [], \"name\": \"Usage\", \"purpose\": \"\", \"summary\": \"A command-line application to lint Grafana dashboards.\"}, {\"evidence\": [\"Asserted by its own tests: should call on Limit Change when limit is changed.\", \"Asserted by its own tests: escapes a backslash inside a path segment.\", \"Asserted by its own tests: escapes backticks in a segment to prevent identifier break-out.\", \"Asserted by its own tests: escapes backslash before backtick (no double-escaping).\", \"Asserted by its own tests: should call on Conn Max Open Conns Change when changed.\", \"Asserted by its own tests: should call on Conn Max Lifetime Change when changed.\"], \"name\": \"clickhouse-datasource\", \"purpose\": \"Dashboard data source plugin for querying and visualizing logs and metrics stored in ClickHouse, including annotations from events.\", \"summary\": \"Grafana Plugin for ClickHouse\"}, {\"evidence\": [], \"name\": \"catalog-otel-metrics\", \"purpose\": \"Example Node.js catalog service that pushes application metrics via the OpenTelemetry SDK over OTLP/HTTP to a telemetry collector.\", \"summary\": \"Catalog service that pushes metrics via the OpenTelemetry SDK over OTLP/HTTP\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "use_as_is",
+    "reason": "Exports AWS and GCP cost metrics suitable for daily dashboard."
+   },
+   {
+    "candidate": "B",
+    "verdict": "extend",
+    "reason": "Helm chart deploys the exporter; may need configuration for per‑team metrics."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Only lints Grafana dashboards, does not provide cost data."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Grafana datasource for ClickHouse, unrelated to cloud cost metrics."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Example OpenTelemetry metric source, not cloud cost related."
+   }
+  ]
+ },
+ "05bb43f937b9caa2b971": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Write a function that parses an ISO 8601 week date like 2026-W45-3 into a calendar date.",
+   "[{\"evidence\": [\"Asserted by its own tests: Should update colors options correctly via thresholds.\", \"Asserted by its own tests: Should not update colors options if set only base threshold value.\", \"Asserted by its own tests: Should show color Field if thresholds is selected.\", \"Asserted by its own tests: Should render view for duration more or equal 45 minutes.\", \"Asserted by its own tests: Should return event with color if thresholds is not specified.\", \"Asserted by its own tests: Should recompute minutes Offset when time Range changes.\"], \"name\": \"business-panel\", \"purpose\": \"Dashboard panel plugin that displays events, schedules and deadlines from any data source in a day, week, month, year or agenda calendar view.\", \"summary\": \"Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration\"}, {\"evidence\": [], \"name\": \"Business Calendar\", \"purpose\": \"\", \"summary\": \"description: Learn how to display events in a stylish calendar format using the Business Calendar panel plugin.\"}, {\"evidence\": [], \"name\": \"augurs-seasons-js\", \"purpose\": \"JavaScript/WASM bindings for detecting seasonality or periodicity in time series.\", \"summary\": \"JavaScript bindings for the augurs-seasons library.\"}, {\"evidence\": [], \"name\": \"Configuration\", \"purpose\": \"\", \"summary\": \"description: Learn about the configuration categories available in the Business Calendar plugin.\"}, {\"evidence\": [], \"name\": \"augurs-transforms-js\", \"purpose\": \"JavaScript/WASM bindings for time series data transformations such as scaling, log transforms and imputation before forecasting.\", \"summary\": \"JavaScript bindings for augurs' data transformations.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Provides a UI panel for displaying calendar events; does not include functionality for parsing ISO week dates into calendar dates."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Describes a calendar display plugin; lacks any date‑parsing utilities needed for ISO week‑date conversion."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Offers bindings for seasonality detection, not for general date parsing such as ISO week‑date to calendar date conversion."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Relates to configuration settings for a calendar plugin and does not provide date‑parsing logic."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Focuses on time‑series data transformations; does not contain utilities for converting ISO week dates to calendar dates."
+   }
+  ]
+ },
+ "ae87bbc833653716b003": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Add a helper that resizes an uploaded profile photo to 256 by 256 and crops it to a circle.",
+   "[{\"evidence\": [], \"name\": \"docker\", \"purpose\": \"Automatically pull and apply metrics cardinality-reduction recommendations on a schedule via a GitHub Actions workflow that opens pull requests.\", \"summary\": \"A template repository for enabling auto-apply of Adaptive Metrics recommendations\"}, {\"evidence\": [], \"name\": \"Add data\", \"purpose\": \"\", \"summary\": \"description: Learn how to add new rows to your Business Table panel with configurable data entry options.\"}, {\"evidence\": [\"Asserted by its own tests: Should update slider value when min and max are not set.\", \"Asserted by its own tests: Should update date min.\", \"Asserted by its own tests: Should make initial datasource request for streaming data state.\", \"Asserted by its own tests: Should normalize is Escaping for code and textarea elements.\", \"Asserted by its own tests: Should update date max.\", \"Asserted by its own tests: Should show mini map if value more than 100 symbols.\"], \"name\": \"business-forms\", \"purpose\": \"Dashboard panel plugin providing forms to insert or update application data and modify configuration directly from a dashboard.\", \"summary\": \"Insert, update application data, and modify configuration\"}, {\"evidence\": [\"Asserted by its own tests: escapes backslashes in label name on empty input.\", \"Asserted by its own tests: escapes double quotes in label names.\", \"Asserted by its own tests: parses label name with escaped double quote.\", \"Asserted by its own tests: escapes double quotes in label name inside braces.\", \"Asserted by its own tests: escapes double quotes in label name on empty input.\", \"Asserted by its own tests: parses label name with escaped backslash.\"], \"name\": \"grafana-pyroscope-datasource\", \"purpose\": \"Dashboard data source plugin for querying and visualizing continuous profiling data like CPU and memory profiles to investigate performance regressions.\", \"summary\": \"Data source for Grafana Pyroscope, horizontally-scalable, highly-available, multi-tenant continuous profiling aggregation system.\"}, {\"evidence\": [\"Asserted by its own tests: clamps to config.min when the field has no value range.\", \"Asserted by its own tests: corrects input as per min and max.\", \"Asserted by its own tests: does not call hide Popper for non-Escape keys but still stops propagation.\", \"Asserted by its own tests: clamps out of range values.\", \"Asserted by its own tests: keeps remainder after divisible by max.\", \"Asserted by its own tests: maps each value through thresholds for a by-value field.\"], \"name\": \"canvas\", \"purpose\": \"Dashboard panel plugin for building custom infographics, floor plans and diagrams by placing elements whose properties bind to live data.\", \"summary\": \"Draw pictures with the Canvas visualization panel plugin, then paint by numbers with your Grafana metrics data!\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Provides a Docker template for metrics recommendations, unrelated to image processing."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Describes adding data rows to a Business Table panel, not image resizing or cropping."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "A dashboard form plugin for data entry, no image manipulation capabilities."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Data source plugin for profiling data, unrelated to image processing."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Canvas visualization panel for drawing, but does not offer built‑in image resize/crop helper."
+   }
+  ]
+ },
+ "d0b0a2cb666522f5cc25": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Write a function that converts Roman numerals to integers and back.",
+   "[{\"evidence\": [\"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Concrete Reference With Discriminator Field And Mapping Set.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Scalar Discriminator Non Constant Reference.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Concrete Discriminator.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Unknown Discriminator Field.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Scalar With Discriminator Field Set.\"], \"name\": \"cog\", \"purpose\": \"Code generator that turns CUE, JSON Schema or OpenAPI schemas into types and builder libraries for Go, Java, PHP, Python and TypeScript.\", \"summary\": \"Code Generation with a human touch\"}, {\"evidence\": [], \"name\": \"Business Text\", \"purpose\": \"\", \"summary\": \"description: Learn how to convert plain text and table data into visually appealing information cards using Markdown, Handlebars, CSS, and JavaScript.\"}, {\"evidence\": [], \"name\": \"augurs-transforms-js\", \"purpose\": \"JavaScript/WASM bindings for time series data transformations such as scaling, log transforms and imputation before forecasting.\", \"summary\": \"JavaScript bindings for augurs' data transformations.\"}, {\"evidence\": [], \"name\": \"data flow\", \"purpose\": \"\", \"summary\": \"description: Learn how to use the multifarious editing data functionality in the Business Table panel to provide extensive capabilities for working with table data.\"}, {\"evidence\": [], \"name\": \"augurs-core-js\", \"purpose\": \"JavaScript/WASM bindings for the core shared types and utilities of a time series analysis library.\", \"summary\": \"JavaScript bindings for core augurs functionality.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "cog is a schema‑to‑code generator, not a Roman numeral conversion library"
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Business Text focuses on visualizing text/tables, unrelated to numeral conversion"
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "augurs‑transforms‑js provides time‑series data transforms, not numeral utilities"
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "data flow deals with table editing features, not numeral conversion"
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "augurs‑core‑js offers core time‑series utilities, not Roman numeral functions"
+   }
+  ]
+ },
+ "38fb1c131b7c80018f72": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Add server-side validation that a UK postcode is well-formed.",
+   "[{\"evidence\": [\"Asserted by its own tests: Should update slider value when min and max are not set.\", \"Asserted by its own tests: Should update date min.\", \"Asserted by its own tests: Should make initial datasource request for streaming data state.\", \"Asserted by its own tests: Should normalize is Escaping for code and textarea elements.\", \"Asserted by its own tests: Should update date max.\", \"Asserted by its own tests: Should show mini map if value more than 100 symbols.\"], \"name\": \"business-forms\", \"purpose\": \"Dashboard panel plugin providing forms to insert or update application data and modify configuration directly from a dashboard.\", \"summary\": \"Insert, update application data, and modify configuration\"}, {\"evidence\": [\"Asserted by its own tests: Should not show mini map button when value is short.\", \"Asserted by its own tests: Should return undefined if the index is out of range.\", \"Asserted by its own tests: Should show mini map button when value exceeds 100 characters.\", \"Asserted by its own tests: Should unescape value for display when is Escaping is true.\", \"Asserted by its own tests: Should pass value as-is when is Escaping is false.\", \"Asserted by its own tests: Should escape newlines in on Change when is Escaping is true.\"], \"name\": \"business-text\", \"purpose\": \"Dashboard panel plugin that renders query results as data-driven text using Markdown and Handlebars templates with JavaScript and sanitization.\", \"summary\": \"Data-driven text with Markdown and Handlebars support\"}, {\"evidence\": [], \"name\": \"Custom code\", \"purpose\": \"\", \"summary\": \"description: Learn how to use custom code to access panel options, REST API responses, form elements, and Grafana services in Business Forms.\"}, {\"evidence\": [], \"name\": \"Business Forms\", \"purpose\": \"\", \"summary\": \"description: Learn how to insert and update application data and modify configuration directly from your Grafana dashboard using the Business Forms panel.\"}, {\"evidence\": [\"Asserted by its own tests: can be instantiated with a custom max distance.\", \"Asserted by its own tests: can be instantiated with a custom max distance.\", \"Asserted by its own tests: accepts cap/floor.\", \"Asserted by its own tests: accepts cap/floor.\", \"Asserted by its own tests: handles empty pipeline.\", \"Asserted by its own tests: handles empty pipeline.\"], \"name\": \"augurs-js-testpkg\", \"purpose\": \"Internal test package for verifying the JavaScript bindings of a time series analysis library work correctly.\", \"summary\": \"Time series analysis for Rust, with bindings to Python and Javascript\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Business‑forms is a Grafana panel plugin for UI forms, not a server‑side postcode validation library."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Business‑text renders markdown, unrelated to postcode validation."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Custom code example is about accessing panel options, not server validation of postcodes."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Business Forms panel focuses on UI data entry, not server‑side postcode validation."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "augurs‑js‑testpkg is a time‑series analysis test package, unrelated to postcode validation."
+   }
+  ]
+ },
+ "80ee7257a5d21b911d81": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Write a script that sends a birthday greeting email to every employee on their birthday.",
+   "[{\"evidence\": [\"Asserted by its own tests: Generate Rules Determinism With Seed.\", \"Asserted by its own tests: Generate Rules Determinism With Seed.\", \"Asserted by its own tests: Group Rules Groups Per Folder Greater Than One.\", \"Asserted by its own tests: Group Rules Defaults When Zero Or Empty.\", \"Asserted by its own tests: Group Rules Defaults When Zero Or Empty.\", \"Asserted by its own tests: Group Rules Non Even Partition.\"], \"name\": \"alerting-gen\", \"purpose\": \"CLI that generates random, reproducible alerting and recording rules as JSON for testing, optionally pushing them to a dashboard server via its provisioning API.\", \"summary\": \"A tiny CLI to generate random Grafana Alerting rules and Recording rules using:\"}, {\"evidence\": [\"Asserted by its own tests: should call on Limit Change when limit is changed.\", \"Asserted by its own tests: escapes a backslash inside a path segment.\", \"Asserted by its own tests: escapes backticks in a segment to prevent identifier break-out.\", \"Asserted by its own tests: escapes backslash before backtick (no double-escaping).\", \"Asserted by its own tests: should call on Conn Max Open Conns Change when changed.\", \"Asserted by its own tests: should call on Conn Max Lifetime Change when changed.\"], \"name\": \"clickhouse-datasource\", \"purpose\": \"Dashboard data source plugin for querying and visualizing logs and metrics stored in ClickHouse, including annotations from events.\", \"summary\": \"Grafana Plugin for ClickHouse\"}, {\"evidence\": [\"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Concrete Reference With Discriminator Field And Mapping Set.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Scalar Discriminator Non Constant Reference.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Concrete Discriminator.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Unknown Discriminator Field.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Scalar With Discriminator Field Set.\"], \"name\": \"cog\", \"purpose\": \"Code generator that turns CUE, JSON Schema or OpenAPI schemas into types and builder libraries for Go, Java, PHP, Python and TypeScript.\", \"summary\": \"Code Generation with a human touch\"}, {\"evidence\": [\"Asserted by its own tests: Should not show mini map button when value is short.\", \"Asserted by its own tests: Should return undefined if the index is out of range.\", \"Asserted by its own tests: Should show mini map button when value exceeds 100 characters.\", \"Asserted by its own tests: Should unescape value for display when is Escaping is true.\", \"Asserted by its own tests: Should pass value as-is when is Escaping is false.\", \"Asserted by its own tests: Should escape newlines in on Change when is Escaping is true.\"], \"name\": \"business-text\", \"purpose\": \"Dashboard panel plugin that renders query results as data-driven text using Markdown and Handlebars templates with JavaScript and sanitization.\", \"summary\": \"Data-driven text with Markdown and Handlebars support\"}, {\"evidence\": [\"Asserted by its own tests: Renaming Writer Multiple Calls.\", \"Asserted by its own tests: Renaming Writer Mem FS.\", \"Asserted by its own tests: Renaming Writer File.\", \"Asserted by its own tests: Renaming Writer Abort.\", \"Asserted by its own tests: Renaming Writer Abort Ignores Close Error.\", \"Asserted by its own tests: Merge Configs Preserves Explicitly Empty Values.\"], \"name\": \"generate-policy-bot-config\", \"purpose\": \"Generates a pull request policy bot config requiring GitHub Actions workflows to pass only when triggered, respecting path filters.\", \"summary\": \"Generate a config file for `palantir/policy-bot` to help you enforce conditional workflows have passed\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Generates Grafana alerting rules; unrelated to emailing employees."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Grafana ClickHouse datasource plugin; does not provide email functionality."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Code generator for schemas; not suited for birthday email script."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Dashboard text rendering plugin; not for sending emails."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Generates policy‑bot config; unrelated to email automation."
+   }
+  ]
+ },
+ "74c2d57a8f75e1dc2f99": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Add a function that computes the great-circle distance between two latitude/longitude points.",
+   "[{\"evidence\": [], \"name\": \"augurs-outlier-js\", \"purpose\": \"JavaScript/WASM bindings for detecting outlier time series within a group.\", \"summary\": \"JavaScript bindings for the augurs-outlier library.\"}, {\"evidence\": [], \"name\": \"Add data\", \"purpose\": \"\", \"summary\": \"description: Learn how to add new rows to your Business Table panel with configurable data entry options.\"}, {\"evidence\": [], \"name\": \"augurs-changepoint-js\", \"purpose\": \"JavaScript/WASM bindings for detecting changepoints in time series data.\", \"summary\": \"JavaScript bindings for the augurs-changepoint library.\"}, {\"evidence\": [], \"name\": \"augurs-core-js\", \"purpose\": \"JavaScript/WASM bindings for the core shared types and utilities of a time series analysis library.\", \"summary\": \"JavaScript bindings for core augurs functionality.\"}, {\"evidence\": [], \"name\": \"augurs-ets-js\", \"purpose\": \"JavaScript/WASM bindings for exponential smoothing (ETS) time series forecasting models.\", \"summary\": \"JavaScript bindings for the augurs-ets library.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Provides JavaScript/WASM bindings for outlier detection in time series, unrelated to geographic distance calculations."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Describes adding rows to a Business Table UI, not related to geodesic computations."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Bindings for changepoint detection in time series, no functionality for great-circle distance."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Core utilities for a time series library; does not appear to include geographic distance functions."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Bindings for exponential smoothing models, unrelated to computing distances between lat/long points."
+   }
+  ]
+ },
+ "359b7c731dc23a81d7c4": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Write a helper that wraps long lines of text at 80 characters without breaking words.",
+   "[{\"evidence\": [\"Asserted by its own tests: Should not show mini map button when value is short.\", \"Asserted by its own tests: Should return undefined if the index is out of range.\", \"Asserted by its own tests: Should show mini map button when value exceeds 100 characters.\", \"Asserted by its own tests: Should unescape value for display when is Escaping is true.\", \"Asserted by its own tests: Should pass value as-is when is Escaping is false.\", \"Asserted by its own tests: Should escape newlines in on Change when is Escaping is true.\"], \"name\": \"business-text\", \"purpose\": \"Dashboard panel plugin that renders query results as data-driven text using Markdown and Handlebars templates with JavaScript and sanitization.\", \"summary\": \"Data-driven text with Markdown and Handlebars support\"}, {\"evidence\": [], \"name\": \"Business Text\", \"purpose\": \"\", \"summary\": \"description: Learn how to convert plain text and table data into visually appealing information cards using Markdown, Handlebars, CSS, and JavaScript.\"}, {\"evidence\": [\"Asserted by its own tests: Renaming Writer Multiple Calls.\", \"Asserted by its own tests: Renaming Writer Mem FS.\", \"Asserted by its own tests: Renaming Writer File.\", \"Asserted by its own tests: Renaming Writer Abort.\", \"Asserted by its own tests: Renaming Writer Abort Ignores Close Error.\", \"Asserted by its own tests: Merge Configs Preserves Explicitly Empty Values.\"], \"name\": \"generate-policy-bot-config\", \"purpose\": \"Generates a pull request policy bot config requiring GitHub Actions workflows to pass only when triggered, respecting path filters.\", \"summary\": \"Generate a config file for `palantir/policy-bot` to help you enforce conditional workflows have passed\"}, {\"evidence\": [], \"name\": \"Usage\", \"purpose\": \"\", \"summary\": \"A command-line application to lint Grafana dashboards.\"}, {\"evidence\": [\"Asserted by its own tests: Limited Writer.\", \"Asserted by its own tests: Limited Writer Underlying Writer Error.\", \"Asserted by its own tests: Limited Writer Partial Write From Underlying Writer.\", \"Asserted by its own tests: Opt In Caller Grafana Alertmanager Style Minus Caller.\", \"Asserted by its own tests: Webhook Truncate Alerts.\", \"Asserted by its own tests: Truncated Notify.\"], \"name\": \"alerting\", \"purpose\": \"Go library of utilities for building alerting systems, including an Alertmanager implementation and notification integrations compatible with Prometheus Alertmanager.\", \"summary\": \"Set of libraries used to build alerting systems at Grafana - including the Alertmanager.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Provides Markdown/Handlebars rendering for dashboards, not a line‑wrapping utility."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Describes converting text to cards with Markdown/Handlebars, unrelated to word‑preserving line wrapping."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Generates policy‑bot config files; does not address text wrapping."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "CLI tool for linting Grafana dashboards, unrelated to wrapping text."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Alerting libraries for Grafana; no functionality for line wrapping."
+   }
+  ]
+ },
+ "e2259a5044c74ac010d7": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Add a tiny feature that lets users switch the web app between light and dark themes.",
+   "[{\"evidence\": [], \"name\": \"augurs-changepoint-js\", \"purpose\": \"JavaScript/WASM bindings for detecting changepoints in time series data.\", \"summary\": \"JavaScript bindings for the augurs-changepoint library.\"}, {\"evidence\": [], \"name\": \"demo-app\", \"purpose\": \"Demo application used to show zero-code, eBPF-based automatic instrumentation collecting telemetry without changing application code.\", \"summary\": \"A collection of working Alloy scenarios\"}, {\"evidence\": [\"Asserted by its own tests: Should update colors options correctly via thresholds.\", \"Asserted by its own tests: Should not update colors options if set only base threshold value.\", \"Asserted by its own tests: Should show color Field if thresholds is selected.\", \"Asserted by its own tests: Should render view for duration more or equal 45 minutes.\", \"Asserted by its own tests: Should return event with color if thresholds is not specified.\", \"Asserted by its own tests: Should recompute minutes Offset when time Range changes.\"], \"name\": \"business-panel\", \"purpose\": \"Dashboard panel plugin that displays events, schedules and deadlines from any data source in a day, week, month, year or agenda calendar view.\", \"summary\": \"Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration\"}, {\"evidence\": [], \"name\": \"Add data\", \"purpose\": \"\", \"summary\": \"description: Learn how to add new rows to your Business Table panel with configurable data entry options.\"}, {\"evidence\": [\"Asserted by its own tests: Integration Missing Capabilities.\", \"A test is disabled with the reason: Skipping integration test due to -short\", \"A test is disabled with the reason: skipping long tests\", \"Asserted by its own tests: Check Capabilities.\", \"Asserted by its own tests: Chromium Process Type missing Cmdline.\"], \"name\": \"crocochrome\", \"purpose\": \"Supervisor service that launches and reaps headless Chromium browser processes on demand inside a container.\", \"summary\": \"Chromium supervisor\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Library for changepoint detection, unrelated to UI theming."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Demo app for eBPF telemetry, does not provide theme switching functionality."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Calendar panel plugin with color options, but not a general web‑app theme system."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Focuses on adding data rows to a table panel, not related to theme management."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Chromium supervisor service, unrelated to front‑end theming."
+   }
+  ]
+ }
+}

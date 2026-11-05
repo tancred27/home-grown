@@ -108,6 +108,46 @@ against the live API with the uncredited key: every verdict came back `unknown �
 model verdict unavailable (BadRequestError)`, and the agent would interrupt no one.
 `tests/test_model_verdict.py` covers the mapping and the fail-safe.
 
+### A production-path judge: Groq `openai/gpt-oss-120b` (2026-11-06)
+
+The subagent judge above was not the product's code path. This run is: the product's own
+`search.judge_with_model` through `llm.py`, on Groq's free tier, model pinned for the
+whole run, every call recorded (`judge_eval_groq.json`, cached in
+`judge_cache_groq.json`). Script: `scripts/judge_eval.py`. Inputs per ticket: the real
+retriever's top 5 as the asking developer may see them — name, description, LLM-written
+purpose line, non-sensitive evidence. Never the gold label.
+
+Two ticket sets: the 14 held-out tickets (the subagent judge's set, for comparison) and
+12 fresh ones committed before any judge run on them (`tasks_judge_fresh.json`,
+`81b256a`).
+
+| | duplicates flagged | false alarms on controls | unrelated wrong-asset |
+|---|---|---|---|
+| rule-based verdict, held-out 14 | 4 / 6 | 8 / 8 | — |
+| Claude subagent judge, held-out 14 | 6 / 6 | 0 / 8 | 0 (4 siblings) |
+| **gpt-oss-120b, held-out 14** | **5 / 6** | **0 / 8** | **0** |
+| **gpt-oss-120b, fresh 12** | **4 / 4** | **0 / 8** | **0** |
+
+**9 of 10 duplicates flagged, 0 false alarms on 16 controls, 0 failed calls**, about 1 s
+per judgment. The 5 strong verdicts on non-gold assets are all siblings in the gold's
+repository (the JS binding of the same crate, the repo's own Helm chart) and would send a
+developer to the right place.
+
+The one miss is defensible and may be a labelling error of mine: ticket h02 asks for a
+review-bot config generated *from CODEOWNERS*; the asset's description says it generates
+policy-bot config "to help you enforce conditional workflows have passed", with nothing
+about CODEOWNERS, and the judge said so. The ticket assumed a feature the evidence shown
+does not support.
+
+**Bugs this run depended on fixing first.** An earlier Gemini attempt found 0 of 6
+duplicates. The cause was in the product: verdicts were mapped to candidates by the first
+character of the label, so "Candidate A" became "C" (fixed in `566d0e0`; the label is now
+schema-restricted to the letters shown). That run also exhausted Gemini's free tier:
+**20 requests per day per model** — too small for this workload.
+
+Limits: 26 tickets, one rater for the gold labels, one model; free-tier output is
+acceptable here only because every input comes from public repositories.
+
 ## What gate 2 still needs
 
 1. **Credit on the API key**, then `python -I scripts/gate2_run.py --model claude
