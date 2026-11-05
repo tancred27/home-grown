@@ -1,0 +1,30 @@
+{
+  "_about": "Fresh fit-judge tickets, written and committed BEFORE any Gemini judge call. Used to check that a judge's result on the 14 held-out tickets holds on unseen ones. 'duplicate' tickets have an existing asset (gold_unit_id); 'control' tickets have none in the corpus.",
+  "tasks": [
+    {"id": "f01", "kind": "duplicate", "gold_unit_id": "github:clock-panel:.",
+     "ticket": "Our NOC wall screens need a big panel showing the current time in Tokyo, London and New York."},
+    {"id": "f02", "kind": "duplicate", "gold_unit_id": "github:business-forms:.",
+     "ticket": "Operators want to submit maintenance requests from inside a dashboard and have them written to our ticketing API."},
+    {"id": "f03", "kind": "duplicate", "gold_unit_id": "github:augurs:crates/augurs-mstl",
+     "ticket": "Split our request-rate series into trend plus daily and weekly seasonal parts so we can alert on the residual."},
+    {"id": "f04", "kind": "duplicate", "gold_unit_id": "github:cloudcost-exporter:.",
+     "ticket": "Show each team what its GCP and AWS usage costs per day, as metrics we can put on a dashboard."},
+
+    {"id": "g01", "kind": "control", "gold_unit_id": null,
+     "ticket": "Write a function that parses an ISO 8601 week date like 2026-W45-3 into a calendar date."},
+    {"id": "g02", "kind": "control", "gold_unit_id": null,
+     "ticket": "Add a helper that resizes an uploaded profile photo to 256 by 256 and crops it to a circle."},
+    {"id": "g03", "kind": "control", "gold_unit_id": null,
+     "ticket": "Write a function that converts Roman numerals to integers and back."},
+    {"id": "g04", "kind": "control", "gold_unit_id": null,
+     "ticket": "Add server-side validation that a UK postcode is well-formed."},
+    {"id": "g05", "kind": "control", "gold_unit_id": null,
+     "ticket": "Write a script that sends a birthday greeting email to every employee on their birthday."},
+    {"id": "g06", "kind": "control", "gold_unit_id": null,
+     "ticket": "Add a function that computes the great-circle distance between two latitude/longitude points."},
+    {"id": "g07", "kind": "control", "gold_unit_id": null,
+     "ticket": "Write a helper that wraps long lines of text at 80 characters without breaking words."},
+    {"id": "g08", "kind": "control", "gold_unit_id": null,
+     "ticket": "Add a tiny feature that lets users switch the web app between light and dark themes."}
+  ]
+}
