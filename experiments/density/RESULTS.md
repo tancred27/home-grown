@@ -166,13 +166,66 @@ What the literature says, such as it is:
   tacit-knowledge literature on this is entirely vendor blogs; one claims "80% of
   operational intelligence is tacit" with no source. Do not cite it.
 
-**The experiment that settles it:** select public repos that are *effectively internal*
-— company-owned, few stars, nearly all commits from one company's employees, little
-external contribution — and compare claim density against flagship community repos.
-Inside one org works: `grafana/grafana` (large external community) vs an obscure
-`grafana/*` tool. That measures the gradient and yields a defensible discount factor.
-Same pipeline, needs a token for the budget. **Run this before quoting any density
-number publicly.**
+### Run E2: the gradient, measured (2026-11-05, authenticated)
+
+Eight `grafana/*` repos with 0–1 stars, actively pushed, as a proxy for internal:
+`grafana-tempo-datasource`, `grafana-loki-datasource`, `grafana-canvas-panel`,
+`cloud-setup`, `grafana-pyroscope-datasource`, `xk6-kafka`, `pyroscope-kinda-safe`,
+`grafana-opentsdb-datasource`. Every one **exhausted its entire comment history** in
+under 500 comments.
+
+| | flagship (5 repos, recent slice) | effectively-internal (8 repos, full history) |
+|---|---|---|
+| comments fetched | 1,500 | 843 |
+| bot-authored | 68% | **58%** |
+| human, non-empty | 474 | 358 |
+| distinct threads | 324 | 157 |
+| comments per thread | 1.46 | 2.28 |
+| **strong claims** | **19 (4.0%)** | **19 (5.3%)** |
+| threads with ≥1 claim | 4.6% | **9.6%** |
+| share of signal in comments ≥500 chars | 79% | **37%** |
+| claims per repo | — (not exhausted) | **~2.4, for the repo's entire life** |
+
+**Density does not degrade. It is slightly better.** 5.3% vs 4.0% per comment, and 2x
+better per thread. Bot noise is lower. Manual read of 14 flagged comments gave ~50%
+strong, ~21% thin, ~29% noise — precision comparable to or better than flagship.
+
+**Quality holds too**, and one claim type is *denser* here than in the flagship repos:
+"this already exists" and "is this a duplicate of X" — the exact duplication-discovery
+signal the product is built on. Samples recovered:
+
+- A capability relocation with a cost judgement: "since the GATB migration, the matrix
+  build no longer lives in this repo's `ci.yml` — it's now inside
+  `grafana/plugin-ci-workflows`… a local workaround is possible via the existing
+  `playwright-gar-registry` input but needs new GAR credentials/Vault setup — cost
+  likely outweighs benefit for an image this small."
+- A root-caused, generalised CI boundary: "GitHub doesn't issue an OIDC token for
+  workflows triggered from a fork… **any fork PR should hit the same error.**"
+- A performance boundary with no escape: "Loki is not performing well with high
+  cardinality, there doesn't seem to be a good workaround."
+- A workaround with the exact recipe: "adding a parser like `| logfmt |` in the query
+  for the ad hoc to work correctly. This is kinda weird workaround, but it works."
+- "I believe this already exists in Grafana… under Additional Settings I have these
+  options" — a duplicate feature request caught by a human.
+
+**What collapses is volume, not density.** Eight repos' *entire lifetimes* produced 19
+strong claims — about 2.4 per repo, ever. The five flagship repos produced 19 from a
+recent slice alone. And the distribution is brutally skewed: `grafana-tempo-datasource`
+(9) and `grafana-loki-datasource` (7) hold 16 of 19, while **four of eight repos have
+zero.**
+
+**Correction to run E1: the length prefilter does not generalise.** Comments ≥500 chars
+hold 79% of signal in flagship repos but only **37%** here, and short comments carry
+real density (2.4% in the 0–100 bucket vs 0.5% in flagship). Using length as a 5x budget
+cut would discard 63% of the signal on internal-style repos. Keep the bot filter, which
+holds in both; make the length gate configurable and measure it per corpus.
+
+**What this does not settle.** These are *public* repos with *external users filing
+issues*, so the proxy is partial — low popularity and low external contribution, but
+not zero outside reporters. Reading the authors, roughly half the rich claims came from
+people who look like external users rather than employees. A genuinely private repo has
+none of those, which could halve the yield again. Settling that needs real private data,
+which this project cannot use. **It stays a declared assumption, not a measured fact.**
 
 ### Design consequences if internal density really is near zero
 

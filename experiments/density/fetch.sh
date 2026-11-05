@@ -17,7 +17,10 @@ PAGES="${PAGES:-3}"
 TOK="${GITHUB_TOKEN:-}"
 TOKFILE="${GH_TOKEN_FILE:-$HOME/.gh_token}"
 if [ -z "$TOK" ] && [ -r "$TOKFILE" ]; then
-  TOK=$(tr -d ' \t\r\n' < "$TOKFILE")
+  # Extract a token-shaped string rather than taking the whole file, so a file with a
+  # label or surrounding prose still works.
+  TOK=$(grep -oE '(ghp_|github_pat_|gho_|ghu_|ghs_|ghr_)[A-Za-z0-9_]+' "$TOKFILE" | head -1)
+  [ -z "$TOK" ] && TOK=$(tr -d ' \t\r\n' < "$TOKFILE")
 fi
 AUTH=()
 [ -n "$TOK" ] && AUTH=(-H "Authorization: Bearer $TOK")
