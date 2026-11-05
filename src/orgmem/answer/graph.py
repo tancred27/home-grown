@@ -88,11 +88,22 @@ def _enrich(state: AnswerState) -> dict:
             people = [{"name": n, "handle": h, "team": pt, "manager": m, "commits": k,
                        "last_active": la.isoformat() if la else None, "role": r}
                       for n, h, pt, m, k, la, r in cur.fetchall()]
+            # Who depends on it. The edge policy only returns an edge when BOTH ends are
+            # visible to the asker, so a hidden dependent is never named or counted.
+            cur.execute("""
+                select distinct s.name, st.name
+                  from edge e join asset s on s.id = e.src
+                  left join team st on st.id = s.owner_team
+                 where e.dst = %s and e.type = 'depends_on' and e.valid_to is null
+                   and s.owner_team is distinct from (select owner_team from asset
+                                                       where id = %s)""",
+                        (c["asset_id"], c["asset_id"]))
+            used_by = [{"asset": display_name(n), "team": t} for n, t in cur.fetchall()]
             out.append({**c,
                         "stage": {"stage": stage, "confidence": conf,
                                   "confirmed_by_owner": confirmed, "basis": basis},
                         "owner_team": team, "lob": lob, "team_manager": lead,
-                        "built_by": people,
+                        "built_by": people, "used_by": used_by,
                         "access": ("you can read the code" if can_read else
                                    f"discoverable only: request access to {source_ref} "
                                    f"from {lead or team or 'its owner'}")})
@@ -126,6 +137,9 @@ def _compose(state: AnswerState) -> dict:
         for p in m["built_by"]:
             lines.append(f"  built by {p['name']} ({p['team']}, reports to {p['manager']},"
                          f" {p['commits']} commits, last active {(p['last_active'] or '')[:10]})")
+        if m.get("used_by"):
+            lines.append("  used by: " + ", ".join(f"{u['asset']} ({u['team']})"
+                                                   for u in m["used_by"][:5]))
         for r in m["reasons"][:2]:
             lines.append(f"  - {r[:120]}")
         lines.append(f"  access: {m['access']}")

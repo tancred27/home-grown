@@ -71,6 +71,10 @@ def main() -> int:
                 finish(eid, "ignored", {"reason": out.get("reason")})
             else:
                 finish(eid, "applied", out.get("result"))
+        if n:
+            from orgmem.collector.usage import refresh
+            u = refresh(roots)
+            print(f"usage refreshed: {u['edges']} edges, {len(u['lifted'])} stages lifted")
         print(f"processed {n} events")
     return 0
 

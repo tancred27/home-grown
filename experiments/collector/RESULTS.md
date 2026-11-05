@@ -70,6 +70,21 @@ are in production is itself in production. Until that is built, stage stays mark
 and the display took the last segment, so one asset was shown as `v2`. Fixed
 (`models.display_name`).
 
+### Follow-up: stage from usage (fixes the dskit case)
+
+`collector/usage.py` reads `go.mod` requires and `package.json` dependencies in every
+checkout, writes `depends_on` edges between assets with the manifest as evidence, and
+lifts an unconfirmed stage to prod when two or more other teams depend on the asset, or
+a prod asset does. It only lifts, never lowers, and never touches an owner-confirmed
+stage. `// indirect` Go requires are transitive, not users, and are not counted.
+
+On the corpus: 62 published module/package names, 8 direct cross-asset dependencies.
+**dskit: dev -> prod, "depended on by 2 other teams"** (alerting, authlib). The answering
+agent now prints *used by* for each match — another "who to ask" signal — and, because
+the edge policy needs both ends visible, never names a dependent the asker cannot see.
+Eight edges across 39 repos is thin; a real organisation's dependency graph is far
+denser, which is when this signal does most of its work.
+
 ## The answering agent, three real questions
 
 Asked as a developer who may discover every team's assets but read none of their code.
