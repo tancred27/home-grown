@@ -140,9 +140,61 @@ threads carry absence, performance and hiring information. Ingestion must not le
 reach a card. Add it to the redaction rules in `docs/design.md` section 8 — it was not
 on the leak-path list, which only considered private *code*.
 
+## The external-validity problem (raised 2026-11-05, unresolved)
+
+**The corpus is five popular public repositories, where discussion is forced by
+distributed collaboration with external contributors. Private internal repos may never
+hold these conversations at all** — colleagues talk in Slack, in standups, and in
+person, and shared context means less gets written down. So 4.0% is *not* simply a
+floor. Two biases push opposite ways and the net direction is unknown:
+
+- Sampling newest-first returned in-flight PR mechanics (1.46 comments/thread) →
+  **underestimates**.
+- Choosing popular OSS with a high write-down culture → **overestimates** for internal
+  repos, possibly by more.
+
+What the literature says, such as it is:
+
+- Closed-source review comment ratio **9–10% vs 13–26% for open-source** (two
+  industrial projects vs three OSS datasets), attributed partly to larger patches:
+  https://dl.acm.org/doi/pdf/10.1145/3660806 — a 1.5–3x discount, so ~2% internally.
+- But Rigby's open/closed comparison found "little difference" between review practices.
+- And **64.7% of OSS PRs are reviewed with zero comments** (LGTM-smells study), so
+  public repos are much less discussion-rich than this Grafana sample implies either.
+- Google (closed source) reaches 12.5 comments per change on ~1,250-line changes.
+- Nobody has measured boundary/outcome claim density in private vs public repos. The
+  tacit-knowledge literature on this is entirely vendor blogs; one claims "80% of
+  operational intelligence is tacit" with no source. Do not cite it.
+
+**The experiment that settles it:** select public repos that are *effectively internal*
+— company-owned, few stars, nearly all commits from one company's employees, little
+external contribution — and compare claim density against flagship community repos.
+Inside one org works: `grafana/grafana` (large external community) vs an obscure
+`grafana/*` tool. That measures the gradient and yields a defensible discount factor.
+Same pipeline, needs a token for the budget. **Run this before quoting any density
+number publicly.**
+
+### Design consequences if internal density really is near zero
+
+1. **Sources that do not depend on discussion culture.** Tests are the strongest:
+   `rejects_payload_over_1mb` *is* a boundary claim, it is machine-readable, it exists
+   even in silent teams because CI demands it, and unlike prose it stays true or the
+   build breaks. Then code comments written at the moment of pain (`// don't use this,
+   use X`, `// breaks above 1MB`, TODO/FIXME/HACK), deprecation markers, and
+   postmortems, which orgs mandate even when they document nothing else. None of these
+   were in the plan.
+2. **The memory must elicit, not only extract.** The design had reuse outcomes
+   "reported by people", noted as unlikely to bootstrap. Under this objection it becomes
+   mandatory, and *when to ask without being annoying* becomes a core product problem.
+3. **Unaffected:** the access-boundary moat. A bare artifact card — this exists, here is
+   the owner, request access — is valuable when the alternative is not being able to see
+   the repository at all. This question shifts the weight between artifact-shaped and
+   experience-shaped records; it does not decide whether the system is worth building.
+
 ## Caveats
 
-- One organization, one sampling strategy, recent comments only.
+- One organization, one sampling strategy, recent comments only. See the
+  external-validity section above — this is the largest limitation of the result.
 - Judgements are mine, one rater, no second opinion. The strong/thin boundary is a
   judgement call and 29 samples give a wide confidence interval.
 - `screen.py` dedupes by exact body (385) while `stats.py` does not (474). Densities
