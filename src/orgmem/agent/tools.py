@@ -21,15 +21,12 @@ from pathlib import Path
 
 from langchain_core.tools import StructuredTool
 
+from ..tools_text import FIND_EXISTING_DESCRIPTION
+
 VARIANTS = ("none", "description", "instruction", "all", "hook")
 
 DESC_NEUTRAL = "Search the organization's capability memory for existing assets."
-DESC_NUDGE = (
-    "Check whether the organization already has a tool, library, service or solved "
-    "feature for what you are about to build. Call this BEFORE writing any new helper, "
-    "utility, service or integration. Returns up to 5 candidates with a reuse verdict, "
-    "evidence, and how to get access."
-)
+DESC_NUDGE = FIND_EXISTING_DESCRIPTION  # the same text the MCP server publishes
 INSTRUCTION_LINE = (
     "Before writing any new helper, utility, service or integration, call find_existing "
     "to check whether the organization already has one, and reuse or extend it if it does."

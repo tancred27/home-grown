@@ -14,11 +14,16 @@ dependencies = [
     "anthropic>=1.0",
     "langgraph>=1.0",
     "langgraph-checkpoint-postgres>=2.0",
+    "langchain-anthropic>=1.0",     # the gate-2 agent's chat model
+    "mcp>=2.0",                     # MCPServer (FastMCP was renamed in 2.x)
     # fastembed (onnxruntime) rather than sentence-transformers: same BGE models,
     # ~100MB install instead of pulling ~2.5GB of torch.
     "fastembed>=0.4",
     "numpy>=1.26",
 ]
+
+[project.scripts]
+orgmem = "orgmem.cli:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=8.3", "pytest-asyncio>=0.24", "ruff>=0.8"]
@@ -39,3 +44,4 @@ select = ["E", "F", "I", "UP", "B"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+asyncio_default_fixture_loop_scope = "function"
