@@ -1,0 +1,497 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "served_by": {
+  "openai/gpt-oss-120b": "openai/gpt-oss-120b"
+ },
+ "totals": {
+  "dup": 8,
+  "dup_hit": 7,
+  "dup_retrieved": 7,
+  "wrong": 0,
+  "sibling": 3,
+  "ctl": 6,
+  "ctl_alarm": 0,
+  "failed": 0
+ },
+ "rows": [
+  {
+   "task": "p01",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:dskit:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "extend",
+     "reason": "Provides rate limiting and lifecycle utilities but lacks ring\u2011membership support"
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Helm chart for GitHub rate\u2011limit exporter, unrelated to Go library needs"
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "URL clustering package, not relevant to ring membership or rate limiting"
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Custom Grafana\u2011related code, unrelated to shared Go library for distributed services"
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Code\u2011generation tool, does not provide runtime ring or rate\u2011limit functionality"
+    }
+   ]
+  },
+  {
+   "task": "p02",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:crocochrome:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "flagger-k6-webhook is for k6 load testing, unrelated to launching or supervising Chrome instances."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Grafana plugin RBAC library does not provide Chrome launch or supervision capabilities."
+    },
+    {
+     "candidate": "C",
+     "verdict": "use_as_is",
+     "reason": "crocochrome is a Chromium supervisor that launches and reaps Chrome processes, matching the sidecar requirement."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "gcx is a telemetry query tool, not related to Chrome process management."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "k6-loadtester is a load testing tool, unrelated to Chrome sidecar functionality."
+    }
+   ]
+  },
+  {
+   "task": "p03",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:augurs:crates/augurs-seasons",
+    "github:augurs:crates/augurs",
+    "github:augurs:js/testpkg"
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "use_as_is",
+     "reason": "Provides periodogram\u2011based seasonality detection suitable for identifying weekly cycles."
+    },
+    {
+     "candidate": "B",
+     "verdict": "use_as_is",
+     "reason": "Includes seasonality analysis tools that can detect weekly patterns in time\u2011series data."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Only offers outlier detection, no seasonality or periodicity analysis."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "A metric export service, not a time\u2011series analysis tool."
+    },
+    {
+     "candidate": "E",
+     "verdict": "use_as_is",
+     "reason": "Offers seasonality analysis via Rust library with bindings, capable of detecting weekly cycles."
+    }
+   ]
+  },
+  {
+   "task": "p04",
+   "kind": "duplicate",
+   "outcome": "MISS (not retrieved)",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "dskit is a Go utilities library and does not provide pod latency analysis."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Business Table is a Grafana panel plugin for data tables, not for latency curve comparison across pods."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Compatibility matrix describes grafana/xk6-kafka comparison, not latency analysis."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "clickhouse-datasource is a Grafana data source plugin for ClickHouse, not latency curve analysis."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "docker-otel-lgtm provides an OpenTelemetry stack but does not directly identify outlier latency curves across pods."
+    }
+   ]
+  },
+  {
+   "task": "p05",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:dashboard-linter:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Detects only Angular data sources and panel plugins, not deprecated panels or hard\u2011coded datasources."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Custom code guidance, not a ready asset for rejecting dashboards."
+    },
+    {
+     "candidate": "C",
+     "verdict": "extend",
+     "reason": "Linter can be extended with rules to detect deprecated panels or hard\u2011coded datasources."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Focuses on context parameters in custom code, not on dashboard JSON validation."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Business Forms panel usage, unrelated to detecting deprecated panels or datasources."
+    }
+   ]
+  },
+  {
+   "task": "p06",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:github-rate-limits-prometheus-exporter:.",
+    "github:github-rate-limits-prometheus-exporter:helm/github-rate-limits-prometheus-exporter"
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "use_as_is",
+     "reason": "Exports GitHub API rate limit metrics to Prometheus, which can be combined with Prometheus alerting rules to notify when the App approaches its quota."
+    },
+    {
+     "candidate": "B",
+     "verdict": "use_as_is",
+     "reason": "Helm chart deploys the same exporter, enabling the same metric collection and alerting capability without additional development."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Provides a template for Adaptive Metrics recommendations in Grafana Cloud, unrelated to GitHub API quota monitoring."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Demo Alloy telemetry scenarios focus on logging/monitoring stacks, not on GitHub API rate limit alerts."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Similar to D, offers Alloy demos and does not address GitHub API quota monitoring."
+    }
+   ]
+  },
+  {
+   "task": "p07",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:collector-configurator:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "use_as_is",
+     "reason": "Provides a web UI for creating and editing OpenTelemetry Collector configuration files, directly matching the requested click\u2011based pipeline builder."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Only provides a Docker container with a full OpenTelemetry stack; it does not offer a UI for building collector pipelines."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "A catalog service that emits traces; unrelated to a UI for configuring the collector."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "A catalog service that emits metrics; does not provide a collector configuration UI."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Docker image for a full OpenTelemetry stack; lacks any UI for pipeline construction."
+    }
+   ]
+  },
+  {
+   "task": "p08",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:alerting:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Provides URL clustering utilities unrelated to alert rule evaluation or notification routing."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Generates random Grafana alert rules for testing; does not evaluate rules or handle notification routing."
+    },
+    {
+     "candidate": "C",
+     "verdict": "extend",
+     "reason": "Offers core libraries for building alerting systems and Alertmanager integration, but may require adaptation to specific chat/paging routing logic."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Focused on historian functionality and alert storage rather than rule evaluation or notification routing."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Data\u2011plane utilities for dataframe handling; unrelated to alert evaluation or routing."
+    }
+   ]
+  },
+  {
+   "task": "q01",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Provides seasonality detection, unrelated to leap year calculation."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "JavaScript bindings for time-series analysis, not leap year logic."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Bindings for forecasting library, unrelated to date calculations."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Describes Grafana context parameters, not relevant to leap year function."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Outlier detection for time series, does not help with leap year determination."
+    }
+   ]
+  },
+  {
+   "task": "q02",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Provides changepoint detection bindings, unrelated to unit conversion."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Describes adding rows to a business table, not a conversion helper."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Helm chart for a Prometheus exporter, unrelated to speed unit conversion."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Focuses on text-to-card rendering, not on numeric conversion."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Offers time-series data transformations, not a simple km/h to mph helper."
+    }
+   ]
+  },
+  {
+   "task": "q03",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Provides URL clustering, unrelated to QR code generation"
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Code generation tool, does not generate QR codes"
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Creates text cards, not QR code images"
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Guides custom Grafana code, unrelated to QR code creation"
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Generates policy bot config, not QR code generation"
+    }
+   ]
+  },
+  {
+   "task": "q04",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "cog generates code from schemas, unrelated to financial calculations"
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "kindasafe provides signal\u2011safe memory reads, not relevant to compound interest"
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "data flow describes UI editing features, no financial computation support"
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Creating a New Module documentation for cloud cost exporter, not a ready function for interest"
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "augurs-core-js focuses on time\u2011series forecasting, not simple compound interest calculation"
+    }
+   ]
+  },
+  {
+   "task": "q05",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "generate-policy-bot-config creates a Policy Bot config for workflow checks; it does not provide a profanity filtering capability for user comments."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Add data describes adding rows to a Business Table panel; it is unrelated to content moderation or profanity filtering."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "business-text is for dynamic text panels in Grafana and lacks any functionality for detecting or filtering profanity."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Introduction to the Grafana data structure is documentation, not a tool for filtering profanity in user-submitted content."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "The docker template automates Adaptive Metrics recommendations; it does not address profanity detection or filtering."
+    }
+   ]
+  },
+  {
+   "task": "q06",
+   "kind": "control",
+   "outcome": "quiet",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Tracks struct field offsets per Go version, not semantic version comparison"
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Tool for telemetry queries, unrelated to version parsing"
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Exports cloud cost metrics, does not handle semantic version strings"
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Describes Grafana data structures, no version parsing functionality"
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Lints Grafana dashboards, unrelated to semantic version comparison"
+    }
+   ]
+  }
+ ]
+}

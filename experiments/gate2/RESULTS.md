@@ -148,6 +148,38 @@ schema-restricted to the letters shown). That run also exhausted Gemini's free t
 Limits: 26 tickets, one rater for the gold labels, one model; free-tier output is
 acceptable here only because every input comes from public repositories.
 
+### Does a longer shortlist help? Top 5 vs top 15 (2026-11-06, partial)
+
+A third ticket set (`tasks_judge_fresh2.json`, committed in `75f52c6` before either
+configuration ran): 8 duplicates phrased far from the assets' own wording, 6 controls.
+Same model, pinned. Purpose lines from the Groq-written map in the DB (the product path).
+
+| | duplicates flagged | false alarms | unrelated wrong-asset | siblings |
+|---|---|---|---|---|
+| top 5 | 7 / 8 | 0 / 6 | 0 | 3 |
+| top 15 | 7 / 8 | *not yet run* | 0 | 5 |
+
+**On the duplicates, the longer shortlist changes nothing.** The one miss, p04 ("which
+pod's latency curve does not look like the others"), is the case it was meant to fix, and
+it does not: the gold asset (`augurs-outlier`, purpose line "Detect when a time series
+deviates from a group of similar series") ranks **18th** in retrieval. The judge never
+sees it at 15. The gap is vocabulary (pods, latency curve vs time series, outlier), so it
+belongs to retrieval, not to the judge. Untested ideas: have the model restate the
+ticket in the asset vocabulary before search, or a depth of ~25 (cost below).
+
+The longer list costs tokens and buys siblings: 5 strong verdicts on assets in the gold's
+own repo (e.g. four other augurs crates for the "weekly cycle" ticket). That is still the
+right place to send a developer, but it is noisier. Product default stays at
+`verdict_shortlist = 15` until the controls are in; a false alarm there would decide it.
+
+**Why partial: Groq's daily token cap.** The free tier allows 1,000 requests/day, but
+also **200,000 tokens/day**, and that is the limit that binds. A top-15 prompt is several
+thousand tokens. The cap was hit after the 8 duplicates. The client then made it worse:
+it treated the per-day 429 like a per-minute one and retried each call for ~9 minutes
+before failing. Fixed: `llm.QuotaExhausted` is raised at once on a per-day 429 (the
+product judge fails safe to `unknown` immediately), and both eval scripts stop cleanly
+instead of logging a row of failures. Regression tests in `tests/test_llm_providers.py`.
+
 ## What gate 2 still needs
 
 1. **Credit on the API key**, then `python -I scripts/gate2_run.py --model claude

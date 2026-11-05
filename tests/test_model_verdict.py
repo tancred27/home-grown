@@ -55,3 +55,31 @@ def test_unparseable_label_is_unknown_not_a_guess(monkeypatch):
     monkeypatch.setattr(llm, "structured", lambda *a, **k: {"verdicts": [
         {"candidate": "the first one", "verdict": "use_as_is", "reason": "y"}]})
     assert all(o["verdict"] == "unknown" for o in judge_with_model("add retries", CARDS))
+
+
+def test_fifteen_candidate_shortlist_does_not_crash(monkeypatch):
+    """Regression: labels stopped at J, so a 15-card shortlist crashed find_existing."""
+    cards = [{"name": f"c{i}", "summary": "", "evidence": []} for i in range(15)]
+
+    def fake(system, user, schema, max_tokens=2000):
+        enum = schema["properties"]["verdicts"]["items"]["properties"]["candidate"]["enum"]
+        assert enum[-1] == "O" and "Candidate O: c14" in user
+        return {"verdicts": [{"candidate": "O", "verdict": "use_as_is", "reason": "y"}]}
+    monkeypatch.setattr(llm, "structured", fake)
+    out = judge_with_model("x", cards)
+    assert len(out) == 15 and out[14]["verdict"] == "use_as_is"
+    assert out[0]["verdict"] == "unknown"
+
+
+def test_bad_card_fails_safe_instead_of_raising(monkeypatch):
+    monkeypatch.setattr(llm, "structured", lambda *a, **k: {"verdicts": []})
+    out = judge_with_model("x", [{"summary": "no name key"}])     # malformed card
+    assert out[0]["verdict"] == "unknown"
+
+
+def test_candidate_o_label_parses():
+    from orgmem.search import _candidate_letter
+    letters = list("ABCDEFGHIJKLMNO")
+    assert _candidate_letter("Candidate O", letters, []) == "O"
+    assert _candidate_letter("(m)", letters, []) == "M"
+    assert _candidate_letter("Candidate P", letters, []) is None, "P was not shown"

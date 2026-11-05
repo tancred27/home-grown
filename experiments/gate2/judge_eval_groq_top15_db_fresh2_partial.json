@@ -1,0 +1,700 @@
+{
+ "model": "openai/gpt-oss-120b",
+ "served_by": {},
+ "totals": {
+  "dup": 8,
+  "dup_hit": 7,
+  "dup_retrieved": 7,
+  "wrong": 0,
+  "sibling": 5,
+  "ctl": 0,
+  "ctl_alarm": 0,
+  "failed": 0,
+  "skipped": 6
+ },
+ "rows": [
+  {
+   "task": "p01",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:dskit:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "use_as_is",
+     "reason": "dskit provides rate limiting and service lifecycle utilities for Go services, matching the requested shared library."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Helm chart for a GitHub rate\u2011limits exporter; unrelated to Go backend service infrastructure."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "URL clustering library; does not address ring membership, rate limiting or service lifecycle."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Custom Grafana code examples; not a Go library for distributed service concerns."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Code generation tool; unrelated to runtime rate limiting or lifecycle management."
+    },
+    {
+     "candidate": "F",
+     "verdict": "not_a_fit",
+     "reason": "Duplicate GitHub exporter; not relevant to Go backend shared library."
+    },
+    {
+     "candidate": "G",
+     "verdict": "not_a_fit",
+     "reason": "Context parameters for Grafana; not a Go distributed systems library."
+    },
+    {
+     "candidate": "H",
+     "verdict": "not_a_fit",
+     "reason": "Prophet WASM model; unrelated to Go backend utilities."
+    },
+    {
+     "candidate": "I",
+     "verdict": "not_a_fit",
+     "reason": "Docker image for OpenTelemetry backend; not a Go library for ring membership or rate limiting."
+    },
+    {
+     "candidate": "J",
+     "verdict": "not_a_fit",
+     "reason": "JavaScript bindings; not a Go library."
+    },
+    {
+     "candidate": "K",
+     "verdict": "not_a_fit",
+     "reason": "Alloy telemetry scenarios; unrelated to Go backend library."
+    },
+    {
+     "candidate": "L",
+     "verdict": "not_a_fit",
+     "reason": "JavaScript bindings for seasonality; not relevant."
+    },
+    {
+     "candidate": "M",
+     "verdict": "not_a_fit",
+     "reason": "JavaScript bindings for data transforms; not a Go library."
+    },
+    {
+     "candidate": "N",
+     "verdict": "not_a_fit",
+     "reason": "OpenTelemetry metrics service; does not provide ring membership or rate limiting utilities."
+    },
+    {
+     "candidate": "O",
+     "verdict": "not_a_fit",
+     "reason": "OpenTelemetry traces service; not relevant to the requested shared Go library."
+    }
+   ]
+  },
+  {
+   "task": "p02",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:crocochrome:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Provides k6 load\u2011testing webhook, unrelated to launching or managing Chrome."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Implements Grafana plugin RBAC, not a Chrome sidecar."
+    },
+    {
+     "candidate": "C",
+     "verdict": "use_as_is",
+     "reason": "Chromium supervisor that launches and supervises Chromium, matching the required sidecar behavior."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Tool for querying local telemetry, unrelated to Chrome process management."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Another k6 load\u2011testing tool, not relevant to Chrome sidecar."
+    },
+    {
+     "candidate": "F",
+     "verdict": "not_a_fit",
+     "reason": "Frontend observability SDK, does not launch or control Chrome instances."
+    },
+    {
+     "candidate": "G",
+     "verdict": "not_a_fit",
+     "reason": "Clustering library, unrelated to browser process supervision."
+    },
+    {
+     "candidate": "H",
+     "verdict": "not_a_fit",
+     "reason": "Detects Grafana dashboards, not a Chrome sidecar."
+    },
+    {
+     "candidate": "I",
+     "verdict": "not_a_fit",
+     "reason": "Kafka load\u2011testing extension, unrelated to launching Chrome."
+    },
+    {
+     "candidate": "J",
+     "verdict": "not_a_fit",
+     "reason": "Grafana Cloud setup wizard, does not manage Chrome processes."
+    },
+    {
+     "candidate": "K",
+     "verdict": "not_a_fit",
+     "reason": "Carbon metric relay, unrelated to browser process supervision."
+    },
+    {
+     "candidate": "L",
+     "verdict": "not_a_fit",
+     "reason": "Distributed systems utilities, not a Chrome sidecar."
+    },
+    {
+     "candidate": "M",
+     "verdict": "not_a_fit",
+     "reason": "Authentication library for Grafana, unrelated to Chrome management."
+    },
+    {
+     "candidate": "N",
+     "verdict": "not_a_fit",
+     "reason": "JavaScript bindings for a Rust library, not related to launching Chrome."
+    },
+    {
+     "candidate": "O",
+     "verdict": "not_a_fit",
+     "reason": "Calendar panel UI component, not a Chrome sidecar."
+    }
+   ]
+  },
+  {
+   "task": "p03",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:augurs:crates/augurs-seasons",
+    "github:augurs:crates/augurs",
+    "github:augurs:components/js/prophet-wasmstan",
+    "github:augurs:js/augurs-prophet-js",
+    "github:augurs:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "use_as_is",
+     "reason": "Provides seasonality detection via periodograms, directly suitable for identifying weekly cycles."
+    },
+    {
+     "candidate": "B",
+     "verdict": "use_as_is",
+     "reason": "Includes seasonality analysis functions that can detect weekly patterns in time series."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Only offers outlier detection, not seasonality detection."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Handles metric export via OpenTelemetry, unrelated to seasonality analysis."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Test utilities for the library; does not expose direct seasonality detection capability."
+    },
+    {
+     "candidate": "F",
+     "verdict": "not_a_fit",
+     "reason": "High\u2011level forecasting API without dedicated seasonality detection features."
+    },
+    {
+     "candidate": "G",
+     "verdict": "extend",
+     "reason": "Prophet can model weekly seasonality but requires configuration; not a dedicated detection tool."
+    },
+    {
+     "candidate": "H",
+     "verdict": "not_a_fit",
+     "reason": "Focuses on changepoint detection, not on periodic/weekly pattern identification."
+    },
+    {
+     "candidate": "I",
+     "verdict": "not_a_fit",
+     "reason": "Provides test data/framework, not functionality for seasonality detection."
+    },
+    {
+     "candidate": "J",
+     "verdict": "not_a_fit",
+     "reason": "Documentation of Grafana data structures, unrelated to time\u2011series analysis."
+    },
+    {
+     "candidate": "K",
+     "verdict": "not_a_fit",
+     "reason": "Detects Angular\u2011based Grafana dashboards, not applicable to metric seasonality."
+    },
+    {
+     "candidate": "L",
+     "verdict": "extend",
+     "reason": "Prophet JS bindings can fit weekly seasonality but require model setup; not a standalone detector."
+    },
+    {
+     "candidate": "M",
+     "verdict": "not_a_fit",
+     "reason": "Visualization panel plugin, no time\u2011series analysis capabilities."
+    },
+    {
+     "candidate": "N",
+     "verdict": "use_as_is",
+     "reason": "Comprehensive time\u2011series library that includes seasonality analysis suitable for weekly cycle detection."
+    },
+    {
+     "candidate": "O",
+     "verdict": "not_a_fit",
+     "reason": "Exports cloud cost metrics, unrelated to detecting weekly patterns in time series."
+    }
+   ]
+  },
+  {
+   "task": "p04",
+   "kind": "duplicate",
+   "outcome": "MISS (not retrieved)",
+   "strong": [],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "dskit provides generic distributed service utilities but no functionality for collecting or comparing pod latency curves."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Business Table is a visualization panel for tabular data, not for latency analysis across pods."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Compatibility matrix only compares Grafana plugins, unrelated to pod latency monitoring."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "clickhouse-datasource is a Grafana data source for ClickHouse queries, not a tool for latency curve comparison."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "docker-otel-lgtm runs an OpenTelemetry stack but does not itself identify outlier latency curves across pods."
+    },
+    {
+     "candidate": "F",
+     "verdict": "not_a_fit",
+     "reason": "volkovlabs-table-panel is a table visualization plugin, not a latency analysis solution."
+    },
+    {
+     "candidate": "G",
+     "verdict": "not_a_fit",
+     "reason": "grafana-pyroscope-datasource visualizes profiling data, not specifically pod latency curve outlier detection."
+    },
+    {
+     "candidate": "H",
+     "verdict": "not_a_fit",
+     "reason": "carbon-relay-ng is a metric relay/aggregator, not a tool for comparing latency curves across a fleet."
+    },
+    {
+     "candidate": "I",
+     "verdict": "not_a_fit",
+     "reason": "ckit is a clustering library for workload distribution, not for latency curve analysis."
+    },
+    {
+     "candidate": "J",
+     "verdict": "not_a_fit",
+     "reason": "clock-panel displays a clock, unrelated to pod latency monitoring."
+    },
+    {
+     "candidate": "K",
+     "verdict": "not_a_fit",
+     "reason": "business-panel shows calendar events, not latency data."
+    },
+    {
+     "candidate": "L",
+     "verdict": "not_a_fit",
+     "reason": "cloudcost-exporter exports cost metrics, not latency curve comparison."
+    },
+    {
+     "candidate": "M",
+     "verdict": "not_a_fit",
+     "reason": "xk6-kafka is a load\u2011testing extension for Kafka, not a pod latency analysis tool."
+    },
+    {
+     "candidate": "N",
+     "verdict": "not_a_fit",
+     "reason": "clusterurl processes URLs, unrelated to latency curve analysis."
+    },
+    {
+     "candidate": "O",
+     "verdict": "not_a_fit",
+     "reason": "cloud-setup is an interactive setup wizard, not a latency monitoring or analysis solution."
+    }
+   ]
+  },
+  {
+   "task": "p05",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:dashboard-linter:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Detects Angular data source and panel plugins only; does not address deprecated panels or hard\u2011coded datasource detection."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Provides learning material for custom code; not a ready\u2011made tool for rejecting dashboards."
+    },
+    {
+     "candidate": "C",
+     "verdict": "extend",
+     "reason": "Dashboard\u2011linter can lint JSON files and could be extended with rules for deprecated panels or hard\u2011coded datasource detection."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Educational content about context parameters; not a tool for dashboard validation."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Describes Business Forms panel functionality; does not help reject dashboards based on deprecation or hard\u2011coded datasources."
+    },
+    {
+     "candidate": "F",
+     "verdict": "not_a_fit",
+     "reason": "Calendar\u2011type panel implementation; unrelated to linting or validation of dashboard JSON."
+    },
+    {
+     "candidate": "G",
+     "verdict": "not_a_fit",
+     "reason": "Business Forms plugin; not a validation or linting solution for deprecated panels or datasources."
+    },
+    {
+     "candidate": "H",
+     "verdict": "not_a_fit",
+     "reason": "Athena datasource plugin; does not provide dashboard\u2011JSON rejection capabilities."
+    },
+    {
+     "candidate": "I",
+     "verdict": "not_a_fit",
+     "reason": "Canvas visualization panel; not relevant to detecting deprecated panels or hard\u2011coded datasources."
+    },
+    {
+     "candidate": "J",
+     "verdict": "not_a_fit",
+     "reason": "Learning material about data flow in Business Table panel; not a validation tool."
+    },
+    {
+     "candidate": "K",
+     "verdict": "not_a_fit",
+     "reason": "Helm chart for cloud cost exporter; unrelated to Grafana dashboard JSON validation."
+    },
+    {
+     "candidate": "L",
+     "verdict": "not_a_fit",
+     "reason": "Documentation on Grafana EventBus; does not offer linting or rejection of dashboards."
+    },
+    {
+     "candidate": "M",
+     "verdict": "not_a_fit",
+     "reason": "Utilities for building data frames; not aimed at dashboard JSON validation."
+    },
+    {
+     "candidate": "N",
+     "verdict": "not_a_fit",
+     "reason": "Business Calendar panel description; not a linting or validation asset."
+    },
+    {
+     "candidate": "O",
+     "verdict": "not_a_fit",
+     "reason": "Data\u2011plane utilities for Go; not applicable to rejecting dashboard JSON with deprecated panels or hard\u2011coded datasources."
+    }
+   ]
+  },
+  {
+   "task": "p06",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:github-rate-limits-prometheus-exporter:.",
+    "github:github-rate-limits-prometheus-exporter:helm/github-rate-limits-prometheus-exporter"
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "use_as_is",
+     "reason": "Exports GitHub API rate limit metrics which can be scraped by Prometheus and alerted on when limits approach exhaustion."
+    },
+    {
+     "candidate": "B",
+     "verdict": "extend",
+     "reason": "Helm chart deploys the exporter but does not itself provide alerting; needs configuration of Prometheus alerts on the exported metrics."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "Provides a Grafana Adaptive Metrics template unrelated to GitHub API quota monitoring."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Demo Alloy scenarios for telemetry pipelines, not relevant to GitHub rate limit alerts."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Alloy workload demos, unrelated to GitHub API quota monitoring."
+    },
+    {
+     "candidate": "F",
+     "verdict": "not_a_fit",
+     "reason": "Generates random Grafana alerting rules; does not monitor GitHub API usage."
+    },
+    {
+     "candidate": "G",
+     "verdict": "not_a_fit",
+     "reason": "Exports catalog service metrics via OpenTelemetry, not GitHub rate limits."
+    },
+    {
+     "candidate": "H",
+     "verdict": "not_a_fit",
+     "reason": "Forecasting library for time\u2011series, not applicable to GitHub API quota alerts."
+    },
+    {
+     "candidate": "I",
+     "verdict": "not_a_fit",
+     "reason": "K6 load\u2011testing webhook for canary deployments, unrelated to rate limit monitoring."
+    },
+    {
+     "candidate": "J",
+     "verdict": "not_a_fit",
+     "reason": "Custom code example for Grafana Business Forms, not related to GitHub API quota."
+    },
+    {
+     "candidate": "K",
+     "verdict": "not_a_fit",
+     "reason": "Generates Policy Bot config; does not address GitHub rate limit monitoring."
+    },
+    {
+     "candidate": "L",
+     "verdict": "not_a_fit",
+     "reason": "Detects Angular dashboards via Grafana API; not relevant to GitHub API quota alerts."
+    },
+    {
+     "candidate": "M",
+     "verdict": "not_a_fit",
+     "reason": "OpenTelemetry backend container, not specific to GitHub rate limit monitoring."
+    },
+    {
+     "candidate": "N",
+     "verdict": "not_a_fit",
+     "reason": "Alerting libraries for Grafana, but not a ready solution for GitHub API quota alerts."
+    },
+    {
+     "candidate": "O",
+     "verdict": "not_a_fit",
+     "reason": "JavaScript bindings for seasonality detection; unrelated to GitHub API quota monitoring."
+    }
+   ]
+  },
+  {
+   "task": "p07",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:collector-configurator:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "use_as_is",
+     "reason": "Offers a web UI specifically for creating and editing OpenTelemetry Collector configurations, matching the requested pipeline builder."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Provides a Docker image for running an OTEL stack, but no UI for assembling collector pipelines."
+    },
+    {
+     "candidate": "C",
+     "verdict": "not_a_fit",
+     "reason": "A service that emits traces; unrelated to a UI configurator for the collector."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Exports metrics from a service; does not help build collector pipelines via UI."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Docker container for a full OTEL stack, lacking any UI configuration tool."
+    },
+    {
+     "candidate": "F",
+     "verdict": "not_a_fit",
+     "reason": "Collection of Alloy scenarios; not a UI for OpenTelemetry Collector pipeline composition."
+    },
+    {
+     "candidate": "G",
+     "verdict": "not_a_fit",
+     "reason": "Duplicate of F; does not provide a collector UI."
+    },
+    {
+     "candidate": "H",
+     "verdict": "not_a_fit",
+     "reason": "Prometheus exporter for cloud costs; unrelated to collector pipeline UI."
+    },
+    {
+     "candidate": "I",
+     "verdict": "not_a_fit",
+     "reason": "Another set of Alloy scenarios; no collector configuration UI."
+    },
+    {
+     "candidate": "J",
+     "verdict": "not_a_fit",
+     "reason": "Library of distributed system utilities; does not offer a UI for OTEL collector pipelines."
+    },
+    {
+     "candidate": "K",
+     "verdict": "not_a_fit",
+     "reason": "Demo app for Alloy pipelines; does not provide a UI for building OTEL collector pipelines."
+    },
+    {
+     "candidate": "L",
+     "verdict": "not_a_fit",
+     "reason": "Dashboard linter for Grafana; unrelated to OpenTelemetry collector UI."
+    },
+    {
+     "candidate": "M",
+     "verdict": "not_a_fit",
+     "reason": "Grafana table panel plugin; does not address collector pipeline configuration."
+    },
+    {
+     "candidate": "N",
+     "verdict": "not_a_fit",
+     "reason": "Alloy scenario collection; lacks a UI for configuring OpenTelemetry Collector pipelines."
+    },
+    {
+     "candidate": "O",
+     "verdict": "not_a_fit",
+     "reason": "Load\u2011testing extension for k6 Kafka; unrelated to a collector configuration UI."
+    }
+   ]
+  },
+  {
+   "task": "p08",
+   "kind": "duplicate",
+   "outcome": "HIT",
+   "strong": [
+    "github:alerting:."
+   ],
+   "verdicts": [
+    {
+     "candidate": "A",
+     "verdict": "not_a_fit",
+     "reason": "Provides URL clustering, unrelated to alert evaluation or routing."
+    },
+    {
+     "candidate": "B",
+     "verdict": "not_a_fit",
+     "reason": "Generates random alert rules for testing only; does not evaluate or route alerts."
+    },
+    {
+     "candidate": "C",
+     "verdict": "extend",
+     "reason": "Library set for building Grafana alerting systems including Alertmanager; can be extended to implement chat/paging routing."
+    },
+    {
+     "candidate": "D",
+     "verdict": "not_a_fit",
+     "reason": "Historian focuses on storing/querying alert data, not on evaluation or routing."
+    },
+    {
+     "candidate": "E",
+     "verdict": "not_a_fit",
+     "reason": "Dataframe utilities for the data plane, unrelated to alert logic."
+    },
+    {
+     "candidate": "F",
+     "verdict": "not_a_fit",
+     "reason": "Generates dynamic text panels, unrelated to alert evaluation or routing."
+    },
+    {
+     "candidate": "G",
+     "verdict": "unknown",
+     "reason": "Insufficient information about functionality to assess suitability."
+    },
+    {
+     "candidate": "H",
+     "verdict": "unknown",
+     "reason": "Insufficient information about functionality to assess suitability."
+    },
+    {
+     "candidate": "I",
+     "verdict": "not_a_fit",
+     "reason": "Dashboard linter, unrelated to alert evaluation or routing."
+    },
+    {
+     "candidate": "J",
+     "verdict": "not_a_fit",
+     "reason": "Frontend observability SDK, unrelated to alert evaluation or routing."
+    },
+    {
+     "candidate": "K",
+     "verdict": "not_a_fit",
+     "reason": "Metric relay/aggregator, unrelated to alert evaluation or routing."
+    },
+    {
+     "candidate": "L",
+     "verdict": "not_a_fit",
+     "reason": "Pyroscope datasource, unrelated to alert evaluation or routing."
+    },
+    {
+     "candidate": "M",
+     "verdict": "not_a_fit",
+     "reason": "Code generation tool, unrelated to alert evaluation or routing."
+    },
+    {
+     "candidate": "N",
+     "verdict": "not_a_fit",
+     "reason": "Signal\u2011safe memory reading primitives, unrelated to alert evaluation or routing."
+    },
+    {
+     "candidate": "O",
+     "verdict": "not_a_fit",
+     "reason": "Load\u2011testing webhook for canary deployments, unrelated to alert evaluation or routing."
+    }
+   ]
+  }
+ ]
+}

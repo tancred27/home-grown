@@ -181,6 +181,38 @@ def test_doc_pages_only_stored_when_they_describe_a_solution(env):
             cur.execute("delete from asset where unit_id like 'page:confluence:ENG/%%'")
 
 
+def test_page_model_decides_and_failure_falls_back_to_the_rule(env):
+    """The model's keep/ignore wins over the keyword rule; if it raises, the rule decides."""
+    from dataclasses import replace
+
+    from langgraph.checkpoint.memory import InMemorySaver
+    name, deps, _ = env
+    # A usage page full of "solved"-style keywords: the rule keeps it, the model must not.
+    usage = Event(source="confluence", kind="page_updated",
+                  object_ref=f"confluence:ENG/{uuid.uuid4().hex[:6]}", version="1",
+                  actor="bob", title="Basic configuration",
+                  body=("To fix the port, set server.port. This solves the conflict when "
+                        "two services start; workaround: use the default. ") * 4)
+    ignore = lambda t, b: {"keep": False, "kind": "usage_reference",  # noqa: E731
+                           "reason": "describes one tool's settings"}
+    g = build_collector(replace(deps, page_judge=ignore), checkpointer=InMemorySaver())
+    out = run_event(g, usage, uuid.uuid4().hex)
+    assert out["status"] == "ignored"
+
+    def broken(t, b):
+        raise RuntimeError("model down")
+    g = build_collector(replace(deps, page_judge=broken), checkpointer=InMemorySaver())
+    out = run_event(g, usage, uuid.uuid4().hex,
+                    owner_policy=lambda qs: {f"{q['unit_id']}:{q['ask']}": "team-only"
+                                             for q in qs})
+    try:
+        assert out["status"] == "applied", "model failure must fall back to the keyword rule"
+    finally:
+        with admin_conn() as conn, conn.cursor() as cur:
+            cur.execute("delete from asset where unit_id = %s",
+                        (f"page:{usage.object_ref}",))
+
+
 def test_personnel_data_never_becomes_a_claim(env):
     from langgraph.checkpoint.memory import InMemorySaver
     name, deps, _ = env

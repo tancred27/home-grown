@@ -950,5 +950,1085 @@
     "reason": "k6-loadtester is a load testing tool, unrelated to Chrome sidecar functionality."
    }
   ]
+ },
+ "daa1b356cbe43c93d30d": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Detect whether a metric has a weekly cycle before we pick a forecasting model.",
+   "[{\"evidence\": [], \"name\": \"augurs-seasons\", \"purpose\": \"Detect seasonality or periodic patterns in time series using periodograms.\", \"summary\": \"Seasonality detection using periodograms\"}, {\"evidence\": [], \"name\": \"augurs\", \"purpose\": \"Perform time series forecasting, outlier detection, clustering, seasonality and changepoint analysis in Rust.\", \"summary\": \"A time-series toolkit for forecasting, outlier detection, clustering and more.\"}, {\"evidence\": [], \"name\": \"augurs-outlier\", \"purpose\": \"Detect when a time series deviates from a group of similar series (time series outlier detection).\", \"summary\": \"Outlier detection for time series.\"}, {\"evidence\": [], \"name\": \"catalog-otel-metrics\", \"purpose\": \"Export catalog service metrics to a monitoring backend via OpenTelemetry\\u2019s OTLP over HTTP.\", \"summary\": \"Catalog service that pushes metrics via the OpenTelemetry SDK over OTLP/HTTP\"}, {\"evidence\": [\"Asserted by its own tests: can be instantiated with a custom max distance.\", \"Asserted by its own tests: can be instantiated with a custom max distance.\", \"Asserted by its own tests: accepts cap/floor.\", \"Asserted by its own tests: accepts cap/floor.\", \"Asserted by its own tests: handles empty pipeline.\", \"Asserted by its own tests: handles empty pipeline.\"], \"name\": \"augurs-js-testpkg\", \"purpose\": \"Perform forecasting, anomaly detection, clustering, and seasonality analysis on time series data using a high\\u2011performance Rust library with Python and JavaScript bindings.\", \"summary\": \"Time series analysis for Rust, with bindings to Python and Javascript\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "use_as_is",
+    "reason": "Provides periodogram‑based seasonality detection suitable for identifying weekly cycles."
+   },
+   {
+    "candidate": "B",
+    "verdict": "use_as_is",
+    "reason": "Includes seasonality analysis tools that can detect weekly patterns in time‑series data."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Only offers outlier detection, no seasonality or periodicity analysis."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "A metric export service, not a time‑series analysis tool."
+   },
+   {
+    "candidate": "E",
+    "verdict": "use_as_is",
+    "reason": "Offers seasonality analysis via Rust library with bindings, capable of detecting weekly cycles."
+   }
+  ]
+ },
+ "455b89c9748d9fc72619": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Across a fleet of pods, tell me which pod's latency curve does not look like the others.",
+   "[{\"evidence\": [\"Asserted by its own tests: Rate Limiter Tokens At.\", \"Asserted by its own tests: Get Cluster From Incoming Context.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Concurrency Limit.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Returns When All Tokens Are Inflight.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Calls Only Not In Flight Tokens.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Returns When Tokens Are Empty.\"], \"name\": \"dskit\", \"purpose\": \"Utilities for building distributed Go services, providing backoff retries, cache, key\\u2011value store, request hedging, RPC middleware, and service lifecycle management.\", \"summary\": \"Distributed systems kit\"}, {\"evidence\": [], \"name\": \"Business Table\", \"purpose\": \"\", \"summary\": \"description: Learn how to use the Business Table Panel plugin to create powerful, flexible data visualizations with advanced features like tree views, data editing, custom cell rendering, and export capabilities.\"}, {\"evidence\": [], \"name\": \"Compatibility matrix\", \"purpose\": \"\", \"summary\": \"How `grafana/xk6-kafka` compares to the community\"}, {\"evidence\": [\"Asserted by its own tests: should call on Limit Change when limit is changed.\", \"Asserted by its own tests: escapes a backslash inside a path segment.\", \"Asserted by its own tests: escapes backticks in a segment to prevent identifier break-out.\", \"Asserted by its own tests: escapes backslash before backtick (no double-escaping).\", \"Asserted by its own tests: should call on Conn Max Open Conns Change when changed.\", \"Asserted by its own tests: should call on Conn Max Lifetime Change when changed.\"], \"name\": \"clickhouse-datasource\", \"purpose\": \"Query ClickHouse data in Grafana to build dashboards and annotate graphs with stored events\", \"summary\": \"Grafana Plugin for ClickHouse\"}, {\"evidence\": [], \"name\": \"docker-otel-lgtm\", \"purpose\": \"Run a full OpenTelemetry observability stack (metrics, traces, logs, profiles) locally via a single Docker container for development or testing\", \"summary\": \"An OpenTelemetry backend in a Docker container image\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "dskit is a Go utilities library and does not provide pod latency analysis."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Business Table is a Grafana panel plugin for data tables, not for latency curve comparison across pods."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Compatibility matrix describes grafana/xk6-kafka comparison, not latency analysis."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "clickhouse-datasource is a Grafana data source plugin for ClickHouse, not latency curve analysis."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "docker-otel-lgtm provides an OpenTelemetry stack but does not directly identify outlier latency curves across pods."
+   }
+  ]
+ },
+ "165b450468715360c2f6": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Before merging, reject dashboard JSON that uses deprecated panels or hard-coded datasources.",
+   "[{\"evidence\": [], \"name\": \"detect-angular-dashboards\", \"purpose\": \"Identify Grafana dashboards that rely on Angular data sources or panel plugins to assess migration or deprecation needs.\", \"summary\": \"Detect dashboards depending on Angular data source and panel plugins on a running Grafana instance using the Grafana API.\"}, {\"evidence\": [], \"name\": \"Custom code\", \"purpose\": \"\", \"summary\": \"description: Learn how to use custom code to access panel options, REST API responses, form elements, and Grafana services in Business Forms.\"}, {\"evidence\": [\"Asserted by its own tests: Element Reference Rule Reports Missing Elements.\", \"Asserted by its own tests: Element Reference Rule Sorts And Deduplicates Missing Elements.\", \"Asserted by its own tests: Element Reference Rule Reports Missing And Orphaned Together.\", \"Asserted by its own tests: V2 Required Fields Rule Missing Fields.\", \"Asserted by its own tests: Template On Time Range Reload Rule.\"], \"name\": \"dashboard-linter\", \"purpose\": \"Lint Grafana dashboard JSON files to catch common errors and enforce best\\u2011practice conventions.\", \"summary\": \"A tool to lint Grafana dashboards\"}, {\"evidence\": [], \"name\": \"Context parameters\", \"purpose\": \"\", \"summary\": \"description: Learn how to use context parameters to access panel data, form elements, Grafana services, and other functionality in custom code.\"}, {\"evidence\": [], \"name\": \"Business Forms\", \"purpose\": \"\", \"summary\": \"description: Learn how to insert and update application data and modify configuration directly from your Grafana dashboard using the Business Forms panel.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Detects only Angular data sources and panel plugins, not deprecated panels or hard‑coded datasources."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Custom code guidance, not a ready asset for rejecting dashboards."
+   },
+   {
+    "candidate": "C",
+    "verdict": "extend",
+    "reason": "Linter can be extended with rules to detect deprecated panels or hard‑coded datasources."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Focuses on context parameters in custom code, not on dashboard JSON validation."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Business Forms panel usage, unrelated to detecting deprecated panels or datasources."
+   }
+  ]
+ },
+ "15c67ce6a1856ff5c17f": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Alert us when our GitHub App is close to exhausting its API quota.",
+   "[{\"evidence\": [\"Asserted by its own tests: Get Remaining Limits.\", \"Asserted by its own tests: New Limits Collector.\"], \"name\": \"github-rate-limits-prometheus-exporter\", \"purpose\": \"Export GitHub API rate limit metrics to Prometheus for monitoring using PAT or GitHub App credentials\", \"summary\": \"GitHub Rate Limits Prometheus exporter. Works with both App and PAT credentials \"}, {\"evidence\": [], \"name\": \"github-rate-limits-prometheus-exporter\", \"purpose\": \"Deploy a Prometheus exporter to monitor GitHub API rate limits using a Helm chart with PAT or GitHub App credentials.\", \"summary\": \"This helm chart helps to install and configure github-rate-limits-prometheus-exporter\"}, {\"evidence\": [], \"name\": \"docker\", \"purpose\": \"Automatically fetch and apply Adaptive Metrics recommendations on a schedule in Grafana Cloud using a GitHub Actions template repository.\", \"summary\": \"A template repository for enabling auto-apply of Adaptive Metrics recommendations\"}, {\"evidence\": [], \"name\": \"demo-app\", \"purpose\": \"Need a ready-to-run example of Grafana Alloy telemetry pipelines with Docker Compose for Loki, Prometheus, Grafana, and Tempo.\", \"summary\": \"A collection of working Alloy scenarios\"}, {\"evidence\": [], \"name\": \"workload\", \"purpose\": \"Run ready-to-use Grafana Alloy telemetry collection and processing demos with Docker Compose backends like Loki, Prometheus, and Tempo.\", \"summary\": \"A collection of working Alloy scenarios\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "use_as_is",
+    "reason": "Exports GitHub API rate limit metrics to Prometheus, which can be combined with Prometheus alerting rules to notify when the App approaches its quota."
+   },
+   {
+    "candidate": "B",
+    "verdict": "use_as_is",
+    "reason": "Helm chart deploys the same exporter, enabling the same metric collection and alerting capability without additional development."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Provides a template for Adaptive Metrics recommendations in Grafana Cloud, unrelated to GitHub API quota monitoring."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Demo Alloy telemetry scenarios focus on logging/monitoring stacks, not on GitHub API rate limit alerts."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Similar to D, offers Alloy demos and does not address GitHub API quota monitoring."
+   }
+  ]
+ },
+ "bfdee3f1ae43c76defab": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "A UI where people click together an OpenTelemetry collector pipeline instead of writing YAML by hand.",
+   "[{\"evidence\": [], \"name\": \"collector-configurator\", \"purpose\": \"Web UI for creating and editing OpenTelemetry Collector configuration files\", \"summary\": \"Fork of the agent configurator to work with otel\"}, {\"evidence\": [], \"name\": \"mise-npm-install\", \"purpose\": \"Run a complete OpenTelemetry observability stack (collector, metrics, traces, logs, profiling, Grafana) in a Docker container for development, demo, or testing environments.\", \"summary\": \"An OpenTelemetry backend in a Docker container image\"}, {\"evidence\": [], \"name\": \"catalog-otel-traces\", \"purpose\": \"Send OpenTelemetry trace data from a catalog service to an OTLP/HTTP endpoint for observability.\", \"summary\": \"Catalog service that emits traces via the OpenTelemetry SDK over OTLP/HTTP\"}, {\"evidence\": [], \"name\": \"catalog-otel-metrics\", \"purpose\": \"Export catalog service metrics to a monitoring backend via OpenTelemetry\\u2019s OTLP over HTTP.\", \"summary\": \"Catalog service that pushes metrics via the OpenTelemetry SDK over OTLP/HTTP\"}, {\"evidence\": [], \"name\": \"docker-otel-lgtm\", \"purpose\": \"Run a full OpenTelemetry observability stack (metrics, traces, logs, profiles) locally via a single Docker container for development or testing\", \"summary\": \"An OpenTelemetry backend in a Docker container image\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "use_as_is",
+    "reason": "Provides a web UI for creating and editing OpenTelemetry Collector configuration files, directly matching the requested click‑based pipeline builder."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Only provides a Docker container with a full OpenTelemetry stack; it does not offer a UI for building collector pipelines."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "A catalog service that emits traces; unrelated to a UI for configuring the collector."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "A catalog service that emits metrics; does not provide a collector configuration UI."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Docker image for a full OpenTelemetry stack; lacks any UI for pipeline construction."
+   }
+  ]
+ },
+ "0e1715e6b44fb0acfc20": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "We need the logic that evaluates alert rules and routes notifications to chat and paging tools; we do not want to write our own.",
+   "[{\"evidence\": [\"Asserted by its own tests: Path Trie Soft Threshold.\", \"Asserted by its own tests: Path Trie Hard Threshold.\", \"Asserted by its own tests: Path Trie Depth Based Thresholds.\", \"Asserted by its own tests: Path Trie No Limit With Minus One.\", \"Asserted by its own tests: Path Trie Max Patterns Under Limit.\", \"Asserted by its own tests: Path Trie Hard Threshold Unique Segment Counting.\"], \"name\": \"clusterurl\", \"purpose\": \"Extract a generic route from URLs to group similar pages for analytics or routing, using rule\\u2011based parsing and gibberish detection.\", \"summary\": \"A simple Go package for processing and clustering a URL to extract a generic page route from it\"}, {\"evidence\": [\"Asserted by its own tests: Generate Rules Determinism With Seed.\", \"Asserted by its own tests: Generate Rules Determinism With Seed.\", \"Asserted by its own tests: Group Rules Groups Per Folder Greater Than One.\", \"Asserted by its own tests: Group Rules Defaults When Zero Or Empty.\", \"Asserted by its own tests: Group Rules Defaults When Zero Or Empty.\", \"Asserted by its own tests: Group Rules Non Even Partition.\"], \"name\": \"alerting-gen\", \"purpose\": \"Generate realistic random Grafana alerting and recording rule groups for testing or prototyping, with optional push to Grafana via provisioning API.\", \"summary\": \"A tiny CLI to generate random Grafana Alerting rules and Recording rules using:\"}, {\"evidence\": [\"Asserted by its own tests: Limited Writer.\", \"Asserted by its own tests: Limited Writer Underlying Writer Error.\", \"Asserted by its own tests: Limited Writer Partial Write From Underlying Writer.\", \"Asserted by its own tests: Opt In Caller Grafana Alertmanager Style Minus Caller.\", \"Asserted by its own tests: Webhook Truncate Alerts.\", \"Asserted by its own tests: Truncated Notify.\"], \"name\": \"alerting\", \"purpose\": \"Utilities for building alerting systems, including Alertmanager integration, for Grafana and Mimir compatibility.\", \"summary\": \"Set of libraries used to build alerting systems at Grafana - including the Alertmanager.\"}, {\"evidence\": [\"A test is disabled with the reason: set HISTORIAN_LOKI_URL (e.g. http://localhost:3100) to run the notification RBAC integration test\", \"Asserted by its own tests: Run Query Truncates Merged Entries To Limit.\", \"Asserted by its own tests: Run Query Truncates Merged Entries To Limit.\", \"A test is disabled with the reason: set HISTORIAN_LOKI_URL (e.g. http://localhost:3100) to run the notification RBAC integration test\", \"Asserted by its own tests: Loki Reader Query Non Empty Filter Applies Matcher.\", \"Asserted by its own tests: Loki Reader Query Empty Filter Returns Empty Without Querying.\"], \"name\": \"historian\", \"purpose\": \"Libraries for building Grafana alerting systems with Alertmanager integration and Mimir compatibility\", \"summary\": \"Set of libraries used to build alerting systems at Grafana - including the Alertmanager.\"}, {\"evidence\": [\"Asserted by its own tests: Multi Frame Series Validate With Frames Invalid Cases.\", \"Asserted by its own tests: Multi Frame Series Get Metric Refs Empty Invalid Edge Cases.\"], \"name\": \"dataplane\", \"purpose\": \"Create and test typed Dataframe structures for Grafana's data plane using Go utilities and example JSON specifications.\", \"summary\": \"Grafana data plane tools and docs\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Provides URL clustering utilities unrelated to alert rule evaluation or notification routing."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Generates random Grafana alert rules for testing; does not evaluate rules or handle notification routing."
+   },
+   {
+    "candidate": "C",
+    "verdict": "extend",
+    "reason": "Offers core libraries for building alerting systems and Alertmanager integration, but may require adaptation to specific chat/paging routing logic."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Focused on historian functionality and alert storage rather than rule evaluation or notification routing."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Data‑plane utilities for dataframe handling; unrelated to alert evaluation or routing."
+   }
+  ]
+ },
+ "9fa431afc12625b23952": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Write a function that checks whether a year is a leap year.",
+   "[{\"evidence\": [], \"name\": \"augurs-seasons\", \"purpose\": \"Detect seasonality or periodic patterns in time series using periodograms.\", \"summary\": \"Seasonality detection using periodograms\"}, {\"evidence\": [], \"name\": \"augurs-core-js\", \"purpose\": \"Use it to perform time-series forecasting, anomaly detection, clustering, seasonality and changepoint analysis in JavaScript via WebAssembly.\", \"summary\": \"JavaScript bindings for core augurs functionality.\"}, {\"evidence\": [], \"name\": \"augurs-ets-js\", \"purpose\": \"Use JavaScript bindings to run augurs-ets time series forecasting, anomaly detection, and seasonality analysis in a web or Node.js app.\", \"summary\": \"JavaScript bindings for the augurs-ets library.\"}, {\"evidence\": [], \"name\": \"Context parameters\", \"purpose\": \"\", \"summary\": \"description: Learn how to use context parameters to access panel data, form elements, Grafana services, and other functionality in custom code.\"}, {\"evidence\": [], \"name\": \"augurs-outlier\", \"purpose\": \"Detect when a time series deviates from a group of similar series (time series outlier detection).\", \"summary\": \"Outlier detection for time series.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Provides seasonality detection, unrelated to leap year calculation."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "JavaScript bindings for time-series analysis, not leap year logic."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Bindings for forecasting library, unrelated to date calculations."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Describes Grafana context parameters, not relevant to leap year function."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Outlier detection for time series, does not help with leap year determination."
+   }
+  ]
+ },
+ "7245502b47a6adc7ca5f": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Add a helper that converts kilometres per hour to miles per hour.",
+   "[{\"evidence\": [], \"name\": \"augurs-changepoint-js\", \"purpose\": \"Detect structural changes in time-series data from JavaScript using Rust\\u2011optimized changepoint detection via WebAssembly bindings.\", \"summary\": \"JavaScript bindings for the augurs-changepoint library.\"}, {\"evidence\": [], \"name\": \"Add data\", \"purpose\": \"\", \"summary\": \"description: Learn how to add new rows to your Business Table panel with configurable data entry options.\"}, {\"evidence\": [], \"name\": \"github-rate-limits-prometheus-exporter\", \"purpose\": \"Deploy a Prometheus exporter to monitor GitHub API rate limits using a Helm chart with PAT or GitHub App credentials.\", \"summary\": \"This helm chart helps to install and configure github-rate-limits-prometheus-exporter\"}, {\"evidence\": [], \"name\": \"Business Text\", \"purpose\": \"\", \"summary\": \"description: Learn how to convert plain text and table data into visually appealing information cards using Markdown, Handlebars, CSS, and JavaScript.\"}, {\"evidence\": [], \"name\": \"augurs-transforms-js\", \"purpose\": \"Enable JavaScript developers to apply Augurs' Rust-based time series data transformations via WebAssembly bindings.\", \"summary\": \"JavaScript bindings for augurs' data transformations.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Provides changepoint detection bindings, unrelated to unit conversion."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Describes adding rows to a business table, not a conversion helper."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Helm chart for a Prometheus exporter, unrelated to speed unit conversion."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Focuses on text-to-card rendering, not on numeric conversion."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Offers time-series data transformations, not a simple km/h to mph helper."
+   }
+  ]
+ },
+ "3bf2d1720b523587bd15": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Generate a QR code PNG for a given URL.",
+   "[{\"evidence\": [\"Asserted by its own tests: Path Trie Soft Threshold.\", \"Asserted by its own tests: Path Trie Hard Threshold.\", \"Asserted by its own tests: Path Trie Depth Based Thresholds.\", \"Asserted by its own tests: Path Trie No Limit With Minus One.\", \"Asserted by its own tests: Path Trie Max Patterns Under Limit.\", \"Asserted by its own tests: Path Trie Hard Threshold Unique Segment Counting.\"], \"name\": \"clusterurl\", \"purpose\": \"Extract a generic route from URLs to group similar pages for analytics or routing, using rule\\u2011based parsing and gibberish detection.\", \"summary\": \"A simple Go package for processing and clustering a URL to extract a generic page route from it\"}, {\"evidence\": [\"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Concrete Reference With Discriminator Field And Mapping Set.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Scalar Discriminator Non Constant Reference.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Concrete Discriminator.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Unknown Discriminator Field.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Scalar With Discriminator Field Set.\"], \"name\": \"cog\", \"purpose\": \"Generate typed code and builder libraries from schemas (CUE, JSON Schema, OpenAPI, etc.) for multiple languages such as Go, Java, Python, TypeScript, and more.\", \"summary\": \"Code Generation with a human touch\"}, {\"evidence\": [], \"name\": \"Business Text\", \"purpose\": \"\", \"summary\": \"description: Learn how to convert plain text and table data into visually appealing information cards using Markdown, Handlebars, CSS, and JavaScript.\"}, {\"evidence\": [], \"name\": \"Custom code\", \"purpose\": \"\", \"summary\": \"description: Learn how to use custom code to access panel options, REST API responses, form elements, and Grafana services in Business Forms.\"}, {\"evidence\": [\"Asserted by its own tests: Renaming Writer Multiple Calls.\", \"Asserted by its own tests: Renaming Writer Mem FS.\", \"Asserted by its own tests: Renaming Writer File.\", \"Asserted by its own tests: Renaming Writer Abort.\", \"Asserted by its own tests: Renaming Writer Abort Ignores Close Error.\", \"Asserted by its own tests: Merge Configs Preserves Explicitly Empty Values.\"], \"name\": \"generate-policy-bot-config\", \"purpose\": \"Generate a Policy Bot config that automatically requires any GitHub Actions workflow triggered on pull requests to pass, respecting path filters.\", \"summary\": \"Generate a config file for `palantir/policy-bot` to help you enforce conditional workflows have passed\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Provides URL clustering, unrelated to QR code generation"
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Code generation tool, does not generate QR codes"
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Creates text cards, not QR code images"
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Guides custom Grafana code, unrelated to QR code creation"
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Generates policy bot config, not QR code generation"
+   }
+  ]
+ },
+ "f524870ceba653ac1d08": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Write a function that calculates compound interest for a savings plan.",
+   "[{\"evidence\": [\"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Concrete Reference With Discriminator Field And Mapping Set.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Scalar Discriminator Non Constant Reference.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Concrete Discriminator.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Unknown Discriminator Field.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Scalar With Discriminator Field Set.\"], \"name\": \"cog\", \"purpose\": \"Generate typed code and builder libraries from schemas (CUE, JSON Schema, OpenAPI, etc.) for multiple languages such as Go, Java, Python, TypeScript, and more.\", \"summary\": \"Code Generation with a human touch\"}, {\"evidence\": [\"Asserted by its own tests: u64 unaligned page boundary.\", \"Asserted by its own tests: vec sigsegv page boundary.\", \"Asserted by its own tests: u64 unaligned page boundary.\", \"Asserted by its own tests: vec sigsegv page boundary.\"], \"name\": \"kindasafe\", \"purpose\": \"Perform signal\\u2011safe memory reads on Linux x86_64/aarch64, preventing crashes by catching SIGSEGV/SIGBUS and skipping faulting instructions.\", \"summary\": \"Signal-safe memory reading for x86_64 and aarch64 using naked functions and crash recovery\"}, {\"evidence\": [], \"name\": \"data flow\", \"purpose\": \"\", \"summary\": \"description: Learn how to use the multifarious editing data functionality in the Business Table panel to provide extensive capabilities for working with table data.\"}, {\"evidence\": [], \"name\": \"Creating a New Module\", \"purpose\": \"\", \"summary\": \"This document outlines the process for creating a new module for the Cloud Cost Exporter.\"}, {\"evidence\": [], \"name\": \"augurs-core-js\", \"purpose\": \"Use it to perform time-series forecasting, anomaly detection, clustering, seasonality and changepoint analysis in JavaScript via WebAssembly.\", \"summary\": \"JavaScript bindings for core augurs functionality.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "cog generates code from schemas, unrelated to financial calculations"
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "kindasafe provides signal‑safe memory reads, not relevant to compound interest"
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "data flow describes UI editing features, no financial computation support"
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Creating a New Module documentation for cloud cost exporter, not a ready function for interest"
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "augurs-core-js focuses on time‑series forecasting, not simple compound interest calculation"
+   }
+  ]
+ },
+ "3c07a72144f851e09452": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Add a profanity filter for user-submitted comments.",
+   "[{\"evidence\": [\"Asserted by its own tests: Renaming Writer Multiple Calls.\", \"Asserted by its own tests: Renaming Writer Mem FS.\", \"Asserted by its own tests: Renaming Writer File.\", \"Asserted by its own tests: Renaming Writer Abort.\", \"Asserted by its own tests: Renaming Writer Abort Ignores Close Error.\", \"Asserted by its own tests: Merge Configs Preserves Explicitly Empty Values.\"], \"name\": \"generate-policy-bot-config\", \"purpose\": \"Generate a Policy Bot config that automatically requires any GitHub Actions workflow triggered on pull requests to pass, respecting path filters.\", \"summary\": \"Generate a config file for `palantir/policy-bot` to help you enforce conditional workflows have passed\"}, {\"evidence\": [], \"name\": \"Add data\", \"purpose\": \"\", \"summary\": \"description: Learn how to add new rows to your Business Table panel with configurable data entry options.\"}, {\"evidence\": [\"Asserted by its own tests: Should not show mini map button when value is short.\", \"Asserted by its own tests: Should return undefined if the index is out of range.\", \"Asserted by its own tests: Should show mini map button when value exceeds 100 characters.\", \"Asserted by its own tests: Should unescape value for display when is Escaping is true.\", \"Asserted by its own tests: Should pass value as-is when is Escaping is false.\", \"Asserted by its own tests: Should escape newlines in on Change when is Escaping is true.\"], \"name\": \"business-text\", \"purpose\": \"Create dynamic text panels in Grafana using Markdown or Handlebars templates populated with query data.\", \"summary\": \"Data-driven text with Markdown and Handlebars support\"}, {\"evidence\": [], \"name\": \"Introduction to the Grafana data structure\", \"purpose\": \"\", \"summary\": \"Grafana supports a variety of different data sources, each with its own data model. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a **data frame**. The **data plane** adds a property layer to the data frame with i\"}, {\"evidence\": [], \"name\": \"docker\", \"purpose\": \"Automatically fetch and apply Adaptive Metrics recommendations on a schedule in Grafana Cloud using a GitHub Actions template repository.\", \"summary\": \"A template repository for enabling auto-apply of Adaptive Metrics recommendations\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "generate-policy-bot-config creates a Policy Bot config for workflow checks; it does not provide a profanity filtering capability for user comments."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Add data describes adding rows to a Business Table panel; it is unrelated to content moderation or profanity filtering."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "business-text is for dynamic text panels in Grafana and lacks any functionality for detecting or filtering profanity."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Introduction to the Grafana data structure is documentation, not a tool for filtering profanity in user-submitted content."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "The docker template automates Adaptive Metrics recommendations; it does not address profanity detection or filtering."
+   }
+  ]
+ },
+ "1664b0a79c64e3f6b2a1": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Parse two semantic version strings and tell which one is newer.",
+   "[{\"evidence\": [], \"name\": \"go-offsets-tracker\", \"purpose\": \"Generate and query JSON of struct field byte offsets per Go/library version to locate fields in binaries lacking debug symbols.\", \"summary\": \"Track byte offsets of different struct fields, for different versions\"}, {\"evidence\": [], \"name\": \"Query and troubleshoot local telemetry with gcx\", \"purpose\": \"\", \"summary\": \"Use gcx from your host to query telemetry in a local LGTM instance, then use one\"}, {\"evidence\": [], \"name\": \"cloudcost-exporter\", \"purpose\": \"Export and expose cloud provider cost metrics in Kubernetes via a Helm chart for integration with monitoring tools.\", \"summary\": \"{{ template \\\"chart.versionBadge\\\" . }}{{ template \\\"chart.typeBadge\\\" . }}{{ template \\\"chart.appVersionBadge\\\" . }}\"}, {\"evidence\": [], \"name\": \"Introduction to the Grafana data structure\", \"purpose\": \"\", \"summary\": \"Grafana supports a variety of different data sources, each with its own data model. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a **data frame**. The **data plane** adds a property layer to the data frame with i\"}, {\"evidence\": [\"Asserted by its own tests: Element Reference Rule Reports Missing Elements.\", \"Asserted by its own tests: Element Reference Rule Sorts And Deduplicates Missing Elements.\", \"Asserted by its own tests: Element Reference Rule Reports Missing And Orphaned Together.\", \"Asserted by its own tests: V2 Required Fields Rule Missing Fields.\", \"Asserted by its own tests: Template On Time Range Reload Rule.\"], \"name\": \"dashboard-linter\", \"purpose\": \"Lint Grafana dashboard JSON files to catch common errors and enforce best\\u2011practice conventions.\", \"summary\": \"A tool to lint Grafana dashboards\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Tracks struct field offsets per Go version, not semantic version comparison"
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Tool for telemetry queries, unrelated to version parsing"
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Exports cloud cost metrics, does not handle semantic version strings"
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Describes Grafana data structures, no version parsing functionality"
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Lints Grafana dashboards, unrelated to semantic version comparison"
+   }
+  ]
+ },
+ "f6898c1bb6474f67941d": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Every backend team keeps rewriting ring membership, rate limiting and service lifecycle code. Is there a shared Go library for that?",
+   "[{\"evidence\": [\"Asserted by its own tests: Rate Limiter Tokens At.\", \"Asserted by its own tests: Get Cluster From Incoming Context.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Concurrency Limit.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Returns When All Tokens Are Inflight.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Calls Only Not In Flight Tokens.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Returns When Tokens Are Empty.\"], \"name\": \"dskit\", \"purpose\": \"Utilities for building distributed Go services, providing backoff retries, cache, key\\u2011value store, request hedging, RPC middleware, and service lifecycle management.\", \"summary\": \"Distributed systems kit\"}, {\"evidence\": [], \"name\": \"github-rate-limits-prometheus-exporter\", \"purpose\": \"Deploy a Prometheus exporter to monitor GitHub API rate limits using a Helm chart with PAT or GitHub App credentials.\", \"summary\": \"This helm chart helps to install and configure github-rate-limits-prometheus-exporter\"}, {\"evidence\": [\"Asserted by its own tests: Path Trie Soft Threshold.\", \"Asserted by its own tests: Path Trie Hard Threshold.\", \"Asserted by its own tests: Path Trie Depth Based Thresholds.\", \"Asserted by its own tests: Path Trie No Limit With Minus One.\", \"Asserted by its own tests: Path Trie Max Patterns Under Limit.\", \"Asserted by its own tests: Path Trie Hard Threshold Unique Segment Counting.\"], \"name\": \"clusterurl\", \"purpose\": \"Extract a generic route from URLs to group similar pages for analytics or routing, using rule\\u2011based parsing and gibberish detection.\", \"summary\": \"A simple Go package for processing and clustering a URL to extract a generic page route from it\"}, {\"evidence\": [], \"name\": \"Custom code\", \"purpose\": \"\", \"summary\": \"description: Learn how to use custom code to access panel options, REST API responses, form elements, and Grafana services in Business Forms.\"}, {\"evidence\": [\"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Concrete Reference With Discriminator Field And Mapping Set.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Scalar Discriminator Non Constant Reference.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Concrete Discriminator.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Unknown Discriminator Field.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Scalar With Discriminator Field Set.\"], \"name\": \"cog\", \"purpose\": \"Generate typed code and builder libraries from schemas (CUE, JSON Schema, OpenAPI, etc.) for multiple languages such as Go, Java, Python, TypeScript, and more.\", \"summary\": \"Code Generation with a human touch\"}, {\"evidence\": [\"Asserted by its own tests: Get Remaining Limits.\", \"Asserted by its own tests: New Limits Collector.\"], \"name\": \"github-rate-limits-prometheus-exporter\", \"purpose\": \"Export GitHub API rate limit metrics to Prometheus for monitoring using PAT or GitHub App credentials\", \"summary\": \"GitHub Rate Limits Prometheus exporter. Works with both App and PAT credentials \"}, {\"evidence\": [], \"name\": \"Context parameters\", \"purpose\": \"\", \"summary\": \"description: Learn how to use context parameters to access panel data, form elements, Grafana services, and other functionality in custom code.\"}, {\"evidence\": [], \"name\": \"augurs-prophet-wasmstan\", \"purpose\": \"Run Prophet time-series forecasting via a Stan model in WebAssembly for use with the @bsull/augurs JavaScript library.\", \"summary\": \"Prophet's Stan model, compiled to WASM, for use with the @bsull/augurs library.\"}, {\"evidence\": [], \"name\": \"docker-otel-lgtm\", \"purpose\": \"Run a full OpenTelemetry observability stack (metrics, traces, logs, profiles) locally via a single Docker container for development or testing\", \"summary\": \"An OpenTelemetry backend in a Docker container image\"}, {\"evidence\": [], \"name\": \"augurs-clustering-js\", \"purpose\": \"Cluster time series data in JavaScript using augurs\\u2011clustering via WebAssembly bindings.\", \"summary\": \"JavaScript bindings for the augurs-clustering library.\"}, {\"evidence\": [], \"name\": \"logging-example\", \"purpose\": \"Run ready-to-use Grafana Alloy telemetry collection scenarios with Docker Compose for testing or learning.\", \"summary\": \"A collection of working Alloy scenarios\"}, {\"evidence\": [], \"name\": \"augurs-seasons-js\", \"purpose\": \"Add seasonality detection to JavaScript projects using the augurs\\u2011seasons Rust library via WebAssembly.\", \"summary\": \"JavaScript bindings for the augurs-seasons library.\"}, {\"evidence\": [], \"name\": \"augurs-transforms-js\", \"purpose\": \"Enable JavaScript developers to apply Augurs' Rust-based time series data transformations via WebAssembly bindings.\", \"summary\": \"JavaScript bindings for augurs' data transformations.\"}, {\"evidence\": [], \"name\": \"catalog-otel-metrics\", \"purpose\": \"Export catalog service metrics to a monitoring backend via OpenTelemetry\\u2019s OTLP over HTTP.\", \"summary\": \"Catalog service that pushes metrics via the OpenTelemetry SDK over OTLP/HTTP\"}, {\"evidence\": [], \"name\": \"catalog-otel-traces\", \"purpose\": \"Send OpenTelemetry trace data from a catalog service to an OTLP/HTTP endpoint for observability.\", \"summary\": \"Catalog service that emits traces via the OpenTelemetry SDK over OTLP/HTTP\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "use_as_is",
+    "reason": "dskit provides rate limiting and service lifecycle utilities for Go services, matching the requested shared library."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Helm chart for a GitHub rate‑limits exporter; unrelated to Go backend service infrastructure."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "URL clustering library; does not address ring membership, rate limiting or service lifecycle."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Custom Grafana code examples; not a Go library for distributed service concerns."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Code generation tool; unrelated to runtime rate limiting or lifecycle management."
+   },
+   {
+    "candidate": "F",
+    "verdict": "not_a_fit",
+    "reason": "Duplicate GitHub exporter; not relevant to Go backend shared library."
+   },
+   {
+    "candidate": "G",
+    "verdict": "not_a_fit",
+    "reason": "Context parameters for Grafana; not a Go distributed systems library."
+   },
+   {
+    "candidate": "H",
+    "verdict": "not_a_fit",
+    "reason": "Prophet WASM model; unrelated to Go backend utilities."
+   },
+   {
+    "candidate": "I",
+    "verdict": "not_a_fit",
+    "reason": "Docker image for OpenTelemetry backend; not a Go library for ring membership or rate limiting."
+   },
+   {
+    "candidate": "J",
+    "verdict": "not_a_fit",
+    "reason": "JavaScript bindings; not a Go library."
+   },
+   {
+    "candidate": "K",
+    "verdict": "not_a_fit",
+    "reason": "Alloy telemetry scenarios; unrelated to Go backend library."
+   },
+   {
+    "candidate": "L",
+    "verdict": "not_a_fit",
+    "reason": "JavaScript bindings for seasonality; not relevant."
+   },
+   {
+    "candidate": "M",
+    "verdict": "not_a_fit",
+    "reason": "JavaScript bindings for data transforms; not a Go library."
+   },
+   {
+    "candidate": "N",
+    "verdict": "not_a_fit",
+    "reason": "OpenTelemetry metrics service; does not provide ring membership or rate limiting utilities."
+   },
+   {
+    "candidate": "O",
+    "verdict": "not_a_fit",
+    "reason": "OpenTelemetry traces service; not relevant to the requested shared Go library."
+   }
+  ]
+ },
+ "792c9decdc70402b55b8": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Our browser-based checks need a sidecar that launches Chrome on request and kills hung instances.",
+   "[{\"evidence\": [\"Asserted by its own tests: New Launch Payload.\", \"Asserted by its own tests: Bad Payload.\"], \"name\": \"flagger-k6-webhook\", \"purpose\": \"Run k6 load tests on a canary deployment via a pre\\u2011rollout webhook to verify performance thresholds before promoting traffic.\", \"summary\": \"Using k6 to do load testing of the canary before rolling out traffic\"}, {\"evidence\": [], \"name\": \"How it works for Grafana Plugins\", \"purpose\": \"\", \"summary\": \"This library empowers your Grafana plugins with straightforward access control mechanisms using the `EnforcementClient`. This client simplifies the enforcement of Grafana's Role-Based Access Control (RBAC) within your plugin.\"}, {\"evidence\": [\"Asserted by its own tests: Integration Missing Capabilities.\", \"A test is disabled with the reason: Skipping integration test due to -short\", \"A test is disabled with the reason: skipping long tests\", \"Asserted by its own tests: Check Capabilities.\", \"Asserted by its own tests: Chromium Process Type missing Cmdline.\"], \"name\": \"crocochrome\", \"purpose\": \"Launch and supervise Chromium inside a container, automatically starting and reaping processes without sandboxing\", \"summary\": \"Chromium supervisor\"}, {\"evidence\": [], \"name\": \"Query and troubleshoot local telemetry with gcx\", \"purpose\": \"\", \"summary\": \"Use gcx from your host to query telemetry in a local LGTM instance, then use one\"}, {\"evidence\": [], \"name\": \"k6-loadtester\", \"purpose\": \"Execute k6 load tests on a canary version before traffic is shifted to verify performance thresholds.\", \"summary\": \"Using k6 to do load testing of the canary before rolling out traffic\"}, {\"evidence\": [\"Asserted by its own tests: Meta Sampling Absent Is Nil.\", \"Asserted by its own tests: Meta Sampling Partial Decodes.\", \"Asserted by its own tests: Meta Sampling Absent Is Nil.\", \"Asserted by its own tests: Meta Sampling Partial Decodes.\"], \"name\": \"go\", \"purpose\": \"Instrument browser frontend applications to collect real\\u2011user monitoring telemetry for full\\u2011stack observability.\", \"summary\": \"Grafana Faro is a project for frontend application observability. It includes a highly configurable web SDK that instruments browser frontend applications to capture observability signals.\"}, {\"evidence\": [\"Asserted by its own tests: Enqueue Limit.\", \"Asserted by its own tests: Messages Invalid.\", \"Asserted by its own tests: Conn Set Timeout.\", \"Asserted by its own tests: Conn Set Write Timeout.\", \"Asserted by its own tests: Dequeue Timeout.\", \"Asserted by its own tests: Enqueue Race.\"], \"name\": \"ckit\", \"purpose\": \"Create a lightweight cluster that uses consistent hashing over HTTP/2 gossip for efficient workload distribution.\", \"summary\": \"Lightweight library for clustering and workload distribution\"}, {\"evidence\": [], \"name\": \"detect-angular-dashboards\", \"purpose\": \"Identify Grafana dashboards that rely on Angular data sources or panel plugins to assess migration or deprecation needs.\", \"summary\": \"Detect dashboards depending on Angular data source and panel plugins on a running Grafana instance using the Grafana API.\"}, {\"evidence\": [\"Asserted by its own tests: Acks From Int.\", \"Asserted by its own tests: Timing Metrics Are Untagged.\", \"Asserted by its own tests: Encode Wire Format Out Of Range.\", \"Asserted by its own tests: Req Context Nil VU.\", \"Asserted by its own tests: Flush Nil VUAnd Nil Collector.\", \"Asserted by its own tests: JKSTo PEMRejects Non JKS.\"], \"name\": \"xk6-kafka\", \"purpose\": \"Load test Apache Kafka with k6, producing/consuming messages, managing topics and schema registry, all in pure Go without a C toolchain\", \"summary\": \"Official pure-Go k6 extension for load testing Apache Kafka\"}, {\"evidence\": [\"Asserted by its own tests: run Task does not retry a deliberate terminal state.\", \"Asserted by its own tests: commands without URL flags reach the interactive-terminal gate.\", \"Asserted by its own tests: partial wiring and a failed package install both remain in the recovery details.\", \"Asserted by its own tests: any non-empty NO COLOR value opts out, per the spec.\", \"Asserted by its own tests: list dir returns a non-empty placeholder for an empty directory.\", \"Asserted by its own tests: an existing browser check missing the v2 channel is updated, not a noop.\"], \"name\": \"cloud-setup\", \"purpose\": \"Interactively set up Grafana Cloud Synthetics or Frontend Observability, installing required agents and skills\", \"summary\": \"Grafana Cloud's interactive setup wizard, powered by Grafana Assistant.\"}, {\"evidence\": [\"Asserted by its own tests: Invalid Regex.\", \"Asserted by its own tests: Invalid Not Regex.\"], \"name\": \"carbon-relay-ng\", \"purpose\": \"Fast, high-throughput carbon metric relay and aggregator that routes, validates, and aggregates incoming metrics with dynamic runtime routing and supports multiple output formats.\", \"summary\": \"Fast carbon relay+aggregator with admin interfaces for making changes online - production ready\"}, {\"evidence\": [\"Asserted by its own tests: Rate Limiter Tokens At.\", \"Asserted by its own tests: Get Cluster From Incoming Context.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Concurrency Limit.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Returns When All Tokens Are Inflight.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Calls Only Not In Flight Tokens.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Returns When Tokens Are Empty.\"], \"name\": \"dskit\", \"purpose\": \"Utilities for building distributed Go services, providing backoff retries, cache, key\\u2011value store, request hedging, RPC middleware, and service lifecycle management.\", \"summary\": \"Distributed systems kit\"}, {\"evidence\": [\"Asserted by its own tests: Filter Authorized Early Termination.\", \"Asserted by its own tests: Client Get User Permissions Accepts Empty Stream.\", \"Asserted by its own tests: Filter Authorized Missing Auth Info.\", \"Asserted by its own tests: Filter Authorized Empty Input.\", \"Asserted by its own tests: Client Invalidate User Permissions Evicts Cached Snapshot.\", \"Asserted by its own tests: Client Get User Permissions Rejects Caller Without Delegated Permission.\"], \"name\": \"authlib\", \"purpose\": \"Need a reusable Grafana auth library to handle JWT authentication, propagate identities, and query RBAC permissions for plugins or services.\", \"summary\": \"Common utilities for grafana authnz\"}, {\"evidence\": [], \"name\": \"augurs-seasons-js\", \"purpose\": \"Add seasonality detection to JavaScript projects using the augurs\\u2011seasons Rust library via WebAssembly.\", \"summary\": \"JavaScript bindings for the augurs-seasons library.\"}, {\"evidence\": [\"Asserted by its own tests: Should update colors options correctly via thresholds.\", \"Asserted by its own tests: Should not update colors options if set only base threshold value.\", \"Asserted by its own tests: Should show color Field if thresholds is selected.\", \"Asserted by its own tests: Should render view for duration more or equal 45 minutes.\", \"Asserted by its own tests: Should return event with color if thresholds is not specified.\", \"Asserted by its own tests: Should recompute minutes Offset when time Range changes.\"], \"name\": \"business-panel\", \"purpose\": \"Render schedules, deadlines, and time-based metrics as an interactive calendar, pulling events from any Grafana data source with day/week/month views.\", \"summary\": \"Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Provides k6 load‑testing webhook, unrelated to launching or managing Chrome."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Implements Grafana plugin RBAC, not a Chrome sidecar."
+   },
+   {
+    "candidate": "C",
+    "verdict": "use_as_is",
+    "reason": "Chromium supervisor that launches and supervises Chromium, matching the required sidecar behavior."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Tool for querying local telemetry, unrelated to Chrome process management."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Another k6 load‑testing tool, not relevant to Chrome sidecar."
+   },
+   {
+    "candidate": "F",
+    "verdict": "not_a_fit",
+    "reason": "Frontend observability SDK, does not launch or control Chrome instances."
+   },
+   {
+    "candidate": "G",
+    "verdict": "not_a_fit",
+    "reason": "Clustering library, unrelated to browser process supervision."
+   },
+   {
+    "candidate": "H",
+    "verdict": "not_a_fit",
+    "reason": "Detects Grafana dashboards, not a Chrome sidecar."
+   },
+   {
+    "candidate": "I",
+    "verdict": "not_a_fit",
+    "reason": "Kafka load‑testing extension, unrelated to launching Chrome."
+   },
+   {
+    "candidate": "J",
+    "verdict": "not_a_fit",
+    "reason": "Grafana Cloud setup wizard, does not manage Chrome processes."
+   },
+   {
+    "candidate": "K",
+    "verdict": "not_a_fit",
+    "reason": "Carbon metric relay, unrelated to browser process supervision."
+   },
+   {
+    "candidate": "L",
+    "verdict": "not_a_fit",
+    "reason": "Distributed systems utilities, not a Chrome sidecar."
+   },
+   {
+    "candidate": "M",
+    "verdict": "not_a_fit",
+    "reason": "Authentication library for Grafana, unrelated to Chrome management."
+   },
+   {
+    "candidate": "N",
+    "verdict": "not_a_fit",
+    "reason": "JavaScript bindings for a Rust library, not related to launching Chrome."
+   },
+   {
+    "candidate": "O",
+    "verdict": "not_a_fit",
+    "reason": "Calendar panel UI component, not a Chrome sidecar."
+   }
+  ]
+ },
+ "8991cf5be537c1d2d897": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Detect whether a metric has a weekly cycle before we pick a forecasting model.",
+   "[{\"evidence\": [], \"name\": \"augurs-seasons\", \"purpose\": \"Detect seasonality or periodic patterns in time series using periodograms.\", \"summary\": \"Seasonality detection using periodograms\"}, {\"evidence\": [], \"name\": \"augurs\", \"purpose\": \"Perform time series forecasting, outlier detection, clustering, seasonality and changepoint analysis in Rust.\", \"summary\": \"A time-series toolkit for forecasting, outlier detection, clustering and more.\"}, {\"evidence\": [], \"name\": \"augurs-outlier\", \"purpose\": \"Detect when a time series deviates from a group of similar series (time series outlier detection).\", \"summary\": \"Outlier detection for time series.\"}, {\"evidence\": [], \"name\": \"catalog-otel-metrics\", \"purpose\": \"Export catalog service metrics to a monitoring backend via OpenTelemetry\\u2019s OTLP over HTTP.\", \"summary\": \"Catalog service that pushes metrics via the OpenTelemetry SDK over OTLP/HTTP\"}, {\"evidence\": [\"Asserted by its own tests: can be instantiated with a custom max distance.\", \"Asserted by its own tests: can be instantiated with a custom max distance.\", \"Asserted by its own tests: accepts cap/floor.\", \"Asserted by its own tests: accepts cap/floor.\", \"Asserted by its own tests: handles empty pipeline.\", \"Asserted by its own tests: handles empty pipeline.\"], \"name\": \"augurs-js-testpkg\", \"purpose\": \"Perform forecasting, anomaly detection, clustering, and seasonality analysis on time series data using a high\\u2011performance Rust library with Python and JavaScript bindings.\", \"summary\": \"Time series analysis for Rust, with bindings to Python and Javascript\"}, {\"evidence\": [], \"name\": \"augurs-forecaster\", \"purpose\": \"High-level API to train and predict time series models with preprocessing (imputation, scaling, transforms) and automatic back\\u2011transformation of forecasts and intervals.\", \"summary\": \"A high-level API for the augurs forecasting library.\"}, {\"evidence\": [], \"name\": \"augurs-prophet-wasmstan\", \"purpose\": \"Run Prophet time-series forecasting via a Stan model in WebAssembly for use with the @bsull/augurs JavaScript library.\", \"summary\": \"Prophet's Stan model, compiled to WASM, for use with the @bsull/augurs library.\"}, {\"evidence\": [], \"name\": \"augurs-changepoint\", \"purpose\": \"Detect change points in time series data using Bayesian online change point detection.\", \"summary\": \"Changepoint detection using Bayesian Online Change Point Detection and more.\"}, {\"evidence\": [], \"name\": \"augurs-testing\", \"purpose\": \"Provides a test framework and sample data for validating augurs time series models and utilities.\", \"summary\": \"Test framework and data for the augurs library.\"}, {\"evidence\": [], \"name\": \"Introduction to the Grafana data structure\", \"purpose\": \"\", \"summary\": \"Grafana supports a variety of different data sources, each with its own data model. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a **data frame**. The **data plane** adds a property layer to the data frame with i\"}, {\"evidence\": [], \"name\": \"detect-angular-dashboards\", \"purpose\": \"Identify Grafana dashboards that rely on Angular data sources or panel plugins to assess migration or deprecation needs.\", \"summary\": \"Detect dashboards depending on Angular data source and panel plugins on a running Grafana instance using the Grafana API.\"}, {\"evidence\": [], \"name\": \"augurs-prophet-js\", \"purpose\": \"Forecast time series data in JavaScript using optimized Prophet models via WebAssembly.\", \"summary\": \"JavaScript bindings for the augurs-prophet library.\"}, {\"evidence\": [\"Asserted by its own tests: clamps to config.min when the field has no value range.\", \"Asserted by its own tests: corrects input as per min and max.\", \"Asserted by its own tests: does not call hide Popper for non-Escape keys but still stops propagation.\", \"Asserted by its own tests: clamps out of range values.\", \"Asserted by its own tests: keeps remainder after divisible by max.\", \"Asserted by its own tests: maps each value through thresholds for a by-value field.\"], \"name\": \"canvas\", \"purpose\": \"Create custom, data-bound visual dashboards by placing and styling elements on a canvas and linking their properties to Grafana metric fields\", \"summary\": \"Draw pictures with the Canvas visualization panel plugin, then paint by numbers with your Grafana metrics data!\"}, {\"evidence\": [\"Asserted by its own tests: can be instantiated with a custom max distance.\", \"Asserted by its own tests: with threshold.\", \"Asserted by its own tests: accepts cap/floor.\", \"Asserted by its own tests: different min cluster sizes.\", \"Asserted by its own tests: with min period.\", \"Asserted by its own tests: with max period.\"], \"name\": \"augurs\", \"purpose\": \"Perform fast Rust-based time series forecasting, anomaly detection, clustering, seasonality and changepoint analysis, with Python/JS bindings.\", \"summary\": \"Time series analysis for Rust, with bindings to Python and Javascript\"}, {\"evidence\": [\"Asserted by its own tests: Machine Type Cache Warm Respects Concurrency Limit.\", \"Asserted by its own tests: Generate Capacity Block Pricing Map splits Same Day Same Type Reservations.\", \"Asserted by its own tests: Node Store Populate Concurrency Limit.\", \"Asserted by its own tests: parse Capacity Block Usage Type.\", \"Asserted by its own tests: parse Capacity Block Costs nets Refunds.\", \"Asserted by its own tests: cluster Name From Instance.\"], \"name\": \"cloudcost-exporter\", \"purpose\": \"Export real-time per-minute cloud cost rates from AWS, GCP, and Azure as Prometheus metrics for monitoring and budgeting\", \"summary\": \"Prometheus Exporter for Cloud Provider agnostic cost metrics\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "use_as_is",
+    "reason": "Provides seasonality detection via periodograms, directly suitable for identifying weekly cycles."
+   },
+   {
+    "candidate": "B",
+    "verdict": "use_as_is",
+    "reason": "Includes seasonality analysis functions that can detect weekly patterns in time series."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Only offers outlier detection, not seasonality detection."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Handles metric export via OpenTelemetry, unrelated to seasonality analysis."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Test utilities for the library; does not expose direct seasonality detection capability."
+   },
+   {
+    "candidate": "F",
+    "verdict": "not_a_fit",
+    "reason": "High‑level forecasting API without dedicated seasonality detection features."
+   },
+   {
+    "candidate": "G",
+    "verdict": "extend",
+    "reason": "Prophet can model weekly seasonality but requires configuration; not a dedicated detection tool."
+   },
+   {
+    "candidate": "H",
+    "verdict": "not_a_fit",
+    "reason": "Focuses on changepoint detection, not on periodic/weekly pattern identification."
+   },
+   {
+    "candidate": "I",
+    "verdict": "not_a_fit",
+    "reason": "Provides test data/framework, not functionality for seasonality detection."
+   },
+   {
+    "candidate": "J",
+    "verdict": "not_a_fit",
+    "reason": "Documentation of Grafana data structures, unrelated to time‑series analysis."
+   },
+   {
+    "candidate": "K",
+    "verdict": "not_a_fit",
+    "reason": "Detects Angular‑based Grafana dashboards, not applicable to metric seasonality."
+   },
+   {
+    "candidate": "L",
+    "verdict": "extend",
+    "reason": "Prophet JS bindings can fit weekly seasonality but require model setup; not a standalone detector."
+   },
+   {
+    "candidate": "M",
+    "verdict": "not_a_fit",
+    "reason": "Visualization panel plugin, no time‑series analysis capabilities."
+   },
+   {
+    "candidate": "N",
+    "verdict": "use_as_is",
+    "reason": "Comprehensive time‑series library that includes seasonality analysis suitable for weekly cycle detection."
+   },
+   {
+    "candidate": "O",
+    "verdict": "not_a_fit",
+    "reason": "Exports cloud cost metrics, unrelated to detecting weekly patterns in time series."
+   }
+  ]
+ },
+ "d09090fa2667a9154d89": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Across a fleet of pods, tell me which pod's latency curve does not look like the others.",
+   "[{\"evidence\": [\"Asserted by its own tests: Rate Limiter Tokens At.\", \"Asserted by its own tests: Get Cluster From Incoming Context.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Concurrency Limit.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Returns When All Tokens Are Inflight.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Calls Only Not In Flight Tokens.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Returns When Tokens Are Empty.\"], \"name\": \"dskit\", \"purpose\": \"Utilities for building distributed Go services, providing backoff retries, cache, key\\u2011value store, request hedging, RPC middleware, and service lifecycle management.\", \"summary\": \"Distributed systems kit\"}, {\"evidence\": [], \"name\": \"Business Table\", \"purpose\": \"\", \"summary\": \"description: Learn how to use the Business Table Panel plugin to create powerful, flexible data visualizations with advanced features like tree views, data editing, custom cell rendering, and export capabilities.\"}, {\"evidence\": [], \"name\": \"Compatibility matrix\", \"purpose\": \"\", \"summary\": \"How `grafana/xk6-kafka` compares to the community\"}, {\"evidence\": [\"Asserted by its own tests: should call on Limit Change when limit is changed.\", \"Asserted by its own tests: escapes a backslash inside a path segment.\", \"Asserted by its own tests: escapes backticks in a segment to prevent identifier break-out.\", \"Asserted by its own tests: escapes backslash before backtick (no double-escaping).\", \"Asserted by its own tests: should call on Conn Max Open Conns Change when changed.\", \"Asserted by its own tests: should call on Conn Max Lifetime Change when changed.\"], \"name\": \"clickhouse-datasource\", \"purpose\": \"Query ClickHouse data in Grafana to build dashboards and annotate graphs with stored events\", \"summary\": \"Grafana Plugin for ClickHouse\"}, {\"evidence\": [], \"name\": \"docker-otel-lgtm\", \"purpose\": \"Run a full OpenTelemetry observability stack (metrics, traces, logs, profiles) locally via a single Docker container for development or testing\", \"summary\": \"An OpenTelemetry backend in a Docker container image\"}, {\"evidence\": [\"Asserted by its own tests: Should show red threshold.\", \"Asserted by its own tests: Should render value for min aggregation type.\", \"Asserted by its own tests: Should cancel by escape click.\", \"Asserted by its own tests: Should show green threshold.\", \"Asserted by its own tests: Should show orange threshold.\", \"Asserted by its own tests: Should allow to set min in config.\"], \"name\": \"volkovlabs-table-panel\", \"purpose\": \"Display and interact with hierarchical and multi-frame data in Grafana tables, with filtering, editing, and export features.\", \"summary\": \"Simplify data visualization in table format\"}, {\"evidence\": [\"Asserted by its own tests: escapes backslashes in label name on empty input.\", \"Asserted by its own tests: escapes double quotes in label names.\", \"Asserted by its own tests: parses label name with escaped double quote.\", \"Asserted by its own tests: escapes double quotes in label name inside braces.\", \"Asserted by its own tests: escapes double quotes in label name on empty input.\", \"Asserted by its own tests: parses label name with escaped backslash.\"], \"name\": \"grafana-pyroscope-datasource\", \"purpose\": \"Query and visualize continuous profiling data (CPU, memory, goroutine, etc.) from a Pyroscope server within Grafana.\", \"summary\": \"Data source for Grafana Pyroscope, horizontally-scalable, highly-available, multi-tenant continuous profiling aggregation system.\"}, {\"evidence\": [\"Asserted by its own tests: Invalid Regex.\", \"Asserted by its own tests: Invalid Not Regex.\"], \"name\": \"carbon-relay-ng\", \"purpose\": \"Fast, high-throughput carbon metric relay and aggregator that routes, validates, and aggregates incoming metrics with dynamic runtime routing and supports multiple output formats.\", \"summary\": \"Fast carbon relay+aggregator with admin interfaces for making changes online - production ready\"}, {\"evidence\": [\"Asserted by its own tests: Enqueue Limit.\", \"Asserted by its own tests: Messages Invalid.\", \"Asserted by its own tests: Conn Set Timeout.\", \"Asserted by its own tests: Conn Set Write Timeout.\", \"Asserted by its own tests: Dequeue Timeout.\", \"Asserted by its own tests: Enqueue Race.\"], \"name\": \"ckit\", \"purpose\": \"Create a lightweight cluster that uses consistent hashing over HTTP/2 gossip for efficient workload distribution.\", \"summary\": \"Lightweight library for clustering and workload distribution\"}, {\"evidence\": [\"Asserted by its own tests: max Past Query Calculation from query field.\", \"Asserted by its own tests: max Query Calculation from query field.\", \"Asserted by its own tests: min Query Calculation from query field.\", \"Asserted by its own tests: min Future Query Calculation from query field.\", \"Asserted by its own tests: should have no description height when description options are missing.\", \"Asserted by its own tests: undefined as input from query field.\"], \"name\": \"clock-panel\", \"purpose\": \"Display a live clock or countdown/countup timer in Grafana dashboards.\", \"summary\": \"Clock Panel Plugin for Grafana\"}, {\"evidence\": [\"Asserted by its own tests: Should update colors options correctly via thresholds.\", \"Asserted by its own tests: Should not update colors options if set only base threshold value.\", \"Asserted by its own tests: Should show color Field if thresholds is selected.\", \"Asserted by its own tests: Should render view for duration more or equal 45 minutes.\", \"Asserted by its own tests: Should return event with color if thresholds is not specified.\", \"Asserted by its own tests: Should recompute minutes Offset when time Range changes.\"], \"name\": \"business-panel\", \"purpose\": \"Render schedules, deadlines, and time-based metrics as an interactive calendar, pulling events from any Grafana data source with day/week/month views.\", \"summary\": \"Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration\"}, {\"evidence\": [\"Asserted by its own tests: Machine Type Cache Warm Respects Concurrency Limit.\", \"Asserted by its own tests: Generate Capacity Block Pricing Map splits Same Day Same Type Reservations.\", \"Asserted by its own tests: Node Store Populate Concurrency Limit.\", \"Asserted by its own tests: parse Capacity Block Usage Type.\", \"Asserted by its own tests: parse Capacity Block Costs nets Refunds.\", \"Asserted by its own tests: cluster Name From Instance.\"], \"name\": \"cloudcost-exporter\", \"purpose\": \"Export real-time per-minute cloud cost rates from AWS, GCP, and Azure as Prometheus metrics for monitoring and budgeting\", \"summary\": \"Prometheus Exporter for Cloud Provider agnostic cost metrics\"}, {\"evidence\": [\"Asserted by its own tests: Acks From Int.\", \"Asserted by its own tests: Timing Metrics Are Untagged.\", \"Asserted by its own tests: Encode Wire Format Out Of Range.\", \"Asserted by its own tests: Req Context Nil VU.\", \"Asserted by its own tests: Flush Nil VUAnd Nil Collector.\", \"Asserted by its own tests: JKSTo PEMRejects Non JKS.\"], \"name\": \"xk6-kafka\", \"purpose\": \"Load test Apache Kafka with k6, producing/consuming messages, managing topics and schema registry, all in pure Go without a C toolchain\", \"summary\": \"Official pure-Go k6 extension for load testing Apache Kafka\"}, {\"evidence\": [\"Asserted by its own tests: Path Trie Soft Threshold.\", \"Asserted by its own tests: Path Trie Hard Threshold.\", \"Asserted by its own tests: Path Trie Depth Based Thresholds.\", \"Asserted by its own tests: Path Trie No Limit With Minus One.\", \"Asserted by its own tests: Path Trie Max Patterns Under Limit.\", \"Asserted by its own tests: Path Trie Hard Threshold Unique Segment Counting.\"], \"name\": \"clusterurl\", \"purpose\": \"Extract a generic route from URLs to group similar pages for analytics or routing, using rule\\u2011based parsing and gibberish detection.\", \"summary\": \"A simple Go package for processing and clustering a URL to extract a generic page route from it\"}, {\"evidence\": [\"Asserted by its own tests: run Task does not retry a deliberate terminal state.\", \"Asserted by its own tests: commands without URL flags reach the interactive-terminal gate.\", \"Asserted by its own tests: partial wiring and a failed package install both remain in the recovery details.\", \"Asserted by its own tests: any non-empty NO COLOR value opts out, per the spec.\", \"Asserted by its own tests: list dir returns a non-empty placeholder for an empty directory.\", \"Asserted by its own tests: an existing browser check missing the v2 channel is updated, not a noop.\"], \"name\": \"cloud-setup\", \"purpose\": \"Interactively set up Grafana Cloud Synthetics or Frontend Observability, installing required agents and skills\", \"summary\": \"Grafana Cloud's interactive setup wizard, powered by Grafana Assistant.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "dskit provides generic distributed service utilities but no functionality for collecting or comparing pod latency curves."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Business Table is a visualization panel for tabular data, not for latency analysis across pods."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Compatibility matrix only compares Grafana plugins, unrelated to pod latency monitoring."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "clickhouse-datasource is a Grafana data source for ClickHouse queries, not a tool for latency curve comparison."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "docker-otel-lgtm runs an OpenTelemetry stack but does not itself identify outlier latency curves across pods."
+   },
+   {
+    "candidate": "F",
+    "verdict": "not_a_fit",
+    "reason": "volkovlabs-table-panel is a table visualization plugin, not a latency analysis solution."
+   },
+   {
+    "candidate": "G",
+    "verdict": "not_a_fit",
+    "reason": "grafana-pyroscope-datasource visualizes profiling data, not specifically pod latency curve outlier detection."
+   },
+   {
+    "candidate": "H",
+    "verdict": "not_a_fit",
+    "reason": "carbon-relay-ng is a metric relay/aggregator, not a tool for comparing latency curves across a fleet."
+   },
+   {
+    "candidate": "I",
+    "verdict": "not_a_fit",
+    "reason": "ckit is a clustering library for workload distribution, not for latency curve analysis."
+   },
+   {
+    "candidate": "J",
+    "verdict": "not_a_fit",
+    "reason": "clock-panel displays a clock, unrelated to pod latency monitoring."
+   },
+   {
+    "candidate": "K",
+    "verdict": "not_a_fit",
+    "reason": "business-panel shows calendar events, not latency data."
+   },
+   {
+    "candidate": "L",
+    "verdict": "not_a_fit",
+    "reason": "cloudcost-exporter exports cost metrics, not latency curve comparison."
+   },
+   {
+    "candidate": "M",
+    "verdict": "not_a_fit",
+    "reason": "xk6-kafka is a load‑testing extension for Kafka, not a pod latency analysis tool."
+   },
+   {
+    "candidate": "N",
+    "verdict": "not_a_fit",
+    "reason": "clusterurl processes URLs, unrelated to latency curve analysis."
+   },
+   {
+    "candidate": "O",
+    "verdict": "not_a_fit",
+    "reason": "cloud-setup is an interactive setup wizard, not a latency monitoring or analysis solution."
+   }
+  ]
+ },
+ "9c7b337078d2e1f74ca0": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Before merging, reject dashboard JSON that uses deprecated panels or hard-coded datasources.",
+   "[{\"evidence\": [], \"name\": \"detect-angular-dashboards\", \"purpose\": \"Identify Grafana dashboards that rely on Angular data sources or panel plugins to assess migration or deprecation needs.\", \"summary\": \"Detect dashboards depending on Angular data source and panel plugins on a running Grafana instance using the Grafana API.\"}, {\"evidence\": [], \"name\": \"Custom code\", \"purpose\": \"\", \"summary\": \"description: Learn how to use custom code to access panel options, REST API responses, form elements, and Grafana services in Business Forms.\"}, {\"evidence\": [\"Asserted by its own tests: Element Reference Rule Reports Missing Elements.\", \"Asserted by its own tests: Element Reference Rule Sorts And Deduplicates Missing Elements.\", \"Asserted by its own tests: Element Reference Rule Reports Missing And Orphaned Together.\", \"Asserted by its own tests: V2 Required Fields Rule Missing Fields.\", \"Asserted by its own tests: Template On Time Range Reload Rule.\"], \"name\": \"dashboard-linter\", \"purpose\": \"Lint Grafana dashboard JSON files to catch common errors and enforce best\\u2011practice conventions.\", \"summary\": \"A tool to lint Grafana dashboards\"}, {\"evidence\": [], \"name\": \"Context parameters\", \"purpose\": \"\", \"summary\": \"description: Learn how to use context parameters to access panel data, form elements, Grafana services, and other functionality in custom code.\"}, {\"evidence\": [], \"name\": \"Business Forms\", \"purpose\": \"\", \"summary\": \"description: Learn how to insert and update application data and modify configuration directly from your Grafana dashboard using the Business Forms panel.\"}, {\"evidence\": [\"Asserted by its own tests: Should update colors options correctly via thresholds.\", \"Asserted by its own tests: Should not update colors options if set only base threshold value.\", \"Asserted by its own tests: Should show color Field if thresholds is selected.\", \"Asserted by its own tests: Should render view for duration more or equal 45 minutes.\", \"Asserted by its own tests: Should return event with color if thresholds is not specified.\", \"Asserted by its own tests: Should recompute minutes Offset when time Range changes.\"], \"name\": \"business-panel\", \"purpose\": \"Render schedules, deadlines, and time-based metrics as an interactive calendar, pulling events from any Grafana data source with day/week/month views.\", \"summary\": \"Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration\"}, {\"evidence\": [\"Asserted by its own tests: Should update slider value when min and max are not set.\", \"Asserted by its own tests: Should update date min.\", \"Asserted by its own tests: Should make initial datasource request for streaming data state.\", \"Asserted by its own tests: Should normalize is Escaping for code and textarea elements.\", \"Asserted by its own tests: Should update date max.\", \"Asserted by its own tests: Should show mini map if value more than 100 symbols.\"], \"name\": \"business-forms\", \"purpose\": \"Enable inserting, updating, and modifying application data and configuration directly within Grafana dashboards\", \"summary\": \"Insert, update application data, and modify configuration\"}, {\"evidence\": [\"Asserted by its own tests: Connection Execute Result Reuse Not Enabled And Max Age In Minutes Provided Does Not Throw Error.\", \"Asserted by its own tests: run button should be disabled if the query is empty.\", \"Asserted by its own tests: should not run query if query is empty.\", \"Asserted by its own tests: gracefully handles when the fetch for external id throws an error.\", \"Asserted by its own tests: should not support result reuse if athena engine version is 2.\", \"Asserted by its own tests: Athena Data Source Settings Load.\"], \"name\": \"grafana-athena-datasource\", \"purpose\": \"Query Amazon Athena data directly from Grafana dashboards\", \"summary\": \"Use Amazon Athena with Grafana\"}, {\"evidence\": [\"Asserted by its own tests: clamps to config.min when the field has no value range.\", \"Asserted by its own tests: corrects input as per min and max.\", \"Asserted by its own tests: does not call hide Popper for non-Escape keys but still stops propagation.\", \"Asserted by its own tests: clamps out of range values.\", \"Asserted by its own tests: keeps remainder after divisible by max.\", \"Asserted by its own tests: maps each value through thresholds for a by-value field.\"], \"name\": \"canvas\", \"purpose\": \"Create custom, data-bound visual dashboards by placing and styling elements on a canvas and linking their properties to Grafana metric fields\", \"summary\": \"Draw pictures with the Canvas visualization panel plugin, then paint by numbers with your Grafana metrics data!\"}, {\"evidence\": [], \"name\": \"data flow\", \"purpose\": \"\", \"summary\": \"description: Learn how to use the multifarious editing data functionality in the Business Table panel to provide extensive capabilities for working with table data.\"}, {\"evidence\": [], \"name\": \"cloudcost-exporter\", \"purpose\": \"Export and expose cloud provider cost metrics in Kubernetes via a Helm chart for integration with monitoring tools.\", \"summary\": \"{{ template \\\"chart.versionBadge\\\" . }}{{ template \\\"chart.typeBadge\\\" . }}{{ template \\\"chart.appVersionBadge\\\" . }}\"}, {\"evidence\": [], \"name\": \"Exploring Grafana events\", \"purpose\": \"\", \"summary\": \"description: Learn how to use the Grafana EventBus and its predefined events to react to UI and dashboard actions in your plugins.\"}, {\"evidence\": [\"Asserted by its own tests: Multi Frame Series Validate With Frames Invalid Cases.\", \"Asserted by its own tests: Multi Frame Series Get Metric Refs Empty Invalid Edge Cases.\", \"Asserted by its own tests: Multi Frame Series Validate With Frames Invalid Cases.\", \"Asserted by its own tests: Multi Frame Series Get Metric Refs Empty Invalid Edge Cases.\"], \"name\": \"sdata\", \"purpose\": \"Create and validate structured data frames that conform to a predefined contract.\", \"summary\": \"sdata package provides utilities to build data frames in a structural way and ensure the data frames adhere to data frame contract.\"}, {\"evidence\": [], \"name\": \"Business Calendar\", \"purpose\": \"\", \"summary\": \"description: Learn how to display events in a stylish calendar format using the Business Calendar panel plugin.\"}, {\"evidence\": [\"Asserted by its own tests: Multi Frame Series Validate With Frames Invalid Cases.\", \"Asserted by its own tests: Multi Frame Series Get Metric Refs Empty Invalid Edge Cases.\"], \"name\": \"dataplane\", \"purpose\": \"Create and test typed Dataframe structures for Grafana's data plane using Go utilities and example JSON specifications.\", \"summary\": \"Grafana data plane tools and docs\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Detects Angular data source and panel plugins only; does not address deprecated panels or hard‑coded datasource detection."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Provides learning material for custom code; not a ready‑made tool for rejecting dashboards."
+   },
+   {
+    "candidate": "C",
+    "verdict": "extend",
+    "reason": "Dashboard‑linter can lint JSON files and could be extended with rules for deprecated panels or hard‑coded datasource detection."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Educational content about context parameters; not a tool for dashboard validation."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Describes Business Forms panel functionality; does not help reject dashboards based on deprecation or hard‑coded datasources."
+   },
+   {
+    "candidate": "F",
+    "verdict": "not_a_fit",
+    "reason": "Calendar‑type panel implementation; unrelated to linting or validation of dashboard JSON."
+   },
+   {
+    "candidate": "G",
+    "verdict": "not_a_fit",
+    "reason": "Business Forms plugin; not a validation or linting solution for deprecated panels or datasources."
+   },
+   {
+    "candidate": "H",
+    "verdict": "not_a_fit",
+    "reason": "Athena datasource plugin; does not provide dashboard‑JSON rejection capabilities."
+   },
+   {
+    "candidate": "I",
+    "verdict": "not_a_fit",
+    "reason": "Canvas visualization panel; not relevant to detecting deprecated panels or hard‑coded datasources."
+   },
+   {
+    "candidate": "J",
+    "verdict": "not_a_fit",
+    "reason": "Learning material about data flow in Business Table panel; not a validation tool."
+   },
+   {
+    "candidate": "K",
+    "verdict": "not_a_fit",
+    "reason": "Helm chart for cloud cost exporter; unrelated to Grafana dashboard JSON validation."
+   },
+   {
+    "candidate": "L",
+    "verdict": "not_a_fit",
+    "reason": "Documentation on Grafana EventBus; does not offer linting or rejection of dashboards."
+   },
+   {
+    "candidate": "M",
+    "verdict": "not_a_fit",
+    "reason": "Utilities for building data frames; not aimed at dashboard JSON validation."
+   },
+   {
+    "candidate": "N",
+    "verdict": "not_a_fit",
+    "reason": "Business Calendar panel description; not a linting or validation asset."
+   },
+   {
+    "candidate": "O",
+    "verdict": "not_a_fit",
+    "reason": "Data‑plane utilities for Go; not applicable to rejecting dashboard JSON with deprecated panels or hard‑coded datasources."
+   }
+  ]
+ },
+ "8bb825ba064292c46a41": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "Alert us when our GitHub App is close to exhausting its API quota.",
+   "[{\"evidence\": [\"Asserted by its own tests: Get Remaining Limits.\", \"Asserted by its own tests: New Limits Collector.\"], \"name\": \"github-rate-limits-prometheus-exporter\", \"purpose\": \"Export GitHub API rate limit metrics to Prometheus for monitoring using PAT or GitHub App credentials\", \"summary\": \"GitHub Rate Limits Prometheus exporter. Works with both App and PAT credentials \"}, {\"evidence\": [], \"name\": \"github-rate-limits-prometheus-exporter\", \"purpose\": \"Deploy a Prometheus exporter to monitor GitHub API rate limits using a Helm chart with PAT or GitHub App credentials.\", \"summary\": \"This helm chart helps to install and configure github-rate-limits-prometheus-exporter\"}, {\"evidence\": [], \"name\": \"docker\", \"purpose\": \"Automatically fetch and apply Adaptive Metrics recommendations on a schedule in Grafana Cloud using a GitHub Actions template repository.\", \"summary\": \"A template repository for enabling auto-apply of Adaptive Metrics recommendations\"}, {\"evidence\": [], \"name\": \"demo-app\", \"purpose\": \"Need a ready-to-run example of Grafana Alloy telemetry pipelines with Docker Compose for Loki, Prometheus, Grafana, and Tempo.\", \"summary\": \"A collection of working Alloy scenarios\"}, {\"evidence\": [], \"name\": \"workload\", \"purpose\": \"Run ready-to-use Grafana Alloy telemetry collection and processing demos with Docker Compose backends like Loki, Prometheus, and Tempo.\", \"summary\": \"A collection of working Alloy scenarios\"}, {\"evidence\": [\"Asserted by its own tests: Generate Rules Determinism With Seed.\", \"Asserted by its own tests: Generate Rules Determinism With Seed.\", \"Asserted by its own tests: Group Rules Groups Per Folder Greater Than One.\", \"Asserted by its own tests: Group Rules Defaults When Zero Or Empty.\", \"Asserted by its own tests: Group Rules Defaults When Zero Or Empty.\", \"Asserted by its own tests: Group Rules Non Even Partition.\"], \"name\": \"alerting-gen\", \"purpose\": \"Generate realistic random Grafana alerting and recording rule groups for testing or prototyping, with optional push to Grafana via provisioning API.\", \"summary\": \"A tiny CLI to generate random Grafana Alerting rules and Recording rules using:\"}, {\"evidence\": [], \"name\": \"catalog-otel-metrics\", \"purpose\": \"Export catalog service metrics to a monitoring backend via OpenTelemetry\\u2019s OTLP over HTTP.\", \"summary\": \"Catalog service that pushes metrics via the OpenTelemetry SDK over OTLP/HTTP\"}, {\"evidence\": [], \"name\": \"augurs-forecaster\", \"purpose\": \"High-level API to train and predict time series models with preprocessing (imputation, scaling, transforms) and automatic back\\u2011transformation of forecasts and intervals.\", \"summary\": \"A high-level API for the augurs forecasting library.\"}, {\"evidence\": [\"Asserted by its own tests: New Launch Payload.\", \"Asserted by its own tests: Bad Payload.\"], \"name\": \"flagger-k6-webhook\", \"purpose\": \"Run k6 load tests on a canary deployment via a pre\\u2011rollout webhook to verify performance thresholds before promoting traffic.\", \"summary\": \"Using k6 to do load testing of the canary before rolling out traffic\"}, {\"evidence\": [], \"name\": \"Custom code\", \"purpose\": \"\", \"summary\": \"description: Learn how to use custom code to access panel options, REST API responses, form elements, and Grafana services in Business Forms.\"}, {\"evidence\": [\"Asserted by its own tests: Renaming Writer Multiple Calls.\", \"Asserted by its own tests: Renaming Writer Mem FS.\", \"Asserted by its own tests: Renaming Writer File.\", \"Asserted by its own tests: Renaming Writer Abort.\", \"Asserted by its own tests: Renaming Writer Abort Ignores Close Error.\", \"Asserted by its own tests: Merge Configs Preserves Explicitly Empty Values.\"], \"name\": \"generate-policy-bot-config\", \"purpose\": \"Generate a Policy Bot config that automatically requires any GitHub Actions workflow triggered on pull requests to pass, respecting path filters.\", \"summary\": \"Generate a config file for `palantir/policy-bot` to help you enforce conditional workflows have passed\"}, {\"evidence\": [], \"name\": \"detect-angular-dashboards\", \"purpose\": \"Identify Grafana dashboards that rely on Angular data sources or panel plugins to assess migration or deprecation needs.\", \"summary\": \"Detect dashboards depending on Angular data source and panel plugins on a running Grafana instance using the Grafana API.\"}, {\"evidence\": [], \"name\": \"mise-npm-install\", \"purpose\": \"Run a complete OpenTelemetry observability stack (collector, metrics, traces, logs, profiling, Grafana) in a Docker container for development, demo, or testing environments.\", \"summary\": \"An OpenTelemetry backend in a Docker container image\"}, {\"evidence\": [\"A test is disabled with the reason: set HISTORIAN_LOKI_URL (e.g. http://localhost:3100) to run the notification RBAC integration test\", \"Asserted by its own tests: Run Query Truncates Merged Entries To Limit.\", \"Asserted by its own tests: Run Query Truncates Merged Entries To Limit.\", \"A test is disabled with the reason: set HISTORIAN_LOKI_URL (e.g. http://localhost:3100) to run the notification RBAC integration test\", \"Asserted by its own tests: Loki Reader Query Non Empty Filter Applies Matcher.\", \"Asserted by its own tests: Loki Reader Query Empty Filter Returns Empty Without Querying.\"], \"name\": \"historian\", \"purpose\": \"Libraries for building Grafana alerting systems with Alertmanager integration and Mimir compatibility\", \"summary\": \"Set of libraries used to build alerting systems at Grafana - including the Alertmanager.\"}, {\"evidence\": [], \"name\": \"augurs-seasons-js\", \"purpose\": \"Add seasonality detection to JavaScript projects using the augurs\\u2011seasons Rust library via WebAssembly.\", \"summary\": \"JavaScript bindings for the augurs-seasons library.\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "use_as_is",
+    "reason": "Exports GitHub API rate limit metrics which can be scraped by Prometheus and alerted on when limits approach exhaustion."
+   },
+   {
+    "candidate": "B",
+    "verdict": "extend",
+    "reason": "Helm chart deploys the exporter but does not itself provide alerting; needs configuration of Prometheus alerts on the exported metrics."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "Provides a Grafana Adaptive Metrics template unrelated to GitHub API quota monitoring."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Demo Alloy scenarios for telemetry pipelines, not relevant to GitHub rate limit alerts."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Alloy workload demos, unrelated to GitHub API quota monitoring."
+   },
+   {
+    "candidate": "F",
+    "verdict": "not_a_fit",
+    "reason": "Generates random Grafana alerting rules; does not monitor GitHub API usage."
+   },
+   {
+    "candidate": "G",
+    "verdict": "not_a_fit",
+    "reason": "Exports catalog service metrics via OpenTelemetry, not GitHub rate limits."
+   },
+   {
+    "candidate": "H",
+    "verdict": "not_a_fit",
+    "reason": "Forecasting library for time‑series, not applicable to GitHub API quota alerts."
+   },
+   {
+    "candidate": "I",
+    "verdict": "not_a_fit",
+    "reason": "K6 load‑testing webhook for canary deployments, unrelated to rate limit monitoring."
+   },
+   {
+    "candidate": "J",
+    "verdict": "not_a_fit",
+    "reason": "Custom code example for Grafana Business Forms, not related to GitHub API quota."
+   },
+   {
+    "candidate": "K",
+    "verdict": "not_a_fit",
+    "reason": "Generates Policy Bot config; does not address GitHub rate limit monitoring."
+   },
+   {
+    "candidate": "L",
+    "verdict": "not_a_fit",
+    "reason": "Detects Angular dashboards via Grafana API; not relevant to GitHub API quota alerts."
+   },
+   {
+    "candidate": "M",
+    "verdict": "not_a_fit",
+    "reason": "OpenTelemetry backend container, not specific to GitHub rate limit monitoring."
+   },
+   {
+    "candidate": "N",
+    "verdict": "not_a_fit",
+    "reason": "Alerting libraries for Grafana, but not a ready solution for GitHub API quota alerts."
+   },
+   {
+    "candidate": "O",
+    "verdict": "not_a_fit",
+    "reason": "JavaScript bindings for seasonality detection; unrelated to GitHub API quota monitoring."
+   }
+  ]
+ },
+ "b04e225a97fbce9b276d": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "A UI where people click together an OpenTelemetry collector pipeline instead of writing YAML by hand.",
+   "[{\"evidence\": [], \"name\": \"collector-configurator\", \"purpose\": \"Web UI for creating and editing OpenTelemetry Collector configuration files\", \"summary\": \"Fork of the agent configurator to work with otel\"}, {\"evidence\": [], \"name\": \"mise-npm-install\", \"purpose\": \"Run a complete OpenTelemetry observability stack (collector, metrics, traces, logs, profiling, Grafana) in a Docker container for development, demo, or testing environments.\", \"summary\": \"An OpenTelemetry backend in a Docker container image\"}, {\"evidence\": [], \"name\": \"catalog-otel-traces\", \"purpose\": \"Send OpenTelemetry trace data from a catalog service to an OTLP/HTTP endpoint for observability.\", \"summary\": \"Catalog service that emits traces via the OpenTelemetry SDK over OTLP/HTTP\"}, {\"evidence\": [], \"name\": \"catalog-otel-metrics\", \"purpose\": \"Export catalog service metrics to a monitoring backend via OpenTelemetry\\u2019s OTLP over HTTP.\", \"summary\": \"Catalog service that pushes metrics via the OpenTelemetry SDK over OTLP/HTTP\"}, {\"evidence\": [], \"name\": \"docker-otel-lgtm\", \"purpose\": \"Run a full OpenTelemetry observability stack (metrics, traces, logs, profiles) locally via a single Docker container for development or testing\", \"summary\": \"An OpenTelemetry backend in a Docker container image\"}, {\"evidence\": [], \"name\": \"inventory\", \"purpose\": \"Run ready-made Grafana Alloy telemetry collection scenarios with Docker Compose to test and demo data pipelines\", \"summary\": \"A collection of working Alloy scenarios\"}, {\"evidence\": [], \"name\": \"inventory\", \"purpose\": \"Run ready-made Grafana Alloy telemetry collection scenarios with Docker Compose to test and demo data pipelines\", \"summary\": \"A collection of working Alloy scenarios\"}, {\"evidence\": [\"Asserted by its own tests: Machine Type Cache Warm Respects Concurrency Limit.\", \"Asserted by its own tests: Generate Capacity Block Pricing Map splits Same Day Same Type Reservations.\", \"Asserted by its own tests: Node Store Populate Concurrency Limit.\", \"Asserted by its own tests: parse Capacity Block Usage Type.\", \"Asserted by its own tests: parse Capacity Block Costs nets Refunds.\", \"Asserted by its own tests: cluster Name From Instance.\"], \"name\": \"cloudcost-exporter\", \"purpose\": \"Export real-time per-minute cloud cost rates from AWS, GCP, and Azure as Prometheus metrics for monitoring and budgeting\", \"summary\": \"Prometheus Exporter for Cloud Provider agnostic cost metrics\"}, {\"evidence\": [], \"name\": \"inventory\", \"purpose\": \"Run ready-made Grafana Alloy telemetry collection scenarios with Docker Compose to test and demo data pipelines\", \"summary\": \"A collection of working Alloy scenarios\"}, {\"evidence\": [\"Asserted by its own tests: Rate Limiter Tokens At.\", \"Asserted by its own tests: Get Cluster From Incoming Context.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Concurrency Limit.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Returns When All Tokens Are Inflight.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Calls Only Not In Flight Tokens.\", \"Asserted by its own tests: Limited Concurrency Single Flight For Each Not In Flight Returns When Tokens Are Empty.\"], \"name\": \"dskit\", \"purpose\": \"Utilities for building distributed Go services, providing backoff retries, cache, key\\u2011value store, request hedging, RPC middleware, and service lifecycle management.\", \"summary\": \"Distributed systems kit\"}, {\"evidence\": [], \"name\": \"demo-app\", \"purpose\": \"Need a ready-to-run example of Grafana Alloy telemetry pipelines with Docker Compose for Loki, Prometheus, Grafana, and Tempo.\", \"summary\": \"A collection of working Alloy scenarios\"}, {\"evidence\": [\"Asserted by its own tests: Element Reference Rule Reports Missing Elements.\", \"Asserted by its own tests: Element Reference Rule Sorts And Deduplicates Missing Elements.\", \"Asserted by its own tests: Element Reference Rule Reports Missing And Orphaned Together.\", \"Asserted by its own tests: V2 Required Fields Rule Missing Fields.\", \"Asserted by its own tests: Template On Time Range Reload Rule.\"], \"name\": \"dashboard-linter\", \"purpose\": \"Lint Grafana dashboard JSON files to catch common errors and enforce best\\u2011practice conventions.\", \"summary\": \"A tool to lint Grafana dashboards\"}, {\"evidence\": [\"Asserted by its own tests: Should show red threshold.\", \"Asserted by its own tests: Should render value for min aggregation type.\", \"Asserted by its own tests: Should cancel by escape click.\", \"Asserted by its own tests: Should show green threshold.\", \"Asserted by its own tests: Should show orange threshold.\", \"Asserted by its own tests: Should allow to set min in config.\"], \"name\": \"volkovlabs-table-panel\", \"purpose\": \"Display and interact with hierarchical and multi-frame data in Grafana tables, with filtering, editing, and export features.\", \"summary\": \"Simplify data visualization in table format\"}, {\"evidence\": [], \"name\": \"java\", \"purpose\": \"Ready-to-run Docker Compose scenarios demonstrating Grafana Alloy telemetry collection and processing with Loki, Prometheus, Tempo, etc.\", \"summary\": \"A collection of working Alloy scenarios\"}, {\"evidence\": [\"Asserted by its own tests: Acks From Int.\", \"Asserted by its own tests: Timing Metrics Are Untagged.\", \"Asserted by its own tests: Encode Wire Format Out Of Range.\", \"Asserted by its own tests: Req Context Nil VU.\", \"Asserted by its own tests: Flush Nil VUAnd Nil Collector.\", \"Asserted by its own tests: JKSTo PEMRejects Non JKS.\"], \"name\": \"xk6-kafka\", \"purpose\": \"Load test Apache Kafka with k6, producing/consuming messages, managing topics and schema registry, all in pure Go without a C toolchain\", \"summary\": \"Official pure-Go k6 extension for load testing Apache Kafka\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "use_as_is",
+    "reason": "Offers a web UI specifically for creating and editing OpenTelemetry Collector configurations, matching the requested pipeline builder."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Provides a Docker image for running an OTEL stack, but no UI for assembling collector pipelines."
+   },
+   {
+    "candidate": "C",
+    "verdict": "not_a_fit",
+    "reason": "A service that emits traces; unrelated to a UI configurator for the collector."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Exports metrics from a service; does not help build collector pipelines via UI."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Docker container for a full OTEL stack, lacking any UI configuration tool."
+   },
+   {
+    "candidate": "F",
+    "verdict": "not_a_fit",
+    "reason": "Collection of Alloy scenarios; not a UI for OpenTelemetry Collector pipeline composition."
+   },
+   {
+    "candidate": "G",
+    "verdict": "not_a_fit",
+    "reason": "Duplicate of F; does not provide a collector UI."
+   },
+   {
+    "candidate": "H",
+    "verdict": "not_a_fit",
+    "reason": "Prometheus exporter for cloud costs; unrelated to collector pipeline UI."
+   },
+   {
+    "candidate": "I",
+    "verdict": "not_a_fit",
+    "reason": "Another set of Alloy scenarios; no collector configuration UI."
+   },
+   {
+    "candidate": "J",
+    "verdict": "not_a_fit",
+    "reason": "Library of distributed system utilities; does not offer a UI for OTEL collector pipelines."
+   },
+   {
+    "candidate": "K",
+    "verdict": "not_a_fit",
+    "reason": "Demo app for Alloy pipelines; does not provide a UI for building OTEL collector pipelines."
+   },
+   {
+    "candidate": "L",
+    "verdict": "not_a_fit",
+    "reason": "Dashboard linter for Grafana; unrelated to OpenTelemetry collector UI."
+   },
+   {
+    "candidate": "M",
+    "verdict": "not_a_fit",
+    "reason": "Grafana table panel plugin; does not address collector pipeline configuration."
+   },
+   {
+    "candidate": "N",
+    "verdict": "not_a_fit",
+    "reason": "Alloy scenario collection; lacks a UI for configuring OpenTelemetry Collector pipelines."
+   },
+   {
+    "candidate": "O",
+    "verdict": "not_a_fit",
+    "reason": "Load‑testing extension for k6 Kafka; unrelated to a collector configuration UI."
+   }
+  ]
+ },
+ "c9902d332447f0209406": {
+  "in": [
+   "openai/gpt-oss-120b",
+   "We need the logic that evaluates alert rules and routes notifications to chat and paging tools; we do not want to write our own.",
+   "[{\"evidence\": [\"Asserted by its own tests: Path Trie Soft Threshold.\", \"Asserted by its own tests: Path Trie Hard Threshold.\", \"Asserted by its own tests: Path Trie Depth Based Thresholds.\", \"Asserted by its own tests: Path Trie No Limit With Minus One.\", \"Asserted by its own tests: Path Trie Max Patterns Under Limit.\", \"Asserted by its own tests: Path Trie Hard Threshold Unique Segment Counting.\"], \"name\": \"clusterurl\", \"purpose\": \"Extract a generic route from URLs to group similar pages for analytics or routing, using rule\\u2011based parsing and gibberish detection.\", \"summary\": \"A simple Go package for processing and clustering a URL to extract a generic page route from it\"}, {\"evidence\": [\"Asserted by its own tests: Generate Rules Determinism With Seed.\", \"Asserted by its own tests: Generate Rules Determinism With Seed.\", \"Asserted by its own tests: Group Rules Groups Per Folder Greater Than One.\", \"Asserted by its own tests: Group Rules Defaults When Zero Or Empty.\", \"Asserted by its own tests: Group Rules Defaults When Zero Or Empty.\", \"Asserted by its own tests: Group Rules Non Even Partition.\"], \"name\": \"alerting-gen\", \"purpose\": \"Generate realistic random Grafana alerting and recording rule groups for testing or prototyping, with optional push to Grafana via provisioning API.\", \"summary\": \"A tiny CLI to generate random Grafana Alerting rules and Recording rules using:\"}, {\"evidence\": [\"Asserted by its own tests: Limited Writer.\", \"Asserted by its own tests: Limited Writer Underlying Writer Error.\", \"Asserted by its own tests: Limited Writer Partial Write From Underlying Writer.\", \"Asserted by its own tests: Opt In Caller Grafana Alertmanager Style Minus Caller.\", \"Asserted by its own tests: Webhook Truncate Alerts.\", \"Asserted by its own tests: Truncated Notify.\"], \"name\": \"alerting\", \"purpose\": \"Utilities for building alerting systems, including Alertmanager integration, for Grafana and Mimir compatibility.\", \"summary\": \"Set of libraries used to build alerting systems at Grafana - including the Alertmanager.\"}, {\"evidence\": [\"A test is disabled with the reason: set HISTORIAN_LOKI_URL (e.g. http://localhost:3100) to run the notification RBAC integration test\", \"Asserted by its own tests: Run Query Truncates Merged Entries To Limit.\", \"Asserted by its own tests: Run Query Truncates Merged Entries To Limit.\", \"A test is disabled with the reason: set HISTORIAN_LOKI_URL (e.g. http://localhost:3100) to run the notification RBAC integration test\", \"Asserted by its own tests: Loki Reader Query Non Empty Filter Applies Matcher.\", \"Asserted by its own tests: Loki Reader Query Empty Filter Returns Empty Without Querying.\"], \"name\": \"historian\", \"purpose\": \"Libraries for building Grafana alerting systems with Alertmanager integration and Mimir compatibility\", \"summary\": \"Set of libraries used to build alerting systems at Grafana - including the Alertmanager.\"}, {\"evidence\": [\"Asserted by its own tests: Multi Frame Series Validate With Frames Invalid Cases.\", \"Asserted by its own tests: Multi Frame Series Get Metric Refs Empty Invalid Edge Cases.\"], \"name\": \"dataplane\", \"purpose\": \"Create and test typed Dataframe structures for Grafana's data plane using Go utilities and example JSON specifications.\", \"summary\": \"Grafana data plane tools and docs\"}, {\"evidence\": [\"Asserted by its own tests: Should not show mini map button when value is short.\", \"Asserted by its own tests: Should return undefined if the index is out of range.\", \"Asserted by its own tests: Should show mini map button when value exceeds 100 characters.\", \"Asserted by its own tests: Should unescape value for display when is Escaping is true.\", \"Asserted by its own tests: Should pass value as-is when is Escaping is false.\", \"Asserted by its own tests: Should escape newlines in on Change when is Escaping is true.\"], \"name\": \"business-text\", \"purpose\": \"Create dynamic text panels in Grafana using Markdown or Handlebars templates populated with query data.\", \"summary\": \"Data-driven text with Markdown and Handlebars support\"}, {\"evidence\": [], \"name\": \"Amazon Athena alerting\", \"purpose\": \"\", \"summary\": \"- /docs/plugins/grafana-athena-datasource/alerting/\"}, {\"evidence\": [], \"name\": \"dataplane-website\", \"purpose\": \"Create and test typed dataframes for Grafana data plane pipelines using Go and JSON specifications.\", \"summary\": \"Grafana data plane tools and docs\"}, {\"evidence\": [\"Asserted by its own tests: Element Reference Rule Reports Missing Elements.\", \"Asserted by its own tests: Element Reference Rule Sorts And Deduplicates Missing Elements.\", \"Asserted by its own tests: Element Reference Rule Reports Missing And Orphaned Together.\", \"Asserted by its own tests: V2 Required Fields Rule Missing Fields.\", \"Asserted by its own tests: Template On Time Range Reload Rule.\"], \"name\": \"dashboard-linter\", \"purpose\": \"Lint Grafana dashboard JSON files to catch common errors and enforce best\\u2011practice conventions.\", \"summary\": \"A tool to lint Grafana dashboards\"}, {\"evidence\": [\"Asserted by its own tests: Meta Sampling Absent Is Nil.\", \"Asserted by its own tests: Meta Sampling Partial Decodes.\", \"Asserted by its own tests: Meta Sampling Absent Is Nil.\", \"Asserted by its own tests: Meta Sampling Partial Decodes.\"], \"name\": \"go\", \"purpose\": \"Instrument browser frontend applications to collect real\\u2011user monitoring telemetry for full\\u2011stack observability.\", \"summary\": \"Grafana Faro is a project for frontend application observability. It includes a highly configurable web SDK that instruments browser frontend applications to capture observability signals.\"}, {\"evidence\": [\"Asserted by its own tests: Invalid Regex.\", \"Asserted by its own tests: Invalid Not Regex.\"], \"name\": \"carbon-relay-ng\", \"purpose\": \"Fast, high-throughput carbon metric relay and aggregator that routes, validates, and aggregates incoming metrics with dynamic runtime routing and supports multiple output formats.\", \"summary\": \"Fast carbon relay+aggregator with admin interfaces for making changes online - production ready\"}, {\"evidence\": [\"Asserted by its own tests: escapes backslashes in label name on empty input.\", \"Asserted by its own tests: escapes double quotes in label names.\", \"Asserted by its own tests: parses label name with escaped double quote.\", \"Asserted by its own tests: escapes double quotes in label name inside braces.\", \"Asserted by its own tests: escapes double quotes in label name on empty input.\", \"Asserted by its own tests: parses label name with escaped backslash.\"], \"name\": \"grafana-pyroscope-datasource\", \"purpose\": \"Query and visualize continuous profiling data (CPU, memory, goroutine, etc.) from a Pyroscope server within Grafana.\", \"summary\": \"Data source for Grafana Pyroscope, horizontally-scalable, highly-available, multi-tenant continuous profiling aggregation system.\"}, {\"evidence\": [\"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Concrete Reference With Discriminator Field And Mapping Set.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Scalar Discriminator Non Constant Reference.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Concrete Discriminator.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Unknown Discriminator Field.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata.\", \"Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Scalar With Discriminator Field Set.\"], \"name\": \"cog\", \"purpose\": \"Generate typed code and builder libraries from schemas (CUE, JSON Schema, OpenAPI, etc.) for multiple languages such as Go, Java, Python, TypeScript, and more.\", \"summary\": \"Code Generation with a human touch\"}, {\"evidence\": [\"Asserted by its own tests: u64 unaligned page boundary.\", \"Asserted by its own tests: vec sigsegv page boundary.\"], \"name\": \"pyroscope-kinda-safe\", \"purpose\": \"Signal-safe memory read primitives for x86_64 and aarch64 Linux, enabling crash-recoverable reads from signal handlers.\", \"summary\": \"Signal-safe memory reading for x8664 and aarch64 on Linux.\"}, {\"evidence\": [\"Asserted by its own tests: New Launch Payload.\", \"Asserted by its own tests: Bad Payload.\"], \"name\": \"flagger-k6-webhook\", \"purpose\": \"Run k6 load tests on a canary deployment via a pre\\u2011rollout webhook to verify performance thresholds before promoting traffic.\", \"summary\": \"Using k6 to do load testing of the canary before rolling out traffic\"}]"
+  ],
+  "out": [
+   {
+    "candidate": "A",
+    "verdict": "not_a_fit",
+    "reason": "Provides URL clustering, unrelated to alert evaluation or routing."
+   },
+   {
+    "candidate": "B",
+    "verdict": "not_a_fit",
+    "reason": "Generates random alert rules for testing only; does not evaluate or route alerts."
+   },
+   {
+    "candidate": "C",
+    "verdict": "extend",
+    "reason": "Library set for building Grafana alerting systems including Alertmanager; can be extended to implement chat/paging routing."
+   },
+   {
+    "candidate": "D",
+    "verdict": "not_a_fit",
+    "reason": "Historian focuses on storing/querying alert data, not on evaluation or routing."
+   },
+   {
+    "candidate": "E",
+    "verdict": "not_a_fit",
+    "reason": "Dataframe utilities for the data plane, unrelated to alert logic."
+   },
+   {
+    "candidate": "F",
+    "verdict": "not_a_fit",
+    "reason": "Generates dynamic text panels, unrelated to alert evaluation or routing."
+   },
+   {
+    "candidate": "G",
+    "verdict": "unknown",
+    "reason": "Insufficient information about functionality to assess suitability."
+   },
+   {
+    "candidate": "H",
+    "verdict": "unknown",
+    "reason": "Insufficient information about functionality to assess suitability."
+   },
+   {
+    "candidate": "I",
+    "verdict": "not_a_fit",
+    "reason": "Dashboard linter, unrelated to alert evaluation or routing."
+   },
+   {
+    "candidate": "J",
+    "verdict": "not_a_fit",
+    "reason": "Frontend observability SDK, unrelated to alert evaluation or routing."
+   },
+   {
+    "candidate": "K",
+    "verdict": "not_a_fit",
+    "reason": "Metric relay/aggregator, unrelated to alert evaluation or routing."
+   },
+   {
+    "candidate": "L",
+    "verdict": "not_a_fit",
+    "reason": "Pyroscope datasource, unrelated to alert evaluation or routing."
+   },
+   {
+    "candidate": "M",
+    "verdict": "not_a_fit",
+    "reason": "Code generation tool, unrelated to alert evaluation or routing."
+   },
+   {
+    "candidate": "N",
+    "verdict": "not_a_fit",
+    "reason": "Signal‑safe memory reading primitives, unrelated to alert evaluation or routing."
+   },
+   {
+    "candidate": "O",
+    "verdict": "not_a_fit",
+    "reason": "Load‑testing webhook for canary deployments, unrelated to alert evaluation or routing."
+   }
+  ]
  }
 }

@@ -42,6 +42,10 @@ class _Skip(Exception):
     pass
 
 
+class _Quota(Exception):
+    pass
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("tasks", nargs="+")
@@ -87,6 +91,8 @@ def main() -> int:
                     raise _Skip()
                 v = judge_with_model(t["ticket"], cards)
                 if v and all("unavailable" in (x.get("reason") or "") for x in v):
+                    if "QuotaExhausted" in v[0]["reason"]:
+                        raise _Quota(v[0]["reason"])
                     raise _Failed(v[0]["reason"])      # never cache a failure
                 return v
             try:
@@ -96,6 +102,10 @@ def main() -> int:
             except _Skip:
                 totals["skipped"] = totals.get("skipped", 0) + 1
                 continue
+            except _Quota as e:
+                print(f"\nSTOPPED at {t['id']}: {e}\nNothing was scored or written; "
+                      f"rerun later (judged tickets are cached).")
+                return 2
             except _Failed as e:
                 verdicts, failed = [], True
                 print(f"  {t['id']:4s} model call failed: {str(e)[:110]}")

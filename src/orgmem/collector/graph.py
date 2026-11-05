@@ -81,6 +81,10 @@ class Deps:
     # (name, description, readme) -> {"purpose", "confidence"}; None = use the LLM via
     # collector.purpose.write_line. Tests inject a stub.
     purpose_writer: Callable[[str, str | None, str], dict] | None = None
+    # (title, body) -> {"keep", "kind", "reason"}; None = collector.pages.judge_page.
+    # Any failure falls back to the keyword rule.
+    page_judge: Callable[[str, str], dict] | None = None
+    use_llm_pages: bool = True
     org: str = "grafana"
     extra: dict = field(default_factory=dict)
 
@@ -155,10 +159,22 @@ def build_collector(deps: Deps, checkpointer=None):
 
         if ev.source in ("docs-markdown", "confluence", "notion"):
             text = f"{ev.title or ''}\n{ev.body or ''}"
-            if not _SOLVED_SIGNAL.search(text[:6000]):
-                return {"decision": "ignore",
-                        "reason": "page does not describe a solution, decision or pitfall",
-                        "log": [{"node": "locate", "ignored": "no solved-problem signal"}]}
+            verdict, how = None, "rule"
+            if deps.use_llm_pages:
+                try:
+                    from .pages import judge_page
+                    verdict = (deps.page_judge or judge_page)(ev.title or "", ev.body or "")
+                    how = "model"
+                except Exception:          # model unavailable: fall back to the rule
+                    verdict = None
+            keep = (verdict["keep"] if verdict is not None
+                    else bool(_SOLVED_SIGNAL.search(text[:6000])))
+            if not keep:
+                why = (f"page judged {verdict['kind']}: {verdict['reason'][:120]}"
+                       if verdict is not None
+                       else "page does not describe a solution, decision or pitfall")
+                return {"decision": "ignore", "reason": why,
+                        "log": [{"node": "locate", "ignored": why, "by": how}]}
             targets.append({"unit_id": f"page:{ev.object_ref}", "repo": repo or ev.source,
                             "full": full, "path": ev.object_ref, "kind": "solved_problem",
                             "name": (ev.title or ev.object_ref)[:120]})

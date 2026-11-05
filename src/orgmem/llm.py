@@ -30,6 +30,7 @@ from __future__ import annotations
 import hashlib
 import json
 import random
+import re
 import time
 from pathlib import Path
 
@@ -49,6 +50,10 @@ class LLMRefusal(RuntimeError):
 
 class LLMUnavailable(RuntimeError):
     pass
+
+
+class QuotaExhausted(LLMUnavailable):
+    """The provider's per-day cap is spent. Not retried; evaluation scripts stop on it."""
 
 
 # ---------------------------------------------------------------- keys & models
@@ -216,6 +221,10 @@ def _post_with_backoff(body: dict, model: str, attempts: int = 6) -> dict:
                 body["response_format"].get("type") == "json_schema":
             _json_schema_supported[model] = False
             raise _Retry()
+        if r.status_code == 429 and _DAILY_LIMIT.search(r.text):
+            # A per-day cap does not clear in seconds: retrying only stalls the caller
+            # (measured: ~9 minutes per call on Groq). Fail now; callers fail safe.
+            raise QuotaExhausted(_quota_message(r.text))
         if r.status_code in (429, 500, 502, 503, 504) and i < attempts - 1:
             ra = r.headers.get("retry-after")
             wait = float(ra) if ra and ra.replace(".", "").isdigit() else delay
@@ -228,6 +237,19 @@ def _post_with_backoff(body: dict, model: str, attempts: int = 6) -> dict:
 
 class _Retry(Exception):
     pass
+
+
+# Groq: "tokens per day (TPD)" / "requests per day (RPD)"; Gemini: "...PerDay...".
+_DAILY_LIMIT = re.compile(r"per day|\((?:TPD|RPD)\)|PerDay", re.I)
+
+
+def _quota_message(text: str) -> str:
+    try:
+        msg = json.loads(text)["error"]["message"]
+    except Exception:
+        msg = text
+    msg = re.sub(r"organization `[^`]*`\s*", "", msg)       # don't log account ids
+    return f"daily quota exhausted: {msg[:200]}"
 
 
 def _strip_fences(text: str) -> str:

@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import json
 import re
+import string
 import uuid
 
 import psycopg
@@ -307,7 +308,7 @@ def _candidate_letter(label: str, letters: list[str], names: list[str]) -> str |
     s = (label or "").strip()
     if s.upper() in letters:
         return s.upper()
-    m = re.fullmatch(r"(?i)\(?\s*(?:candidate\s+)?([A-J])\s*\)?(?:\s*[:\-.].*)?", s)
+    m = re.fullmatch(r"(?i)\(?\s*(?:candidate\s+)?([A-Z])\s*\)?(?:\s*[:\-.].*)?", s)
     if m and m.group(1).upper() in letters:
         return m.group(1).upper()
     hits = [letters[i] for i, n in enumerate(names) if n and n.lower() == s.lower()]
@@ -325,19 +326,23 @@ def judge_with_model(intent: str, cards: list[dict]) -> list[dict]:
     """
     from .llm import structured
 
-    letters = "ABCDEFGHIJ"
-    body = "\n\n".join(
-        f"Candidate {letters[i]}: {c['name']}\n  description: {c.get('summary') or '-'}\n"
-        + (f"  purpose: {c['purpose']}\n" if c.get("purpose") else "")
-        + "\n".join(f"  evidence: {e}" for e in c.get("evidence", [])[:6])
-        for i, c in enumerate(cards))
-    used = list(letters[:len(cards)])
-    # Constrain the label to exactly the letters shown. The original schema allowed any
-    # string, and a model that wrote "Candidate A" was parsed by its first character,
-    # "C" -- scrambling every verdict onto the wrong candidate (caught on Gemini).
-    schema = json.loads(json.dumps(_JUDGE_SCHEMA))
-    schema["properties"]["verdicts"]["items"]["properties"]["candidate"]["enum"] = used
+    # 26 labels. It used to be "ABCDEFGHIJ": a 15-candidate shortlist then indexed past
+    # the end while building the prompt -- OUTSIDE the try below -- so find_existing
+    # crashed instead of failing safe. Everything now happens inside the try.
+    letters = string.ascii_uppercase
     try:
+        cards = cards[:len(letters)]
+        body = "\n\n".join(
+            f"Candidate {letters[i]}: {c['name']}\n  description: {c.get('summary') or '-'}\n"
+            + (f"  purpose: {c['purpose']}\n" if c.get("purpose") else "")
+            + "\n".join(f"  evidence: {e}" for e in c.get("evidence", [])[:6])
+            for i, c in enumerate(cards))
+        used = list(letters[:len(cards)])
+        # Constrain the label to exactly the letters shown. The original schema allowed
+        # any string, and a model that wrote "Candidate A" was parsed by its first
+        # character, "C" -- scrambling every verdict (caught on Gemini).
+        schema = json.loads(json.dumps(_JUDGE_SCHEMA))
+        schema["properties"]["verdicts"]["items"]["properties"]["candidate"]["enum"] = used
         out = structured(_JUDGE_SYSTEM, f"Request: {intent}\n\n{body}\n\n"
                          f"Answer once for each candidate, labelled with its letter only "
                          f"({', '.join(used)}).", schema)
