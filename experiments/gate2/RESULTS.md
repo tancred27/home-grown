@@ -169,8 +169,32 @@ ticket in the asset vocabulary before search, or a depth of ~25 (cost below).
 
 The longer list costs tokens and buys siblings: 5 strong verdicts on assets in the gold's
 own repo (e.g. four other augurs crates for the "weekly cycle" ticket). That is still the
-right place to send a developer, but it is noisier. Product default stays at
-`verdict_shortlist = 15` until the controls are in; a false alarm there would decide it.
+right place to send a developer, but it is noisier.
+
+**How deep does the shortlist need to be? Measured without the model.** The judge can
+only flag what it is shown, so the depth question is a retrieval question:
+`scripts/gold_ranks.py` records the gold asset's rank for all 30 gate-2 duplicate tickets
+(four ticket sets), at three corpus sizes, with the same real distractors as gate-1 run
+4c (`gold_ranks_{base,grafana,all}.json`).
+
+| corpus | gold in top 1 | top 5 | top 15 | top 30 | ranks > 5 |
+|---|---|---|---|---|---|
+| 109 (86 units + 23 pages) | 23 | **29** | 29 | 30 | p04 = 18 |
+| 515 (+ 406 other Grafana repos) | 22 | **28** | 28 | 29 | d08 = 23, p04 = 54 |
+| 1,932 (+ 1,417 from 5 other orgs) | 20 | **27** | 27 | 28 | d07 = 17, d08 = 35, p04 > 50 |
+
+**At every size, top 15 holds exactly as many gold assets as top 5.** Misses that fall
+out of the top 5 fall far (ranks 17 to 54+), so the useful depths are 5 or ≥30, and 30
+would cost ~6x the tokens of 5 on a 200k-tokens/day budget. **Product default changed
+back to `verdict_shortlist = 5`.** The way to recover those misses is better retrieval
+(e.g. restate the ticket in asset vocabulary), not a deeper judge.
+
+Caveat that flatters these numbers: the gold assets have LLM-written purpose lines and
+the distractors do not (only name + description), so gold gets one extra field to match
+on. Gate-1 run 4c had the same imbalance in the other direction (no purpose lines at
+all) and saw recall@5 fall to 0.55 at 1,909 assets. The truth at scale is between the
+two; measuring it fairly needs purpose lines for all ~1,900 distractors (~1,900 LLM
+calls, about 10 days of this free tier).
 
 **Why partial: Groq's daily token cap.** The free tier allows 1,000 requests/day, but
 also **200,000 tokens/day**, and that is the limit that binds. A top-15 prompt is several

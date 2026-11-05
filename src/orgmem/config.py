@@ -37,7 +37,10 @@ class Settings(BaseSettings):
     # "unknown". See experiments/gate2/RESULTS.md.
     verdict_mode: str = "rules"
     # How many search results the model judge reads per question (only in "model" mode).
-    verdict_shortlist: int = 15
+    # 5, not 15: on all 30 gate-2 duplicate tickets, at 109, 515 and 1,932 assets, top 15
+    # held exactly as many gold assets as top 5; the misses sit at ranks 17-54. Depth 15
+    # cost ~3x the tokens per question for nothing (experiments/gate2/RESULTS.md).
+    verdict_shortlist: int = 5
 
     # Which LLM. "anthropic" | "gemini" | "local" (any OpenAI-compatible server).
     # The Gemini FREE tier may use prompts to improve Google's products: acceptable for

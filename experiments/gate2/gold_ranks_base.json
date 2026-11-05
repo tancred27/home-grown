@@ -1,0 +1,164 @@
+{
+ "visible_assets": 109,
+ "within": {
+  "1": 23,
+  "5": 29,
+  "10": 29,
+  "15": 29,
+  "20": 30,
+  "30": 30,
+  "50": 30
+ },
+ "rows": [
+  {
+   "set": "tasks.json",
+   "task": "d01",
+   "rank": 1
+  },
+  {
+   "set": "tasks.json",
+   "task": "d02",
+   "rank": 1
+  },
+  {
+   "set": "tasks.json",
+   "task": "d03",
+   "rank": 1
+  },
+  {
+   "set": "tasks.json",
+   "task": "d04",
+   "rank": 1
+  },
+  {
+   "set": "tasks.json",
+   "task": "d05",
+   "rank": 1
+  },
+  {
+   "set": "tasks.json",
+   "task": "d06",
+   "rank": 1
+  },
+  {
+   "set": "tasks.json",
+   "task": "d07",
+   "rank": 1
+  },
+  {
+   "set": "tasks.json",
+   "task": "d08",
+   "rank": 4
+  },
+  {
+   "set": "tasks.json",
+   "task": "d09",
+   "rank": 1
+  },
+  {
+   "set": "tasks.json",
+   "task": "d10",
+   "rank": 1
+  },
+  {
+   "set": "tasks.json",
+   "task": "d11",
+   "rank": 1
+  },
+  {
+   "set": "tasks.json",
+   "task": "d12",
+   "rank": 1
+  },
+  {
+   "set": "tasks_heldout.json",
+   "task": "h01",
+   "rank": 1
+  },
+  {
+   "set": "tasks_heldout.json",
+   "task": "h02",
+   "rank": 1
+  },
+  {
+   "set": "tasks_heldout.json",
+   "task": "h03",
+   "rank": 1
+  },
+  {
+   "set": "tasks_heldout.json",
+   "task": "h04",
+   "rank": 2
+  },
+  {
+   "set": "tasks_heldout.json",
+   "task": "h05",
+   "rank": 1
+  },
+  {
+   "set": "tasks_heldout.json",
+   "task": "h06",
+   "rank": 3
+  },
+  {
+   "set": "tasks_judge_fresh.json",
+   "task": "f01",
+   "rank": 1
+  },
+  {
+   "set": "tasks_judge_fresh.json",
+   "task": "f02",
+   "rank": 1
+  },
+  {
+   "set": "tasks_judge_fresh.json",
+   "task": "f03",
+   "rank": 1
+  },
+  {
+   "set": "tasks_judge_fresh.json",
+   "task": "f04",
+   "rank": 1
+  },
+  {
+   "set": "tasks_judge_fresh2.json",
+   "task": "p01",
+   "rank": 1
+  },
+  {
+   "set": "tasks_judge_fresh2.json",
+   "task": "p02",
+   "rank": 3
+  },
+  {
+   "set": "tasks_judge_fresh2.json",
+   "task": "p03",
+   "rank": 1
+  },
+  {
+   "set": "tasks_judge_fresh2.json",
+   "task": "p04",
+   "rank": 18
+  },
+  {
+   "set": "tasks_judge_fresh2.json",
+   "task": "p05",
+   "rank": 3
+  },
+  {
+   "set": "tasks_judge_fresh2.json",
+   "task": "p06",
+   "rank": 1
+  },
+  {
+   "set": "tasks_judge_fresh2.json",
+   "task": "p07",
+   "rank": 1
+  },
+  {
+   "set": "tasks_judge_fresh2.json",
+   "task": "p08",
+   "rank": 3
+  }
+ ]
+}
