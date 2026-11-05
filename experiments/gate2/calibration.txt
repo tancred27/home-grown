@@ -1,0 +1,32 @@
+tuning queries: 106   similarity percentiles (5 25 50 75 95)
+  positive (query vs its gold asset):        0.539 0.576 0.627 0.690 0.786
+  negative (best match when gold is absent):  0.517 0.568 0.612 0.660 0.749
+threshold    TPR    FPR      J
+     0.55   0.89   0.85   0.04
+     0.56   0.85   0.80   0.05
+     0.57   0.78   0.73   0.06
+     0.58   0.74   0.66   0.08
+     0.59   0.71   0.59   0.11
+     0.60   0.69   0.56   0.13
+     0.63   0.49   0.38   0.11
+     0.66   0.35   0.25   0.09
+     0.67   0.32   0.18   0.14
+     0.68   0.28   0.12   0.16
+     0.69   0.25   0.12   0.13
+     0.72   0.18   0.07   0.11
+     0.75   0.11   0.05   0.07
+     0.78   0.07   0.03   0.04
+     0.81   0.02   0.00   0.02
+     0.84   0.02   0.00   0.02
+best by Youden J: threshold=0.68  TPR=0.28  FPR=0.12  J=0.16
+
+FINDING: an absolute similarity threshold cannot separate "it exists" from "it does
+not". Positive and leave-one-out negative similarity distributions overlap almost
+entirely (medians 0.627 vs 0.612); the best threshold has Youden J = 0.16. Retrieval can
+RANK the right asset first when it exists; it cannot DETECT that nothing matches. Not
+adopted. The held-out gate-2 tickets were not used for this.
+
+NEXT (declared before running): compare, on the held-out gate-2 tickets, the current
+rule-based verdict against a model-judged verdict made blind (a fresh subagent sees each
+ticket and its top-5 candidate cards, never the gold label). Both are evaluations of the
+same retrieval output; neither is tuned on these tickets.
