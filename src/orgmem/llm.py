@@ -135,6 +135,8 @@ def _headers() -> dict:
 
 def structured(system: str, user: str, schema: dict, max_tokens: int = 2000) -> dict:
     """One call, JSON out, matching `schema`. Raises on any failure (callers fail safe)."""
+    if settings.llm_provider == "disabled":
+        raise LLMUnavailable("LLM disabled (llm_provider=disabled)")
     if settings.llm_provider == "anthropic":
         return _anthropic(system, user, schema, max_tokens)
     try:
