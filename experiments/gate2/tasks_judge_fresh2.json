@@ -1,0 +1,34 @@
+{
+  "_about": "Third fit-judge ticket set, written and committed BEFORE the shortlist (top-15) judge or the Groq-written map was evaluated. Used once per configuration to compare top-5 vs shortlist-15. Duplicates are deliberately phrased far from the assets' own wording.",
+  "tasks": [
+    {"id": "p01", "kind": "duplicate", "gold_unit_id": "github:dskit:.",
+     "ticket": "Every backend team keeps rewriting ring membership, rate limiting and service lifecycle code. Is there a shared Go library for that?"},
+    {"id": "p02", "kind": "duplicate", "gold_unit_id": "github:crocochrome:.",
+     "ticket": "Our browser-based checks need a sidecar that launches Chrome on request and kills hung instances."},
+    {"id": "p03", "kind": "duplicate", "gold_unit_id": "github:augurs:crates/augurs-seasons",
+     "ticket": "Detect whether a metric has a weekly cycle before we pick a forecasting model."},
+    {"id": "p04", "kind": "duplicate", "gold_unit_id": "github:augurs:crates/augurs-outlier",
+     "ticket": "Across a fleet of pods, tell me which pod's latency curve does not look like the others."},
+    {"id": "p05", "kind": "duplicate", "gold_unit_id": "github:dashboard-linter:.",
+     "ticket": "Before merging, reject dashboard JSON that uses deprecated panels or hard-coded datasources."},
+    {"id": "p06", "kind": "duplicate", "gold_unit_id": "github:github-rate-limits-prometheus-exporter:.",
+     "ticket": "Alert us when our GitHub App is close to exhausting its API quota."},
+    {"id": "p07", "kind": "duplicate", "gold_unit_id": "github:collector-configurator:.",
+     "ticket": "A UI where people click together an OpenTelemetry collector pipeline instead of writing YAML by hand."},
+    {"id": "p08", "kind": "duplicate", "gold_unit_id": "github:alerting:.",
+     "ticket": "We need the logic that evaluates alert rules and routes notifications to chat and paging tools; we do not want to write our own."},
+
+    {"id": "q01", "kind": "control", "gold_unit_id": null,
+     "ticket": "Write a function that checks whether a year is a leap year."},
+    {"id": "q02", "kind": "control", "gold_unit_id": null,
+     "ticket": "Add a helper that converts kilometres per hour to miles per hour."},
+    {"id": "q03", "kind": "control", "gold_unit_id": null,
+     "ticket": "Generate a QR code PNG for a given URL."},
+    {"id": "q04", "kind": "control", "gold_unit_id": null,
+     "ticket": "Write a function that calculates compound interest for a savings plan."},
+    {"id": "q05", "kind": "control", "gold_unit_id": null,
+     "ticket": "Add a profanity filter for user-submitted comments."},
+    {"id": "q06", "kind": "control", "gold_unit_id": null,
+     "ticket": "Parse two semantic version strings and tell which one is newer."}
+  ]
+}
