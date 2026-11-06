@@ -346,3 +346,62 @@ def test_owner_gate_off_still_never_applies_a_deprecation(env):
     assert out["status"] == "applied"
     (_, res), = out["result"].items()
     assert res["stage"] != "deprecated"
+
+
+def _fake_github(files: dict[str, str]):
+    """A stand-in for the GitHub API: one tree, raw file contents, call counting."""
+    calls = []
+
+    def get(url, headers=None):
+        calls.append(url)
+        if "/git/trees/" in url:
+            return 200, {"sha": "abc123def4567890",
+                         "tree": [{"path": p, "type": "blob"} for p in files]}
+        path = url.split("/contents/", 1)[1].split("?", 1)[0]
+        return (200, files[path]) if path in files else (404, "")
+    return get, calls
+
+
+def test_sparse_checkout_fetches_only_what_the_agent_reads(tmp_path):
+    from orgmem.collector.remote import sparse_checkout
+    files = {"package.json": '{"name": "remote-retry", "description": "Retry HTTP calls"}',
+             "README.md": "# remote-retry", "src/retry.ts": "export const x = 1",
+             "src/retry.test.ts": "it('gives up after max attempts', () => {})",
+             "../evil.txt": "nope"}
+    get, calls = _fake_github(files)
+    root = sparse_checkout("testorg/remote-retry", "HEAD", get=get, cache=tmp_path)
+    assert (root / "package.json").read_text().startswith('{"name"')
+    assert (root / "src" / "retry.ts").exists() and (root / "src" / "retry.ts").read_text() == ""
+    assert "gives up" in (root / "src" / "retry.test.ts").read_text()
+    assert not (tmp_path / "evil.txt").exists(), "paths must never escape the checkout"
+    fetched = [c for c in calls if "/contents/" in c]
+    assert len(fetched) == 3, "manifest, README and test file only; source is a placeholder"
+    n = len(calls)
+    assert sparse_checkout("testorg/remote-retry", "HEAD", get=get, cache=tmp_path) == root
+    assert len(calls) == n + 1, "cached per tree sha: only the tree is re-read"
+
+
+def test_repo_without_a_local_clone_is_processed_remotely(tmp_path):
+    from langgraph.checkpoint.memory import InMemorySaver
+
+    from orgmem.collector.remote import sparse_checkout
+    name = f"zz-remote-{uuid.uuid4().hex[:6]}"
+    files = {"package.json": '{"name": "%s", "description": "Retry HTTP calls"}' % name,
+             "README.md": f"# {name}\n\nRetries failed HTTP requests with backoff.\n",
+             "retry.test.ts": "it('gives up after max attempts', () => {})\n"}
+    get, _ = _fake_github(files)
+    deps = Deps(repos_roots=[tmp_path / "no-clones-here"],
+                remote=lambda full, ref: sparse_checkout(full, ref, get=get,
+                                                         cache=tmp_path / "sparse"),
+                purpose_writer=lambda n, d, r: {"purpose": "Retry HTTP calls.",
+                                                "confidence": "high"})
+    g = build_collector(deps, checkpointer=InMemorySaver())
+    try:
+        out = run_event(g, commit(name, "Add retry", [("package.json", "added")]),
+                        uuid.uuid4().hex)
+        assert out["status"] == "applied", out
+        (uid, res), = out["result"].items()
+        assert uid == f"github:{name}:." and res["new_claims"] >= 1
+    finally:
+        with admin_conn() as conn, conn.cursor() as cur:
+            cur.execute("delete from asset where unit_id like %s", (f"github:{name}:%",))

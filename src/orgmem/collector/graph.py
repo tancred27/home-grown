@@ -89,6 +89,10 @@ class Deps:
     use_llm_pages: bool = True
     # None = settings.owner_gate. Tests of the approval flow pass True explicitly.
     owner_gate: bool | None = None
+    # (full_name, ref) -> local dir, for repos with no local clone. Production passes
+    # collector.remote.sparse_checkout: fetch tree + manifests + READMEs + touched tests
+    # instead of mirroring every repo. None = local checkouts only.
+    remote: Callable[[str, str], Path | None] | None = None
     org: str = "grafana"
     extra: dict = field(default_factory=dict)
 
@@ -185,6 +189,9 @@ def build_collector(deps: Deps, checkpointer=None):
             return {"targets": targets, "log": [{"node": "locate", "page": ev.object_ref}]}
 
         root = deps.clone(repo)
+        if root is None and deps.remote is not None and full:
+            ref = ev.version if re.fullmatch(r"[0-9a-f]{7,40}", ev.version or "") else "HEAD"
+            root = deps.remote(full, ref)
         if root is None:
             return {"decision": "ignore", "reason": f"no checkout of {repo} available",
                     "log": [{"node": "locate", "ignored": "no checkout"}]}
@@ -205,7 +212,8 @@ def build_collector(deps: Deps, checkpointer=None):
         for u, _ in found:
             if u.path in hit or u.path in added_manifests:
                 targets.append({"unit_id": u.unit_id, "repo": repo, "full": full,
-                                "path": u.path, "kind": u.kind, "name": u.name})
+                                "path": u.path, "kind": u.kind, "name": u.name,
+                                "root": str(root)})
         if not targets:
             return {"decision": "ignore", "reason": "no reusable unit touched",
                     "log": [{"node": "locate", "ignored": "no unit"}]}
@@ -258,7 +266,7 @@ def build_collector(deps: Deps, checkpointer=None):
                 for c in RuleExtractor().extract(body, ev.url or ev.object_ref, version):
                     claims.append(c)
             else:
-                root = deps.clone(t["repo"])
+                root = (Path(t["root"]) if t.get("root") else deps.clone(t["repo"]))
                 meta = deps.repo_meta(t["full"]) or {}
                 detected = {u.unit_id: (u, cl) for u, cl in units_mod.detect(
                     root, t["repo"], commit=version,
@@ -299,7 +307,7 @@ def build_collector(deps: Deps, checkpointer=None):
             if not P.needs_refresh(paths, t["path"], has_line, regenerate=regen):
                 skipped += 1
                 continue
-            root = deps.clone(t["repo"])
+            root = (Path(t["root"]) if t.get("root") else deps.clone(t["repo"]))
             unit_dir = root if t["path"] == "." else root / t["path"]
             readme, rname = P.readme_excerpt(unit_dir)
             try:
@@ -344,7 +352,7 @@ def build_collector(deps: Deps, checkpointer=None):
                                           reasons=["documentation page"]).model_dump()
                 continue
             meta = deps.repo_meta(t["full"]) or {}
-            root = deps.clone(t["repo"])
+            root = (Path(t["root"]) if t.get("root") else deps.clone(t["repo"]))
             unit_dir = root if t["path"] == "." else root / t["path"]
             readme = ""
             for f in sorted(unit_dir.glob("[Rr][Ee][Aa][Dd][Mm][Ee]*")):

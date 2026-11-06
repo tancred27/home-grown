@@ -28,8 +28,13 @@ from orgmem.db import admin_conn
 
 def make_deps(roots: list[Path]) -> Deps:
     meta = fetch_org_repos(settings.github_org)
+    from orgmem.collector.remote import sparse_checkout
+    # Local clones are optional: any repo without one is read through a sparse remote
+    # checkout (tree + manifests + READMEs + tests), so the worker scales past what fits
+    # on disk.
     return Deps(repos_roots=roots, repo_meta=lambda full: meta.get(full.split("/")[-1], {}),
-                releases=A.github_releases, contributors=A.github_contributors)
+                releases=A.github_releases, contributors=A.github_contributors,
+                remote=sparse_checkout)
 
 
 def main() -> int:
