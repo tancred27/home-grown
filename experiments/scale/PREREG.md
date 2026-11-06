@@ -49,3 +49,20 @@ exactly as in the product.
 No method changes are made on the basis of these numbers within this run. The gate-1 test
 set has been used before for measurement (see gate1/RESULTS.md caveat 4). It is used here
 only to measure, never to tune.
+
+## Addendum, 2026-11-07, before any code-signal line exists: condition K
+
+READMEs are often outdated, so a map built from them describes what the code used to do.
+Condition **K** writes every purpose line from **code-derived signals only**: name,
+one-line description, language, manifest module + imported dependencies, directory
+names, source file names and test file names (`collector/signals.signal_text`, capped at
+1,200 characters). No README. Distractors' signals come from the GitHub tree + root
+manifest (`scripts/fetch_code_signals.py`). Real units get the same function on their
+local checkout. Same opaque ids, same blind-writer setup (fresh Claude instances; they
+see only the signal files). The instruction adds one sentence: "The one-line description
+may be outdated; where it disagrees with the code signals, trust the code signals."
+
+Measured exactly like C / C0, as conditions **K0** (109 assets) and **K** (1,932).
+Decision rule, fixed now: if K0 is within 0.05 of A0 on gate-1 test r@5 **and** K beats
+C, the production map switches to code signals as the primary input, with the README
+demoted to an optional, explicitly-possibly-stale extra.

@@ -47,17 +47,21 @@ _CAPABILITY_FILE = re.compile(
     r"chart\.yaml|docs?/[^/]+\.md)$", re.I)
 
 
+def clean_readme(t: str, limit: int = 1400) -> str:
+    """README text -> plain excerpt: no comments, images, HTML, link targets or code."""
+    t = re.sub(r"<!--.*?-->", " ", t, flags=re.S)
+    t = re.sub(r"!\[[^\]]*\]\([^)]*\)", " ", t)
+    t = re.sub(r"<[^>]+>", " ", t)
+    t = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", t)
+    t = re.sub(r"```.*?```", " [code] ", t, flags=re.S)
+    return re.sub(r"\s+", " ", t).strip()[:limit]
+
+
 def readme_excerpt(d: Path, limit: int = 1400) -> tuple[str, str | None]:
     """(clean excerpt, relative README filename) of the first README in d."""
     for f in sorted(d.iterdir()) if d.is_dir() else []:
         if f.is_file() and f.name.lower().startswith("readme"):
-            t = f.read_text(encoding="utf-8", errors="ignore")
-            t = re.sub(r"<!--.*?-->", " ", t, flags=re.S)
-            t = re.sub(r"!\[[^\]]*\]\([^)]*\)", " ", t)
-            t = re.sub(r"<[^>]+>", " ", t)
-            t = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", t)
-            t = re.sub(r"```.*?```", " [code] ", t, flags=re.S)
-            return re.sub(r"\s+", " ", t).strip()[:limit], f.name
+            return clean_readme(f.read_text(encoding="utf-8", errors="ignore"), limit), f.name
     return "", None
 
 
