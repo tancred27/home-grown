@@ -29,7 +29,7 @@ def _headers() -> dict[str, str]:
 
 
 def fetch_org_repos(org: str | None = None, cache: Path | None = None,
-                    refresh: bool = False) -> dict[str, dict]:
+                    refresh: bool = False, max_pages: int = 10) -> dict[str, dict]:
     """{repo_name: {description, language, stars, pushed_at, archived}}.
 
     Cached to disk, because this is metadata that changes slowly and we would rather
@@ -45,9 +45,16 @@ def fetch_org_repos(org: str | None = None, cache: Path | None = None,
 
     out: dict[str, dict] = {}
     with httpx.Client(headers=_headers(), timeout=30.0, follow_redirects=True) as cl:
-        for page in range(1, 11):
-            r = cl.get(f"{API}/orgs/{org}/repos",
-                       params={"per_page": 100, "page": page, "type": "public"})
+        for page in range(1, max_pages + 1):
+            for attempt in range(4):            # big orgs: dropped connections happen
+                try:
+                    r = cl.get(f"{API}/orgs/{org}/repos",
+                               params={"per_page": 100, "page": page, "type": "public"})
+                    break
+                except httpx.TransportError:
+                    if attempt == 3:
+                        raise
+                    time.sleep(2 * (attempt + 1))
             r.raise_for_status()
             batch = r.json()
             if not batch:

@@ -1,0 +1,11 @@
+loaded 1,000,000 rows (95% org-wide) in 21s
+exact scan (today's rule)              p50   247.2 ms  p95   269.5 ms  recall@10 1.000  short results 0/50
+HNSW index built in 25184s
+HNSW ef=40, no iterative scan          p50     3.7 ms  p95     8.5 ms  recall@10 0.774  short results 0/50
+HNSW ef=40, iterative scan             p50     2.9 ms  p95     5.7 ms  recall@10 0.774  short results 0/50
+HNSW ef=100, no iterative scan         p50     3.2 ms  p95     7.9 ms  recall@10 0.836  short results 0/50
+HNSW ef=100, iterative scan            p50     3.4 ms  p95     7.5 ms  recall@10 0.836  short results 0/50
+HNSW ef=200, no iterative scan         p50     4.1 ms  p95    10.3 ms  recall@10 0.894  short results 0/50
+HNSW ef=200, iterative scan            p50     4.4 ms  p95    10.6 ms  recall@10 0.894  short results 0/50
+HNSW pool=400 then exact rank          p50     5.1 ms  p95    12.8 ms  recall@10 0.930  short results 0/50
+HNSW pool=1000 then exact rank         p50    17.7 ms  p95    30.1 ms  recall@10 0.930  short results 0/50

@@ -81,7 +81,8 @@ def main() -> int:
     queries = batch(nq)
     teams = rng.integers(1, TEAMS + 1, nq)
 
-    def run(label, setup_sql):
+    def run(label, setup_sql, sql=None):
+        sql = sql or "select id from zz_ann order by vec <=> %s limit %s"
         lat, results = [], []
         with psycopg.connect(settings.app_dsn) as c:      # orgmem_app: RLS applies
             register_vector(c)
@@ -91,8 +92,9 @@ def main() -> int:
                     for s in setup_sql:
                         c.execute(s)
                     t0 = time.perf_counter()
-                    rows = c.execute("select id from zz_ann order by vec <=> %s limit %s",
-                                     (HalfVector(q), K)).fetchall()
+                    params = ({"q": HalfVector(q), "k": K} if "%(q)s" in sql
+                              else (HalfVector(q), K))
+                    rows = c.execute(sql, params).fetchall()
                     lat.append((time.perf_counter() - t0) * 1000)
                     results.append([r[0] for r in rows])
         return lat, results
@@ -122,6 +124,18 @@ def main() -> int:
         lat, res = run("hnsw-it", [f"set local hnsw.ef_search = {ef}",
                                    "set local hnsw.iterative_scan = relaxed_order"])
         report(f"HNSW ef={ef}, iterative scan", lat, res)
+
+    # The production "hnsw" mode: a candidate POOL through the index (iterative scan),
+    # then exact ranking of the pool (search.py, settings.hnsw_pool / hnsw_ef_search).
+    for pool in (400, 1000):
+        pool_sql = (f"select id from (select id, vec <=> %s as d from zz_ann "
+                    f"order by vec <=> %s limit {pool}) p order by d limit %s")
+        lat, res = run("pool", [f"set local hnsw.ef_search = {pool}",
+                                "set local hnsw.iterative_scan = relaxed_order"],
+                       sql=pool_sql.replace("%s as d", "%(q)s as d")
+                       .replace("vec <=> %s limit", "vec <=> %(q)s limit")
+                       .replace("limit %s", "limit %(k)s"))
+        report(f"HNSW pool={pool} then exact rank", lat, res)
 
     if "--keep" not in sys.argv:
         with psycopg.connect(settings.admin_dsn, autocommit=True) as a:
