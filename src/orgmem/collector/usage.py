@@ -7,8 +7,11 @@ on it (experiments/collector/RESULTS.md). Usage is the better signal.
 
 This pass, run after a batch of events (it is a property across assets, not of one
 event):
-  1. reads go.mod requires and package.json dependencies in every checkout and writes
-     `depends_on` edges between assets, with the manifest as evidence;
+  1. reads go.mod requires and package.json dependencies and writes `depends_on` edges
+     between assets, with the manifest as evidence. INCREMENTAL: pass `repos=` and only
+     those repos' manifests are read; their published names are stored in
+     `package_name` (db/005_scale.sql), so a dependency on a repo that was not rescanned
+     still resolves by lookup. Cost is proportional to what changed, not to the org;
   2. lifts a stage the owner has not confirmed: an asset that two or more OTHER teams
      depend on, or that a prod asset depends on, is in production use.
 It only ever lifts (dev/beta/unknown -> prod), never lowers, and never touches a stage
@@ -34,12 +37,14 @@ def _manifests(root: Path):
             yield p
 
 
-def scan(roots: list[Path]) -> tuple[dict, list[tuple]]:
-    """-> (published name -> unit_id, [(src_unit_id, dep_name, manifest_rel_path)])."""
+def scan(roots: list[Path], repos: set[str] | None = None) -> tuple[dict, list[tuple]]:
+    """-> (published name -> unit_id, [(src_unit_id, dep_name, manifest_rel_path)]).
+    `repos`: only these repo directories (None = every checkout)."""
     published: dict[str, str] = {}
     uses: list[tuple] = []
     for r in roots:
-        for repo_dir in sorted(p for p in r.iterdir() if p.is_dir()):
+        for repo_dir in sorted(p for p in r.iterdir() if p.is_dir()
+                               and (repos is None or p.name in repos)):
             repo = repo_dir.name
             for m in _manifests(repo_dir):
                 rel_dir = m.parent.relative_to(repo_dir).as_posix() or "."
@@ -78,11 +83,25 @@ def _resolve(published: dict, dep: str) -> str | None:
     return best[1] if best else None
 
 
-def refresh(roots: list[Path]) -> dict:
-    published, uses = scan(roots)
+def refresh(roots: list[Path], repos: set[str] | list[str] | None = None) -> dict:
+    """Rebuild dependency edges for `repos` (None = all checkouts) and lift stages."""
+    repos = set(repos) if repos is not None else None
+    scanned = {r.name for root in roots for r in root.iterdir() if r.is_dir()
+               and (repos is None or r.name in repos)}
+    local_published, uses = scan(roots, repos)
     edges = 0
     lifted: list[tuple[str, str]] = []
     with admin_conn() as conn, conn.cursor() as cur:
+        # Keep the stored name index current for the scanned repos, then resolve against
+        # ALL stored names (other repos' names come from earlier scans).
+        cur.execute("delete from package_name where repo = any(%s)", (list(scanned),))
+        for name, unit in local_published.items():
+            cur.execute("insert into package_name (name, unit_id, repo) values (%s,%s,%s) "
+                        "on conflict (name) do update set unit_id = excluded.unit_id, "
+                        "repo = excluded.repo, updated_at = now()",
+                        (name, unit, unit.split(":")[1]))
+        cur.execute("select name, unit_id from package_name")
+        published = dict(cur.fetchall())
         cur.execute("select unit_id, id, owner_team, stage, stage_confirmed from asset")
         assets = {u: (i, t, s, c) for u, i, t, s, c in cur.fetchall()}
 
@@ -104,7 +123,6 @@ def refresh(roots: list[Path]) -> dict:
 
         # Replace only the edges whose SOURCE is in the repos just scanned: refreshing
         # one repo must not wipe what every other repo depends on.
-        scanned = {r.name for root in roots for r in root.iterdir() if r.is_dir()}
         src_ids = [v[0] for u, v in assets.items()
                    if u.startswith("github:") and u.split(":")[1] in scanned]
         cur.execute("delete from edge where type = 'depends_on' and src = any(%s)",
@@ -123,9 +141,14 @@ def refresh(roots: list[Path]) -> dict:
 
         # Stage from usage: iterate to a fixed point so prod propagates down the chain.
         by_id = {v[0]: [u, v[1], v[2], v[3]] for u, v in assets.items()}
+        # Dependents from ALL current edges, not just this scan's: an incremental refresh
+        # must still count the teams whose repos were scanned earlier.
         dependents: dict = {}
-        for src_id, dst_id, _, _ in pairs:
-            dependents.setdefault(dst_id, set()).add(src_id)
+        cur.execute("select src, dst from edge where type = 'depends_on' "
+                    "and valid_to is null")
+        for src_id, dst_id in cur.fetchall():
+            if src_id in by_id and dst_id in by_id:
+                dependents.setdefault(dst_id, set()).add(src_id)
         changed = True
         while changed:
             changed = False
@@ -151,4 +174,4 @@ def refresh(roots: list[Path]) -> dict:
                     ev = cur.fetchone()[0]
                     cur.execute("update asset set stage = 'prod', stage_confidence = 0.65, "
                                 "stage_evidence_id = %s where id = %s", (ev, dst_id))
-    return {"published": len(published), "edges": edges, "lifted": lifted}
+    return {"published": len(published), "scanned_repos": len(scanned), "edges": edges, "lifted": lifted}

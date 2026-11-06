@@ -20,7 +20,7 @@ from langgraph.checkpoint.postgres import PostgresSaver
 from orgmem.collector import Deps, build_collector, run_event
 from orgmem.collector import adapters as A
 from orgmem.collector.events import claim_next, finish, release
-from orgmem.collector.graph import resume_event
+from orgmem.collector.graph import _repo_of, resume_event
 from orgmem.config import settings
 from orgmem.corpus.github import fetch_org_repos
 from orgmem.db import admin_conn
@@ -56,9 +56,10 @@ def main() -> int:
                    out.get("result") or {"questions": out.get("questions")})
             print(json.dumps(out, indent=1, default=str))
             return 0
-        n = 0
+        n, touched = 0, set()
         while (job := claim_next()) is not None:
             eid, ev = job
+            touched.add(_repo_of(ev)[1])
             try:
                 out = run_event(graph, ev, eid, owner_policy=None)
             except Exception as e:
@@ -73,8 +74,10 @@ def main() -> int:
                 finish(eid, "applied", out.get("result"))
         if n:
             from orgmem.collector.usage import refresh
-            u = refresh(roots)
-            print(f"usage refreshed: {u['edges']} edges, {len(u['lifted'])} stages lifted")
+            # Only the repos this batch touched: cost follows change, not org size.
+            u = refresh(roots, repos=touched)
+            print(f"usage refreshed for {u['scanned_repos']} repo(s): {u['edges']} edges, "
+                  f"{len(u['lifted'])} stages lifted")
         print(f"processed {n} events")
     return 0
 

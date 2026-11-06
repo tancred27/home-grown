@@ -43,6 +43,7 @@ def lib_and_two_users(tmp_path):
     with admin_conn() as conn, conn.cursor() as cur:
         cur.execute("delete from asset where id = any(%s)", ([v[0] for v in ids.values()],))
         cur.execute("delete from team where id = any(%s)", ([v[1] for v in ids.values()],))
+        cur.execute("delete from package_name where repo = any(%s)", (list(names.values()),))
 
 
 def test_library_used_by_two_other_teams_is_lifted_to_prod(lib_and_two_users):
@@ -92,3 +93,19 @@ def test_hidden_dependents_are_not_visible_through_edges(lib_and_two_users):
         with admin_conn() as conn, conn.cursor() as cur:
             cur.execute("delete from membership where user_id = %s", (viewer,))
             cur.execute("delete from app_user where id = %s", (viewer,))
+
+
+def test_incremental_refresh_resolves_against_repos_scanned_earlier(lib_and_two_users):
+    """Scale: each refresh reads ONE repo, yet the library is still found and lifted,
+    because published names are stored (package_name) and stage uses all edges."""
+    root, names, ids = lib_and_two_users
+    out = refresh([root], repos={names["lib"]})
+    assert out["scanned_repos"] == 1 and out["edges"] == 0
+    out = refresh([root], repos={names["app1"]})
+    assert out["scanned_repos"] == 1 and out["edges"] == 1, "resolved via stored name"
+    out = refresh([root], repos={names["app2"]})
+    assert (f"github:{names['lib']}:.", "depended on by 2 other teams") in out["lifted"]
+    with admin_conn() as conn, conn.cursor() as cur:
+        cur.execute("select count(*) from edge where type = 'depends_on' and dst = %s",
+                    (ids["lib"][0],))
+        assert cur.fetchone()[0] == 2, "app2's refresh must keep app1's edge"
