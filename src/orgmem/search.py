@@ -122,18 +122,44 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
         # carry several fields ("card": name+summary+claims, "summary": name+summary
         # only), and an ungrouped ORDER BY would return the same asset twice and push
         # other candidates out of the list.
-        cur.execute(
-            """
-            select a.id, a.name, 1 - min(e.vec <=> %s) as sim
-              from embedding e
-              join asset a on a.id = e.asset_id
-             where e.model = %s          -- never compare across models
-             group by a.id, a.name
-             order by min(e.vec <=> %s)
-             limit %s
-            """,
-            (qvec, settings.embed_model, qvec, limit),
-        )
+        if settings.vector_search == "hnsw":
+            # Past ~1M vectors: the HNSW index (db/006_hnsw.sql) fetches a candidate
+            # POOL with iterative scan -- it keeps walking the graph until enough rows
+            # pass row-level security, so a selective filter can't silently return
+            # nothing -- and the pool is then ranked exactly, best field per asset.
+            pool = max(settings.hnsw_pool, limit * 4)
+            cur.execute("set local enable_indexscan = on")
+            cur.execute("set local hnsw.iterative_scan = relaxed_order")
+            cur.execute(f"set local hnsw.ef_search = {max(pool, settings.hnsw_ef_search)}")
+            cur.execute(
+                """
+                with pool as materialized (
+                    select e.asset_id, e.vec <=> %s as d
+                      from embedding e
+                     where e.model = %s
+                     order by e.vec <=> %s
+                     limit %s)
+                select a.id, a.name, 1 - min(p.d) as sim
+                  from pool p join asset a on a.id = p.asset_id
+                 group by a.id, a.name
+                 order by min(p.d)
+                 limit %s
+                """,
+                (qvec, settings.embed_model, qvec, pool, limit),
+            )
+        else:
+            cur.execute(
+                """
+                select a.id, a.name, 1 - min(e.vec <=> %s) as sim
+                  from embedding e
+                  join asset a on a.id = e.asset_id
+                 where e.model = %s          -- never compare across models
+                 group by a.id, a.name
+                 order by min(e.vec <=> %s)
+                 limit %s
+                """,
+                (qvec, settings.embed_model, qvec, limit),
+            )
         semantic = [(r[0], r[1], float(r[2])) for r in cur.fetchall()]
 
     if settings.fusion == "interleave":

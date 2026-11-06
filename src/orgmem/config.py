@@ -36,6 +36,13 @@ class Settings(BaseSettings):
     # "model": an LLM judges each candidate against the request and fails safe to
     # "unknown". See experiments/gate2/RESULTS.md.
     verdict_mode: str = "rules"
+    # Vector search: "exact" (default; correct, ~0.2-0.7 s at 1M vectors under RLS) or
+    # "hnsw" (index fetches a candidate pool with iterative scan, pool ranked exactly;
+    # ~4-10 ms at 1M). Switch to hnsw when the corpus outgrows exact scan.
+    vector_search: str = "exact"
+    hnsw_pool: int = 400
+    hnsw_ef_search: int = 400
+
     # Restate the request as a component purpose line before searching (one small LLM
     # call per question; only in "model" mode, fails safe to plain search). Biggest
     # measured gain at scale: test recall@5 0.69 -> 0.82 at ~1,900 assets.
