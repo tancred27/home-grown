@@ -19,6 +19,7 @@ Rewrites come from llm.structured() (the product path, settings.llm_provider), c
 experiments/scale/rewrites_<provider>.json; failures are not cached.
 
 Usage: python -I scripts/scale_variants.py <lines-dir> [--set tuning|test|gate2]
+                                          [--rewrites <file.json>]
 """
 
 from __future__ import annotations
@@ -135,7 +136,13 @@ def main() -> int:
     qs = questions(which)
     print(f"{which}: {len(qs)} questions; rewriting with {settings.llm_provider} ...",
           flush=True)
-    rw = rewrites([q for q, _ in qs])
+    if "--rewrites" in sys.argv:          # precomputed: {"request": ..., "purpose": ...}
+        f = Path(sys.argv[sys.argv.index("--rewrites") + 1])
+        rw = {r["request"]: r["purpose"] for r in json.loads(f.read_text("utf-8"))}
+        missing = [q for q, _ in qs if q not in rw]
+        assert not missing, f"{len(missing)} questions have no rewrite"
+    else:
+        rw = rewrites([q for q, _ in qs])
     user = dev_user()
     model = settings.embed_model
     real = {k: v for k, v in key.items() if v["kind"] == "real"}

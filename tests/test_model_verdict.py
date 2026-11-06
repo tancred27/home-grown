@@ -83,3 +83,22 @@ def test_candidate_o_label_parses():
     assert _candidate_letter("Candidate O", letters, []) == "O"
     assert _candidate_letter("(m)", letters, []) == "M"
     assert _candidate_letter("Candidate P", letters, []) is None, "P was not shown"
+
+
+def test_query_rewrite_joins_the_search_and_fails_safe(monkeypatch):
+    import orgmem.search as S
+    monkeypatch.setattr(S.settings, "verdict_mode", "model")
+    monkeypatch.setattr(S.settings, "query_rewrite", True)
+    S._rewrite_cache.clear()
+    import orgmem.llm as L
+    monkeypatch.setattr(L, "structured", lambda *a, **k: {"purpose": "Detect outliers in a group of time series."})
+    assert S.rewrite_query("which pod's latency curve looks different?") == \
+        "Detect outliers in a group of time series."
+    S._rewrite_cache.clear()
+
+    def boom(*a, **k):
+        raise L.LLMUnavailable("down")
+    monkeypatch.setattr(L, "structured", boom)
+    assert S.rewrite_query("anything") is None, "no model: plain search, never an error"
+    monkeypatch.setattr(S.settings, "verdict_mode", "rules")
+    assert S.rewrite_query("x") is None, "rules mode never calls a model"

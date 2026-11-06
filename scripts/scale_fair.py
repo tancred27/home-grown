@@ -164,7 +164,8 @@ def main() -> int:
         finally:
             conn.rollback()                   # nothing from this experiment is kept
 
-    out = ROOT / "experiments" / "scale" / "results.json"
+    name = "results.json" if Path(sys.argv[2]).name == "purpose_lines" else f"results_{Path(sys.argv[2]).name}.json"
+    out = ROOT / "experiments" / "scale" / name
     out.write_text(json.dumps(results, indent=1), encoding="utf-8")
     print(f"\nwritten {out.relative_to(ROOT)}; database unchanged (rolled back)")
     return 0

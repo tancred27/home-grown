@@ -36,6 +36,10 @@ class Settings(BaseSettings):
     # "model": an LLM judges each candidate against the request and fails safe to
     # "unknown". See experiments/gate2/RESULTS.md.
     verdict_mode: str = "rules"
+    # Restate the request as a component purpose line before searching (one small LLM
+    # call per question; only in "model" mode, fails safe to plain search). Biggest
+    # measured gain at scale: test recall@5 0.69 -> 0.82 at ~1,900 assets.
+    query_rewrite: bool = True
     # How many search results the model judge reads per question (only in "model" mode).
     # 5, not 15: on all 30 gate-2 duplicate tickets, at 109, 515 and 1,932 assets, top 15
     # held exactly as many gold assets as top 5; the misses sit at ranks 17-54. Depth 15

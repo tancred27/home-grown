@@ -1,0 +1,6 @@
+embedding 1823 distractors (card, summary, purpose) and 86 real purpose lines...
+A0     109 assets | gate-1 test r@1 0.74 r@5 0.96 r@10 0.98 | gate-2 dups top1 23/30 top5 29 top15 29 top30 30
+A     1932 assets | gate-1 test r@1 0.55 r@5 0.80 r@10 0.88 | gate-2 dups top1 20/30 top5 27 top15 27 top30 28
+K     1932 assets | gate-1 test r@1 0.49 r@5 0.69 r@10 0.80 | gate-2 dups top1 17/30 top5 19 top15 24 top30 25
+K0     109 assets | gate-1 test r@1 0.69 r@5 0.90 r@10 0.94 | gate-2 dups top1 21/30 top5 26 top15 29 top30 29
+written experiments\scale\results_code_lines.json; database unchanged (rolled back)
