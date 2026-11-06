@@ -66,3 +66,22 @@ Measured exactly like C / C0, as conditions **K0** (109 assets) and **K** (1,932
 Decision rule, fixed now: if K0 is within 0.05 of A0 on gate-1 test r@5 **and** K beats
 C, the production map switches to code signals as the primary input, with the README
 demoted to an optional, explicitly-possibly-stale extra.
+
+## Addendum 2, 2026-11-07, before any new line exists: the scale curve
+
+Question: does recall keep falling as the corpus grows, or does it level off? Two points
+(109, ~1,932) can't tell.
+
+- Extra distractors: active, described repos of four large public orgs (microsoft,
+  google, Azure, aws-samples), added on top of the 1,823 already used. Repos already in
+  the corpus are skipped.
+- Purpose lines: **description only** for every new distractor (condition C setup, the
+  only one affordable at ~10k without fetching ~10k repo trees), written by blind Claude
+  instances with the same instruction and opaque ids. Real units keep their condition-C
+  lines, so everyone is on equal terms.
+- Corpus sizes: 109, 1,932, then nested random subsets up to the full set (fixed seed),
+  e.g. ~4k, ~7k, ~10k+.
+- Methods: base search, and base + query rewriting (`rw+`, rewrites already in
+  `rewrites_claude.json`).
+- Metrics: gate-1 test set r@1/5/10 (51) and gate-2 duplicate tickets in top 5 (30).
+- No method choice is made from these numbers. They describe the shape of the curve.
