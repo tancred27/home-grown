@@ -42,6 +42,14 @@ class Settings(BaseSettings):
     # cost ~3x the tokens per question for nothing (experiments/gate2/RESULTS.md).
     verdict_shortlist: int = 5
 
+    # Owner approval in the collection agent. OFF by default: new assets become
+    # discoverable at `default_visibility` with nobody asked, and nothing waits for a person.
+    # ON restores the interrupt() that asks the owner about visibility and deprecation.
+    # Either way the agent never applies a deprecation by itself (CLAUDE.md): with the
+    # gate off, a deprecation signal is recorded as an unconfirmed note in the stage basis.
+    owner_gate: bool = False
+    default_visibility: str = "org-wide"        # "org-wide" | "team-only"
+
     # Which LLM. "anthropic" | "gemini" | "local" (any OpenAI-compatible server).
     # The Gemini FREE tier may use prompts to improve Google's products: acceptable for
     # this project's public repos, never for private code.

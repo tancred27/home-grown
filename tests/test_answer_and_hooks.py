@@ -103,7 +103,8 @@ def two_users_one_asset(tmp_path):
                 releases=lambda f: [{"tag": "v1.4.0", "prerelease": False}],
                 contributors=lambda f, p: [{"login": "alice-ans", "commits": 9,
                                             "first_at": "2026-01-01T00:00:00Z",
-                                            "last_at": "2026-10-01T00:00:00Z"}])
+                                            "last_at": "2026-10-01T00:00:00Z"}],
+                owner_gate=True)        # the owner keeps X team-only
     g = build_collector(deps, checkpointer=InMemorySaver())
     ev = Event(source="github", kind="commit", object_ref=f"testorg/{name}",
                version=uuid.uuid4().hex, actor="alice-ans", title="Add retry",

@@ -41,6 +41,7 @@ def env(tmp_path):
         contributors=lambda full, path: [
             {"login": "alice-test", "commits": 12, "first_at": "2026-01-01T00:00:00Z",
              "last_at": "2026-10-01T00:00:00Z"}],
+        owner_gate=True,        # these tests exercise the approval flow; default is off
     )
     graph = build_collector(deps)        # in-memory: no checkpointer needed for most tests
     yield name, deps, graph
@@ -314,3 +315,34 @@ def test_needs_refresh_rules():
     assert needs_refresh(["pkg/go.mod"], "pkg", has_line=True)
     assert not needs_refresh(["other/README.md"], "pkg", has_line=True)
     assert needs_refresh(["a.go"], ".", has_line=True, regenerate=True)
+
+
+def test_owner_gate_off_by_default_stores_without_asking(env):
+    """Default config: nobody is asked; a new asset is discoverable org-wide at once."""
+    from dataclasses import replace
+
+    from langgraph.checkpoint.memory import InMemorySaver
+
+    from orgmem.config import settings
+    name, deps, _ = env
+    assert settings.owner_gate is False and settings.default_visibility == "org-wide"
+    g = build_collector(replace(deps, owner_gate=None), checkpointer=InMemorySaver())
+    out = run_event(g, commit(name, "Add retry helper", [("package.json", "added")]),
+                    uuid.uuid4().hex, owner_policy=None)      # no owner available at all
+    assert out["status"] == "applied", "must not wait for an owner"
+    (uid, res), = out["result"].items()
+    assert res["scope"] == "org-wide"
+
+
+def test_owner_gate_off_still_never_applies_a_deprecation(env):
+    from dataclasses import replace
+
+    from langgraph.checkpoint.memory import InMemorySaver
+    name, deps, _ = env
+    g = build_collector(replace(deps, owner_gate=False), checkpointer=InMemorySaver())
+    run_event(g, commit(name, "Add retry", [("package.json", "added")]), uuid.uuid4().hex)
+    out = run_event(g, commit(name, "Deprecate retry helper, superseded by http-kit",
+                              [("retry.ts", "modified")]), uuid.uuid4().hex)
+    assert out["status"] == "applied"
+    (_, res), = out["result"].items()
+    assert res["stage"] != "deprecated"

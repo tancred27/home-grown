@@ -141,7 +141,7 @@ def _compose(state: AnswerState) -> dict:
         st = m["stage"]
         stage = f"{st['stage']}" + ("" if st["confirmed_by_owner"] else
                                     f" (inferred, {int((st['confidence'] or 0) * 100)}% "
-                                    "confidence, not yet confirmed by the owner)")
+                                    "confidence, unconfirmed)")
         where = f" ({m['where']})" if m.get("where") else ""
         lines.append(f"\n* {m['name']}{where}  [{m['verdict']}]  stage: {stage}")
         lines.append(f"  team: {m['owner_team']}  |  LOB: {m['lob']}  |  "

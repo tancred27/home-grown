@@ -1,4 +1,4 @@
-"""Is a solution in dev, beta or prod? Inferred from evidence, confirmed by the owner.
+"""Is a solution in dev, beta or prod? Inferred from evidence, marked unconfirmed.
 
 Code alone cannot prove something runs in production; a real deployment would read this
 from its deploy system (Argo CD, a service catalog, Kubernetes). From public data the

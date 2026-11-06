@@ -16,9 +16,10 @@ Triggered by every pushed commit and every created or updated documentation page
   attribute    who built it -> pseudonymous person -> team -> LOB -> manager.
   assess_stage dev / beta / prod / retired, inferred from evidence, unconfirmed.
   validate     every claim has evidence; personnel data is dropped.
-  owner_gate   interrupt() for what only a human decides: org-wide visibility of a new
-               asset, and any deprecation. The design's rules: the agent never
-               auto-deprecates, and visibility always goes to the owner.
+  owner_gate   OPTIONAL (settings.owner_gate, default off). Off: new assets get
+               settings.default_visibility and nobody is asked. On: interrupt() asks the
+               owner about org-wide visibility and any deprecation. Either way the agent
+               never applies a deprecation by itself.
   apply        one transaction: asset, claims, card, embeddings, contributors, stage,
                audit.
 
@@ -37,6 +38,7 @@ from typing import Annotated, Any, Callable, TypedDict
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import interrupt
 
+from ..config import settings
 from ..db import admin_conn
 from ..embed import asset_text, embed_texts
 from ..extract import tests_extractor as tx
@@ -85,6 +87,8 @@ class Deps:
     # Any failure falls back to the keyword rule.
     page_judge: Callable[[str, str], dict] | None = None
     use_llm_pages: bool = True
+    # None = settings.owner_gate. Tests of the approval flow pass True explicitly.
+    owner_gate: bool | None = None
     org: str = "grafana"
     extra: dict = field(default_factory=dict)
 
@@ -381,6 +385,15 @@ def build_collector(deps: Deps, checkpointer=None):
 
     # ------------------------------------------------------------ owner_gate
     def owner_gate(state: CollectState) -> dict:
+        gate_on = settings.owner_gate if deps.owner_gate is None else deps.owner_gate
+        if not gate_on:
+            # Nobody is asked. New assets take the configured default visibility; a
+            # deprecation proposal gets no "confirm", so apply() never applies it.
+            auto = {f"{t['unit_id']}:visibility": settings.default_visibility
+                    for t in state["targets"] if t["action"] == "create"}
+            return {"questions": [], "answers": auto,
+                    "log": [{"node": "owner_gate", "skipped": "owner_gate disabled",
+                             "auto": auto}]}
         questions = []
         for t in state["targets"]:
             if t["action"] == "create":
