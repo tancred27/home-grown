@@ -2,7 +2,9 @@
 
     retrieve -> judge -> enrich -> compose
 
-Answers yes / no / unknown / possibly, and for every match: who built it, their team,
+Answers yes / no / unknown / possibly, and lists up to settings.answer_results (5)
+results: every candidate judged a fit first, then candidates the judge could not rule
+out (labelled unknown); not-a-fit candidates are never listed. For each: who built it, their team,
 line of business and manager, whether it is in dev or prod (and how sure we are), and
 whether the asker can read the code or must request access.
 
@@ -48,9 +50,13 @@ class AnswerState(TypedDict, total=False):
 
 
 def _retrieve_and_judge(state: AnswerState) -> dict:
-    vs = find_existing(state["user_id"], state["question"], state.get("keywords") or [])
+    model = settings.verdict_mode == "model"
+    vs = find_existing(state["user_id"], state["question"], state.get("keywords") or [],
+                       top=settings.answer_results)
+    # In model mode the judge's own reason is unknowns[0] (see search.find_existing).
     cands = [{"asset_id": v.asset_id, "name": display_name(v.name),
               "verdict": v.verdict, "reasons": [r["text"] for r in v.reasons[:3]],
+              "why": (v.unknowns[0] if model and v.unknowns else ""),
               "unknowns": v.unknowns[:2]} for v in vs]
     return {"candidates": cands, "verdict_source": settings.verdict_mode}
 
@@ -65,11 +71,19 @@ def _unit_path(unit_id: str | None) -> str:
     return "" if path in ("", ".") else path
 
 
+def select_results(cands: list[dict], n: int) -> list[dict]:
+    """Up to n results: every fit first (search order kept), then candidates the judge
+    could not rule out. A candidate judged not-a-fit is never shown."""
+    fits = [c for c in cands if c["verdict"] in STRONG]
+    maybe = [c for c in cands if c["verdict"] == "unknown"]
+    return (fits + maybe)[:n]
+
+
 def _enrich(state: AnswerState) -> dict:
-    strong = [c for c in state["candidates"] if c["verdict"] in STRONG][:3]
+    shown = select_results(state["candidates"], settings.answer_results)
     out = []
     with as_user(state["user_id"]) as conn, conn.cursor() as cur:
-        for c in strong:
+        for c in shown:
             cur.execute("""
                 select a.stage, a.stage_confidence, a.stage_confirmed, e.excerpt,
                        t.name, l.name, lead.display_name, a.status,
@@ -124,7 +138,8 @@ def _enrich(state: AnswerState) -> dict:
 def _compose(state: AnswerState) -> dict:
     cands, matches = state["candidates"], state["matches"]
     model = state.get("verdict_source") == "model"
-    if matches:
+    fits = [m for m in matches if m["verdict"] in STRONG]
+    if fits:
         answer = "yes" if model else "possibly"
     elif model and cands and all(c["verdict"] == "not_a_fit" for c in cands):
         answer = "no"
@@ -137,6 +152,12 @@ def _compose(state: AnswerState) -> dict:
               "no": "No - nothing in the organisation's memory fits this.",
               "unknown": "Unknown - nothing clearly fits, but that is not proof it "
                          "has not been done."}[answer]]
+    if matches:
+        n_fit = sum(1 for m in matches if m["verdict"] in STRONG)
+        lines.append(f"\nTop {len(matches)} result{'s' if len(matches) != 1 else ''}"
+                     f" ({n_fit} judged a fit"
+                     + (f", {len(matches) - n_fit} not ruled out" if len(matches) > n_fit
+                        else "") + "):")
     for m in matches:
         st = m["stage"]
         stage = f"{st['stage']}" + ("" if st["confirmed_by_owner"] else
@@ -152,7 +173,9 @@ def _compose(state: AnswerState) -> dict:
         if m.get("used_by"):
             lines.append("  used by: " + ", ".join(f"{u['asset']} ({u['team']})"
                                                    for u in m["used_by"][:5]))
-        for r in m["reasons"][:2]:
+        if m.get("why"):
+            lines.append(f"  why: {m['why'][:200]}")
+        for r in list(dict.fromkeys(m["reasons"]))[:2]:      # dedupe, keep order
             lines.append(f"  - {r[:120]}")
         lines.append(f"  access: {m['access']}")
         if st.get("basis"):

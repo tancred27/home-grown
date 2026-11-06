@@ -166,3 +166,27 @@ def test_sibling_units_are_told_apart_by_their_path():
         "helm/github-rate-limits-prometheus-exporter"
     assert _unit_path("page:docs:grafana/x/docs/a.md") == "grafana/x/docs/a.md"
     assert _unit_path(None) == ""
+
+
+def test_up_to_five_results_fits_first_never_not_a_fit():
+    from orgmem.answer.graph import _compose, select_results
+    v = ["not_a_fit", "unknown", "extend", "unknown", "use_as_is", "unknown", "extend"]
+    cands = [{"name": f"c{i}", "verdict": x} for i, x in enumerate(v)]
+    shown = select_results(cands, 5)
+    assert [c["name"] for c in shown] == ["c2", "c4", "c6", "c1", "c3"]
+    assert all(c["verdict"] != "not_a_fit" for c in shown)
+
+    def m(c):
+        return {**c, "stage": {"stage": "dev", "confidence": 0.3, "confirmed_by_owner": False,
+                               "basis": ""}, "owner_team": "t", "lob": "l",
+                "team_manager": "m", "built_by": [], "used_by": [], "reasons": [],
+                "why": "fits", "access": "you can read the code"}
+    out = _compose({"candidates": cands, "matches": [m(c) for c in shown],
+                    "verdict_source": "model"})
+    assert out["answer"] == "yes"
+    assert "Top 5 results (3 judged a fit, 2 not ruled out)" in out["text"]
+    assert out["text"].count(chr(10) + "* ") == 5 and "why: fits" in out["text"]
+
+    only_unknown = [m({"name": "u", "verdict": "unknown"})]
+    assert _compose({"candidates": [{"verdict": "unknown"}], "matches": only_unknown,
+                     "verdict_source": "model"})["answer"] == "unknown"

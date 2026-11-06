@@ -42,6 +42,10 @@ class Settings(BaseSettings):
     # cost ~3x the tokens per question for nothing (experiments/gate2/RESULTS.md).
     verdict_shortlist: int = 5
 
+    # How many results the answering agent shows: every candidate judged a fit, then
+    # (to fill up) candidates the judge could not rule out. Not-a-fit is never shown.
+    answer_results: int = 5
+
     # Owner approval in the collection agent. OFF by default: new assets become
     # discoverable at `default_visibility` with nobody asked, and nothing waits for a person.
     # ON restores the interrupt() that asks the owner about visibility and deprecation.
