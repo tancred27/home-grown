@@ -157,7 +157,7 @@ Same model, pinned. Purpose lines from the Groq-written map in the DB (the produ
 | | duplicates flagged | false alarms | unrelated wrong-asset | siblings |
 |---|---|---|---|---|
 | top 5 | 7 / 8 | 0 / 6 | 0 | 3 |
-| top 15 | 7 / 8 | *not yet run* | 0 | 5 |
+| top 15 | 7 / 8 | *dropped (see below)* | 0 | 5 |
 
 **On the duplicates, the longer shortlist changes nothing.** The one miss, p04 ("which
 pod's latency curve does not look like the others"), is the case it was meant to fix, and
@@ -186,7 +186,9 @@ only flag what it is shown, so the depth question is a retrieval question:
 **At every size, top 15 holds exactly as many gold assets as top 5.** Misses that fall
 out of the top 5 fall far (ranks 17 to 54+), so the useful depths are 5 or ≥30, and 30
 would cost ~6x the tokens of 5 on a 200k-tokens/day budget. **Product default changed
-back to `verdict_shortlist = 5`.** The way to recover those misses is better retrieval
+back to `verdict_shortlist = 5`.** The 6 control tickets at depth 15 were therefore
+dropped. They would only measure false alarms at a depth the product no longer uses, at
+~40–50k tokens (about 6 hours of this free tier's refill). The way to recover those misses is better retrieval
 (e.g. restate the ticket in asset vocabulary), not a deeper judge.
 
 Caveat that flatters these numbers: the gold assets have LLM-written purpose lines and

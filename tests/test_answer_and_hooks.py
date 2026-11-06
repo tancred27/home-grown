@@ -155,3 +155,13 @@ def test_answer_reveals_nothing_about_an_asset_the_asker_cannot_discover(
                     "on p.id = ac.person_id join team t on t.id = p.team_id "
                     "where t.name = %s", (f"team-{name}",))
         assert cur.fetchone()[0] == 0, "contributors of an invisible asset leaked"
+
+
+def test_sibling_units_are_told_apart_by_their_path():
+    from orgmem.answer.graph import _unit_path
+    assert _unit_path("github:github-rate-limits-prometheus-exporter:.") == ""
+    assert _unit_path("github:github-rate-limits-prometheus-exporter:"
+                      "helm/github-rate-limits-prometheus-exporter") == \
+        "helm/github-rate-limits-prometheus-exporter"
+    assert _unit_path("page:docs:grafana/x/docs/a.md") == "grafana/x/docs/a.md"
+    assert _unit_path(None) == ""

@@ -55,6 +55,16 @@ def _retrieve_and_judge(state: AnswerState) -> dict:
     return {"candidates": cands, "verdict_source": settings.verdict_mode}
 
 
+def _unit_path(unit_id: str | None) -> str:
+    """'github:repo:helm/chart' -> 'helm/chart'; the repo root ('.') -> ''.
+
+    Two units in one repo often share a display name (a service and its Helm chart);
+    without the path an answer lists the same name twice."""
+    parts = (unit_id or "").split(":", 2)
+    path = parts[2] if len(parts) == 3 else ""
+    return "" if path in ("", ".") else path
+
+
 def _enrich(state: AnswerState) -> dict:
     strong = [c for c in state["candidates"] if c["verdict"] in STRONG][:3]
     out = []
@@ -63,7 +73,7 @@ def _enrich(state: AnswerState) -> dict:
             cur.execute("""
                 select a.stage, a.stage_confidence, a.stage_confirmed, e.excerpt,
                        t.name, l.name, lead.display_name, a.status,
-                       caller_can_read_source(a.source_ref), a.source_ref
+                       caller_can_read_source(a.source_ref), a.source_ref, a.unit_id
                   from asset a
                   left join team t on t.id = a.owner_team
                   left join lob l on l.id = t.lob_id
@@ -75,7 +85,8 @@ def _enrich(state: AnswerState) -> dict:
             if not row:
                 continue          # not discoverable for this user: say nothing about it
             (stage, conf, confirmed, basis, team, lob, lead, status, can_read,
-             source_ref) = row
+             source_ref, unit_id) = row
+            c = {**c, "where": _unit_path(unit_id)}
             cur.execute("""
                 select p.display_name, p.handle, pt.name, m.display_name,
                        ac.commits, ac.last_at, ac.role
@@ -131,7 +142,8 @@ def _compose(state: AnswerState) -> dict:
         stage = f"{st['stage']}" + ("" if st["confirmed_by_owner"] else
                                     f" (inferred, {int((st['confidence'] or 0) * 100)}% "
                                     "confidence, not yet confirmed by the owner)")
-        lines.append(f"\n* {m['name']}  [{m['verdict']}]  stage: {stage}")
+        where = f" ({m['where']})" if m.get("where") else ""
+        lines.append(f"\n* {m['name']}{where}  [{m['verdict']}]  stage: {stage}")
         lines.append(f"  team: {m['owner_team']}  |  LOB: {m['lob']}  |  "
                      f"manager: {m['team_manager']}")
         for p in m["built_by"]:

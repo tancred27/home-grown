@@ -1,0 +1,540 @@
+{
+ "model": {
+  "precision": 0.6,
+  "recall": 0.9230769230769231,
+  "accuracy": 0.7906976744186046,
+  "tp": 12,
+  "fp": 8,
+  "fn": 1,
+  "n": 43
+ },
+ "rows": [
+  {
+   "object_ref": "docs:grafana/athena-datasource/docs/sources/alerting.md",
+   "title": "Amazon Athena alerting",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": true,
+    "kind": "howto",
+    "reason": "The page provides a reusable step\u2011by\u2011step guide for configuring Grafana alerting with the Amazon Athena data source, including prerequisites, query requirements, performance considerations, and example queries, which other teams can use when building monitoring solutions."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/athena-datasource/docs/sources/annotations.md",
+   "title": "Amazon Athena annotations",
+   "keep": false,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page is a product\u2011specific usage/reference guide for Grafana's Athena annotation feature, describing configuration steps rather than a reusable solution, design decision, policy, limitation, migration, or general how\u2011to that other teams would need before building something."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/athena-datasource/docs/sources/_index.md",
+   "title": "Amazon Athena data source",
+   "keep": false,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page only documents the features, configuration steps, and usage of the Grafana Amazon Athena data source plugin. It is a tool\u2011specific reference page rather than a reusable solution, design decision, policy, limitation, migration guide, or how\u2011to that other teams would need before building something."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/authlib/docs/authentication/grpc.md",
+   "title": "Authentication using GRPC",
+   "keep": true,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": true,
+    "kind": "howto",
+    "reason": "Provides a reusable step\u2011by\u2011step guide for setting up GRPC authentication, including server and client configuration, making it valuable for other teams needing a solution to secure inter\u2011service communication."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/authlib/docs/authorization/single-tenant.md",
+   "title": "How it works for Grafana Plugins",
+   "keep": true,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": true,
+    "kind": "howto",
+    "reason": "The page offers a reusable how-to guide for implementing RBAC access control in Grafana plugins using the EnforcementClient, providing example code and reference implementation details useful for other teams building similar plugins."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/business-calendar/docs/sources/basic-config.md",
+   "title": "Basic configuration",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page only documents configuration fields for a specific Grafana plugin, which is a usage/reference guide rather than a reusable solution, decision, policy, limitation, migration, or how\u2011to. Such tool\u2011specific reference material is to be ignored per the guidelines."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/business-calendar/docs/sources/configuration/_index.md",
+   "title": "Configuration",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page only documents configuration settings for a specific Grafana plugin, which is a usage/reference page not a reusable solution, decision, policy, limitation, migration guide, or how\u2011to."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/business-calendar/docs/sources/_index.md",
+   "title": "Business Calendar",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "overview",
+    "reason": "The page only describes the Business Calendar Grafana plugin's features, requirements, and installation, serving as a product overview rather than a reusable solution, policy, migration guide, or how\u2011to for broader organizational problems."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/business-forms/docs/sources/custom-code/context-parameters.md",
+   "title": "Context parameters",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page only documents usage of specific panel context API methods, which is a tool-specific reference and not a reusable solution, decision, policy, limitation, migration guide, or how\u2011to for other teams."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/business-forms/docs/sources/custom-code/_index.md",
+   "title": "Custom code",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page is a reference for a specific Grafana plugin\u2019s custom code API, describing its parameters and usage, which is considered a tool\u2011specific usage/reference page and not a reusable solution, decision, policy, limitation, migration guide, or how\u2011to."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/business-forms/docs/sources/_index.md",
+   "title": "Business Forms",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "overview",
+    "reason": "The page only documents the features, installation steps, and requirements of a specific Grafana plugin, which is a usage/reference page rather than a reusable solution, policy, decision, limitation, migration guide, or how\u2011to that other teams would need before building something."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/business-table/docs/sources/editable-data/add.md",
+   "title": "Add data",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page only documents how to use a specific Grafana plugin feature (adding rows in Business Table). It is a usage/reference guide rather than a reusable solution, policy, limitation, migration, or how\u2011to that other teams could apply generically, so it should be ignored."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/business-table/docs/sources/editable-data/_index.md",
+   "title": "Editable data/data flow",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page only describes configuration options and features of the Business Table plugin, which is a tool\u2011specific usage/reference document rather than a reusable solution, decision, policy, limitation, migration guide, or how\u2011to that other teams would need before building something."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/business-table/docs/sources/_index.md",
+   "title": "Business Table",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "overview",
+    "reason": "The page only describes the features and requirements of a specific Grafana plugin; it does not provide a solution, decision, policy, migration guide, or reusable how\u2011to that other teams could apply when building something."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/business-text/docs/sources/exploring-eventbus.md",
+   "title": "Exploring Grafana events",
+   "keep": true,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page only lists Grafana's predefined events and describes their purpose, serving as a tool-specific reference. It does not provide a solution, design decision, policy, migration guide, or reusable how\u2011to that another team would need before building something, so it should be ignored."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/business-text/docs/sources/exploring-variables.md",
+   "title": "Exploring variables",
+   "keep": false,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page only describes Grafana variable types and built\u2011in variables, which is a product feature reference rather than a solution, decision, policy, limitation, migration guide, or reusable how\u2011to."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/business-text/docs/sources/_index.md",
+   "title": "Business Text",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page only documents the features, requirements, and usage of the Business Text Grafana plugin, which is a tool\u2011specific reference; it does not provide a reusable solution, design decision, policy, limitation, migration guide, or how\u2011to for other teams."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/carbon-relay-ng/docs/aggregation.md",
+   "title": "input",
+   "keep": false,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": true,
+    "kind": "howto",
+    "reason": "The page explains how to configure and use aggregation, covering matching, bucketing, functions, and parameters. This reusable knowledge helps other teams implement aggregation solutions without reinventing the approach."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/carbon-relay-ng/docs/config.md",
+   "title": "Blocklist",
+   "keep": false,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page only documents configuration options and usage details for a specific tool (carbon\u2011relay\u2011ng), which is a usage/reference page rather than a reusable solution, policy, or migration guide."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/carbon-relay-ng/docs/deploying-on-k8s.md",
+   "title": "Deploying Carbon-Relay-Ng on Kubernetes",
+   "keep": true,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": true,
+    "kind": "howto",
+    "reason": "Provides a reusable step-by-step guide for deploying Carbon-Relay-Ng on Kubernetes (via Tanka or raw YAML), which other teams can follow when setting up monitoring infrastructure."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/clickhouse-datasource/docs/sources/alerting.md",
+   "title": "ClickHouse alerting",
+   "keep": false,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": true,
+    "kind": "howto",
+    "reason": "Provides a reusable step\u2011by\u2011step guide for creating Grafana alert rules using ClickHouse queries, which is valuable for any team building monitoring/alerting solutions."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/clickhouse-datasource/docs/sources/annotations.md",
+   "title": "ClickHouse annotations",
+   "keep": false,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page is a usage/reference guide for configuring ClickHouse annotations in Grafana, describing a specific tool's features rather than providing a reusable solution, policy, migration guide, or design decision."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/clickhouse-datasource/docs/sources/_index.md",
+   "title": "ClickHouse data source",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page only documents the ClickHouse data source plugin's features, configuration steps, and usage, which is a tool-specific usage/reference page and not a reusable solution, decision, policy, limitation, migration guide, or how\u2011to for broader problems."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/cloudcost-exporter/docs/contribute/creating-a-new-module.md",
+   "title": "Creating a New Module",
+   "keep": true,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": true,
+    "kind": "howto",
+    "reason": "Provides a reusable step\u2011by\u2011step guide and design patterns for adding new modules to the Cloud Cost Exporter, including architecture decisions, context handling, and pricing integration, which other teams can follow when building similar functionality."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/cloudcost-exporter/docs/contribute/deprecation-policy.md",
+   "title": "Deprecation Policy",
+   "keep": true,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": true,
+    "kind": "policy",
+    "reason": "The page defines a deprecation policy with clear steps and timelines for handling breaking changes, which is a reusable policy that other teams can adopt when managing feature removal and compatibility."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/cloudcost-exporter/docs/contribute/developer-guide.md",
+   "title": "Developer Guide",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "other",
+    "reason": "The page is a contributor/developer guide specific to this project, detailing setup, dependencies, and release process, which falls under contributor documentation and is not a reusable solution, policy, limitation, migration guide, or generic how\u2011to for other teams."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/cog/docs/index.md",
+   "title": "Cog",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "overview",
+    "reason": "The page is an overview of the Cog code generator, describing its objectives and basic usage. It does not provide a reusable solution, design decision, policy, limitation, migration guide, or detailed how\u2011to that other teams would need before building something, so it should be ignored per the guidelines."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/cog/docs/pipelines/builder_transformations.md",
+   "title": "Applying builder transformations",
+   "keep": false,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": true,
+    "kind": "howto",
+    "reason": "The page offers a reusable how\u2011to for configuring builder transformations in the cog tool, including file structure, reference links, and editor schema validation, which other teams can use when building code generation pipelines."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/cog/docs/pipelines/creating_pipeline.md",
+   "title": "Creating a codegen pipeline",
+   "keep": false,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": true,
+    "kind": "howto",
+    "reason": "The page explains how to create and configure a code generation pipeline, including schema validation, inputs, transformations, and outputs. This reusable how\u2011to would be valuable to other teams needing to set up similar pipelines before building a solution."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/crossplane-provider-grafana/docs/contributing.md",
+   "title": "Contributing",
+   "keep": false,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": false,
+    "kind": "process",
+    "reason": "The page is a contributor guide describing internal contribution workflow and PR title format, which is a release\u2011process / contributor documentation and not a reusable solution, policy, or how\u2011to for other teams. According to the guidelines, such contributor documentation should be ignored."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/crossplane-provider-grafana/docs/kubeconform.md",
+   "title": "Validating manifests with kubeconform",
+   "keep": true,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": true,
+    "kind": "howto",
+    "reason": "Provides a reusable solution and step\u2011by\u2011step guide for validating Crossplane manifests offline with kubeconform, including schema generation and usage patterns that other teams can adopt."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/crossplane-provider-grafana/docs/observed-resources.md",
+   "title": "Observed Resources (TF Data Sources as Crossplane Resources)",
+   "keep": true,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": true,
+    "kind": "solution",
+    "reason": "The page explains a reusable design pattern for exposing Terraform data sources as read\u2011only Crossplane resources, including key limitations (namespaced\u2011only), lifecycle behavior, field mapping, and handling of plural data sources, which other teams can apply when integrating external data via Crossplane."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/dashboard-linter/docs/index.md",
+   "title": "Usage",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page only documents the tool's own commands and linter rules, serving as a usage/reference guide rather than a reusable solution, decision, policy, limitation, migration, or how\u2011to for other teams."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/dashboard-linter/docs/rules/element-reference-rule.md",
+   "title": "element-reference-rule",
+   "keep": false,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": true,
+    "kind": "solution",
+    "reason": "Describes a reusable validation rule for ensuring dashboard layout element references match defined panels, offering a solution and best practices that other teams can apply when building or linting dashboards."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/dashboard-linter/docs/rules/panel-datasource-rule.md",
+   "title": "panel-datasource-rule",
+   "keep": false,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": true,
+    "kind": "policy",
+    "reason": "Defines a reusable rule that enforces templated datasource usage across dashboard panels, providing a solution/policy that other teams can adopt to ensure consistency and avoid hard\u2011coded datasources."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/dataplane/docs/contract/contract.md",
+   "title": "Introduction to the Grafana data structure",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": false,
+    "kind": "usage_reference",
+    "reason": "The page is a product feature overview describing Grafana's data frame and data plane concepts, which is a usage/reference document rather than a solution, design decision, policy, limitation, migration guide, or reusable how\u2011to; such pages are to be ignored per the criteria."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/dataplane/docs/contract/contract-spec.md",
+   "title": "Data Plane Contract - Technical Specification",
+   "keep": true,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": true,
+    "kind": "policy",
+    "reason": "The page defines a technical contract for the data plane layer, specifying data types, formats, and rules for dimensional sets. This reusable specification is essential for other teams building data source integrations or processing pipelines, making it a valuable piece of organizational knowledge."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/dataplane/docs/contract/dataframes.md",
+   "title": "Data frames",
+   "keep": false,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": true,
+    "kind": "overview",
+    "reason": "The page gives a conceptual overview of Grafana data frames, their types, and technical references, which is useful for teams building plugins or integrating data frames, fitting the 'overview' category."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/docker-otel-lgtm/docs/gcx-integration.md",
+   "title": "Query and troubleshoot local telemetry with gcx",
+   "keep": true,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": true,
+    "kind": "howto",
+    "reason": "Provides a step\u2011by\u2011step diagnostic procedure for querying and troubleshooting local telemetry with gcx, which is a reusable solution other teams can follow when investigating telemetry issues."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/docker-otel-lgtm/docs/gcx-migration.md",
+   "title": "Migration: generated MCP setup replaced by gcx guidance",
+   "keep": true,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": true,
+    "kind": "migration",
+    "reason": "The page documents a migration from generated MCP setup in the docker-otel-lgtm image to using gcx guidance, detailing removed behaviors, preserved functionality, and steps for updating automation. This is reusable guidance for teams upgrading the image, fitting the migration guide category."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/flagger-k6-webhook/docs/internal/release-process.md",
+   "title": "Release process",
+   "keep": false,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": false,
+    "kind": "process",
+    "reason": "The page describes an internal release process, which falls under contributor/release-process documentation and is not a reusable solution, decision, policy, limitation, migration guide, or how\u2011to for other teams."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/xk6-kafka/docs/COMPATIBILITY.md",
+   "title": "Compatibility matrix",
+   "keep": true,
+   "rules_kept": true,
+   "rule_kept_now": true,
+   "model": {
+    "keep": true,
+    "kind": "limitation",
+    "reason": "The page documents the compatibility and feature support differences between grafana/xk6-kafka and the community version, providing crucial limitation and compatibility boundary information that other teams need before adopting or building on the library."
+   }
+  },
+  {
+   "object_ref": "docs:grafana/xk6-kafka/docs/MIGRATION.md",
+   "title": "Migrating from `mostafa/xk6-kafka`",
+   "keep": true,
+   "rules_kept": false,
+   "rule_kept_now": false,
+   "model": {
+    "keep": true,
+    "kind": "migration",
+    "reason": "The page is a detailed migration guide explaining how to transition from the community mostafa/xk6-kafka extension to grafana/xk6-kafka, covering required code changes, unsupported features, behavior differences, and compatibility notes, making it reusable knowledge for other teams undertaking the same migration."
+   }
+  }
+ ],
+ "failed": 0,
+ "missing": 0,
+ "keyword rule": {
+  "precision": 0.2608695652173913,
+  "recall": 0.46153846153846156,
+  "accuracy": 0.4418604651162791,
+  "tp": 6,
+  "fp": 17,
+  "fn": 7,
+  "n": 43
+ }
+}
