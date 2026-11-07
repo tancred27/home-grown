@@ -18,15 +18,18 @@ from pathlib import Path
 
 from langgraph.checkpoint.postgres import PostgresSaver
 
+from homegrown import telemetry
 from homegrown.collector import adapters as A
 from homegrown.collector.poller import poll_org
 from homegrown.collector.source import GitHubSource, LocalGitSource
-from homegrown.collector.state import claim_daily, complete, release_lease
+from homegrown.collector.state import claim_daily, complete, release_lease, repos_waiting
 from homegrown.collector.sync import Syncer
 from homegrown.config import settings
 
 
 def main() -> int:
+    if telemetry.init("sync-worker"):
+        telemetry.watch_repos_waiting(repos_waiting)
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     once = "--once" in sys.argv
     mirror = (Path(sys.argv[sys.argv.index("--mirror-dir") + 1])

@@ -23,16 +23,26 @@ from __future__ import annotations
 
 import hmac
 import json
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Header, HTTPException, Request
 
+from . import telemetry
 from .answer import ask
 from .cli import resolve_user
 from .collector import adapters as A
 from .collector.events import enqueue
 from .config import settings
 
-app = FastAPI(title="org-memory")
+
+@asynccontextmanager
+async def _lifespan(app: FastAPI):
+    telemetry.init("api")
+    yield
+
+
+# No HTTP-server spans on purpose: the URL of /ask carries the question.
+app = FastAPI(title="org-memory", lifespan=_lifespan)
 
 
 @app.get("/healthz")
@@ -99,4 +109,4 @@ def ask_endpoint(q: str, keywords: str = "",
     except SystemExit:
         raise HTTPException(status_code=403, detail="unknown user") from None
     kws = [k.strip() for k in keywords.split(",") if k.strip()]
-    return ask(user, q, kws)
+    return ask(user, q, kws, route="http")

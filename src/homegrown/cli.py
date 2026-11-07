@@ -19,7 +19,9 @@ import argparse
 import json
 import os
 import sys
+import time
 
+from . import telemetry
 from .db import admin_conn, as_user
 from .search import find_existing
 
@@ -93,6 +95,7 @@ def main(argv: list[str] | None = None) -> int:
     u.add_argument("--team", action="append", default=[],
                    help="also see assets scoped to this team (repeatable)")
     args = ap.parse_args(argv)
+    telemetry.init("cli")
 
     if args.cmd == "add-user":
         add_user(args.login, args.team)
@@ -101,11 +104,13 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "ask":
         from .answer import ask
         kws = [k.strip() for k in args.keywords.split(",") if k.strip()]
-        out = ask(user, args.question, kws)
+        out = ask(user, args.question, kws, route="cli")
         print(json.dumps(out, indent=1, default=str) if args.json else out["text"])
         return 0
     kws = [k.strip() for k in args.keywords.split(",") if k.strip()]
+    t0 = time.monotonic()
     verdicts = find_existing(user, args.intent, kws, top=args.top)
+    telemetry.record_question("cli", "find", time.monotonic() - t0)
     log_question(user, args.intent, kws, "cli", verdicts)
 
     if args.json:
