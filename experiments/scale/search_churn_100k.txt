@@ -1,0 +1,6 @@
+reusing 100,000 loaded assets
+embedding: {'sequential_ms_per_question': 24, 'questions_per_s_10_threads': 139.8}
+[{"replaced": 0.1, "vacuum": false, "overlap@10": 0.762}, {"replaced": 0.1, "vacuum": true, "overlap@10": 0.798}]
+[{"replaced": 0.3, "vacuum": false, "overlap@10": 0.752}, {"replaced": 0.3, "vacuum": true, "overlap@10": 0.778}]
+C baseline: {"replaced": 0, "vacuum": false, "overlap@10": 0.756}
+written experiments\scale\search_churn_100000.json

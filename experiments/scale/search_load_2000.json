@@ -1,0 +1,197 @@
+{
+ "assets": 2000,
+ "vectors": 6000,
+ "B": [
+  {
+   "mode": "exact",
+   "concurrency": 1,
+   "writer": false,
+   "questions": 6,
+   "qps": 2.0,
+   "p50_ms": 497,
+   "p95_ms": 522,
+   "writes_per_s": 0.0
+  },
+  {
+   "mode": "exact",
+   "concurrency": 1,
+   "writer": true,
+   "questions": 6,
+   "qps": 2.0,
+   "p50_ms": 507,
+   "p95_ms": 510,
+   "writes_per_s": 73.3
+  },
+  {
+   "mode": "exact",
+   "concurrency": 10,
+   "writer": false,
+   "questions": 43,
+   "qps": 14.3,
+   "p50_ms": 736,
+   "p95_ms": 952,
+   "writes_per_s": 0.0
+  },
+  {
+   "mode": "exact",
+   "concurrency": 10,
+   "writer": true,
+   "questions": 42,
+   "qps": 14.0,
+   "p50_ms": 777,
+   "p95_ms": 842,
+   "writes_per_s": 66.7
+  },
+  {
+   "mode": "exact",
+   "concurrency": 50,
+   "writer": false,
+   "questions": 72,
+   "qps": 24.0,
+   "p50_ms": 2759,
+   "p95_ms": 4280,
+   "writes_per_s": 0.0
+  },
+  {
+   "mode": "exact",
+   "concurrency": 50,
+   "writer": true,
+   "questions": 75,
+   "qps": 25.0,
+   "p50_ms": 2404,
+   "p95_ms": 4397,
+   "writes_per_s": 53.3
+  },
+  {
+   "mode": "exact",
+   "concurrency": 200,
+   "writer": false,
+   "questions": 213,
+   "qps": 71.0,
+   "p50_ms": 9539,
+   "p95_ms": 15468,
+   "writes_per_s": 0.0
+  },
+  {
+   "mode": "exact",
+   "concurrency": 200,
+   "writer": true,
+   "questions": 203,
+   "qps": 67.7,
+   "p50_ms": 10241,
+   "p95_ms": 15537,
+   "writes_per_s": 46.7
+  },
+  {
+   "mode": "hnsw",
+   "concurrency": 1,
+   "writer": false,
+   "questions": 10,
+   "qps": 3.3,
+   "p50_ms": 298,
+   "p95_ms": 305,
+   "writes_per_s": 0.0
+  },
+  {
+   "mode": "hnsw",
+   "concurrency": 1,
+   "writer": true,
+   "questions": 10,
+   "qps": 3.3,
+   "p50_ms": 302,
+   "p95_ms": 312,
+   "writes_per_s": 80.0
+  },
+  {
+   "mode": "hnsw",
+   "concurrency": 10,
+   "writer": false,
+   "questions": 70,
+   "qps": 23.3,
+   "p50_ms": 478,
+   "p95_ms": 514,
+   "writes_per_s": 0.0
+  },
+  {
+   "mode": "hnsw",
+   "concurrency": 10,
+   "writer": true,
+   "questions": 57,
+   "qps": 19.0,
+   "p50_ms": 596,
+   "p95_ms": 647,
+   "writes_per_s": 60.0
+  },
+  {
+   "mode": "hnsw",
+   "concurrency": 50,
+   "writer": false,
+   "questions": 82,
+   "qps": 27.3,
+   "p50_ms": 2074,
+   "p95_ms": 3499,
+   "writes_per_s": 0.0
+  },
+  {
+   "mode": "hnsw",
+   "concurrency": 50,
+   "writer": true,
+   "questions": 83,
+   "qps": 27.7,
+   "p50_ms": 2164,
+   "p95_ms": 3487,
+   "writes_per_s": 46.7
+  },
+  {
+   "mode": "hnsw",
+   "concurrency": 200,
+   "writer": false,
+   "questions": 233,
+   "qps": 77.7,
+   "p50_ms": 6812,
+   "p95_ms": 10408,
+   "writes_per_s": 0.0
+  },
+  {
+   "mode": "hnsw",
+   "concurrency": 200,
+   "writer": true,
+   "questions": 233,
+   "qps": 77.7,
+   "p50_ms": 6918,
+   "p95_ms": 10034,
+   "writes_per_s": 46.7
+  }
+ ],
+ "C": [
+  {
+   "replaced": 0,
+   "vacuum": false,
+   "overlap@10": 0.828
+  },
+  {
+   "replaced": 0.1,
+   "vacuum": false,
+   "overlap@10": 0.842
+  },
+  {
+   "replaced": 0.1,
+   "vacuum": true,
+   "overlap@10": 0.846
+  },
+  {
+   "replaced": 0.3,
+   "vacuum": false,
+   "overlap@10": 0.872
+  },
+  {
+   "replaced": 0.3,
+   "vacuum": true,
+   "overlap@10": 0.868
+  }
+ ],
+ "embed": {
+  "sequential_ms_per_question": 22,
+  "questions_per_s_10_threads": 126.9
+ }
+}

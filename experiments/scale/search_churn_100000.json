@@ -1,0 +1,36 @@
+{
+ "assets": 100000,
+ "vectors": 300000,
+ "B": [],
+ "C": [
+  {
+   "replaced": 0,
+   "vacuum": false,
+   "overlap@10": 0.756
+  },
+  {
+   "replaced": 0.1,
+   "vacuum": false,
+   "overlap@10": 0.762
+  },
+  {
+   "replaced": 0.1,
+   "vacuum": true,
+   "overlap@10": 0.798
+  },
+  {
+   "replaced": 0.3,
+   "vacuum": false,
+   "overlap@10": 0.752
+  },
+  {
+   "replaced": 0.3,
+   "vacuum": true,
+   "overlap@10": 0.778
+  }
+ ],
+ "embed": {
+  "sequential_ms_per_question": 24,
+  "questions_per_s_10_threads": 139.8
+ }
+}

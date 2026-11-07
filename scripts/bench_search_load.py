@@ -163,7 +163,14 @@ def main() -> int:
     n, seconds = arg("--assets", 100_000), arg("--seconds", 20)
     rng = np.random.default_rng(42)
     random.seed(42)
-    user = setup(n, rng)
+    only_churn = "--only-churn" in sys.argv          # reuse loaded data; test C only
+    if only_churn:
+        with admin_conn() as conn:
+            user = str(conn.execute("select id from app_user where login = 'bench-user'").fetchone()[0])
+            n = conn.execute("select count(*) from asset where unit_id like 'bench:%'").fetchone()[0]
+        print(f"reusing {n:,} loaded assets", flush=True)
+    else:
+        user = setup(n, rng)
     qs = [q["query"] for f in ("queries.json", "queries_heldout.json")
           for q in json.loads((ROOT / "experiments/gate1" / f).read_text("utf-8"))]
     report = {"assets": n, "vectors": 3 * n, "B": [], "C": [], "embed": {}}
@@ -182,7 +189,7 @@ def main() -> int:
     print("embedding:", report["embed"], flush=True)
     S.embed_query = lambda text, model=None: cache[text]
 
-    for mode in ("exact", "hnsw"):
+    for mode in (() if only_churn else ("exact", "hnsw")):
         settings.vector_search = mode
         if mode == "hnsw":
             t0 = time.perf_counter()
@@ -200,6 +207,7 @@ def main() -> int:
                 print(json.dumps(r), flush=True)
 
     # C: churn, hnsw vs exact on the same data
+    settings.vector_search = "hnsw"
     qvecs = [cache[q] for q in qs[:50]]
 
     def overlap():
@@ -224,8 +232,10 @@ def main() -> int:
             c.execute("vacuum embedding")
         report["C"].append({"replaced": frac, "vacuum": True, "overlap@10": overlap()})
         print(json.dumps(report["C"][-2:]), flush=True)
+    print("C baseline:", json.dumps(report["C"][0]), flush=True)
 
-    out = ROOT / "experiments" / "scale" / f"search_load_{n}.json"
+    out = ROOT / "experiments" / "scale" / (f"search_churn_{n}.json" if only_churn
+                                            else f"search_load_{n}.json")
     out.write_text(json.dumps(report, indent=1), encoding="utf-8")
     with admin_conn() as conn:
         conn.execute("delete from asset where unit_id like 'bench:%'")
