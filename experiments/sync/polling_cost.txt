@@ -1,0 +1,8 @@
+ 10 min window  kubernetes   calls= 1  repos changed=0
+ 10 min window  apache       calls= 1  repos changed=8
+ 10 min window  NixOS        calls= 1  repos changed=1
+ 10 min window  microsoft    calls= 1  repos changed=7
+ 60 min window  kubernetes   calls= 1  repos changed=0
+ 60 min window  apache       calls= 1  repos changed=31
+ 60 min window  NixOS        calls= 1  repos changed=2
+ 60 min window  microsoft    calls= 1  repos changed=18

@@ -40,7 +40,7 @@ def _major(v: str | None) -> int | None:
 
 def infer(archived: bool = False, releases: list[dict] | None = None,
           manifest_version: str | None = None, readme: str = "",
-          change_text: str = "") -> Stage:
+          change_text: str = "", _check_deprecation: bool = True) -> Stage:
     """releases: [{"tag": "v1.2.0", "prerelease": False, "published_at": "..."}], newest first."""
     releases = releases or []
     if archived:
@@ -49,9 +49,12 @@ def infer(archived: bool = False, releases: list[dict] | None = None,
 
     # Deprecation signals are reported, never applied.
     for text, where in ((change_text, "the change"), (readme[:3000], "the README")):
-        m = _DEPRECATED.search(text or "")
+        m = _DEPRECATED.search(text or "") if _check_deprecation else None
         if m:
-            base = infer(False, releases, manifest_version, readme, "")
+            # The stage underneath the deprecation signal. Must not re-check the same
+            # README, or it recurses forever (found on kubernetes READMEs).
+            base = infer(False, releases, manifest_version, readme, "",
+                         _check_deprecation=False)
             base.needs_owner = True
             base.proposed = "deprecated"
             base.reasons.append(f"'{m.group(0)}' appears in {where}: owner must confirm")

@@ -1,0 +1,24 @@
+111,019 pushes to main/master over 0:59:59, 53,211 repos
+intake, one per request: 417 dirty-marks/s
+{
+ "pushes": 111019,
+ "repos": 53211,
+ "commits_hour_equiv": null,
+ "passes": 78015,
+ "coalescing_ratio": 1.42,
+ "intake_single_per_s": 417,
+ "intake_batched_per_s": 5728,
+ "scheduler_claims_per_s": 238,
+ "staleness_s": {
+  "p50": 137.0,
+  "p95": 225.0,
+  "p99": 419.0,
+  "max": 509.0
+ },
+ "settings": {
+  "quiet_s": 120,
+  "max_wait_s": 480,
+  "tick_s": 30,
+  "batch": 500
+ }
+}

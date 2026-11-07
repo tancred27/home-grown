@@ -405,3 +405,10 @@ def test_repo_without_a_local_clone_is_processed_remotely(tmp_path):
     finally:
         with admin_conn() as conn, conn.cursor() as cur:
             cur.execute("delete from asset where unit_id like %s", (f"github:{name}:%",))
+
+
+def test_stage_with_deprecation_word_in_readme_does_not_recurse():
+    from orgmem.collector.stage import infer
+    st = infer(readme="This API is deprecated in favour of v2.",
+               releases=[{"tag": "v1.4.0", "prerelease": False}])
+    assert st.stage == "prod" and st.needs_owner and st.proposed == "deprecated"

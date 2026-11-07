@@ -167,7 +167,11 @@ class Syncer:
         """A minimal directory the extractors can walk: every manifest in the repo (unit
         detection), plus READMEs and tests of the CHANGED units only. Blob contents are
         cached by SHA (immutable), so an unchanged file is never fetched twice."""
-        work = CACHE / "sync" / f"{repo.replace('/', '__')}@{sha[:12]}" / "repo"
+        # Short folder name: deep repos (kubernetes) exceed Windows' 260-char path limit
+        # under a long prefix. Files still too long are skipped and counted, not fatal.
+        import hashlib
+        work = CACHE / "s" / hashlib.sha1(f"{repo}@{sha}".encode()).hexdigest()[:10] / "r"
+        self.skipped_long_paths = 0
         prefixes = ["" if u == "." else u + "/" for u in changed]
         tests = defaultdict(int)
         for p, s in blobs.items():
@@ -190,8 +194,11 @@ class Syncer:
                 blob.parent.mkdir(parents=True, exist_ok=True)
                 blob.write_text(text[:500_000], encoding="utf-8")
             dest = work / p
-            dest.parent.mkdir(parents=True, exist_ok=True)
-            dest.write_text(text[:500_000], encoding="utf-8")
+            try:
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_text(text[:500_000], encoding="utf-8")
+            except OSError:
+                self.skipped_long_paths += 1
         work.mkdir(parents=True, exist_ok=True)
         return work
 
