@@ -42,7 +42,9 @@ def test_find_existing_over_mcp_returns_verdicts(monkeypatch):
 
 def test_get_asset_hides_existence_of_invisible_assets(monkeypatch):
     """An id the caller cannot see answers exactly like an id that does not exist."""
-    monkeypatch.setenv("HOMEGROWN_USER", "gate2-dev")
+    from homegrown.cli import add_user
+    add_user("test-mcp-user", [])
+    monkeypatch.setenv("HOMEGROWN_USER", "test-mcp-user")
     res = asyncio.run(mcp_server.server.call_tool(
         "get_asset", {"asset_id": "00000000-0000-0000-0000-000000000000"}))
     assert json.loads(_text(res)) == {"error": "not found"}

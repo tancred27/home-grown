@@ -7,7 +7,7 @@ Tools:
 
 Run (stdio):   python -m homegrown.mcp_server
 Register with Claude Code:
-  claude mcp add homegrown -e HOMEGROWN_USER=gate2-dev -- \
+  claude mcp add homegrown -e HOMEGROWN_USER=alice -- \
       <repo>/.venv/Scripts/python -m homegrown.mcp_server
 
 Identity: $HOMEGROWN_USER names the app_user, and every query runs under that user's
@@ -37,7 +37,7 @@ server = MCPServer(
 
 
 def _user() -> str:
-    return resolve_user(os.environ.get("HOMEGROWN_USER", "gate2-dev"))
+    return resolve_user(os.environ.get("HOMEGROWN_USER", ""))
 
 
 @server.tool(name="find_existing", description=FIND_EXISTING_DESCRIPTION,

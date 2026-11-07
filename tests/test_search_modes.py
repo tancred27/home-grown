@@ -55,7 +55,7 @@ def test_auto_mode_switches_on_table_size(monkeypatch):
     import homegrown.search as S
     monkeypatch.setattr(settings, "vector_search", "auto")
     with as_user(None) as conn, conn.cursor() as cur:
-        for threshold, expected in ((10**12, "exact"), (0, "hnsw")):
+        for threshold, expected in ((10**12, "exact"), (-1, "hnsw")):  # never-analysed: -1 rows
             S._mode_cache.clear()
             monkeypatch.setattr(settings, "hnsw_auto_threshold", threshold)
             assert S.vector_mode(cur) == expected
