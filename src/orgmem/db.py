@@ -8,6 +8,8 @@ fail closed, which is the behaviour we want if a caller is ever unidentified.
 
 from __future__ import annotations
 
+import atexit
+import threading
 import uuid
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -18,19 +20,48 @@ from pgvector.psycopg import register_vector
 from .config import settings
 
 
+# Connection pools, one per DSN, created on first use. Opening a fresh connection per
+# query cost ~41 connections per processed commit and dominated the write path
+# (experiments/scale/write_path.md). Pooled connections are safe for RLS: as_user()
+# sets app.user_id transaction-locally, so it can never outlive the request.
+_pools: dict[tuple[str, bool], "ConnectionPool"] = {}
+_pool_lock = threading.Lock()
+
+
+def _pool(dsn: str, autocommit: bool):
+    key = (dsn, autocommit)
+    pool = _pools.get(key)
+    if pool is None:
+        with _pool_lock:
+            pool = _pools.get(key)
+            if pool is None:
+                from psycopg_pool import ConnectionPool
+                pool = ConnectionPool(dsn, min_size=1, max_size=settings.db_pool_size,
+                                      kwargs={"autocommit": autocommit},
+                                      configure=register_vector, open=True)
+                _pools[key] = pool
+    return pool
+
+
+@atexit.register
+def close_pools() -> None:
+    for pool in list(_pools.values()):
+        pool.close()
+    _pools.clear()
+
+
 @contextmanager
 def admin_conn() -> Iterator[psycopg.Connection]:
     """Schema owner. Bypasses RLS -- use for ingestion and migrations only."""
-    with psycopg.connect(settings.admin_dsn, autocommit=True) as conn:
-        register_vector(conn)
+    with _pool(settings.admin_dsn, True).connection() as conn:
         yield conn
 
 
 @contextmanager
 def app_conn() -> Iterator[psycopg.Connection]:
-    """Non-superuser, NOBYPASSRLS. Use for everything on the read path."""
-    with psycopg.connect(settings.app_dsn) as conn:
-        register_vector(conn)
+    """Non-superuser, NOBYPASSRLS. Use for everything on the read path.
+    Commits on success and rolls back on error, like psycopg.connect()."""
+    with _pool(settings.app_dsn, False).connection() as conn:
         yield conn
 
 

@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     # runtime would silently disable every policy in db/002_rls.sql.
     admin_dsn: str = "postgresql://orgmem:orgmem_dev_only@localhost:5433/orgmem"
     app_dsn: str = "postgresql://orgmem_app:orgmem_app_dev_only@localhost:5433/orgmem"
+    db_pool_size: int = 10              # connections per pool (admin, app)
 
     # "auto" uses CUDA when the installed onnxruntime can see it (.venv-gpu), else CPU.
     # "cpu" / "cuda" force it; "cuda" raises rather than silently falling back.
