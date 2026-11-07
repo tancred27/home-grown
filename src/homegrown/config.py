@@ -4,13 +4,13 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="ORGMEM_", env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_prefix="HOMEGROWN_", env_file=".env", extra="ignore")
 
     # Two roles on purpose. admin_dsn owns the schema; app_dsn is NOT a superuser and
     # is NOBYPASSRLS, so row-level security actually applies to it. Using admin_dsn at
     # runtime would silently disable every policy in db/002_rls.sql.
-    admin_dsn: str = "postgresql://orgmem:orgmem_dev_only@localhost:5433/orgmem"
-    app_dsn: str = "postgresql://orgmem_app:orgmem_app_dev_only@localhost:5433/orgmem"
+    admin_dsn: str = "postgresql://homegrown:homegrown_dev_only@localhost:5433/homegrown"
+    app_dsn: str = "postgresql://homegrown_app:homegrown_app_dev_only@localhost:5433/homegrown"
     db_pool_size: int = 10              # connections per pool (admin, app)
 
     # "auto" uses CUDA when the installed onnxruntime can see it (.venv-gpu), else CPU.

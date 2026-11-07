@@ -1,6 +1,6 @@
 """Replay one real hour of GitHub push traffic (GH Archive) through intake + scheduler.
 
-ONLY against the throwaway database (ORGMEM_ADMIN_DSN must point at orgmem_bench).
+ONLY against the throwaway database (HOMEGROWN_ADMIN_DSN must point at homegrown_bench).
 All public GitHub is treated as ONE organisation: a far harsher load than any company.
 
     python -I scripts/bench_intake_replay.py <hour.json.gz> [--batch 500] [--tick 30]
@@ -26,12 +26,12 @@ import sys
 import time
 from datetime import datetime, timedelta
 
-from orgmem.collector.state import claim_due, complete, mark_dirty, mark_dirty_many
-from orgmem.config import settings
-from orgmem.db import admin_conn
+from homegrown.collector.state import claim_due, complete, mark_dirty, mark_dirty_many
+from homegrown.config import settings
+from homegrown.db import admin_conn
 
-if "orgmem_bench" not in settings.admin_dsn:
-    raise SystemExit("refusing to run: ORGMEM_ADMIN_DSN must point at orgmem_bench")
+if "homegrown_bench" not in settings.admin_dsn:
+    raise SystemExit("refusing to run: HOMEGROWN_ADMIN_DSN must point at homegrown_bench")
 
 
 def arg(name, default, cast=int):

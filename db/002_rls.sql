@@ -5,22 +5,22 @@
 --   2. Can I read details?    -> I have source_acl on asset.source_ref
 --   3. Can I use it?          -> application concern (access steps, approval)
 --
--- The application connects as orgmem_app, which is NOT a superuser and is
+-- The application connects as homegrown_app, which is NOT a superuser and is
 -- explicitly NOBYPASSRLS. A superuser bypasses every policy below, so using the
 -- bootstrap role at runtime would silently disable all of this.
 
 do $$
 begin
-  if not exists (select 1 from pg_roles where rolname = 'orgmem_app') then
-    create role orgmem_app login password 'orgmem_app_dev_only' nobypassrls;
+  if not exists (select 1 from pg_roles where rolname = 'homegrown_app') then
+    create role homegrown_app login password 'homegrown_app_dev_only' nobypassrls;
   end if;
 end $$;
 
-grant usage on schema public to orgmem_app;
-grant select, insert, update on all tables in schema public to orgmem_app;
-grant usage, select on all sequences in schema public to orgmem_app;
+grant usage on schema public to homegrown_app;
+grant select, insert, update on all tables in schema public to homegrown_app;
+grant usage, select on all sequences in schema public to homegrown_app;
 alter default privileges in schema public
-  grant select, insert, update on tables to orgmem_app;
+  grant select, insert, update on tables to homegrown_app;
 
 -- Helper: the caller, from a per-request setting. NULL when unset, which makes
 -- every policy below fail closed rather than open.
@@ -43,7 +43,7 @@ $$ language sql stable;
 alter table asset enable row level security;
 alter table asset force row level security;
 
-create policy asset_discover on asset for select to orgmem_app
+create policy asset_discover on asset for select to homegrown_app
   using (discovery_scope in (select caller_groups()));
 
 -- ---------------------------------------------------------------- claim
@@ -54,7 +54,7 @@ create policy asset_discover on asset for select to orgmem_app
 alter table claim enable row level security;
 alter table claim force row level security;
 
-create policy claim_read on claim for select to orgmem_app
+create policy claim_read on claim for select to homegrown_app
   using (
     exists (select 1 from asset a where a.id = claim.asset_id)
     and (not sensitive or caller_can_read_source(
@@ -67,7 +67,7 @@ create policy claim_read on claim for select to orgmem_app
 alter table card_version enable row level security;
 alter table card_version force row level security;
 
-create policy card_read on card_version for select to orgmem_app
+create policy card_read on card_version for select to homegrown_app
   using (exists (select 1 from asset a where a.id = card_version.asset_id));
 
 -- The only thing the API should read. `detail` becomes '{}' unless the caller
@@ -84,7 +84,7 @@ create or replace view card_visible as
     join asset a on a.id = cv.asset_id
    where cv.valid_to is null;
 
-grant select on card_visible to orgmem_app;
+grant select on card_visible to homegrown_app;
 
 -- ---------------------------------------------------------------- edge
 -- An edge is only returned when BOTH ends are visible. The application renders
@@ -94,7 +94,7 @@ grant select on card_visible to orgmem_app;
 alter table edge enable row level security;
 alter table edge force row level security;
 
-create policy edge_read on edge for select to orgmem_app
+create policy edge_read on edge for select to homegrown_app
   using (
     exists (select 1 from asset a where a.id = edge.src)
     and exists (select 1 from asset a where a.id = edge.dst)
@@ -106,7 +106,7 @@ create policy edge_read on edge for select to orgmem_app
 alter table embedding enable row level security;
 alter table embedding force row level security;
 
-create policy embedding_read on embedding for select to orgmem_app
+create policy embedding_read on embedding for select to homegrown_app
   using (exists (select 1 from asset a where a.id = embedding.asset_id));
 
 -- ---------------------------------------------------------------- outcomes
@@ -114,10 +114,10 @@ create policy embedding_read on embedding for select to orgmem_app
 alter table reuse_outcome enable row level security;
 alter table reuse_outcome force row level security;
 
-create policy outcome_read on reuse_outcome for select to orgmem_app
+create policy outcome_read on reuse_outcome for select to homegrown_app
   using (exists (select 1 from asset a where a.id = reuse_outcome.asset_id));
 
-create policy outcome_insert on reuse_outcome for insert to orgmem_app
+create policy outcome_insert on reuse_outcome for insert to homegrown_app
   with check (exists (select 1 from asset a where a.id = reuse_outcome.asset_id));
 
 -- ---------------------------------------------------------------- questions
@@ -126,7 +126,7 @@ create policy outcome_insert on reuse_outcome for insert to orgmem_app
 alter table question enable row level security;
 alter table question force row level security;
 
-create policy question_own on question for select to orgmem_app
+create policy question_own on question for select to homegrown_app
   using (asker_id = current_app_user());
-create policy question_insert on question for insert to orgmem_app
+create policy question_insert on question for insert to homegrown_app
   with check (asker_id = current_app_user());

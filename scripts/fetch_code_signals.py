@@ -15,8 +15,8 @@ from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from orgmem.collector.adapters import _gh
-from orgmem.collector.signals import MANIFESTS
+from homegrown.collector.adapters import _gh
+from homegrown.collector.signals import MANIFESTS
 
 CACHE = Path(__file__).parent.parent / ".cache" / "codesig"
 

@@ -47,7 +47,7 @@ def providers() -> list[str]:
         if not _cuda_ready():
             raise RuntimeError(
                 "device=cuda but CUDAExecutionProvider is unavailable. Use .venv-gpu, "
-                "or set ORGMEM_DEVICE=cpu.")
+                "or set HOMEGROWN_DEVICE=cpu.")
         return ["CUDAExecutionProvider", "CPUExecutionProvider"]
     return (["CUDAExecutionProvider", "CPUExecutionProvider"] if _cuda_ready()
             else ["CPUExecutionProvider"])

@@ -11,7 +11,7 @@ the most important finding so far about the product's verdict.
 
 ## The harness
 
-`src/orgmem/agent/` is a LangGraph coding agent (see `graph.py`):
+`src/homegrown/agent/` is a LangGraph coding agent (see `graph.py`):
 
 ```
 START -> agent -> (no tool calls) ------------------------------------------> END
@@ -209,11 +209,11 @@ instead of logging a row of failures. Regression tests in `tests/test_llm_provid
 ## What gate 2 still needs
 
 1. **Credit on the API key**, then `python -I scripts/gate2_run.py --model claude
-   --repeats 3` with `ORGMEM_VERDICT_MODE=model`. That run answers the gate: the
+   --repeats 3` with `HOMEGROWN_VERDICT_MODE=model`. That run answers the gate: the
    `model checked` column across `none` / `description` / `instruction` / `all`, against
    the `hook` row, is the comparison the design is built around.
 2. More tickets, especially controls — a false-alarm rate needs more than 8 to be
    quoted with any confidence.
 3. Other coding agents. The same `find_existing` is reachable over a CLI and MCP
-   (`orgmem.cli`, `orgmem.mcp_server`), which is how agents other than this harness —
+   (`homegrown.cli`, `homegrown.mcp_server`), which is how agents other than this harness —
    Claude Code, Codex, Cursor — can be measured on the same tickets.

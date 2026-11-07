@@ -27,8 +27,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 from gate1_retrieval import auditor, fts_only, indexed_text, toks  # noqa: E402
 from gate1_variants import interleave, rank  # noqa: E402
 
-from orgmem.db import admin_conn, as_user  # noqa: E402
-from orgmem.embed import asset_text  # noqa: E402
+from homegrown.db import admin_conn, as_user  # noqa: E402
+from homegrown.embed import asset_text  # noqa: E402
 
 ROOT = Path(__file__).parent.parent / "experiments" / "gate1"
 
@@ -98,7 +98,7 @@ def main() -> int:
         qp, dp = MODELS.get(name, ("", ""))
         t = time.time()
         try:
-            from orgmem.device import providers
+            from homegrown.device import providers
             m = TextEmbedding(model_name=name, providers=providers())
             dc = enc(m, [dp + x for x in card])
             ds = enc(m, [dp + x for x in summ])

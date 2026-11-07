@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-import orgmem.llm as llm
+import homegrown.llm as llm
 
 
 def test_key_file_skips_comment_lines(tmp_path):
@@ -45,7 +45,7 @@ def test_missing_gemini_key_is_unavailable_not_a_crash(monkeypatch):
 
 
 def test_judge_fails_safe_when_the_provider_is_down(monkeypatch):
-    from orgmem.search import judge_with_model
+    from homegrown.search import judge_with_model
     monkeypatch.setattr(llm.settings, "llm_provider", "gemini")
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
     monkeypatch.setattr(llm.settings, "gemini_key_file", "")

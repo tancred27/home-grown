@@ -18,12 +18,12 @@ from pathlib import Path
 
 from langgraph.checkpoint.postgres import PostgresSaver
 
-from orgmem.collector import adapters as A
-from orgmem.collector.poller import poll_org
-from orgmem.collector.source import GitHubSource, LocalGitSource
-from orgmem.collector.state import claim_daily, complete, release_lease
-from orgmem.collector.sync import Syncer
-from orgmem.config import settings
+from homegrown.collector import adapters as A
+from homegrown.collector.poller import poll_org
+from homegrown.collector.source import GitHubSource, LocalGitSource
+from homegrown.collector.state import claim_daily, complete, release_lease
+from homegrown.collector.sync import Syncer
+from homegrown.config import settings
 
 
 def main() -> int:

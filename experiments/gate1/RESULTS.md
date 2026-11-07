@@ -225,7 +225,7 @@ bge-base vs bge-large is not a pure size comparison. nomic was given its require
 `queries_test.json`, unchanged since `76e6b4e` (verified with `git diff` before the
 run). 52 queries, 51 resolvable — `adaptive-metrics-autoapply` has no detected unit, as
 in the held-out set. Configuration: bge-base-en-v1.5, `card` + `summary` fields,
-`ORGMEM_FUSION=interleave`, reranker off. Raw output: `test_run_output.txt`.
+`HOMEGROWN_FUSION=interleave`, reranker off. Raw output: `test_run_output.txt`.
 
 | test set (n=51) | recall@1 | recall@5 | recall@10 | MRR | misses |
 |---|---|---|---|---|---|
@@ -304,7 +304,7 @@ indexed from their name and description only. Corpus sizes ~86, ~600 and ~2,500.
 measures degradation of a fixed system and changes nothing.
 
 **How the blind LLM calls were made.** The project's own Anthropic API key had no
-credit at the time (`400: credit balance is too low`), so the calls in `src/orgmem/llm.py`
+credit at the time (`400: credit balance is too low`), so the calls in `src/homegrown/llm.py`
 could not run. Both jobs were instead given to fresh Claude subagents, each allowed to
 read exactly one input file and write one output file, with no access to the queries or
 labels. Blindness here is by instruction and by what the input file contains, not by

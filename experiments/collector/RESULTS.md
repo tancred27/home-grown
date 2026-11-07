@@ -105,7 +105,7 @@ matches.
 verdicts can only say "possibly", never "yes" — but irrelevant matches are still listed.
 This is the rule-based verdict's known failure (false alarms on 8/8 held-out control
 tickets, `experiments/gate2/RESULTS.md`); the blind model judge had 0/8 on similar
-tickets. `ORGMEM_VERDICT_MODE=model` is the fix and needs API credit.
+tickets. `HOMEGROWN_VERDICT_MODE=model` is the fix and needs API credit.
 
 ## Summary
 

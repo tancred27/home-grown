@@ -11,7 +11,7 @@ migration guide, a reusable how-to or runbook); IGNORE usage and reference pages
 tool's own features, contributor or release-process docs, and pages that only restate
 what the asset is. 13 of 43 are KEEP.
 
-The decider's prompt (`src/orgmem/collector/pages.py`) states the same criterion. So this
+The decider's prompt (`src/homegrown/collector/pages.py`) states the same criterion. So this
 measures whether the model applies the rule the way the rater did. It does not show the
 rule is the right one.
 

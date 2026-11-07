@@ -13,7 +13,7 @@ import re
 import sys
 from pathlib import Path
 
-from orgmem.db import admin_conn
+from homegrown.db import admin_conn
 
 
 def readme_excerpt(d: Path, limit: int = 1400) -> str:

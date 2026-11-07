@@ -17,8 +17,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from gate2_run import dev_user  # noqa: E402
 
-from orgmem.db import as_user  # noqa: E402
-from orgmem.search import search  # noqa: E402
+from homegrown.db import as_user  # noqa: E402
+from homegrown.search import search  # noqa: E402
 
 ROOT = Path(__file__).parent.parent
 SETS = ["tasks.json", "tasks_heldout.json", "tasks_judge_fresh.json",

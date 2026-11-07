@@ -17,10 +17,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from gate1_retrieval import auditor, fts_only, indexed_text, toks  # noqa: E402
 
-from orgmem.config import settings
-from orgmem.db import admin_conn, as_user
-from orgmem.embed import embed_query
-from orgmem.search import _FORCE_EXACT, candidate_text
+from homegrown.config import settings
+from homegrown.db import admin_conn, as_user
+from homegrown.embed import embed_query
+from homegrown.search import _FORCE_EXACT, candidate_text
 
 ROOT = Path(__file__).parent.parent / "experiments" / "gate1"
 K = 60.0

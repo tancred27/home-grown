@@ -1,7 +1,7 @@
 """How many commits per second can the write path absorb?
 
 Run ONLY against a throwaway copy of the database:
-    ORGMEM_ADMIN_DSN=.../orgmem_bench ORGMEM_APP_DSN=.../orgmem_bench \
+    HOMEGROWN_ADMIN_DSN=.../homegrown_bench HOMEGROWN_APP_DSN=.../homegrown_bench \
         python -I scripts/bench_write_path.py <repos-dir> [--events 400] [--mode per-event|coalesce]
 
 Synthetic but realistic commits: real repos and real file paths from local checkouts,
@@ -27,12 +27,12 @@ from pathlib import Path
 
 from langgraph.checkpoint.postgres import PostgresSaver
 
-from orgmem.collector import ChangedFile, Deps, Event, build_collector, run_event
-from orgmem.collector.events import claim_next, enqueue, finish, release
-from orgmem.config import settings
+from homegrown.collector import ChangedFile, Deps, Event, build_collector, run_event
+from homegrown.collector.events import claim_next, enqueue, finish, release
+from homegrown.config import settings
 
-if "orgmem_bench" not in settings.admin_dsn:
-    raise SystemExit("refusing to run: ORGMEM_ADMIN_DSN must point at orgmem_bench")
+if "homegrown_bench" not in settings.admin_dsn:
+    raise SystemExit("refusing to run: HOMEGROWN_ADMIN_DSN must point at homegrown_bench")
 
 
 def arg(name, default, cast=int):
@@ -103,7 +103,7 @@ def main() -> int:
                     release(eid, f"{type(e).__name__}: {e}")
                 stats["runs"] += 1
         else:
-            from orgmem.collector.events import claim_repo_batch, finish_batch
+            from homegrown.collector.events import claim_repo_batch, finish_batch
             while (job := claim_repo_batch()) is not None:
                 ids, ev = job
                 try:

@@ -1,6 +1,6 @@
 """Search under concurrent load and under churn (tests B and C).
 
-ONLY against orgmem_bench. Loads N synthetic assets (3 clustered 768-d vectors each,
+ONLY against homegrown_bench. Loads N synthetic assets (3 clustered 768-d vectors each,
 summaries from a word pool so keyword search has work), visible to one bench user,
 then runs the PRODUCT's search() as that user under RLS:
 
@@ -31,15 +31,15 @@ import numpy as np
 import psycopg
 from pgvector.psycopg import register_vector
 
-from orgmem.config import settings
+from homegrown.config import settings
 
-if "orgmem_bench" not in settings.admin_dsn:
-    raise SystemExit("refusing to run: ORGMEM_ADMIN_DSN must point at orgmem_bench")
+if "homegrown_bench" not in settings.admin_dsn:
+    raise SystemExit("refusing to run: HOMEGROWN_ADMIN_DSN must point at homegrown_bench")
 settings.db_pool_size = 60
 
-from orgmem.db import admin_conn, as_user  # noqa: E402
-from orgmem.embed import embed_query  # noqa: E402
-from orgmem.search import search  # noqa: E402
+from homegrown.db import admin_conn, as_user  # noqa: E402
+from homegrown.embed import embed_query  # noqa: E402
+from homegrown.search import search  # noqa: E402
 
 ROOT = Path(__file__).parent.parent
 DIM, CENTRES = 768, 3000
@@ -178,7 +178,7 @@ def main() -> int:
     # Question embedding (CPU model) measured on its own, then taken out of the DB test:
     # every search() embeds its question first, and under concurrency that, not the
     # database, dominated latency in the smoke run.
-    import orgmem.search as S
+    import homegrown.search as S
     t0 = time.perf_counter()
     cache = {q: embed_query(q) for q in qs}
     report["embed"]["sequential_ms_per_question"] = round(1000 * (time.perf_counter() - t0) / len(qs))

@@ -1,4 +1,4 @@
-# Org Capability Memory (starter)
+# HomeGrown (starter)
 
 An agent-maintained memory of what an organization has already built, so engineers and
 coding agents check before rebuilding.
@@ -70,13 +70,13 @@ The same `find_existing` is reachable three ways; every call is logged to `quest
 with its route, so which route agents actually use is measurable.
 
 ```bash
-orgmem find "turn request paths with ids into route templates" -k cardinality,metrics
+homegrown find "turn request paths with ids into route templates" -k cardinality,metrics
 
-python -m orgmem.mcp_server                     # MCP over stdio
-claude mcp add orgmem -e ORGMEM_USER=gate2-dev -- .venv/Scripts/python -m orgmem.mcp_server
+python -m homegrown.mcp_server                     # MCP over stdio
+claude mcp add homegrown -e HOMEGROWN_USER=gate2-dev -- .venv/Scripts/python -m homegrown.mcp_server
 ```
 
-`ORGMEM_VERDICT_MODE=model` swaps the rule-based verdict for a model judge (needs API
+`HOMEGROWN_VERDICT_MODE=model` swaps the rule-based verdict for a model judge (needs API
 credit; fails safe to `unknown` without it). See `experiments/gate2/RESULTS.md` for why
 it matters: the rule-based verdict raised a false alarm on every control ticket.
 
@@ -87,7 +87,7 @@ python -I scripts/gate2_run.py --model scripted-eager      # plumbing, no LLM
 python -I scripts/gate2_run.py --model claude --repeats 3  # the measurement (API credit)
 ```
 
-A LangGraph agent (`src/orgmem/agent/`) with a Postgres checkpointer and an
+A LangGraph agent (`src/homegrown/agent/`) with a Postgres checkpointer and an
 `interrupt()` that asks reuse-or-build. Five nudge conditions, from a plain tool
 description to a hook where the graph itself checks before the first write.
 
@@ -106,6 +106,6 @@ py -3.13 -m venv .venv-gpu
 .venv-gpu/Scripts/python -I scripts/check_gpu.py            # confirms the ACTIVE provider
 ```
 
-The code is the same in both: `ORGMEM_DEVICE=auto` (default) uses CUDA when it is
+The code is the same in both: `HOMEGROWN_DEVICE=auto` (default) uses CUDA when it is
 available and CPU otherwise. Always run `check_gpu.py` after setup — onnxruntime falls
 back to CPU silently when a CUDA or cuDNN DLL is missing, so "it ran" is not proof.

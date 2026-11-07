@@ -9,14 +9,14 @@ test alone searches five queries per user, and one run spent ~105 of the free ti
   * llm_provider = "disabled"     any accidental call raises LLMUnavailable, which every
                                   caller already treats as "no judgment" (fail safe)
 
-Tests that exercise model behaviour monkeypatch `orgmem.llm.structured` with a fake.
+Tests that exercise model behaviour monkeypatch `homegrown.llm.structured` with a fake.
 """
 
 from __future__ import annotations
 
 import pytest
 
-from orgmem.config import settings
+from homegrown.config import settings
 
 
 @pytest.fixture(autouse=True, scope="session")

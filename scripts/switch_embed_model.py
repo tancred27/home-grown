@@ -5,16 +5,16 @@ drops rows for other models rather than keeping a mixed-dimension column (pgvect
 cannot compare vectors of different dimensions, and the search path filters by model).
 
 Usage: python -I scripts/switch_embed_model.py <model-name> <dim>
-Then set ORGMEM_EMBED_MODEL / ORGMEM_EMBED_DIM (or config.py defaults) to match.
+Then set HOMEGROWN_EMBED_MODEL / HOMEGROWN_EMBED_DIM (or config.py defaults) to match.
 """
 
 from __future__ import annotations
 
 import sys
 
-from orgmem.db import admin_conn
-from orgmem.embed import asset_text, embed_texts
-from orgmem.store import write_embedding
+from homegrown.db import admin_conn
+from homegrown.embed import asset_text, embed_texts
+from homegrown.store import write_embedding
 
 
 def short(name: str) -> str:

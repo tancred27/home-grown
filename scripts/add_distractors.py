@@ -14,11 +14,11 @@ from __future__ import annotations
 
 import sys
 
-from orgmem.config import settings
-from orgmem.corpus.github import fetch_org_repos
-from orgmem.db import admin_conn
-from orgmem.embed import embed_texts
-from orgmem.store import ensure_team, write_embedding
+from homegrown.config import settings
+from homegrown.corpus.github import fetch_org_repos
+from homegrown.db import admin_conn
+from homegrown.embed import embed_texts
+from homegrown.store import ensure_team, write_embedding
 
 
 def main() -> int:

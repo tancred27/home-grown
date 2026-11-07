@@ -12,8 +12,8 @@ import pytest
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.types import Command
 
-from orgmem.agent import Workspace, build_graph, initial_state, make_tools, score_run
-from orgmem.agent.scripted import ScriptedModel
+from homegrown.agent import Workspace, build_graph, initial_state, make_tools, score_run
+from homegrown.agent.scripted import ScriptedModel
 
 GOLD = "asset-retry-client"
 TASK = "Add retries with exponential backoff to our HTTP client."
@@ -85,8 +85,8 @@ def test_no_match_means_no_interrupt(tmp_path):
 
 
 def test_instruction_variant_changes_only_the_system_prompt():
-    from orgmem.agent.graph import system_prompt
-    from orgmem.agent.tools import INSTRUCTION_LINE
+    from homegrown.agent.graph import system_prompt
+    from homegrown.agent.tools import INSTRUCTION_LINE
     assert INSTRUCTION_LINE in system_prompt("instruction")
     assert INSTRUCTION_LINE in system_prompt("all")
     assert INSTRUCTION_LINE not in system_prompt("none")
@@ -103,7 +103,7 @@ def test_pause_survives_a_restart_with_the_postgres_checkpointer(tmp_path):
     instance -- standing in for a new process -- from the saved checkpoint."""
     from langgraph.checkpoint.postgres import PostgresSaver
 
-    from orgmem.config import settings
+    from homegrown.config import settings
 
     try:
         cm = PostgresSaver.from_conn_string(settings.admin_dsn)

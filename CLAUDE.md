@@ -1,4 +1,4 @@
-# Org Capability Memory
+# HomeGrown
 
 An agent-maintained memory of what an organization has already built, so engineers and coding agents check before rebuilding. Design: `docs/design.md`; full context: `docs/HANDOFF.md`.
 

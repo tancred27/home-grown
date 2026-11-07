@@ -26,9 +26,9 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).parent))
 from gate1_retrieval import auditor  # noqa: E402
 
-from orgmem.config import settings  # noqa: E402
-from orgmem.db import admin_conn, as_user  # noqa: E402
-from orgmem.embed import embed_query  # noqa: E402
+from homegrown.config import settings  # noqa: E402
+from homegrown.db import admin_conn, as_user  # noqa: E402
+from homegrown.embed import embed_query  # noqa: E402
 
 G = Path(__file__).parent.parent / "experiments" / "gate1"
 

@@ -17,10 +17,10 @@ import argparse
 import json
 from pathlib import Path
 
-from orgmem import llm
-from orgmem.collector.graph import _SOLVED_SIGNAL
-from orgmem.collector.pages import judge_page
-from orgmem.config import settings
+from homegrown import llm
+from homegrown.collector.graph import _SOLVED_SIGNAL
+from homegrown.collector.pages import judge_page
+from homegrown.config import settings
 
 ROOT = Path(__file__).parent.parent
 

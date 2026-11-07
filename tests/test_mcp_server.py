@@ -7,8 +7,8 @@ import json
 
 import pytest
 
-from orgmem import mcp_server
-from orgmem.tools_text import FIND_EXISTING_DESCRIPTION
+from homegrown import mcp_server
+from homegrown.tools_text import FIND_EXISTING_DESCRIPTION
 
 
 def _text(result) -> str:
@@ -28,7 +28,7 @@ def test_tool_surface_and_annotations():
 
 
 def test_find_existing_over_mcp_returns_verdicts(monkeypatch):
-    monkeypatch.setenv("ORGMEM_USER", "gate2-dev")
+    monkeypatch.setenv("HOMEGROWN_USER", "gate2-dev")
     try:
         res = asyncio.run(mcp_server.server.call_tool(
             "find_existing", {"intent": "collapse request paths with ids into templates",
@@ -42,7 +42,7 @@ def test_find_existing_over_mcp_returns_verdicts(monkeypatch):
 
 def test_get_asset_hides_existence_of_invisible_assets(monkeypatch):
     """An id the caller cannot see answers exactly like an id that does not exist."""
-    monkeypatch.setenv("ORGMEM_USER", "gate2-dev")
+    monkeypatch.setenv("HOMEGROWN_USER", "gate2-dev")
     res = asyncio.run(mcp_server.server.call_tool(
         "get_asset", {"asset_id": "00000000-0000-0000-0000-000000000000"}))
     assert json.loads(_text(res)) == {"error": "not found"}

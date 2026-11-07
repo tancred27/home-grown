@@ -21,11 +21,11 @@ sys.path.insert(0, str(Path(__file__).parent))
 from gate1_retrieval import auditor, fts_only, indexed_text, toks  # noqa: E402
 from gate1_variants import interleave, rank  # noqa: E402
 
-from orgmem.config import settings  # noqa: E402
-from orgmem.db import admin_conn, as_user  # noqa: E402
-from orgmem.embed import embed_query, embed_texts  # noqa: E402
-from orgmem.search import _FORCE_EXACT  # noqa: E402
-from orgmem.store import write_embedding  # noqa: E402
+from homegrown.config import settings  # noqa: E402
+from homegrown.db import admin_conn, as_user  # noqa: E402
+from homegrown.embed import embed_query, embed_texts  # noqa: E402
+from homegrown.search import _FORCE_EXACT  # noqa: E402
+from homegrown.store import write_embedding  # noqa: E402
 
 G = Path(__file__).parent.parent / "experiments" / "gate1"
 

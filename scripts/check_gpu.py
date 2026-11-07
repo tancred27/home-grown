@@ -15,7 +15,7 @@ import time
 import onnxruntime as ort
 from fastembed import TextEmbedding
 
-from orgmem.device import _cuda_ready, active_providers
+from homegrown.device import _cuda_ready, active_providers
 
 
 def main() -> int:

@@ -10,9 +10,9 @@ import uuid
 
 import pytest
 
-from orgmem.collector import ChangedFile, Deps, Event, build_collector, run_event
-from orgmem.collector.stage import infer
-from orgmem.db import admin_conn
+from homegrown.collector import ChangedFile, Deps, Event, build_collector, run_event
+from homegrown.collector.stage import infer
+from homegrown.db import admin_conn
 
 
 def make_repo(root, name):
@@ -308,7 +308,7 @@ def test_failed_map_write_keeps_the_previous_line(env):
 
 
 def test_needs_refresh_rules():
-    from orgmem.collector.purpose import needs_refresh
+    from homegrown.collector.purpose import needs_refresh
     assert needs_refresh([], "pkg", has_line=False)
     assert not needs_refresh(["pkg/src/a.go"], "pkg", has_line=True)
     assert needs_refresh(["pkg/README.md"], "pkg", has_line=True)
@@ -323,7 +323,7 @@ def test_owner_gate_off_by_default_stores_without_asking(env):
 
     from langgraph.checkpoint.memory import InMemorySaver
 
-    from orgmem.config import settings
+    from homegrown.config import settings
     name, deps, _ = env
     assert settings.owner_gate is False and settings.default_visibility == "org-wide"
     g = build_collector(replace(deps, owner_gate=None), checkpointer=InMemorySaver())
@@ -363,7 +363,7 @@ def _fake_github(files: dict[str, str]):
 
 
 def test_sparse_checkout_fetches_only_what_the_agent_reads(tmp_path):
-    from orgmem.collector.remote import sparse_checkout
+    from homegrown.collector.remote import sparse_checkout
     files = {"package.json": '{"name": "remote-retry", "description": "Retry HTTP calls"}',
              "README.md": "# remote-retry", "src/retry.ts": "export const x = 1",
              "src/retry.test.ts": "it('gives up after max attempts', () => {})",
@@ -384,7 +384,7 @@ def test_sparse_checkout_fetches_only_what_the_agent_reads(tmp_path):
 def test_repo_without_a_local_clone_is_processed_remotely(tmp_path):
     from langgraph.checkpoint.memory import InMemorySaver
 
-    from orgmem.collector.remote import sparse_checkout
+    from homegrown.collector.remote import sparse_checkout
     name = f"zz-remote-{uuid.uuid4().hex[:6]}"
     files = {"package.json": '{"name": "%s", "description": "Retry HTTP calls"}' % name,
              "README.md": f"# {name}\n\nRetries failed HTTP requests with backoff.\n",
@@ -408,7 +408,7 @@ def test_repo_without_a_local_clone_is_processed_remotely(tmp_path):
 
 
 def test_stage_with_deprecation_word_in_readme_does_not_recurse():
-    from orgmem.collector.stage import infer
+    from homegrown.collector.stage import infer
     st = infer(readme="This API is deprecated in favour of v2.",
                releases=[{"tag": "v1.4.0", "prerelease": False}])
     assert st.stage == "prod" and st.needs_owner and st.proposed == "deprecated"

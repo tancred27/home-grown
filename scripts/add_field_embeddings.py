@@ -12,10 +12,10 @@ Usage: python -I scripts/add_field_embeddings.py
 
 from __future__ import annotations
 
-from orgmem.config import settings
-from orgmem.db import admin_conn
-from orgmem.embed import embed_texts
-from orgmem.store import write_embedding
+from homegrown.config import settings
+from homegrown.db import admin_conn
+from homegrown.embed import embed_texts
+from homegrown.store import write_embedding
 
 
 def short_name(name: str) -> str:

@@ -18,13 +18,13 @@ import json
 import sys
 from pathlib import Path
 
-from orgmem.config import settings
-from orgmem.corpus.github import fetch_org_repos
-from orgmem.db import admin_conn
-from orgmem.embed import asset_text, embed_texts
-from orgmem.extract import discussions, units
-from orgmem.extract import tests_extractor as tx
-from orgmem.store import (
+from homegrown.config import settings
+from homegrown.corpus.github import fetch_org_repos
+from homegrown.db import admin_conn
+from homegrown.embed import asset_text, embed_texts
+from homegrown.extract import discussions, units
+from homegrown.extract import tests_extractor as tx
+from homegrown.store import (
     ensure_team,
     ensure_user,
     grant_membership,

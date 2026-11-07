@@ -34,7 +34,7 @@ import psycopg
 from pgvector import HalfVector
 from pgvector.psycopg import register_vector
 
-from orgmem.config import settings
+from homegrown.config import settings
 
 DIM, CENTRES, TEAMS, K = 768, 2000, 500, 10
 
@@ -73,9 +73,9 @@ def main() -> int:
         print(f"loaded {n:,} rows ({public:.0%} org-wide) in {time.perf_counter() - t0:.0f}s",
               flush=True)
         a.execute("alter table zz_ann enable row level security")
-        a.execute("create policy zz_ann_read on zz_ann for select to orgmem_app using "
+        a.execute("create policy zz_ann_read on zz_ann for select to homegrown_app using "
                   "(scope = 0 or scope = nullif(current_setting('app.team', true), '')::int)")
-        a.execute("grant select on zz_ann to orgmem_app")
+        a.execute("grant select on zz_ann to homegrown_app")
         a.execute("analyze zz_ann")
 
     queries = batch(nq)
@@ -84,7 +84,7 @@ def main() -> int:
     def run(label, setup_sql, sql=None):
         sql = sql or "select id from zz_ann order by vec <=> %s limit %s"
         lat, results = [], []
-        with psycopg.connect(settings.app_dsn) as c:      # orgmem_app: RLS applies
+        with psycopg.connect(settings.app_dsn) as c:      # homegrown_app: RLS applies
             register_vector(c)
             for q, t in zip(queries, teams):
                 with c.transaction():

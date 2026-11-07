@@ -1,4 +1,4 @@
--- Org Capability Memory: schema.
+-- HomeGrown: schema.
 -- Runs automatically on first container start (docker-entrypoint-initdb.d).
 
 create extension if not exists vector;

@@ -2,7 +2,7 @@
 
 Question: can the write path keep up when an org lands thousands to millions of commits
 a day (coding agents included)? Everything ran against a throwaway copy of the database
-(`orgmem_bench`).
+(`homegrown_bench`).
 
 ## Before: one agent run per commit (`scripts/bench_write_path.py`)
 

@@ -8,11 +8,11 @@ Tools (design section 7):
   get_asset              read-only   one card; `detail` only with source access
   report_reuse_outcome   write       reused / extended / rejected, and why
 
-Run (stdio):   python -m orgmem.mcp_server
+Run (stdio):   python -m homegrown.mcp_server
 Register with Claude Code:
-  claude mcp add orgmem -e ORGMEM_USER=gate2-dev -- <repo>/.venv/Scripts/python -m orgmem.mcp_server
+  claude mcp add homegrown -e HOMEGROWN_USER=gate2-dev -- <repo>/.venv/Scripts/python -m homegrown.mcp_server
 
-Identity: $ORGMEM_USER names the app_user. The design's real path is an OAuth 2.1
+Identity: $HOMEGROWN_USER names the app_user. The design's real path is an OAuth 2.1
 resource server that exchanges the caller's token (section 8); stdio + env var is the
 local stand-in, and every query still runs under that user's row-level security.
 """
@@ -32,7 +32,7 @@ from .search import find_existing as _find
 from .tools_text import FIND_EXISTING_DESCRIPTION
 
 server = MCPServer(
-    name="orgmem",
+    name="homegrown",
     instructions=("Organization capability memory. Before writing a new helper, utility, "
                   "service or integration, call find_existing to check whether the "
                   "organization already has one."),
@@ -40,7 +40,7 @@ server = MCPServer(
 
 
 def _user() -> str:
-    return resolve_user(os.environ.get("ORGMEM_USER", "gate2-dev"))
+    return resolve_user(os.environ.get("HOMEGROWN_USER", "gate2-dev"))
 
 
 @server.tool(name="find_existing", description=FIND_EXISTING_DESCRIPTION,

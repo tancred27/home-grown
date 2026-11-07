@@ -1,14 +1,14 @@
-"""`orgmem find` -- the same find_existing, from a terminal or any coding agent's shell.
+"""`homegrown find` -- the same find_existing, from a terminal or any coding agent's shell.
 
 The design (section 4) keeps REST/CLI/MCP as thin routes onto one function, so gate 2
 can measure which route agents actually use. Every call is logged to the `question`
 table with route='cli' (adherence is a number, not a hope).
 
 Usage:
-  orgmem find "turn request paths with ids into route templates" [-k cardinality,metrics]
+  homegrown find "turn request paths with ids into route templates" [-k cardinality,metrics]
               [--user gate2-dev] [--json]
 
-Identity: the caller is the app_user named by --user or $ORGMEM_USER. A real deployment
+Identity: the caller is the app_user named by --user or $HOMEGROWN_USER. A real deployment
 gets this from the OAuth token (design section 8); the env var is the local stand-in.
 """
 
@@ -31,7 +31,7 @@ def resolve_user(login: str) -> str:
         cur.execute("select id from app_user where login = %s", (login,))
         row = cur.fetchone()
     if not row:
-        raise SystemExit(f"unknown user {login!r}; pass --user or set ORGMEM_USER")
+        raise SystemExit(f"unknown user {login!r}; pass --user or set HOMEGROWN_USER")
     return str(row[0])
 
 
@@ -51,19 +51,19 @@ def log_question(user_id: str, intent: str, keywords: list[str], route: str,
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(prog="orgmem")
+    ap = argparse.ArgumentParser(prog="homegrown")
     sub = ap.add_subparsers(dest="cmd", required=True)
     f = sub.add_parser("find", help="has someone here already built this?")
     f.add_argument("intent")
     f.add_argument("-k", "--keywords", default="",
                    help="comma-separated synonyms / other names for the thing")
-    f.add_argument("--user", default=os.environ.get("ORGMEM_USER", "gate2-dev"))
+    f.add_argument("--user", default=os.environ.get("HOMEGROWN_USER", "gate2-dev"))
     f.add_argument("--json", action="store_true")
     f.add_argument("--top", type=int, default=5)
     a = sub.add_parser("ask", help="has someone done X? who, which team/LOB, what stage?")
     a.add_argument("question")
     a.add_argument("-k", "--keywords", default="")
-    a.add_argument("--user", default=os.environ.get("ORGMEM_USER", "gate2-dev"))
+    a.add_argument("--user", default=os.environ.get("HOMEGROWN_USER", "gate2-dev"))
     a.add_argument("--json", action="store_true")
     args = ap.parse_args(argv)
 

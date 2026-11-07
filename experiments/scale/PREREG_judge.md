@@ -11,7 +11,7 @@ WRONG asset, the most damaging failure the product can have?
 - Tickets: all 30 duplicate and 26 control tickets in experiments/gate2/tasks*.json.
 - Corpus sizes: 109 and 9,610 (the curve corpus: everyone has a description-only purpose
   line from blind writers; experiments/scale/purpose_lines + curve_lines), built inside
-  a rolled-back transaction on orgmem_bench, searched as the gate-2 dev user under RLS.
+  a rolled-back transaction on homegrown_bench, searched as the gate-2 dev user under RLS.
 - Retrieval: production search + query rewriting (rewrites: blind Claude, request only;
   experiments/scale/rewrites_claude.json plus the 26 control rewrites added now).
 - Judge input: the top 5 per ticket at each size, as production builds it (name,

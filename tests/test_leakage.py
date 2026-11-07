@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import pytest
 
-from orgmem.db import admin_conn, as_user
+from homegrown.db import admin_conn, as_user
 
 
 @pytest.fixture(scope="module")
@@ -121,7 +121,7 @@ def test_unidentified_caller_sees_nothing(corpus):
 def test_app_role_cannot_bypass_rls():
     """The guarantee everything else rests on."""
     with admin_conn() as conn, conn.cursor() as cur:
-        cur.execute("select rolsuper, rolbypassrls from pg_roles where rolname='orgmem_app'")
+        cur.execute("select rolsuper, rolbypassrls from pg_roles where rolname='homegrown_app'")
         is_super, bypass = cur.fetchone()
         assert not is_super, "app role is a superuser: RLS is bypassed entirely"
         assert not bypass, "app role has BYPASSRLS"
@@ -129,7 +129,7 @@ def test_app_role_cannot_bypass_rls():
 
 def test_search_never_returns_out_of_scope_results(corpus):
     """End-to-end: the actual read path, not just raw tables."""
-    from orgmem.search import find_existing
+    from homegrown.search import find_existing
 
     queries = ["reject a payload that is too large", "retry a failed request",
                "parse configuration", "clamp a value to a range", "kafka consumer"]
@@ -146,7 +146,7 @@ def test_search_never_returns_out_of_scope_results(corpus):
 # visibility rules itself. These tests hold it to exactly the policies' rules.
 
 def test_fts_hits_never_returns_an_undiscoverable_asset(corpus):
-    from orgmem.search import _tsquery_or
+    from homegrown.search import _tsquery_or
     queries = ["retry backoff http", "kafka consumer", "time series outlier",
                "dashboard panel plugin", "alert rule notification", "parse configuration"]
     checked = 0

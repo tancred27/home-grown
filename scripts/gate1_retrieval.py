@@ -34,10 +34,10 @@ import sys
 import uuid
 from pathlib import Path
 
-from orgmem.config import settings
-from orgmem.db import admin_conn, as_user
-from orgmem.embed import embed_query
-from orgmem.search import _FORCE_EXACT
+from homegrown.config import settings
+from homegrown.db import admin_conn, as_user
+from homegrown.embed import embed_query
+from homegrown.search import _FORCE_EXACT
 
 STOP = set("""a an the and or but if then than that this these those is are was were be
 been being to of in on at by for with from as it its into over under about can could
@@ -91,7 +91,7 @@ def rank_of(rows: list, gold: str) -> int | None:
 
 def fts_only(conn, terms: str, limit: int) -> list[dict]:
     """OR'd tsquery, same as the product path. See _tsquery_or for why not plainto_."""
-    from orgmem.search import _tsquery_or
+    from homegrown.search import _tsquery_or
 
     tsq = _tsquery_or(terms)
     if not tsq:
@@ -131,7 +131,7 @@ def main() -> int:
         return 2
     qs = json.loads(qfile.read_text(encoding="utf-8"))
 
-    from orgmem.search import search
+    from homegrown.search import search
 
     u = auditor()
     with admin_conn() as conn, conn.cursor() as cur:

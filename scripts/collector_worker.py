@@ -17,18 +17,18 @@ from pathlib import Path
 
 from langgraph.checkpoint.postgres import PostgresSaver
 
-from orgmem.collector import Deps, build_collector, run_event
-from orgmem.collector import adapters as A
-from orgmem.collector.events import claim_next, finish, release
-from orgmem.collector.graph import _repo_of, resume_event
-from orgmem.config import settings
-from orgmem.corpus.github import fetch_org_repos
-from orgmem.db import admin_conn
+from homegrown.collector import Deps, build_collector, run_event
+from homegrown.collector import adapters as A
+from homegrown.collector.events import claim_next, finish, release
+from homegrown.collector.graph import _repo_of, resume_event
+from homegrown.config import settings
+from homegrown.corpus.github import fetch_org_repos
+from homegrown.db import admin_conn
 
 
 def make_deps(roots: list[Path]) -> Deps:
     meta = fetch_org_repos(settings.github_org)
-    from orgmem.collector.remote import sparse_checkout
+    from homegrown.collector.remote import sparse_checkout
     # Local clones are optional: any repo without one is read through a sparse remote
     # checkout (tree + manifests + READMEs + tests), so the worker scales past what fits
     # on disk.
@@ -78,7 +78,7 @@ def main() -> int:
             else:
                 finish(eid, "applied", out.get("result"))
         if n:
-            from orgmem.collector.usage import refresh
+            from homegrown.collector.usage import refresh
             # Only the repos this batch touched: cost follows change, not org size.
             u = refresh(roots, repos=touched)
             print(f"usage refreshed for {u['scanned_repos']} repo(s): {u['edges']} edges, "

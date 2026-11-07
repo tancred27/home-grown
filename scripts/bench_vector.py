@@ -23,9 +23,9 @@ import numpy as np
 import psycopg
 from pgvector.psycopg import register_vector
 
-from orgmem.config import settings
+from homegrown.config import settings
 
-BENCH_DB = "orgmem_bench"
+BENCH_DB = "homegrown_bench"
 GROUPS, USERS, PER_USER = 200, 60, 3   # ~1.5% of rows visible per user, as in run B
 
 

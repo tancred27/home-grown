@@ -1,5 +1,5 @@
 -- Org directory, contributors and solution stage.
--- collection agent in src/orgmem/collector/.
+-- collection agent in src/homegrown/collector/.
 --
 -- What the answering agent needs, beyond "does it exist": who built it, which team
 -- and line of business (LOB) they are in, who their manager is, and whether the
@@ -79,22 +79,22 @@ alter table event add column if not exists outcome jsonb;
 
 -- ---------------------------------------------------------------- security
 
-grant select on lob, person to orgmem_app;
-grant select, insert, update on asset_contributor to orgmem_app;
-revoke all on source_identity from orgmem_app;   -- ingestion only
+grant select on lob, person to homegrown_app;
+grant select, insert, update on asset_contributor to homegrown_app;
+revoke all on source_identity from homegrown_app;   -- ingestion only
 
 -- The directory is internal-public: any identified caller may read it; an
 -- unidentified one sees nothing (fail closed, like every other policy).
 alter table lob enable row level security;
 alter table lob force row level security;
 drop policy if exists lob_read on lob;
-create policy lob_read on lob for select to orgmem_app
+create policy lob_read on lob for select to homegrown_app
   using (current_app_user() is not null);
 
 alter table person enable row level security;
 alter table person force row level security;
 drop policy if exists person_read on person;
-create policy person_read on person for select to orgmem_app
+create policy person_read on person for select to homegrown_app
   using (current_app_user() is not null);
 
 -- Who built an asset is visible only if the asset is. Otherwise a contributor list
@@ -102,5 +102,5 @@ create policy person_read on person for select to orgmem_app
 alter table asset_contributor enable row level security;
 alter table asset_contributor force row level security;
 drop policy if exists contributor_read on asset_contributor;
-create policy contributor_read on asset_contributor for select to orgmem_app
+create policy contributor_read on asset_contributor for select to homegrown_app
   using (exists (select 1 from asset a where a.id = asset_contributor.asset_id));

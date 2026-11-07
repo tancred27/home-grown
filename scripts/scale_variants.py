@@ -35,10 +35,10 @@ sys.path.insert(0, str(Path(__file__).parent))
 from gate2_run import dev_user  # noqa: E402
 from scale_fair import load_lines  # noqa: E402
 
-from orgmem import llm  # noqa: E402
-from orgmem.config import settings  # noqa: E402
-from orgmem.embed import embed_query, embed_texts  # noqa: E402
-from orgmem.search import search  # noqa: E402
+from homegrown import llm  # noqa: E402
+from homegrown.config import settings  # noqa: E402
+from homegrown.embed import embed_query, embed_texts  # noqa: E402
+from homegrown.search import search  # noqa: E402
 
 ROOT = Path(__file__).parent.parent
 G2 = ["tasks.json", "tasks_heldout.json", "tasks_judge_fresh.json", "tasks_judge_fresh2.json"]
@@ -100,7 +100,7 @@ def sem_rank(cur, qvecs: list, field: str | None) -> list:
 def run_variants(conn, user, qs, rw, label) -> dict:
     res = {}
     with conn.cursor() as cur:
-        cur.execute("set role orgmem_app")
+        cur.execute("set role homegrown_app")
         cur.execute("select set_config('app.user_id', %s, true)", (user,))
         cur.execute("set local enable_indexscan = off")
         cur.execute("select id, unit_id from asset")

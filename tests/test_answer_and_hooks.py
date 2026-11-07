@@ -10,9 +10,9 @@ import uuid
 import pytest
 from langgraph.checkpoint.memory import InMemorySaver
 
-from orgmem.collector import ChangedFile, Deps, Event, build_collector, run_event
-from orgmem.collector import adapters as A
-from orgmem.db import admin_conn, as_user
+from homegrown.collector import ChangedFile, Deps, Event, build_collector, run_event
+from homegrown.collector import adapters as A
+from homegrown.db import admin_conn, as_user
 from tests.test_collector import make_repo
 
 
@@ -55,7 +55,7 @@ def test_confluence_and_notion_map_to_the_same_envelope():
 def test_webhook_marks_the_repo_dirty_only_for_the_default_branch(monkeypatch):
     from fastapi.testclient import TestClient
 
-    from orgmem import api
+    from homegrown import api
     monkeypatch.setattr(api.settings, "github_webhook_secret", "s3cret")
     client = TestClient(api.app)
     repo = f"acme/zz-hook-{uuid.uuid4().hex[:6]}"
@@ -141,7 +141,7 @@ def two_users_one_asset(tmp_path):
 
 
 def test_answer_says_who_built_it_their_team_lob_manager_and_stage(two_users_one_asset):
-    from orgmem.answer import ask
+    from homegrown.answer import ask
     name, ids = two_users_one_asset
     out = ask(ids["zz-alice"], "retry failed http calls with exponential backoff")
     mine = [m for m in out["matches"] if m["owner_team"] == f"team-{name}"]
@@ -156,7 +156,7 @@ def test_answer_says_who_built_it_their_team_lob_manager_and_stage(two_users_one
 
 def test_answer_reveals_nothing_about_an_asset_the_asker_cannot_discover(
         two_users_one_asset):
-    from orgmem.answer import ask
+    from homegrown.answer import ask
     name, ids = two_users_one_asset
     out = ask(ids["zz-bob"], "retry failed http calls with exponential backoff")
     assert not [m for m in out["matches"] if m["owner_team"] == f"team-{name}"]
@@ -169,7 +169,7 @@ def test_answer_reveals_nothing_about_an_asset_the_asker_cannot_discover(
 
 
 def test_sibling_units_are_told_apart_by_their_path():
-    from orgmem.answer.graph import _unit_path
+    from homegrown.answer.graph import _unit_path
     assert _unit_path("github:github-rate-limits-prometheus-exporter:.") == ""
     assert _unit_path("github:github-rate-limits-prometheus-exporter:"
                       "helm/github-rate-limits-prometheus-exporter") == \
@@ -179,7 +179,7 @@ def test_sibling_units_are_told_apart_by_their_path():
 
 
 def test_up_to_five_results_fits_first_never_not_a_fit():
-    from orgmem.answer.graph import _compose, select_results
+    from homegrown.answer.graph import _compose, select_results
     v = ["not_a_fit", "unknown", "extend", "unknown", "use_as_is", "unknown", "extend"]
     cands = [{"name": f"c{i}", "verdict": x} for i, x in enumerate(v)]
     shown = select_results(cands, 5)

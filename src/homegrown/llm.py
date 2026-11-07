@@ -75,7 +75,7 @@ def _gemini_key() -> str:
     import os
     key = os.environ.get("GEMINI_API_KEY") or _read_key_file(settings.gemini_key_file)
     if not key:
-        raise LLMUnavailable("no Gemini key: set GEMINI_API_KEY or ORGMEM_GEMINI_KEY_FILE")
+        raise LLMUnavailable("no Gemini key: set GEMINI_API_KEY or HOMEGROWN_GEMINI_KEY_FILE")
     return key
 
 
@@ -83,7 +83,7 @@ def _groq_key() -> str:
     import os
     key = os.environ.get("GROQ_API_KEY") or _read_key_file(settings.groq_key_file)
     if not key:
-        raise LLMUnavailable("no Groq key: set GROQ_API_KEY or ORGMEM_GROQ_KEY_FILE")
+        raise LLMUnavailable("no Groq key: set GROQ_API_KEY or HOMEGROWN_GROQ_KEY_FILE")
     return key
 
 
@@ -114,7 +114,7 @@ def resolve_model() -> str:
             raise LLMUnavailable(f"no stable flash model visible; got {ids[:8]}")
         _model_cache[p] = sorted(flash, key=_version_key)[-1]
         return _model_cache[p]
-    raise LLMUnavailable(f"set ORGMEM_LLM_MODEL for provider {p!r}")
+    raise LLMUnavailable(f"set HOMEGROWN_LLM_MODEL for provider {p!r}")
 
 
 def _version_key(model_id: str):

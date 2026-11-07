@@ -26,11 +26,11 @@ from pathlib import Path
 
 from langgraph.checkpoint.postgres import PostgresSaver
 
-from orgmem.collector import Deps, Event, build_collector, enqueue, run_event
-from orgmem.collector import adapters as A
-from orgmem.collector.events import claim_next, finish, release
-from orgmem.config import settings
-from orgmem.corpus.github import fetch_org_repos
+from homegrown.collector import Deps, Event, build_collector, enqueue, run_event
+from homegrown.collector import adapters as A
+from homegrown.collector.events import claim_next, finish, release
+from homegrown.config import settings
+from homegrown.corpus.github import fetch_org_repos
 
 ROOT = Path(__file__).parent.parent
 CACHE = ROOT / ".cache" / "github"

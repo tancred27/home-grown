@@ -28,7 +28,7 @@ purpose line? Earlier scale numbers were unfair in one direction or the other:
 ## Conditions
 
 All are measured inside **one database transaction that is rolled back**, so the live
-database is unchanged. Searches run as `orgmem_app` with the gate-2 dev user under RLS,
+database is unchanged. Searches run as `homegrown_app` with the gate-2 dev user under RLS,
 exactly as in the product.
 
 | | corpus | real units' purpose field | distractors' purpose field |

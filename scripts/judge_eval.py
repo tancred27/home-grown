@@ -24,11 +24,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from gate2_run import dev_user  # noqa: E402
 
-from orgmem import llm  # noqa: E402
-from orgmem.config import settings  # noqa: E402
-from orgmem.db import as_user  # noqa: E402
-from orgmem.models import display_name  # noqa: E402
-from orgmem.search import judge_with_model, load_claims, search  # noqa: E402
+from homegrown import llm  # noqa: E402
+from homegrown.config import settings  # noqa: E402
+from homegrown.db import as_user  # noqa: E402
+from homegrown.models import display_name  # noqa: E402
+from homegrown.search import judge_with_model, load_claims, search  # noqa: E402
 
 ROOT = Path(__file__).parent.parent
 STRONG = ("use_as_is", "extend")

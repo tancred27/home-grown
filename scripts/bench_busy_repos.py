@@ -1,6 +1,6 @@
 """Replay the real history of busy repos through the full state-sync pass.
 
-ONLY against the throwaway database (ORGMEM_ADMIN_DSN must point at orgmem_bench).
+ONLY against the throwaway database (HOMEGROWN_ADMIN_DSN must point at homegrown_bench).
 
     python -I scripts/bench_busy_repos.py <mirrors-dir> [--hours 24] [--step 600]
 
@@ -24,13 +24,13 @@ import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from orgmem.collector.source import LocalGitSource
-from orgmem.collector.sync import Syncer
-from orgmem.config import settings
-from orgmem.db import admin_conn
+from homegrown.collector.source import LocalGitSource
+from homegrown.collector.sync import Syncer
+from homegrown.config import settings
+from homegrown.db import admin_conn
 
-if "orgmem_bench" not in settings.admin_dsn:
-    raise SystemExit("refusing to run: ORGMEM_ADMIN_DSN must point at orgmem_bench")
+if "homegrown_bench" not in settings.admin_dsn:
+    raise SystemExit("refusing to run: HOMEGROWN_ADMIN_DSN must point at homegrown_bench")
 
 
 def arg(name, default, cast=int):

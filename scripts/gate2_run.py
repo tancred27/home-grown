@@ -3,7 +3,7 @@
 Pass line: find_existing is called in >= 60% of runs where a
 duplicate exists, under the strongest nudges.
 
-Runs every (variant x ticket x repeat) through the LangGraph agent in orgmem.agent, with
+Runs every (variant x ticket x repeat) through the LangGraph agent in homegrown.agent, with
 the REAL find_existing over the real corpus, a Postgres checkpointer, and a simulated
 developer who answers each reuse question: "reuse" if the asset shown is the right one
 (the ticket's gold asset), "build" otherwise.
@@ -34,11 +34,11 @@ from pathlib import Path
 from langgraph.checkpoint.postgres import PostgresSaver
 from langgraph.types import Command
 
-from orgmem.agent import (VARIANTS, Workspace, build_graph, compact_verdicts,
+from homegrown.agent import (VARIANTS, Workspace, build_graph, compact_verdicts,
                           initial_state, make_tools, score_run)
-from orgmem.config import settings
-from orgmem.db import admin_conn
-from orgmem.search import find_existing
+from homegrown.config import settings
+from homegrown.db import admin_conn
+from homegrown.search import find_existing
 
 ROOT = Path(__file__).parent.parent
 SEED = {
@@ -67,7 +67,7 @@ def dev_user() -> str:
 
 def make_model(name: str):
     if name.startswith("scripted-"):
-        from orgmem.agent.scripted import ScriptedModel
+        from homegrown.agent.scripted import ScriptedModel
         return ScriptedModel(behaviour=name.removeprefix("scripted-"))
     if name == "claude":
         from langchain_anthropic import ChatAnthropic

@@ -6,14 +6,14 @@ and does not redeliver failures, so the agent never runs inside the request: the
 it. The idempotency key makes redeliveries and the nightly reconcile harmless.
 
   POST /hooks/github             X-Hub-Signature-256 verified against the shared secret
-  POST /hooks/confluence         X-Orgmem-Token checked
-  POST /hooks/notion             X-Orgmem-Token checked
+  POST /hooks/confluence         X-Homegrown-Token checked
+  POST /hooks/notion             X-Homegrown-Token checked
   GET  /ask?q=...                the answering agent
   GET  /healthz
 
-Run: uvicorn orgmem.api:app --port 8080
+Run: uvicorn homegrown.api:app --port 8080
 
-Identity on /ask is X-Orgmem-User, a LOCAL STAND-IN: a real deployment validates an
+Identity on /ask is X-Homegrown-User, a LOCAL STAND-IN: a real deployment validates an
 OAuth 2.1 token here and maps it to app_user.
 """
 
@@ -73,27 +73,27 @@ def _check_token(token: str | None) -> None:
 
 @app.post("/hooks/confluence")
 async def confluence_hook(request: Request,
-                          x_orgmem_token: str | None = Header(default=None)) -> dict:
-    _check_token(x_orgmem_token)
+                          x_homegrown_token: str | None = Header(default=None)) -> dict:
+    _check_token(x_homegrown_token)
     ev = A.from_confluence_webhook(await request.json())
     return {"ok": True, "queued": enqueue(ev)}
 
 
 @app.post("/hooks/notion")
 async def notion_hook(request: Request,
-                      x_orgmem_token: str | None = Header(default=None)) -> dict:
-    _check_token(x_orgmem_token)
+                      x_homegrown_token: str | None = Header(default=None)) -> dict:
+    _check_token(x_homegrown_token)
     ev = A.from_notion_webhook(await request.json())
     return {"ok": True, "queued": enqueue(ev)}
 
 
 @app.get("/ask")
 def ask_endpoint(q: str, keywords: str = "",
-                 x_orgmem_user: str | None = Header(default=None)) -> dict:
-    if not x_orgmem_user:
+                 x_homegrown_user: str | None = Header(default=None)) -> dict:
+    if not x_homegrown_user:
         raise HTTPException(status_code=401, detail="no user")
     try:
-        user = resolve_user(x_orgmem_user)
+        user = resolve_user(x_homegrown_user)
     except SystemExit:
         raise HTTPException(status_code=403, detail="unknown user") from None
     kws = [k.strip() for k in keywords.split(",") if k.strip()]

@@ -15,16 +15,16 @@
 -- silently. It returns only asset ids and ranks; search.py joins them back to `asset`
 -- UNDER RLS, a second check.
 --
--- Least privilege: the function is owned by orgmem_search, a NOLOGIN role that may
+-- Least privilege: the function is owned by homegrown_search, a NOLOGIN role that may
 -- bypass RLS but can only SELECT these four tables.
 
 do $$ begin
-  if not exists (select 1 from pg_roles where rolname = 'orgmem_search') then
-    create role orgmem_search nologin bypassrls;
+  if not exists (select 1 from pg_roles where rolname = 'homegrown_search') then
+    create role homegrown_search nologin bypassrls;
   end if;
 end $$;
-grant usage on schema public to orgmem_search;
-grant select on asset, claim, membership, source_acl to orgmem_search;
+grant usage on schema public to homegrown_search;
+grant select on asset, claim, membership, source_acl to homegrown_search;
 
 create or replace function fts_hits(p_query tsquery, p_limit int)
 returns table (asset_id uuid, arank real, crank real)
@@ -60,6 +60,6 @@ as $$
    limit p_limit
 $$;
 
-alter function fts_hits(tsquery, int) owner to orgmem_search;
+alter function fts_hits(tsquery, int) owner to homegrown_search;
 revoke all on function fts_hits(tsquery, int) from public;
-grant execute on function fts_hits(tsquery, int) to orgmem_app;
+grant execute on function fts_hits(tsquery, int) to homegrown_app;

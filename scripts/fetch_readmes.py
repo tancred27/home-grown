@@ -15,7 +15,7 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from orgmem.collector.adapters import _gh
+from homegrown.collector.adapters import _gh
 
 CACHE = Path(__file__).parent.parent / ".cache" / "readmes"
 

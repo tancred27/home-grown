@@ -4,24 +4,24 @@ services:
     # which are the fallback if exact scan does not hold at real embedding dimensions
 
     image: pgvector/pgvector:0.8.1-pg16
-    container_name: orgmem-db
+    container_name: homegrown-db
     environment:
-      POSTGRES_USER: orgmem
-      POSTGRES_PASSWORD: orgmem_dev_only
-      POSTGRES_DB: orgmem
+      POSTGRES_USER: homegrown
+      POSTGRES_PASSWORD: homegrown_dev_only
+      POSTGRES_DB: homegrown
       # Deterministic plan costs so the vector benchmark is comparable across runs.
       POSTGRES_INITDB_ARGS: "--data-checksums"
     ports:
       - "5433:5432"          # 5433 to avoid clashing with any local Postgres
     volumes:
-      - orgmem_pgdata:/var/lib/postgresql/data
+      - homegrown_pgdata:/var/lib/postgresql/data
       - ./db:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U orgmem -d orgmem"]
+      test: ["CMD-SHELL", "pg_isready -U homegrown -d homegrown"]
       interval: 3s
       timeout: 5s
       retries: 20
     shm_size: 1gb
 
 volumes:
-  orgmem_pgdata:
+  homegrown_pgdata:

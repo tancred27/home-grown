@@ -9,11 +9,11 @@ from pathlib import Path
 
 import pytest
 
-from orgmem.collector.source import LocalGitSource
-from orgmem.collector.state import claim_due, complete, mark_dirty
-from orgmem.collector.sync import Syncer, read_kind, unit_dirs
-from orgmem.config import settings
-from orgmem.db import admin_conn
+from homegrown.collector.source import LocalGitSource
+from homegrown.collector.state import claim_due, complete, mark_dirty
+from homegrown.collector.sync import Syncer, read_kind, unit_dirs
+from homegrown.config import settings
+from homegrown.db import admin_conn
 
 T0 = datetime(2026, 11, 8, 12, 0, tzinfo=timezone.utc)
 
@@ -164,7 +164,7 @@ def _claim_for(repo, now, owner="w1"):
 
 
 def test_poller_marks_only_repos_pushed_since_last_poll():
-    from orgmem.collector.poller import poll_org
+    from homegrown.collector.poller import poll_org
     tag = uuid.uuid4().hex[:6]
     since = datetime(2026, 11, 8, 12, 0, tzinfo=timezone.utc)
     repos = [{"full_name": f"zzorg-{tag}/r{i}", "archived": i == 1,

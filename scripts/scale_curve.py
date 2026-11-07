@@ -27,9 +27,9 @@ from gate2_run import dev_user  # noqa: E402
 from scale_fair import load_lines  # noqa: E402
 from scale_variants import questions  # noqa: E402
 
-from orgmem.config import settings  # noqa: E402
-from orgmem.embed import embed_texts  # noqa: E402
-from orgmem.search import search  # noqa: E402
+from homegrown.config import settings  # noqa: E402
+from homegrown.embed import embed_texts  # noqa: E402
+from homegrown.search import search  # noqa: E402
 
 ROOT = Path(__file__).parent.parent
 
@@ -37,7 +37,7 @@ ROOT = Path(__file__).parent.parent
 def measure(conn, user, sets, rw, size) -> dict:
     out = {"size": size}
     with conn.cursor() as cur:
-        cur.execute("set role orgmem_app")
+        cur.execute("set role homegrown_app")
         cur.execute("select set_config('app.user_id', %s, true)", (user,))
         cur.execute("select id, unit_id from asset")
         uid = dict(cur.fetchall())

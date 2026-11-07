@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-import orgmem.llm as llm
-from orgmem.search import judge_with_model
+import homegrown.llm as llm
+from homegrown.search import judge_with_model
 
 CARDS = [{"name": "retry-client", "summary": "HTTP retries", "evidence": ["test: retries"]},
          {"name": "clock-panel", "summary": "A clock", "evidence": []}]
@@ -78,7 +78,7 @@ def test_bad_card_fails_safe_instead_of_raising(monkeypatch):
 
 
 def test_candidate_o_label_parses():
-    from orgmem.search import _candidate_letter
+    from homegrown.search import _candidate_letter
     letters = list("ABCDEFGHIJKLMNO")
     assert _candidate_letter("Candidate O", letters, []) == "O"
     assert _candidate_letter("(m)", letters, []) == "M"
@@ -86,11 +86,11 @@ def test_candidate_o_label_parses():
 
 
 def test_query_rewrite_joins_the_search_and_fails_safe(monkeypatch):
-    import orgmem.search as S
+    import homegrown.search as S
     monkeypatch.setattr(S.settings, "verdict_mode", "model")
     monkeypatch.setattr(S.settings, "query_rewrite", True)
     S._rewrite_cache.clear()
-    import orgmem.llm as L
+    import homegrown.llm as L
     monkeypatch.setattr(L, "structured", lambda *a, **k: {"purpose": "Detect outliers in a group of time series."})
     assert S.rewrite_query("which pod's latency curve looks different?") == \
         "Detect outliers in a group of time series."

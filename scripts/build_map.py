@@ -15,11 +15,11 @@ import json
 import time
 from pathlib import Path
 
-from orgmem import llm
-from orgmem.collector.purpose import readme_excerpt, store, write_line
-from orgmem.config import settings
-from orgmem.corpus.github import fetch_org_repos
-from orgmem.db import admin_conn
+from homegrown import llm
+from homegrown.collector.purpose import readme_excerpt, store, write_line
+from homegrown.config import settings
+from homegrown.corpus.github import fetch_org_repos
+from homegrown.db import admin_conn
 
 ROOT = Path(__file__).parent.parent
 

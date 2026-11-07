@@ -6,8 +6,8 @@ import uuid
 
 import pytest
 
-from orgmem.collector.usage import _resolve, refresh
-from orgmem.db import admin_conn, as_user
+from homegrown.collector.usage import _resolve, refresh
+from homegrown.db import admin_conn, as_user
 
 
 def test_resolve_matches_module_subpackages_and_major_versions():

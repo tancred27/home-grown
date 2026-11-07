@@ -1,6 +1,6 @@
 """Build the fit judge's inputs at 109 and ~9,610 assets (experiments/scale/PREREG_judge.md).
 
-ONLY against orgmem_bench. One rolled-back transaction; production search + query
+ONLY against homegrown_bench. One rolled-back transaction; production search + query
 rewriting as the gate-2 dev user under RLS; the top 5 per ticket become judge cards
 exactly as search.find_existing builds them.
 
@@ -24,17 +24,17 @@ sys.path.insert(0, str(Path(__file__).parent))
 from gate2_run import dev_user  # noqa: E402
 from scale_fair import load_lines  # noqa: E402
 
-from orgmem.config import settings  # noqa: E402
-from orgmem.embed import embed_texts  # noqa: E402
-from orgmem.models import display_name  # noqa: E402
-from orgmem.search import load_claims, search  # noqa: E402
+from homegrown.config import settings  # noqa: E402
+from homegrown.embed import embed_texts  # noqa: E402
+from homegrown.models import display_name  # noqa: E402
+from homegrown.search import load_claims, search  # noqa: E402
 
 ROOT = Path(__file__).parent.parent
 SETS = ["tasks.json", "tasks_heldout.json", "tasks_judge_fresh.json", "tasks_judge_fresh2.json"]
 LETTERS = "ABCDE"
 
-if "orgmem_bench" not in settings.admin_dsn:
-    raise SystemExit("refusing to run: ORGMEM_ADMIN_DSN must point at orgmem_bench")
+if "homegrown_bench" not in settings.admin_dsn:
+    raise SystemExit("refusing to run: HOMEGROWN_ADMIN_DSN must point at homegrown_bench")
 
 
 def tickets():
@@ -48,7 +48,7 @@ def tickets():
 
 def cards_for(conn, user, ts, rw):
     with conn.cursor() as cur:
-        cur.execute("set role orgmem_app")
+        cur.execute("set role homegrown_app")
         cur.execute("select set_config('app.user_id', %s, true)", (user,))
         cur.execute("select id, unit_id, name, coalesce(summary,''), coalesce(purpose,'') "
                     "from asset")

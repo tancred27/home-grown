@@ -1,7 +1,7 @@
 """Scale test with purpose lines for EVERYONE (experiments/scale/PREREG.md).
 
 Runs every condition inside ONE database transaction that is rolled back at the end:
-the live database is never changed. Searches run as orgmem_app with the gate-2 dev user
+the live database is never changed. Searches run as homegrown_app with the gate-2 dev user
 under row-level security, exactly as the product does (SET ROLE inside the transaction).
 
   A0  109 assets, real units keep their production (Groq, README) purpose lines
@@ -26,9 +26,9 @@ from pgvector.psycopg import register_vector
 sys.path.insert(0, str(Path(__file__).parent))
 from gate2_run import dev_user  # noqa: E402
 
-from orgmem.config import settings  # noqa: E402
-from orgmem.embed import embed_texts  # noqa: E402
-from orgmem.search import search  # noqa: E402
+from homegrown.config import settings  # noqa: E402
+from homegrown.embed import embed_texts  # noqa: E402
+from homegrown.search import search  # noqa: E402
 
 ROOT = Path(__file__).parent.parent
 G2 = ["tasks.json", "tasks_heldout.json", "tasks_judge_fresh.json", "tasks_judge_fresh2.json"]
@@ -49,7 +49,7 @@ def load_lines(key_file: Path, out_dir: Path) -> tuple[dict, dict]:
 def measure(conn, user: str, label: str) -> dict:
     """Run both question sets as the dev user under RLS. Returns the metrics."""
     with conn.cursor() as cur:
-        cur.execute("set role orgmem_app")
+        cur.execute("set role homegrown_app")
         cur.execute("select set_config('app.user_id', %s, true)", (user,))
         cur.execute("select id, unit_id from asset")
         uid_of = {r[0]: r[1] for r in cur.fetchall()}

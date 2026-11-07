@@ -8,9 +8,9 @@ from pathlib import Path
 
 import pytest
 
-from orgmem.config import settings
-from orgmem.db import admin_conn, as_user
-from orgmem.search import search
+from homegrown.config import settings
+from homegrown.db import admin_conn, as_user
+from homegrown.search import search
 
 ROOT = Path(__file__).parent.parent
 
@@ -52,7 +52,7 @@ def test_hnsw_mode_never_shows_a_hidden_asset(monkeypatch):
 
 
 def test_auto_mode_switches_on_table_size(monkeypatch):
-    import orgmem.search as S
+    import homegrown.search as S
     monkeypatch.setattr(settings, "vector_search", "auto")
     with as_user(None) as conn, conn.cursor() as cur:
         for threshold, expected in ((10**12, "exact"), (0, "hnsw")):
