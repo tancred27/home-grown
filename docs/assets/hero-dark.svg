@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340">
+  <clipPath id="card"><rect width="1200" height="340" rx="24"/></clipPath>
+  <rect width="1200" height="340" rx="24" fill="#0f1712"/>
+  <g clip-path="url(#card)"><circle cx="1010" cy="170" r="210" fill="#1d2e22"/></g>
+  <path d="M880 262 Q1010 238 1140 262" stroke="#2a3a2f" stroke-width="6" fill="none" stroke-linecap="round"/>
+  
+  <g transform="translate(1010,118) scale(3.2)">
+    <path d="M0 40 C0 25 0 15 0 4" stroke="#5cc27a" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M0 18 C-4 4 -18 -2 -30 2 C-26 14 -14 22 0 18 Z" fill="#7fd894"/>
+    <path d="M0 10 C6 -6 22 -12 34 -8 C30 6 16 14 0 10 Z" fill="#5cc27a"/>
+  </g>
+  <text x="80" y="138" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="76" font-weight="700" fill="#e8efe8">HomeGrown</text>
+  <text x="82" y="196" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="30" fill="#e8efe8">Has someone in my company already built this?</text>
+  <text x="82" y="246" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="22" fill="#9db0a2">Ask before you build. Find what other teams made, who made it,</text>
+  <text x="82" y="278" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="22" fill="#9db0a2">and whether it is ready to use, even when you can't see their code.</text>
+</svg>

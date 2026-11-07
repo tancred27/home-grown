@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430">
+  <rect width="1200" height="430" rx="24" fill="#0f1712"/>
+  <text x="80" y="44" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" font-weight="600" letter-spacing="2" fill="#9db0a2">HOW IT WORKS</text>
+  
+  <rect x="80" y="70" width="320" height="300" rx="20" fill="#16211a" stroke="#2a3a2f" stroke-width="2"/>
+  <circle cx="144" cy="136" r="36" fill="#1d2e22"/>
+  <g transform="translate(144,136)" stroke="#5cc27a" stroke-width="4" fill="none">
+      <path d="M-20 0 Q0 -18 20 0 Q0 18 -20 0 Z"/><circle r="6" fill="#5cc27a"/></g>
+  <text x="364" y="120" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#2a3a2f">1</text>
+  <text x="120" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#e8efe8">It watches</text>
+  <text x="120" y="262" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#9db0a2">your company's code</text><text x="120" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#9db0a2">and docs, and notices</text><text x="120" y="322" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#9db0a2">what changes.</text>
+  <path d="M414 208 l12 12 l-12 12" stroke="#5cc27a" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <rect x="440" y="70" width="320" height="300" rx="20" fill="#16211a" stroke="#2a3a2f" stroke-width="2"/>
+  <circle cx="504" cy="136" r="36" fill="#1d2e22"/>
+  <g transform="translate(504,136)" stroke="#5cc27a" stroke-width="4" fill="none" stroke-linejoin="round">
+      <path d="M-20 -14 L-2 -10 L-2 16 L-20 12 Z"/><path d="M20 -14 L2 -10 L2 16 L20 12 Z"/></g>
+  <text x="724" y="120" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#2a3a2f">2</text>
+  <text x="480" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#e8efe8">It remembers</text>
+  <text x="480" y="262" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#9db0a2">what each piece does,</text><text x="480" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#9db0a2">who built it, and</text><text x="480" y="322" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#9db0a2">whether it is live.</text>
+  <path d="M774 208 l12 12 l-12 12" stroke="#5cc27a" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <rect x="800" y="70" width="320" height="300" rx="20" fill="#16211a" stroke="#2a3a2f" stroke-width="2"/>
+  <circle cx="864" cy="136" r="36" fill="#1d2e22"/>
+  <g transform="translate(864,136)" stroke="#5cc27a" stroke-width="4" fill="none" stroke-linejoin="round">
+      <path d="M-20 -14 H20 V8 H-4 L-14 18 V8 H-20 Z"/></g>
+  <text x="1084" y="120" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#2a3a2f">3</text>
+  <text x="840" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#e8efe8">It answers</text>
+  <text x="840" y="262" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#9db0a2">“Has anyone built X?”</text><text x="840" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#9db0a2">with the best matches,</text><text x="840" y="322" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" fill="#9db0a2">and only what you may see.</text>
+  <text x="600" y="408" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" fill="#9db0a2">Two AI agents do the work. Permissions are enforced by the database itself.</text>
+</svg>

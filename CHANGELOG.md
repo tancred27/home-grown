@@ -4,6 +4,14 @@ All notable changes are listed here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+- In model mode, answers say "Yes" only when something fits as-is. When the best match
+  would need extending, the answer is "Related", and results are grouped under
+  "Use as-is", "Related, check these" and "Not ruled out".
+- Simpler README with images; detailed results moved to `docs/results.md`.
+
 ## [0.1.0] - 2026-11-08
 
 First public release, as a research prototype.
