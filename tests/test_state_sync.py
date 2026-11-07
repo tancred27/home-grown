@@ -199,3 +199,14 @@ def test_daily_refresh_revisits_every_unit(mono):
     r = daily.sync(full, head)
     assert r["status"] == "processed" and r["changed_units"] == 3, \
         "the daily pass ignores fingerprints so contributors and stage refresh everywhere"
+
+
+def test_read_kind_reads_tests_in_test_folders():
+    from homegrown.collector.sync import read_kind
+    assert read_kind("tests/test_basic.py") == "test"
+    assert read_kind("pkg/__tests__/retry.test.ts") == "test"
+    assert read_kind("src/retry.test.ts") == "test"
+    assert read_kind("node_modules/lib/a.test.js") is None
+    assert read_kind("tests/fixtures/package.json") is None
+    assert read_kind("package.json") == "manifest"
+    assert read_kind("src/app.py") is None

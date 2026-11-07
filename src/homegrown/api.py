@@ -1,9 +1,11 @@
 """HTTP entry points: webhooks in, answers out.
 
-Webhook handlers ONLY verify and enqueue. GitHub times a delivery out after 10 seconds
-and does not redeliver failures, so the agent never runs inside the request: the queue
-(table `event`) absorbs the event and a worker (scripts/collector_worker.py) processes
-it. The idempotency key makes redeliveries and the nightly reconcile harmless.
+Webhook handlers only verify and record; the agents never run inside a request.
+  * GitHub pushes to a repo's default branch mark the repo as changed (repo_state).
+    The sync worker (scripts/sync_worker.py) reads the repo's current state later, so
+    delivery order and redeliveries don't matter.
+  * Confluence / Notion page events go into the `event` queue, which
+    scripts/collector_worker.py drains.
 
   POST /hooks/github             X-Hub-Signature-256 verified against the shared secret
   POST /hooks/confluence         X-Homegrown-Token checked
@@ -13,8 +15,8 @@ it. The idempotency key makes redeliveries and the nightly reconcile harmless.
 
 Run: uvicorn homegrown.api:app --port 8080
 
-Identity on /ask is X-Homegrown-User, a LOCAL STAND-IN: a real deployment validates an
-OAuth 2.1 token here and maps it to app_user.
+Identity on /ask comes from the X-Homegrown-User header. That is a local stand-in: a
+real deployment would validate a sign-in token here and map it to an app_user.
 """
 
 from __future__ import annotations

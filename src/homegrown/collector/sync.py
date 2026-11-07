@@ -44,15 +44,17 @@ def _skipped(path: str) -> bool:
 
 def read_kind(path: str) -> str | None:
     """Files the collector reads: manifest | readme | test. Everything else is ignored."""
+    parts = PurePosixPath(path).parts
+    # Tests usually live in test/ or tests/ folders, which _skipped() treats as noise,
+    # so they only skip vendored and build folders (as tests_extractor.extract_repo does).
+    if is_test_file(path):
+        return None if set(parts[:-1]) & SKIP_DIRS else "test"
     if _skipped(path):
         return None
-    name = PurePosixPath(path).name
-    if name in MANIFESTS:
+    if parts[-1] in MANIFESTS:
         return "manifest"
     if _README.search(path):
         return "readme"
-    if is_test_file(path):
-        return "test"
     return None
 
 
