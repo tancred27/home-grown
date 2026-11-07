@@ -17,3 +17,4 @@ npm/
 
 # Impeccable design-tool settings (local)
 .impeccable/
+.claude/worktrees/
