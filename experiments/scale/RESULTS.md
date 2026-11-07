@@ -141,3 +141,31 @@ pool-then-rank mode at 1M (it needs another ~25-minute index build).
   GPU or a hosted embedder is needed for millions).
 - The 1M search benchmark is synthetic. Real embeddings at 1M weren't affordable on this
   laptop.
+
+## The curve: recall from 109 to 9,610 assets (pre-registered, addendum 2)
+
+`scripts/scale_curve.py`, one rolled-back transaction (database verified unchanged).
+Everyone has a description-only purpose line from blind Claude writers (real units and
+the first 1,823 distractors from round 1, plus 7,678 new distractors from microsoft,
+google, Azure and aws-samples in `curve_lines/`). Raw: `curve_output.txt`, `curve.json`.
+
+| assets | test r@5 base | **test r@5 rw+** | test r@1 rw+ | tickets top-5 base | **tickets top-5 rw+** |
+|---|---|---|---|---|---|
+| 109 | 0.82 | **0.94** | 0.72 | 0.80 | **0.97** |
+| 1,932 | 0.63 | **0.82** | 0.55 | 0.67 | **0.83** |
+| 4,000 | 0.63 | **0.72** | 0.49 | 0.63 | **0.80** |
+| 7,000 | 0.57 | **0.72** | 0.47 | 0.63 | **0.80** |
+| 9,610 | 0.57 | **0.69** | 0.47 | 0.63 | **0.80** |
+
+**It flattens.** Most of the loss happens in the first ~1,900 assets, whose distractors
+include 406 of Grafana's own repositories: near neighbours of the gold assets. The next
+7,678 cost 3 points on the real duplicate tickets (0.83 → 0.80) and 13 on the gate-1 test
+set (0.82 → 0.69). Query rewriting adds 12–17 points at every size.
+
+**The caveat that matters:** the extra 7,678 are from *other* organisations, so they are
+mostly unrelated to the gold assets. A real 10,000-repo org is mostly its own near
+neighbours: many teams' versions of the same kinds of thing. The first segment of this
+curve (in-org neighbours, steep) is therefore the better guide to a real org than the
+flat tail. What the tail does show: sheer volume of unrelated code is not what breaks
+retrieval. Look-alikes are, and look-alikes are exactly the duplicates this product
+exists to surface, where any of several right answers is a useful answer.
