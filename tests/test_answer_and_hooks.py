@@ -183,7 +183,7 @@ def test_up_to_five_results_fits_first_never_not_a_fit():
     v = ["not_a_fit", "unknown", "extend", "unknown", "use_as_is", "unknown", "extend"]
     cands = [{"name": f"c{i}", "verdict": x} for i, x in enumerate(v)]
     shown = select_results(cands, 5)
-    assert [c["name"] for c in shown] == ["c2", "c4", "c6", "c1", "c3"]
+    assert [c["name"] for c in shown] == ["c4", "c2", "c6", "c1", "c3"]
     assert all(c["verdict"] != "not_a_fit" for c in shown)
 
     def m(c):
@@ -194,8 +194,19 @@ def test_up_to_five_results_fits_first_never_not_a_fit():
     out = _compose({"candidates": cands, "matches": [m(c) for c in shown],
                     "verdict_source": "model"})
     assert out["answer"] == "yes"
-    assert "Top 5 results (3 judged a fit, 2 not ruled out)" in out["text"]
-    assert out["text"].count(chr(10) + "* ") == 5 and "why: fits" in out["text"]
+    text = out["text"]
+    assert text.index("Use as-is:") < text.index("Related, check these:") \
+        < text.index("Not ruled out:")
+    assert text.count(chr(10) + "* ") == 5 and "why: fits" in text
+
+    extend_only = [m({"name": "e", "verdict": "extend"})]
+    out = _compose({"candidates": [{"verdict": "extend"}], "matches": extend_only,
+                    "verdict_source": "model"})
+    assert out["answer"] == "related" and out["text"].startswith("Related")
+
+    rules = _compose({"candidates": cands, "matches": [m(c) for c in shown],
+                      "verdict_source": "rules"})
+    assert rules["answer"] == "possibly" and "Top 5 results:" in rules["text"]
 
     only_unknown = [m({"name": "u", "verdict": "unknown"})]
     assert _compose({"candidates": [{"verdict": "unknown"}], "matches": only_unknown,

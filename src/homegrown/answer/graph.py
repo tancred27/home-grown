@@ -2,15 +2,16 @@
 
     retrieve -> judge -> enrich -> compose
 
-Answers yes / no / unknown / possibly, and lists up to settings.answer_results (5)
-results: every candidate judged a fit first, then candidates the judge could not rule
-out (labelled unknown); not-a-fit candidates are never listed. For each: who built
-it, their team, line of business and manager, whether it is in dev or prod (and how
-sure we are), and whether the asker can read the code or must request access.
+Lists up to settings.answer_results (5) results: use-as-is first, then related
+(extend), then candidates the judge could not rule out; not-a-fit candidates are never
+listed. For each: who built it, their team, line of business and manager, whether it is
+in dev or prod (and how sure we are), and whether the asker can read the code or must
+request access.
 
 The answer word is deliberately conservative:
   model verdicts (settings.verdict_mode = "model")
-      yes      a candidate was judged use-as-is or extend
+      yes      a candidate was judged use-as-is
+      related  nothing fits as-is, but a candidate could be extended to fit
       no       every candidate was judged not-a-fit
       unknown  otherwise, including when the model call failed (it fails safe)
   rule verdicts (settings.verdict_mode = "rules")
@@ -71,11 +72,14 @@ def _unit_path(unit_id: str | None) -> str:
 
 
 def select_results(cands: list[dict], n: int) -> list[dict]:
-    """Up to n results: every fit first (search order kept), then candidates the judge
-    could not rule out. A candidate judged not-a-fit is never shown."""
-    fits = [c for c in cands if c["verdict"] in STRONG]
-    maybe = [c for c in cands if c["verdict"] == "unknown"]
-    return (fits + maybe)[:n]
+    """Up to n results: use-as-is, then extend, then unknown, each in search order.
+    A candidate judged not-a-fit is never shown."""
+    order = ("use_as_is", "extend", "unknown")
+    return [c for v in order for c in cands if c["verdict"] == v][:n]
+
+
+_GROUPS = {"use_as_is": "Use as-is", "extend": "Related, check these",
+           "unknown": "Not ruled out"}
 
 
 def _enrich(state: AnswerState) -> dict:
@@ -137,27 +141,33 @@ def _enrich(state: AnswerState) -> dict:
 def _compose(state: AnswerState) -> dict:
     cands, matches = state["candidates"], state["matches"]
     model = state.get("verdict_source") == "model"
-    fits = [m for m in matches if m["verdict"] in STRONG]
-    if fits:
-        answer = "yes" if model else "possibly"
-    elif model and cands and all(c["verdict"] == "not_a_fit" for c in cands):
+    verdicts = {m["verdict"] for m in matches}
+    if not model:
+        answer = "possibly" if verdicts & set(STRONG) else "unknown"
+    elif "use_as_is" in verdicts:
+        answer = "yes"
+    elif "extend" in verdicts:
+        answer = "related"
+    elif cands and all(c["verdict"] == "not_a_fit" for c in cands):
         answer = "no"
     else:
         answer = "unknown"
 
     lines = [{"yes": "Yes - this has been done here.",
+              "related": "Related - nothing does exactly this, but these come close; "
+                         "check them before building.",
               "possibly": "Possibly - these look relevant, but the verdict is "
                           "rule-based and unverified; check before reusing.",
               "no": "No - nothing in the organisation's memory fits this.",
               "unknown": "Unknown - nothing clearly fits, but that is not proof it "
                          "has not been done."}[answer]]
-    if matches:
-        n_fit = sum(1 for m in matches if m["verdict"] in STRONG)
-        lines.append(f"\nTop {len(matches)} result{'s' if len(matches) != 1 else ''}"
-                     f" ({n_fit} judged a fit"
-                     + (f", {len(matches) - n_fit} not ruled out" if len(matches) > n_fit
-                        else "") + "):")
+    if matches and not model:
+        lines.append(f"\nTop {len(matches)} result{'s' if len(matches) != 1 else ''}:")
+    group = None
     for m in matches:
+        if model and m["verdict"] != group:
+            group = m["verdict"]
+            lines.append(f"\n{_GROUPS.get(group, group)}:")
         st = m["stage"]
         stage = f"{st['stage']}" + ("" if st["confirmed_by_owner"] else
                                     f" (inferred, {int((st['confidence'] or 0) * 100)}% "
