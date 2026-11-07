@@ -14,3 +14,6 @@ corpora/
 repos/
 npm/
 .cache/
+
+# Impeccable design-tool settings (local)
+.impeccable/
