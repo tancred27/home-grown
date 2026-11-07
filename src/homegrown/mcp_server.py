@@ -18,10 +18,12 @@ from __future__ import annotations
 
 import json
 import os
+import time
 
 from mcp.server.mcpserver import MCPServer
 from mcp.types import ToolAnnotations
 
+from . import telemetry
 from .cli import log_question, resolve_user
 from .db import as_user
 from .models import display_name
@@ -48,7 +50,9 @@ def find_existing(intent: str, keywords: list[str] | None = None,
     keywords: synonyms and other names someone might have used for this.
     kind: any | library | service | script | dataset | solved_problem."""
     user = _user()
+    t0 = time.monotonic()
     verdicts = _find(user, intent, keywords or [])
+    telemetry.record_question("mcp", "find", time.monotonic() - t0)
     log_question(user, intent, keywords or [], "mcp", verdicts)
     return json.dumps({"results": [{
         "asset_id": v.asset_id, "name": display_name(v.name), "verdict": v.verdict,
@@ -64,7 +68,7 @@ def find_existing(intent: str, keywords: list[str] | None = None,
              annotations=ToolAnnotations(read_only_hint=True, open_world_hint=False))
 def ask_tool(question: str, keywords: list[str] | None = None) -> str:
     from .answer import ask
-    out = ask(_user(), question, keywords or [])
+    out = ask(_user(), question, keywords or [], route="mcp")
     return json.dumps({k: out[k] for k in ("answer", "verdict_source", "matches")},
                       indent=1, default=str)
 
@@ -104,6 +108,7 @@ def report_reuse_outcome(asset_id: str, intent: str, outcome: str,
 
 
 def main() -> None:
+    telemetry.init("mcp")
     server.run(transport="stdio")
 
 

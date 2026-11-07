@@ -116,6 +116,7 @@ a real company. Sign-in, permission sync and monitoring are still to come. See
 - [Settings](docs/configuration.md)
 - [Connecting GitHub](docs/github.md)
 - [Running it for a whole company](docs/production.md)
+- [Traces and metrics](docs/observability.md)
 - [Results and limits](docs/results.md)
 
 ## Contributing

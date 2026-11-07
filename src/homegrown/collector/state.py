@@ -24,6 +24,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
+from .. import telemetry
 from ..config import settings
 from ..db import admin_conn
 
@@ -62,6 +63,7 @@ def mark_dirty_many(rows: list[tuple[str, datetime | None]]) -> None:
             [{"r": r, "t": t} for r, t in rows])
 
 
+@telemetry.traced("sync.claim")
 def claim_due(owner: str, now: datetime | None = None) -> dict | None:
     """Lease one due repo. -> {repo, last_processed_sha, default_branch, started_at}."""
     with admin_conn() as conn:
@@ -84,8 +86,10 @@ def claim_due(owner: str, now: datetime | None = None) -> dict | None:
                          coalesce(%(n)s, now())""",
             {"n": now, "q": settings.sync_quiet_s, "w": settings.sync_max_wait_s,
              "l": settings.sync_lease_s, "o": owner}).fetchone()
+    telemetry.annotate({"homegrown.claimed": row is not None})
     if not row:
         return None
+    telemetry.annotate({"homegrown.repo": row[0]})
     return {"repo": row[0], "last_processed_sha": row[1], "default_branch": row[2],
             "started_at": row[3]}
 
@@ -96,8 +100,11 @@ def complete(repo: str, owner: str, head_sha: str | None, started_at: datetime,
     """Record a finished pass. Stays dirty if a change arrived after the pass started.
     Returns False if this worker no longer held the lease (its result is discarded)."""
     with admin_conn() as conn:
+        # `before` reads the row as it was, for the staleness metric: how long the
+        # oldest change this pass took had been waiting.
         row = conn.execute(
-            """update repo_state set
+            """with before as (select first_pending_at from repo_state where repo = %(r)s)
+               update repo_state set
                  last_processed_sha = coalesce(%(h)s, last_processed_sha),
                  last_processed_at = coalesce(%(n)s, now()),
                  head_ci = coalesce(%(c)s, head_ci),
@@ -107,9 +114,12 @@ def complete(repo: str, owner: str, head_sha: str | None, started_at: datetime,
                  lease_owner = null, lease_until = null,
                  failures = 0, last_error = null
                where repo = %(r)s and lease_owner = %(o)s
-               returning repo""",
+               returning repo, extract(epoch from coalesce(%(n)s, now())
+                                           - (select first_pending_at from before))""",
             {"h": head_sha, "n": now, "c": head_ci, "b": default_branch, "s": started_at,
              "r": repo, "o": owner}).fetchone()
+    if row is not None and row[1] is not None:
+        telemetry.SYNC_STALENESS.record(float(row[1]))
     return row is not None
 
 
@@ -148,6 +158,12 @@ def claim_daily(owner: str, now: datetime | None = None) -> dict | None:
     if not row:
         return None
     return {"repo": row[0], "last_processed_sha": row[1], "started_at": row[2]}
+
+
+def repos_waiting() -> int:
+    """Repos marked changed and not yet processed."""
+    with admin_conn() as conn:
+        return conn.execute("select count(*) from repo_state where dirty").fetchone()[0]
 
 
 def release_lease(repo: str, owner: str) -> None:

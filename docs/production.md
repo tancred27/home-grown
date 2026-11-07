@@ -14,6 +14,8 @@ what is still missing, so you can decide what to add first.
   TLS.
 - **An LLM provider** for model verdicts, query rewriting and purpose lines. Expect two
   model calls per question (rewrite and judge).
+- **Monitoring**, optional: traces and metrics over OpenTelemetry, with no question
+  text or code in them. See [observability.md](observability.md).
 
 ## Sizing, from our measurements
 
@@ -40,8 +42,6 @@ Details: `experiments/sync/RESULTS.md` and `experiments/scale/RESULTS.md`.
 - **Permission sync.** Team membership (`membership`) and source access (`source_acl`)
   aren't synced from GitHub teams or your directory yet. Today, sync assigns one team
   per repo.
-- **Observability.** There are no metrics or traces yet. Every question is logged to
-  the `question` table.
 - **Caching.** Model calls are not cached across questions.
 
 If you run HomeGrown somewhere real, we'd like to hear how it goes. Please open an issue.

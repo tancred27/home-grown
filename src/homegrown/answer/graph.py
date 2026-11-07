@@ -25,11 +25,14 @@ not discover is never returned, and neither is anything about who built it.
 
 from __future__ import annotations
 
+import functools
+import time
 import uuid
 from typing import TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
+from .. import telemetry
 from ..config import settings
 from ..db import as_user
 from ..models import display_name
@@ -192,11 +195,24 @@ def _compose(state: AnswerState) -> dict:
     return {"answer": answer, "text": "\n".join(lines)}
 
 
+def _traced(name: str, fn):
+    """Run a node in a span that records how many items each list it returns holds.
+    Sizes only: the lists hold names and evidence."""
+    @functools.wraps(fn)
+    def node(state: AnswerState) -> dict:
+        with telemetry.span(f"answer.{name}") as sp:
+            out = fn(state)
+            sp.set_attributes({f"homegrown.{k}": len(v) for k, v in out.items()
+                               if isinstance(v, list)})
+            return out
+    return node
+
+
 def build_answerer(checkpointer=None):
     g = StateGraph(AnswerState)
-    g.add_node("retrieve_and_judge", _retrieve_and_judge)
-    g.add_node("enrich", _enrich)
-    g.add_node("compose", _compose)
+    g.add_node("retrieve_and_judge", _traced("retrieve_and_judge", _retrieve_and_judge))
+    g.add_node("enrich", _traced("enrich", _enrich))
+    g.add_node("compose", _traced("compose", _compose))
     g.add_edge(START, "retrieve_and_judge")
     g.add_edge("retrieve_and_judge", "enrich")
     g.add_edge("enrich", "compose")
@@ -204,9 +220,16 @@ def build_answerer(checkpointer=None):
     return g.compile(checkpointer=checkpointer)
 
 
-def ask(user_id: str | uuid.UUID, question: str, keywords: list[str] | None = None) -> dict:
-    out = build_answerer().invoke({"user_id": str(user_id), "question": question,
-                                   "keywords": keywords or []})
+def ask(user_id: str | uuid.UUID, question: str, keywords: list[str] | None = None,
+        route: str = "python") -> dict:
+    """route (cli, mcp, http) only labels the telemetry."""
+    t0 = time.monotonic()
+    with telemetry.span("answer.ask", {"homegrown.route": route}) as sp:
+        out = build_answerer().invoke({"user_id": str(user_id), "question": question,
+                                       "keywords": keywords or []})
+        sp.set_attributes({"homegrown.answer": out["answer"],
+                           "homegrown.matches": len(out["matches"])})
+    telemetry.record_question(route, "ask", time.monotonic() - t0, out["answer"])
     return {"question": question, "answer": out["answer"],
             "verdict_source": out["verdict_source"], "matches": out["matches"],
             "text": out["text"]}

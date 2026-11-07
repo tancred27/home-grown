@@ -80,6 +80,11 @@ class Settings(BaseSettings):
     docs_webhook_secret: str = ""
     github_org: str = "grafana"
 
+    # Traces and metrics over OpenTelemetry (docs/observability.md). Needs the [otel]
+    # extra. The endpoint and service name come from the standard
+    # OTEL_EXPORTER_OTLP_ENDPOINT and OTEL_SERVICE_NAME variables.
+    otel_enabled: bool = False
+
     def github_token(self) -> str | None:
         """Read the token from a file. Never logged, never echoed."""
         import re

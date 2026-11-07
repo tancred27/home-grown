@@ -32,6 +32,9 @@ dependencies = [
     # ~100MB install instead of pulling ~2.5GB of torch.
     "fastembed>=0.4",
     "numpy>=1.26",
+    # The API only: spans and metrics are no-ops unless the [otel] extra is installed and
+    # HOMEGROWN_OTEL_ENABLED is set (docs/observability.md).
+    "opentelemetry-api>=1.27",
 ]
 
 [project.urls]
@@ -44,6 +47,11 @@ homegrown = "homegrown.cli:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=8.3", "pytest-asyncio>=0.24", "ruff>=0.8"]
+otel = [
+    "opentelemetry-sdk>=1.27",
+    "opentelemetry-exporter-otlp-proto-http>=1.27",
+    "anthropic>=2.5",               # its open_telemetry option, to keep its own spans off
+]
 
 [build-system]
 requires = ["hatchling"]

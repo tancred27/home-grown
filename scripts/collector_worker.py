@@ -17,6 +17,7 @@ from pathlib import Path
 
 from langgraph.checkpoint.postgres import PostgresSaver
 
+from homegrown import telemetry
 from homegrown.collector import Deps, build_collector, run_event
 from homegrown.collector import adapters as A
 from homegrown.collector.events import claim_next, finish, release
@@ -38,6 +39,7 @@ def make_deps(roots: list[Path]) -> Deps:
 
 
 def main() -> int:
+    telemetry.init("collector-worker")
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
     if cmd == "pending":
         with admin_conn() as conn, conn.cursor() as cur:

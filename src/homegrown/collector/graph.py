@@ -29,6 +29,7 @@ resume days later, in another process, from where it stopped.
 
 from __future__ import annotations
 
+import functools
 import hashlib
 import operator
 import re
@@ -40,6 +41,7 @@ from typing import Annotated, Any, TypedDict
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import interrupt
 
+from .. import telemetry
 from ..config import settings
 from ..db import admin_conn
 from ..embed import asset_text, embed_texts
@@ -535,7 +537,7 @@ def build_collector(deps: Deps, checkpointer=None):
                      ("attribute", attribute),
                      ("assess_stage", assess_stage), ("validate", validate),
                      ("owner_gate", owner_gate), ("apply", apply)):
-        g.add_node(name, fn)
+        g.add_node(name, _traced(name, fn))
     g.add_edge(START, "triage")
     g.add_conditional_edges("triage", lambda s: after(s, "locate"), ["locate", END])
     g.add_conditional_edges("locate", lambda s: after(s, "decide"), ["decide", END])
@@ -548,6 +550,23 @@ def build_collector(deps: Deps, checkpointer=None):
     g.add_edge("owner_gate", "apply")
     g.add_edge("apply", END)
     return g.compile(checkpointer=checkpointer)
+
+
+def _traced(name: str, fn):
+    """Run a node in a span with counts only: targets, claims and the decision."""
+    @functools.wraps(fn)
+    def node(state: CollectState) -> dict:
+        with telemetry.span(f"collect.{name}") as sp:
+            out = fn(state)
+            attrs = {"homegrown.targets": len(out.get("targets", state.get("targets"))
+                                              or [])}
+            if "claims" in out:
+                attrs["homegrown.claims"] = sum(len(v) for v in out["claims"].values())
+            if "decision" in out:
+                attrs["homegrown.decision"] = out["decision"]
+            sp.set_attributes(attrs)
+            return out
+    return node
 
 
 def _embed_changed(conn, rows: list[tuple]) -> None:

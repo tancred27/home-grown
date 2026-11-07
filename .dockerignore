@@ -1,0 +1,21 @@
+# Only pyproject.toml, README.md, LICENSE, src/ and two scripts go into the image.
+.git
+.github
+.claude
+.env
+.env.*
+.venv*
+venv
+**/__pycache__
+**/*.pyc
+.cache
+corpora
+repos
+npm
+out
+experiments
+tests
+docs
+deploy
+db
+*.log
