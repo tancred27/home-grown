@@ -1,0 +1,107 @@
+{
+ "109": {
+  "dup": 30,
+  "gold_in_top5": 27,
+  "caught": 27,
+  "wrong_yes_sibling": 16,
+  "wrong_yes_unrelated": 3,
+  "dup_tickets_with_unrelated_yes": 2,
+  "ctl": 26,
+  "ctl_false_alarm": 0,
+  "answer": {
+   "yes": 28,
+   "no": 28,
+   "unknown": 0
+  },
+  "missing": 0,
+  "examples": [
+   {
+    "tid": "tasks_judge_fresh:f02",
+    "unit": "page:docs:grafana/business-forms/docs/sources/_index.md",
+    "verdict": "extend",
+    "reason": "Forms panel inserts data from dashboards; would need configuring for the ticketing API."
+   },
+   {
+    "tid": "tasks_judge_fresh:f02",
+    "unit": "page:docs:grafana/business-forms/docs/sources/custom-code/_index.md",
+    "verdict": "extend",
+    "reason": "Business Forms custom code docs covering REST API calls, which support the integration."
+   },
+   {
+    "tid": "tasks_judge_fresh2:p05",
+    "unit": "page:docs:grafana/dashboard-linter/docs/index.md",
+    "verdict": "extend",
+    "reason": "Usage docs for the dashboard linter; rule coverage unconfirmed."
+   }
+  ]
+ },
+ "9610": {
+  "dup": 30,
+  "gold_in_top5": 25,
+  "caught": 25,
+  "wrong_yes_sibling": 12,
+  "wrong_yes_unrelated": 5,
+  "dup_tickets_with_unrelated_yes": 5,
+  "ctl": 26,
+  "ctl_false_alarm": 3,
+  "answer": {
+   "yes": 31,
+   "no": 24,
+   "unknown": 1
+  },
+  "missing": 0,
+  "examples": [
+   {
+    "tid": "tasks:d07",
+    "unit": "meta:apache/casbin",
+    "verdict": "extend",
+    "reason": "Provides the permission-check part; token validation and middleware wiring still needed."
+   },
+   {
+    "tid": "tasks:d09",
+    "unit": "meta:apache/servicecomb-service-center",
+    "verdict": "extend",
+    "reason": "Service registry covers discovery but not consistent hashing work split."
+   },
+   {
+    "tid": "tasks_judge_fresh:f02",
+    "unit": "page:docs:grafana/business-forms/docs/sources/_index.md",
+    "verdict": "use_as_is",
+    "reason": "Dashboard forms panel that inserts and updates data via backends."
+   },
+   {
+    "tid": "tasks_judge_fresh:g04",
+    "unit": "meta:google/libaddressinput",
+    "verdict": "extend",
+    "control": true,
+    "reason": "Postal address validation library that likely covers postcode formats but needs integration."
+   },
+   {
+    "tid": "tasks_judge_fresh:g06",
+    "unit": "meta:google/s2-geometry-library-java",
+    "verdict": "extend",
+    "control": true,
+    "reason": "Spherical geometry library usable for distance, but Java-specific and heavy."
+   },
+   {
+    "tid": "tasks_judge_fresh2:p05",
+    "unit": "github:detect-angular-dashboards:.",
+    "verdict": "extend",
+    "reason": "Detects deprecated Angular panels but against a live instance, not pre-merge JSON."
+   },
+   {
+    "tid": "tasks_judge_fresh2:p08",
+    "unit": "meta:prometheus/alertmanager",
+    "verdict": "extend",
+    "reason": "Routes notifications but does not itself evaluate alert rules."
+   },
+   {
+    "tid": "tasks_judge_fresh2:q06",
+    "unit": "meta:hashicorp/go-version",
+    "verdict": "use_as_is",
+    "control": true,
+    "reason": "Go library for parsing and comparing versions."
+   }
+  ]
+ }
+}

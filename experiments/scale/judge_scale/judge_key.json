@@ -1,0 +1,1238 @@
+{
+ "109": {
+  "tasks:d01": {
+   "kind": "duplicate",
+   "gold": "github:clusterurl:.",
+   "letters": {
+    "A": "github:clusterurl:.",
+    "B": "github:alloy-scenarios:app-instrumentation/metrics/opentelemetry-sdk/node",
+    "C": "github:kubernetes:staging/src/k8s.io/apiserver",
+    "D": "github:adaptive-metrics-autoapply:docker",
+    "E": "github:kubernetes:staging/src/k8s.io/kube-controller-manager"
+   }
+  },
+  "tasks:d02": {
+   "kind": "duplicate",
+   "gold": "github:cloudcost-exporter:.",
+   "letters": {
+    "A": "github:cloudcost-exporter:.",
+    "B": "github:github-rate-limits-prometheus-exporter:.",
+    "C": "github:celery-exporter:.",
+    "D": "page:docs:grafana/cloudcost-exporter/docs/contribute/creating-a-new-module.md",
+    "E": "github:github-rate-limits-prometheus-exporter:helm/github-rate-limits-prometheus-exporter"
+   }
+  },
+  "tasks:d03": {
+   "kind": "duplicate",
+   "gold": "github:celery-exporter:.",
+   "letters": {
+    "A": "github:celery-exporter:.",
+    "B": "github:github-rate-limits-prometheus-exporter:.",
+    "C": "github:alloy-scenarios:app-instrumentation/metrics/prometheus-client/node",
+    "D": "github:github-rate-limits-prometheus-exporter:helm/github-rate-limits-prometheus-exporter",
+    "E": "github:cloudcost-exporter:."
+   }
+  },
+  "tasks:d04": {
+   "kind": "duplicate",
+   "gold": "github:github-rate-limits-prometheus-exporter:.",
+   "letters": {
+    "A": "github:github-rate-limits-prometheus-exporter:.",
+    "B": "github:github-rate-limits-prometheus-exporter:helm/github-rate-limits-prometheus-exporter",
+    "C": "github:rust:src/ci/citool",
+    "D": "github:kubernetes:staging/src/k8s.io/kube-controller-manager",
+    "E": "github:vscode:extensions/github-authentication"
+   }
+  },
+  "tasks:d05": {
+   "kind": "duplicate",
+   "gold": "github:dashboard-linter:.",
+   "letters": {
+    "A": "github:dashboard-linter:.",
+    "B": "github:rust:src/tools/rustfmt/ci",
+    "C": "github:kubernetes:staging/src/k8s.io/pod-security-admission",
+    "D": "github:rust:src/tools/tidy",
+    "E": "github:rust:src/tools/opt-dist"
+   }
+  },
+  "tasks:d06": {
+   "kind": "duplicate",
+   "gold": "github:crocochrome:.",
+   "letters": {
+    "A": "github:crocochrome:.",
+    "B": "github:rust:src/ci/citool",
+    "C": "page:docs:grafana/docker-otel-lgtm/docs/gcx-integration.md",
+    "D": "github:rust:library/compiler-builtins/crates/panic-handler",
+    "E": "github:kubernetes:staging/src/k8s.io/controller-manager"
+   }
+  },
+  "tasks:d07": {
+   "kind": "duplicate",
+   "gold": "github:authlib:.",
+   "letters": {
+    "A": "github:authlib:.",
+    "B": "page:docs:grafana/authlib/docs/authorization/single-tenant.md",
+    "C": "github:kubernetes:staging/src/k8s.io/apiextensions-apiserver",
+    "D": "github:rust:src/ci/citool",
+    "E": "github:kubernetes:staging/src/k8s.io/apiserver"
+   }
+  },
+  "tasks:d08": {
+   "kind": "duplicate",
+   "gold": "github:augurs:crates/augurs-outlier",
+   "letters": {
+    "A": "github:augurs:crates/augurs-outlier",
+    "B": "github:rust:library/std_detect",
+    "C": "github:augurs:js/augurs-outlier-js",
+    "D": "github:augurs:crates/augurs",
+    "E": "github:augurs:js/augurs-clustering-js"
+   }
+  },
+  "tasks:d09": {
+   "kind": "duplicate",
+   "gold": "github:ckit:.",
+   "letters": {
+    "A": "github:rust:src/rustc-std-workspace/rustc-std-workspace-alloc",
+    "B": "github:clusterurl:.",
+    "C": "github:rust:src/rustc-std-workspace/rustc-std-workspace-core",
+    "D": "github:rust:src/shim_utils",
+    "E": "github:rust:src/rustc-std-workspace/rustc-std-workspace-std"
+   }
+  },
+  "tasks:d10": {
+   "kind": "duplicate",
+   "gold": "github:carbon-relay-ng:.",
+   "letters": {
+    "A": "github:carbon-relay-ng:.",
+    "B": "github:clusterurl:.",
+    "C": "github:kubernetes:staging/src/k8s.io/cluster-bootstrap",
+    "D": "github:cloud-setup:.",
+    "E": "github:grafana-pyroscope-datasource:."
+   }
+  },
+  "tasks:d11": {
+   "kind": "duplicate",
+   "gold": "github:alerting:testing/alerting-gen",
+   "letters": {
+    "A": "github:alerting:testing/alerting-gen",
+    "B": "github:alerting:.",
+    "C": "github:rust:src/tools/miropt-test-tools",
+    "D": "github:vscode:scripts",
+    "E": "github:rust:library/stdarch/crates/intrinsic-test"
+   }
+  },
+  "tasks:d12": {
+   "kind": "duplicate",
+   "gold": "github:augurs:crates/augurs-seasons",
+   "letters": {
+    "A": "github:augurs:crates/augurs-seasons",
+    "B": "github:augurs:crates/augurs",
+    "C": "github:augurs:js/augurs-seasons-js",
+    "D": "github:augurs:crates/augurs-mstl",
+    "E": "github:augurs:crates/pyaugurs"
+   }
+  },
+  "tasks:c01": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:rust:src/tools/test-float-parse",
+    "B": "page:docs:grafana/dataplane/docs/contract/contract.md",
+    "C": "github:augurs:js/augurs-seasons-js",
+    "D": "page:docs:grafana/dataplane/docs/contract/dataframes.md",
+    "E": "github:rust:library/portable-simd/crates/std_float"
+   }
+  },
+  "tasks:c02": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:rust:src/tools/html-checker",
+    "B": "github:rust:src/tools/tidy",
+    "C": "github:vscode:extensions/javascript",
+    "D": "page:docs:grafana/business-forms/docs/sources/custom-code/context-parameters.md",
+    "E": "github:business-forms:."
+   }
+  },
+  "tasks:c03": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:vscode:extensions/javascript",
+    "B": "github:kubernetes:staging/src/k8s.io/component-helpers",
+    "C": "github:vscode:extensions/markdown-math",
+    "D": "github:rust:src/tools/rust-analyzer/lib/smol_str",
+    "E": "github:vscode:extensions/prompt-basics"
+   }
+  },
+  "tasks:c04": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:clusterurl:.",
+    "B": "github:rust:src/tools/tidy",
+    "C": "github:rust:src/tools/miri/bench-cargo-miri/slice-chunked",
+    "D": "github:rust:src/tools/test-float-parse",
+    "E": "github:rust:src/tools/rust-analyzer/lib/smol_str"
+   }
+  },
+  "tasks_heldout:h01": {
+   "kind": "duplicate",
+   "gold": "github:grafana-aws-sdk:.",
+   "letters": {
+    "A": "github:grafana-aws-sdk:.",
+    "B": "github:cloudcost-exporter:.",
+    "C": "github:cloud-setup:.",
+    "D": "github:rust:src/tools/tidy",
+    "E": "github:kubernetes:staging/src/k8s.io/cloud-provider"
+   }
+  },
+  "tasks_heldout:h02": {
+   "kind": "duplicate",
+   "gold": "github:generate-policy-bot-config:.",
+   "letters": {
+    "A": "github:generate-policy-bot-config:.",
+    "B": "github:rust:src/tools/collect-license-metadata",
+    "C": "github:collector-configurator:.",
+    "D": "github:rust:src/tools/generate-copyright",
+    "E": "github:crossplane-provider-grafana:."
+   }
+  },
+  "tasks_heldout:h03": {
+   "kind": "duplicate",
+   "gold": "github:xk6-kafka:.",
+   "letters": {
+    "A": "github:xk6-kafka:.",
+    "B": "github:flagger-k6-webhook:charts/k6-loadtester",
+    "C": "github:vscode:extensions/copilot/.vscode/extensions/visualization-runner",
+    "D": "github:vscode:extensions/copilot/.vscode/extensions/test-extension",
+    "E": "github:flagger-k6-webhook:."
+   }
+  },
+  "tasks_heldout:h04": {
+   "kind": "duplicate",
+   "gold": "github:augurs:crates/augurs-changepoint",
+   "letters": {
+    "A": "github:augurs:crates/augurs-changepoint",
+    "B": "github:augurs:js/augurs-changepoint-js",
+    "C": "github:rust:library/std_detect",
+    "D": "github:augurs:js/augurs-clustering-js",
+    "E": "github:augurs:crates/augurs-outlier"
+   }
+  },
+  "tasks_heldout:h05": {
+   "kind": "duplicate",
+   "gold": "github:docker-otel-lgtm:.",
+   "letters": {
+    "A": "github:docker-otel-lgtm:.",
+    "B": "github:docker-otel-lgtm:.mise/locks/npm-renovate/44.132.2~aa673d8d",
+    "C": "github:alloy-scenarios:app-instrumentation/traces/opentelemetry-sdk/node",
+    "D": "github:kubernetes:hack/tools/instrumentation",
+    "E": "github:alloy-scenarios:app-instrumentation/metrics/opentelemetry-sdk/node"
+   }
+  },
+  "tasks_heldout:h06": {
+   "kind": "duplicate",
+   "gold": "github:pyroscope-kinda-safe:kindasafe",
+   "letters": {
+    "A": "github:pyroscope-kinda-safe:kindasafe_init",
+    "B": "github:pyroscope-kinda-safe:kindasafe",
+    "C": "github:pyroscope-kinda-safe:.",
+    "D": "github:rust:library/panic_unwind",
+    "E": "github:rust:library/compiler-builtins/crates/panic-handler"
+   }
+  },
+  "tasks_heldout:k01": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:rust:src/tools/rust-analyzer/lib/text-size",
+    "B": "github:pyroscope-kinda-safe:kindasafe",
+    "C": "github:rust:src/tools/html-checker",
+    "D": "github:business-text:.",
+    "E": "github:rust:src/tools/test-float-parse"
+   }
+  },
+  "tasks_heldout:k02": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:go-offsets-tracker:.",
+    "B": "page:docs:grafana/business-text/docs/sources/_index.md",
+    "C": "github:rust:src/tools/rustbook",
+    "D": "page:docs:grafana/business-table/docs/sources/editable-data/add.md",
+    "E": "page:docs:grafana/dataplane/docs/contract/dataframes.md"
+   }
+  },
+  "tasks_heldout:k03": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:business-calendar:.",
+    "B": "page:docs:grafana/business-table/docs/sources/editable-data/_index.md",
+    "C": "github:rust:src/tools/miri/bench-cargo-miri/backtraces",
+    "D": "github:vscode:extensions/markdown-language-features/test-workspace/checkbox-count-extension",
+    "E": "github:augurs:crates/augurs-mstl"
+   }
+  },
+  "tasks_heldout:k04": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:vscode:extensions/microsoft-authentication/packageMocks/keytar",
+    "B": "github:kubernetes:staging/src/k8s.io/component-helpers",
+    "C": "github:vscode:extensions/less",
+    "D": "page:docs:grafana/business-table/docs/sources/editable-data/add.md",
+    "E": "github:vscode:extensions/javascript"
+   }
+  },
+  "tasks_heldout:k05": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:alerting:testing/alerting-gen",
+    "B": "github:pyroscope-kinda-safe:kindasafe",
+    "C": "github:vscode:extensions/github-authentication",
+    "D": "github:generate-policy-bot-config:.",
+    "E": "github:kubernetes:staging/src/k8s.io/pod-security-admission"
+   }
+  },
+  "tasks_heldout:k06": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:cog:.",
+    "B": "github:vscode:extensions/copilot/.vscode/extensions/visualization-runner",
+    "C": "github:vscode:extensions/vscode-colorize-tests",
+    "D": "github:rust:compiler/rustc_codegen_llvm",
+    "E": "github:vscode:extensions/vscode-colorize-perf-tests"
+   }
+  },
+  "tasks_heldout:k07": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:rust:src/tools/miri/bench-cargo-miri/range-iteration",
+    "B": "github:rust:library/compiler-builtins/crates/update-api-list",
+    "C": "github:rust:src/tools/clippy/clippy_utils",
+    "D": "github:rust:library/compiler-builtins/crates/api-list-common",
+    "E": "github:kubernetes:hack/tools/instrumentation"
+   }
+  },
+  "tasks_heldout:k08": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:rust:src/tools/rust-analyzer/lib/text-size",
+    "B": "page:docs:grafana/dataplane/docs/contract/contract.md",
+    "C": "github:vscode:extensions/markdown-language-features",
+    "D": "github:kubernetes:staging/src/k8s.io/component-helpers",
+    "E": "github:vscode:extensions/typescript-language-features"
+   }
+  },
+  "tasks_judge_fresh:f01": {
+   "kind": "duplicate",
+   "gold": "github:clock-panel:.",
+   "letters": {
+    "A": "github:clock-panel:.",
+    "B": "github:business-calendar:.",
+    "C": "page:docs:grafana/business-forms/docs/sources/_index.md",
+    "D": "page:docs:grafana/business-calendar/docs/sources/_index.md",
+    "E": "github:detect-angular-dashboards:."
+   }
+  },
+  "tasks_judge_fresh:f02": {
+   "kind": "duplicate",
+   "gold": "github:business-forms:.",
+   "letters": {
+    "A": "github:business-calendar:.",
+    "B": "page:docs:grafana/business-forms/docs/sources/_index.md",
+    "C": "github:detect-angular-dashboards:.",
+    "D": "page:docs:grafana/business-forms/docs/sources/custom-code/_index.md",
+    "E": "page:docs:grafana/business-table/docs/sources/editable-data/_index.md"
+   }
+  },
+  "tasks_judge_fresh:f03": {
+   "kind": "duplicate",
+   "gold": "github:augurs:crates/augurs-mstl",
+   "letters": {
+    "A": "github:augurs:crates/augurs-mstl",
+    "B": "github:augurs:crates/augurs-seasons",
+    "C": "github:augurs:crates/augurs-core",
+    "D": "github:augurs:js/augurs-transforms-js",
+    "E": "github:augurs:crates/pyaugurs"
+   }
+  },
+  "tasks_judge_fresh:f04": {
+   "kind": "duplicate",
+   "gold": "github:cloudcost-exporter:.",
+   "letters": {
+    "A": "github:cloudcost-exporter:.",
+    "B": "github:cloudcost-exporter:charts/cloudcost-exporter",
+    "C": "page:docs:grafana/cloudcost-exporter/docs/contribute/creating-a-new-module.md",
+    "D": "github:kubernetes:staging/src/k8s.io/metrics",
+    "E": "github:kubernetes:staging/src/k8s.io/cloud-provider"
+   }
+  },
+  "tasks_judge_fresh:g01": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:business-calendar:.",
+    "B": "page:docs:grafana/business-calendar/docs/sources/_index.md",
+    "C": "github:rust:src/tools/test-float-parse",
+    "D": "github:rust:src/tools/rust-analyzer/lib/smol_str",
+    "E": "github:rust:compiler/rustc_parse_format"
+   }
+  },
+  "tasks_judge_fresh:g02": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:grafana-canvas-panel:.",
+    "B": "github:kubernetes:staging/src/k8s.io/component-helpers",
+    "C": "page:docs:grafana/docker-otel-lgtm/docs/gcx-migration.md",
+    "D": "github:rust:src/tools/rust-analyzer/crates/profile",
+    "E": "github:rust:compiler/rustc_monomorphize"
+   }
+  },
+  "tasks_judge_fresh:g03": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:rust:src/tools/miri/bench-cargo-miri/backtraces",
+    "B": "github:rust:src/tools/rust-analyzer/lib/smol_str",
+    "C": "github:vscode:extensions/julia",
+    "D": "github:rust:src/tools/miri/bench-cargo-miri/string-replace",
+    "E": "github:rust:src/tools/rust-analyzer/crates/syntax-bridge"
+   }
+  },
+  "tasks_judge_fresh:g04": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:business-forms:.",
+    "B": "github:rust:src/tools/rust-analyzer/lib/lsp-server",
+    "C": "github:rust:src/tools/html-checker",
+    "D": "github:dataplane:sdata",
+    "E": "page:docs:grafana/business-forms/docs/sources/custom-code/_index.md"
+   }
+  },
+  "tasks_judge_fresh:g05": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:vscode:scripts",
+    "B": "github:vscode:extensions/coffeescript",
+    "C": "github:rust:src/tools/miri/miri-script",
+    "D": "github:alerting:testing/alerting-gen",
+    "E": "github:vscode:extensions/shellscript"
+   }
+  },
+  "tasks_judge_fresh:g06": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:augurs:js/augurs-ets-js",
+    "B": "page:docs:grafana/business-table/docs/sources/editable-data/add.md",
+    "C": "github:rust:library/stdarch/crates/stdarch-gen-hexagon",
+    "D": "github:rust:src/build_helper",
+    "E": "github:augurs:js/augurs-changepoint-js"
+   }
+  },
+  "tasks_judge_fresh:g07": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:rust:src/tools/rust-analyzer/lib/text-size",
+    "B": "github:rust:src/build_helper",
+    "C": "github:vscode:extensions/markdown-basics",
+    "D": "github:business-text:.",
+    "E": "github:rust:src/tools/lld-wrapper"
+   }
+  },
+  "tasks_judge_fresh:g08": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:vscode:extensions/theme-quietlight",
+    "B": "github:vscode:extensions/theme-kimbie-dark",
+    "C": "github:vscode:extensions/theme-solarized-dark",
+    "D": "github:vscode:extensions/theme-solarized-light",
+    "E": "github:vscode:extensions/theme-monokai-dimmed"
+   }
+  },
+  "tasks_judge_fresh2:p01": {
+   "kind": "duplicate",
+   "gold": "github:dskit:.",
+   "letters": {
+    "A": "github:kubernetes:staging/src/k8s.io/code-generator",
+    "B": "github:rust:src/shim_utils",
+    "C": "github:kubernetes:staging/src/k8s.io/client-go",
+    "D": "github:github-rate-limits-prometheus-exporter:helm/github-rate-limits-prometheus-exporter",
+    "E": "github:clusterurl:."
+   }
+  },
+  "tasks_judge_fresh2:p02": {
+   "kind": "duplicate",
+   "gold": "github:crocochrome:.",
+   "letters": {
+    "A": "github:flagger-k6-webhook:.",
+    "B": "github:rust:src/ci/citool",
+    "C": "github:crocochrome:.",
+    "D": "github:faro:pkg/go",
+    "E": "github:kubernetes:staging/src/k8s.io/controller-manager"
+   }
+  },
+  "tasks_judge_fresh2:p03": {
+   "kind": "duplicate",
+   "gold": "github:augurs:crates/augurs-seasons",
+   "letters": {
+    "A": "github:augurs:crates/augurs-seasons",
+    "B": "github:augurs:crates/augurs-mstl",
+    "C": "github:augurs:js/augurs-seasons-js",
+    "D": "github:augurs:crates/augurs",
+    "E": "github:augurs:crates/pyaugurs"
+   }
+  },
+  "tasks_judge_fresh2:p04": {
+   "kind": "duplicate",
+   "gold": "github:augurs:crates/augurs-outlier",
+   "letters": {
+    "A": "github:augurs:crates/augurs-outlier",
+    "B": "github:kubernetes:staging/src/k8s.io/client-go",
+    "C": "github:augurs:crates/augurs",
+    "D": "github:rust:library/std_detect",
+    "E": "github:augurs:js/augurs-clustering-js"
+   }
+  },
+  "tasks_judge_fresh2:p05": {
+   "kind": "duplicate",
+   "gold": "github:dashboard-linter:.",
+   "letters": {
+    "A": "github:dashboard-linter:.",
+    "B": "github:detect-angular-dashboards:.",
+    "C": "page:docs:grafana/business-forms/docs/sources/custom-code/_index.md",
+    "D": "page:docs:grafana/dashboard-linter/docs/index.md",
+    "E": "github:business-calendar:."
+   }
+  },
+  "tasks_judge_fresh2:p06": {
+   "kind": "duplicate",
+   "gold": "github:github-rate-limits-prometheus-exporter:.",
+   "letters": {
+    "A": "github:github-rate-limits-prometheus-exporter:.",
+    "B": "github:github-rate-limits-prometheus-exporter:helm/github-rate-limits-prometheus-exporter",
+    "C": "github:alerting:apps/historian",
+    "D": "github:kubernetes:staging/src/k8s.io/code-generator",
+    "E": "github:kubernetes:staging/src/k8s.io/apiextensions-apiserver"
+   }
+  },
+  "tasks_judge_fresh2:p07": {
+   "kind": "duplicate",
+   "gold": "github:collector-configurator:.",
+   "letters": {
+    "A": "github:collector-configurator:.",
+    "B": "github:alloy-scenarios:beyla-zero-code-instrumentation/app",
+    "C": "github:vscode:extensions/configuration-editing",
+    "D": "github:alloy-scenarios:continuous-profiling/app",
+    "E": "github:docker-otel-lgtm:."
+   }
+  },
+  "tasks_judge_fresh2:p08": {
+   "kind": "duplicate",
+   "gold": "github:alerting:.",
+   "letters": {
+    "A": "github:alerting:.",
+    "B": "github:alerting:testing/alerting-gen",
+    "C": "github:alerting:apps/historian",
+    "D": "github:clusterurl:.",
+    "E": "github:authlib:."
+   }
+  },
+  "tasks_judge_fresh2:q01": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:augurs:js/augurs-seasons-js",
+    "B": "github:vscode:.eslint-plugin-local",
+    "C": "github:business-calendar:.",
+    "D": "page:docs:grafana/business-calendar/docs/sources/_index.md",
+    "E": "github:augurs:crates/augurs-seasons"
+   }
+  },
+  "tasks_judge_fresh2:q02": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:github-rate-limits-prometheus-exporter:helm/github-rate-limits-prometheus-exporter",
+    "B": "github:kubernetes:staging/src/k8s.io/component-helpers",
+    "C": "github:augurs:js/augurs-transforms-js",
+    "D": "page:docs:grafana/dataplane/docs/contract/dataframes.md",
+    "E": "github:augurs:js/augurs-changepoint-js"
+   }
+  },
+  "tasks_judge_fresh2:q03": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:kubernetes:staging/src/k8s.io/code-generator",
+    "B": "github:rust:src/tools/generate-copyright",
+    "C": "github:crossplane-provider-grafana:.",
+    "D": "github:clusterurl:.",
+    "E": "github:cog:."
+   }
+  },
+  "tasks_judge_fresh2:q04": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:rust:src/tools/miri/bench-cargo-miri/range-iteration",
+    "B": "github:github-rate-limits-prometheus-exporter:helm/github-rate-limits-prometheus-exporter",
+    "C": "github:vscode:extensions/cpp",
+    "D": "github:vscode:.",
+    "E": "github:vscode:extensions/markdown-math"
+   }
+  },
+  "tasks_judge_fresh2:q05": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:rust:compiler/rustc_sanitizers",
+    "B": "github:rust:library/std_detect",
+    "C": "github:alerting:.",
+    "D": "github:business-text:.",
+    "E": "github:vscode:extensions/markdown-language-features/test-workspace/checkbox-count-extension"
+   }
+  },
+  "tasks_judge_fresh2:q06": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:rust:src/tools/rust-analyzer/crates/parser",
+    "B": "github:rust:src/tools/rust-analyzer/lib/smol_str",
+    "C": "github:rust:compiler/rustc_parse",
+    "D": "github:rust:compiler/rustc_attr_parsing",
+    "E": "github:rust:compiler/rustc_parse_format"
+   }
+  }
+ },
+ "9610": {
+  "tasks:d01": {
+   "kind": "duplicate",
+   "gold": "github:clusterurl:.",
+   "letters": {
+    "A": "github:clusterurl:.",
+    "B": "meta:aws-samples/single-use-signed-url",
+    "C": "meta:microsoft/Templates-For-Dynamics-365-Supply-Chain-Management-Demand-Forecasting-With-Azure-Machine-Learning",
+    "D": "meta:aws-samples/sample-api-proxy-for-multi-region-location-service",
+    "E": "meta:kubernetes-sigs/custom-metrics-apiserver"
+   }
+  },
+  "tasks:d02": {
+   "kind": "duplicate",
+   "gold": "github:cloudcost-exporter:.",
+   "letters": {
+    "A": "github:cloudcost-exporter:.",
+    "B": "meta:prometheus/cloudwatch_exporter",
+    "C": "meta:aws-samples/aws-cloudfront-real-time-metrics-sample",
+    "D": "meta:grafana/tailscale-exporter",
+    "E": "meta:aws-samples/sample-cur-filtered-data-exports"
+   }
+  },
+  "tasks:d03": {
+   "kind": "duplicate",
+   "gold": "github:celery-exporter:.",
+   "letters": {
+    "A": "github:celery-exporter:.",
+    "B": "meta:prometheus/cloudwatch_exporter",
+    "C": "meta:grafana/snowflake-prometheus-exporter",
+    "D": "meta:grafana/kafka_exporter",
+    "E": "meta:grafana/ibm-db2-prometheus-exporter"
+   }
+  },
+  "tasks:d04": {
+   "kind": "duplicate",
+   "gold": "github:github-rate-limits-prometheus-exporter:.",
+   "letters": {
+    "A": "github:github-rate-limits-prometheus-exporter:.",
+    "B": "github:github-rate-limits-prometheus-exporter:helm/github-rate-limits-prometheus-exporter",
+    "C": "meta:microsoft/PR-Metrics",
+    "D": "meta:aws-samples/multichannel-app-to-person-alerting",
+    "E": "meta:microsoft/typescript-bot-test-triggerer"
+   }
+  },
+  "tasks:d05": {
+   "kind": "duplicate",
+   "gold": "github:dashboard-linter:.",
+   "letters": {
+    "A": "github:dashboard-linter:.",
+    "B": "meta:Azure/azure-policy-linter",
+    "C": "meta:aws-samples/devsecops-workshop-on-aws",
+    "D": "meta:grafana/plugin-ci-workflows",
+    "E": "meta:microsoft/jmeter-performance-analyzer-devops-extension"
+   }
+  },
+  "tasks:d06": {
+   "kind": "duplicate",
+   "gold": "github:crocochrome:.",
+   "letters": {
+    "A": "github:crocochrome:.",
+    "B": "meta:grafana/synthetic-monitoring-agent",
+    "C": "meta:aws-samples/sample-knowledgeforge",
+    "D": "meta:grafana/chromium-swiftshader-alpine",
+    "E": "meta:aws-samples/sample-rds-sql-server-proactive-monitoring"
+   }
+  },
+  "tasks:d07": {
+   "kind": "duplicate",
+   "gold": "github:authlib:.",
+   "letters": {
+    "A": "meta:aws-samples/authorization-lambda-at-edge",
+    "B": "meta:aws-samples/service-screener",
+    "C": "meta:apache/casbin-revel-authz",
+    "D": "meta:microsoft/Multi-Agent-Custom-Automation-Engine-Solution-Accelerator",
+    "E": "meta:apache/casbin"
+   }
+  },
+  "tasks:d08": {
+   "kind": "duplicate",
+   "gold": "github:augurs:crates/augurs-outlier",
+   "letters": {
+    "A": "github:augurs:crates/augurs-outlier",
+    "B": "github:rust:library/std_detect",
+    "C": "github:augurs:js/augurs-outlier-js",
+    "D": "meta:apache/flagon",
+    "E": "github:augurs:crates/augurs"
+   }
+  },
+  "tasks:d09": {
+   "kind": "duplicate",
+   "gold": "github:ckit:.",
+   "letters": {
+    "A": "meta:hashicorp/se-workshop-hashicat-app",
+    "B": "meta:aws-samples/microservices-dotnet-aws-cdk",
+    "C": "meta:hashicorp/integration-template",
+    "D": "meta:apache/servicecomb-service-center",
+    "E": "meta:hashicorp/research-docs"
+   }
+  },
+  "tasks:d10": {
+   "kind": "duplicate",
+   "gold": "github:carbon-relay-ng:.",
+   "letters": {
+    "A": "meta:prometheus/graphite_exporter",
+    "B": "github:carbon-relay-ng:.",
+    "C": "meta:aws-samples/route-optimization-accelerator",
+    "D": "meta:grafana/graphite-mt",
+    "E": "github:clusterurl:."
+   }
+  },
+  "tasks:d11": {
+   "kind": "duplicate",
+   "gold": "github:alerting:testing/alerting-gen",
+   "letters": {
+    "A": "github:alerting:testing/alerting-gen",
+    "B": "meta:Azure/terraform-azurerm-avm-res-alertsmanagement-actionrule",
+    "C": "meta:microsoft/vscode-makefile-tools",
+    "D": "meta:grafana/provisioning-alerting-examples",
+    "E": "meta:microsoft/diskspd"
+   }
+  },
+  "tasks:d12": {
+   "kind": "duplicate",
+   "gold": "github:augurs:crates/augurs-seasons",
+   "letters": {
+    "A": "github:augurs:crates/augurs-seasons",
+    "B": "meta:aws-samples/robust-time-series-forecasting-with-mlops",
+    "C": "github:augurs:js/augurs-seasons-js",
+    "D": "meta:microsoft/dstoolkit-time-series-forecasting",
+    "E": "github:augurs:crates/pyaugurs"
+   }
+  },
+  "tasks:c01": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:rust:src/tools/test-float-parse",
+    "B": "meta:aws-samples/sample-greengrassv2-opcua-simulator",
+    "C": "meta:google/double-conversion",
+    "D": "page:docs:grafana/dataplane/docs/contract/contract.md",
+    "E": "meta:google/cctz"
+   }
+  },
+  "tasks:c02": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:google/libaddressinput",
+    "B": "meta:aws-samples/amazon-location-detected-addresses-to-map",
+    "C": "meta:aws-samples/aws-cloudformation-validator",
+    "D": "meta:aws-samples/aws-transfer-family-lake-formation-extracted-form-data-product",
+    "E": "meta:apache/james-jspf"
+   }
+  },
+  "tasks:c03": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:google/json5format",
+    "B": "meta:google/hrx",
+    "C": "meta:aws-samples/sample-aws-rdns-form-helper",
+    "D": "meta:microsoft/model-mondays",
+    "E": "meta:google/gts"
+   }
+  },
+  "tasks:c04": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:microsoft/ts-parsec",
+    "B": "meta:aws-samples/sample-azure-functions-to-aws-lambda",
+    "C": "meta:microsoft/swift-guide",
+    "D": "meta:Azure/azure-functions-golang-worker",
+    "E": "meta:google/regexpand"
+   }
+  },
+  "tasks_heldout:h01": {
+   "kind": "duplicate",
+   "gold": "github:grafana-aws-sdk:.",
+   "letters": {
+    "A": "github:grafana-aws-sdk:.",
+    "B": "meta:aws-samples/aws-cloudformation-modules-sharing",
+    "C": "meta:hashicorp/terraform-dynamic-credentials-setup-examples",
+    "D": "meta:hashicorp/terraform-aws-module-installer-acctest",
+    "E": "meta:kubernetes-sigs/provider-aws-test-infra"
+   }
+  },
+  "tasks_heldout:h02": {
+   "kind": "duplicate",
+   "gold": "github:generate-policy-bot-config:.",
+   "letters": {
+    "A": "github:generate-policy-bot-config:.",
+    "B": "meta:hashicorp/terraform",
+    "C": "meta:aws-samples/sample-terraform-pr-automation-utility",
+    "D": "meta:microsoft/vscode-makefile-tools",
+    "E": "meta:google/code-review-bot"
+   }
+  },
+  "tasks_heldout:h03": {
+   "kind": "duplicate",
+   "gold": "github:xk6-kafka:.",
+   "letters": {
+    "A": "github:xk6-kafka:.",
+    "B": "meta:grafana/xk6-client-prometheus-remote",
+    "C": "meta:aws-samples/streaming-data-pipeline-from-kafka-to-s3-using-aws-kinesis-firehose",
+    "D": "meta:grafana/xk6-sm",
+    "E": "meta:microsoft/azureloadtesting-extension"
+   }
+  },
+  "tasks_heldout:h04": {
+   "kind": "duplicate",
+   "gold": "github:augurs:crates/augurs-changepoint",
+   "letters": {
+    "A": "github:augurs:crates/augurs-changepoint",
+    "B": "github:augurs:js/augurs-changepoint-js",
+    "C": "github:rust:library/std_detect",
+    "D": "meta:microsoft/LinuxTracepoints",
+    "E": "meta:aws-samples/sample-amazon-ivs-python-demos"
+   }
+  },
+  "tasks_heldout:h05": {
+   "kind": "duplicate",
+   "gold": "github:docker-otel-lgtm:.",
+   "letters": {
+    "A": "github:docker-otel-lgtm:.",
+    "B": "meta:grafana/faro-otel-swift-exporter",
+    "C": "github:docker-otel-lgtm:.mise/locks/npm-renovate/44.132.2~aa673d8d",
+    "D": "meta:aws-samples/aws-bookstore-demo-app",
+    "E": "meta:open-telemetry/opentelemetry-go-build-tools"
+   }
+  },
+  "tasks_heldout:h06": {
+   "kind": "duplicate",
+   "gold": "github:pyroscope-kinda-safe:kindasafe",
+   "letters": {
+    "A": "github:pyroscope-kinda-safe:kindasafe_init",
+    "B": "github:pyroscope-kinda-safe:kindasafe",
+    "C": "github:pyroscope-kinda-safe:.",
+    "D": "meta:google/sanitizers",
+    "E": "meta:microsoft/batch-processing-kit"
+   }
+  },
+  "tasks_heldout:k01": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:microsoft/swift-guide",
+    "B": "meta:aws-samples/aws-augmentability",
+    "C": "meta:google/effcee",
+    "D": "meta:kubernetes-sigs/kubectl-check-ownerreferences",
+    "E": "meta:google/regexpand"
+   }
+  },
+  "tasks_heldout:k02": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:aws-samples/sample-s3-listobjectversions-to-csv",
+    "B": "meta:microsoft/fsharplu",
+    "C": "meta:apache/commons-csv",
+    "D": "meta:google/riegeli",
+    "E": "meta:apache/avro"
+   }
+  },
+  "tasks_heldout:k03": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:Azure/azure-functions-durable-python",
+    "B": "page:docs:grafana/business-table/docs/sources/editable-data/_index.md",
+    "C": "meta:microsoft/powerbi-visuals-timeline",
+    "D": "meta:aws-samples/calculate-file-content-size-for-vector-db",
+    "E": "github:business-calendar:."
+   }
+  },
+  "tasks_heldout:k04": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:microsoft/contact-card",
+    "B": "meta:microsoft/digital-content-distribution-toolkit",
+    "C": "meta:aws-samples/mask-words-in-image",
+    "D": "meta:aws-samples/sample-multi-agent-financial-health-with-bedrock-agentcore",
+    "E": "meta:aws-samples/data-perimeter-helper"
+   }
+  },
+  "tasks_heldout:k05": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:microsoft/security-utilities",
+    "B": "meta:aws-samples/aws-lambda-function-url-secured",
+    "C": "meta:microsoft/MSR-JavaScript-Crypto",
+    "D": "meta:aws-samples/sample-securing-amazon-s3-presigned-urls-for-serverless-applications",
+    "E": "meta:aws-samples/amazon-location-detected-addresses-to-map"
+   }
+  },
+  "tasks_heldout:k06": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:microsoft/vscode-hexeditor",
+    "B": "meta:aws-samples/blue-green-deployment-pipeline-for-efs",
+    "C": "meta:hashicorp/colorstring",
+    "D": "meta:open-telemetry/opentelemetry-lambda",
+    "E": "meta:microsoft/powerbi-visuals-utils-colorutils"
+   }
+  },
+  "tasks_heldout:k07": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:google/keep-sorted",
+    "B": "meta:aws-samples/amazon-route-53-resolver-dns-firewall-automation-examples",
+    "C": "meta:aws-samples/sample-automatic-removal-of-event-hold-for-amazon-s3",
+    "D": "meta:aws-samples/sample-simple-dynamic-origin-routing-using-amazon-cloudfront-functions",
+    "E": "meta:google/bindiff"
+   }
+  },
+  "tasks_heldout:k08": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:google/mdbook-i18n-helpers",
+    "B": "meta:microsoft/LID-tool",
+    "C": "meta:microsoft/dstoolkit-labelling-app",
+    "D": "meta:aws-samples/cognito-user-token-helper",
+    "E": "meta:microsoft/Tokenizer"
+   }
+  },
+  "tasks_judge_fresh:f01": {
+   "kind": "duplicate",
+   "gold": "github:clock-panel:.",
+   "letters": {
+    "A": "github:clock-panel:.",
+    "B": "github:business-calendar:.",
+    "C": "meta:grafana/business-variable",
+    "D": "meta:microsoft/UTCM-ControlPanel",
+    "E": "meta:microsoft/real-time-intelligence-operations-solution-accelerator"
+   }
+  },
+  "tasks_judge_fresh:f02": {
+   "kind": "duplicate",
+   "gold": "github:business-forms:.",
+   "letters": {
+    "A": "github:business-calendar:.",
+    "B": "page:docs:grafana/business-forms/docs/sources/_index.md",
+    "C": "meta:Azure/api-management-developer-portal",
+    "D": "meta:microsoft/real-time-intelligence-operations-solution-accelerator",
+    "E": "meta:grafana/business-links"
+   }
+  },
+  "tasks_judge_fresh:f03": {
+   "kind": "duplicate",
+   "gold": "github:augurs:crates/augurs-mstl",
+   "letters": {
+    "A": "github:augurs:crates/augurs-mstl",
+    "B": "github:augurs:crates/augurs-seasons",
+    "C": "meta:aws-samples/secret-creator-secrets-manager",
+    "D": "meta:microsoft/azure-boards-split",
+    "E": "github:augurs:crates/augurs-core"
+   }
+  },
+  "tasks_judge_fresh:f04": {
+   "kind": "duplicate",
+   "gold": "github:cloudcost-exporter:.",
+   "letters": {
+    "A": "github:cloudcost-exporter:.",
+    "B": "meta:grafana/vpc-flow-logs-analyzer",
+    "C": "meta:aws-samples/sample-cur-filtered-data-exports",
+    "D": "meta:prometheus/cloudwatch_exporter",
+    "E": "meta:Azure/cloudopt"
+   }
+  },
+  "tasks_judge_fresh:g01": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:google/libphonenumber",
+    "B": "meta:aws-samples/amazon-route-53-resolver-dns-firewall-automation-examples",
+    "C": "meta:google/cctz",
+    "D": "meta:Azure/azure-functions-connector-extension",
+    "E": "meta:hashicorp/cronexpr"
+   }
+  },
+  "tasks_judge_fresh:g02": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:aws-samples/automate-image-processing-with-amazon-bedrock",
+    "B": "meta:aws-samples/sample-s3-semantic-search",
+    "C": "meta:aws-samples/lambda-edge-resizing-images-custom-origin",
+    "D": "meta:microsoft/windows-host-process-containers-base-image",
+    "E": "meta:aws-samples/amazon-sagemaker-workshop-for-huggingface"
+   }
+  },
+  "tasks_judge_fresh:g03": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:apache/commons-numbers",
+    "B": "meta:aws-samples/step-functions-direct-integrations",
+    "C": "meta:google/python-proto-converter",
+    "D": "meta:aws-samples/sample-appsync-dotnet-lambda-resolvers",
+    "E": "github:rust:src/tools/miri/bench-cargo-miri/backtraces"
+   }
+  },
+  "tasks_judge_fresh:g04": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:google/libaddressinput",
+    "B": "meta:aws-samples/aws-transfer-family-lake-formation-extracted-form-data-product",
+    "C": "meta:Azure/uk-official-three-tier-webapp",
+    "D": "meta:microsoft/wopi-validator-core",
+    "E": "meta:aws-samples/aws-cloudformation-validator"
+   }
+  },
+  "tasks_judge_fresh:g05": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:vscode:scripts",
+    "B": "meta:aws-samples/aws-iam-access-key-auto-rotation",
+    "C": "meta:apache/james-project",
+    "D": "meta:aws-samples/amazon-ivs-auto-record-to-s3-web-demo",
+    "E": "meta:microsoft/omi-script-provider"
+   }
+  },
+  "tasks_judge_fresh:g06": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:google/s2-geometry-library-java",
+    "B": "meta:google/distributed_point_functions",
+    "C": "meta:google/country-tracker",
+    "D": "meta:Azure/azure-functions-openai-extension",
+    "E": "meta:aws-samples/amazon-location-detected-addresses-to-map"
+   }
+  },
+  "tasks_judge_fresh:g07": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:rust:src/tools/rust-analyzer/lib/text-size",
+    "B": "meta:microsoft/LID-tool",
+    "C": "meta:microsoft/LongRoPE",
+    "D": "meta:aws-samples/aws-step-functions-long-lived-transactions",
+    "E": "meta:google/budoux-extension"
+   }
+  },
+  "tasks_judge_fresh:g08": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:vscode:extensions/theme-quietlight",
+    "B": "meta:microsoft/FeatureFlightingManagement",
+    "C": "github:vscode:extensions/theme-solarized-dark",
+    "D": "meta:aws-samples/amazon-ivs-auto-record-to-s3-web-demo",
+    "E": "meta:google/material-design-lite"
+   }
+  },
+  "tasks_judge_fresh2:p01": {
+   "kind": "duplicate",
+   "gold": "github:dskit:.",
+   "letters": {
+    "A": "meta:hashicorp/go-gcp-common",
+    "B": "meta:microsoft/AzureDevOpsDemoGenerator",
+    "C": "meta:microsoft/FeatureManagement-Go",
+    "D": "meta:microsoft/Omex",
+    "E": "meta:prometheus/common"
+   }
+  },
+  "tasks_judge_fresh2:p02": {
+   "kind": "duplicate",
+   "gold": "github:crocochrome:.",
+   "letters": {
+    "A": "meta:aws-samples/aws-lambda-sidecar-manager",
+    "B": "meta:aws-samples/amazon-ecs-catsndogs-workshop",
+    "C": "meta:aws-samples/sample-code-server-on-aws",
+    "D": "meta:aws-samples/sample-knowledgeforge",
+    "E": "meta:google/service-worker-detector"
+   }
+  },
+  "tasks_judge_fresh2:p03": {
+   "kind": "duplicate",
+   "gold": "github:augurs:crates/augurs-seasons",
+   "letters": {
+    "A": "github:augurs:crates/augurs-seasons",
+    "B": "meta:microsoft/dstoolkit-time-series-forecasting",
+    "C": "github:augurs:js/augurs-seasons-js",
+    "D": "meta:aws-samples/robust-time-series-forecasting-with-mlops",
+    "E": "meta:microsoft/subseasonal_toolkit"
+   }
+  },
+  "tasks_judge_fresh2:p04": {
+   "kind": "duplicate",
+   "gold": "github:augurs:crates/augurs-outlier",
+   "letters": {
+    "A": "github:augurs:crates/augurs-outlier",
+    "B": "github:kubernetes:staging/src/k8s.io/client-go",
+    "C": "github:augurs:crates/augurs",
+    "D": "github:rust:library/std_detect",
+    "E": "github:augurs:js/augurs-clustering-js"
+   }
+  },
+  "tasks_judge_fresh2:p05": {
+   "kind": "duplicate",
+   "gold": "github:dashboard-linter:.",
+   "letters": {
+    "A": "github:dashboard-linter:.",
+    "B": "meta:Azure/azure-policy-linter",
+    "C": "github:detect-angular-dashboards:.",
+    "D": "meta:aws-samples/ec2-flexibility-score-dashboard",
+    "E": "meta:microsoft/eslint-plugin-powerbi-visuals"
+   }
+  },
+  "tasks_judge_fresh2:p06": {
+   "kind": "duplicate",
+   "gold": "github:github-rate-limits-prometheus-exporter:.",
+   "letters": {
+    "A": "github:github-rate-limits-prometheus-exporter:.",
+    "B": "github:github-rate-limits-prometheus-exporter:helm/github-rate-limits-prometheus-exporter",
+    "C": "meta:grafana/github-exporter",
+    "D": "meta:aws-samples/secret-creator-secrets-manager",
+    "E": "meta:microsoft/PR-Metrics"
+   }
+  },
+  "tasks_judge_fresh2:p07": {
+   "kind": "duplicate",
+   "gold": "github:collector-configurator:.",
+   "letters": {
+    "A": "meta:open-telemetry/opentelemetry-collector",
+    "B": "github:collector-configurator:.",
+    "C": "meta:open-telemetry/opentelemetry-go-build-tools",
+    "D": "meta:grafana/opentelemetry-collector-contrib",
+    "E": "meta:google/visualblocks"
+   }
+  },
+  "tasks_judge_fresh2:p08": {
+   "kind": "duplicate",
+   "gold": "github:alerting:.",
+   "letters": {
+    "A": "github:alerting:.",
+    "B": "meta:aws-samples/service-screener-v2",
+    "C": "meta:prometheus/alertmanager",
+    "D": "meta:aws-samples/amazon-connect-chat-ui",
+    "E": "github:alerting:apps/historian"
+   }
+  },
+  "tasks_judge_fresh2:q01": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "github:augurs:js/augurs-seasons-js",
+    "B": "meta:Azure/azure-policy-linter",
+    "C": "meta:microsoft/swift-guide",
+    "D": "meta:aws-samples/amazon-route-53-resolver-dns-firewall-automation-examples",
+    "E": "meta:hashicorp/js-bexpr"
+   }
+  },
+  "tasks_judge_fresh2:q02": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:hashicorp/go-azure-helpers",
+    "B": "meta:microsoft/excel-to-kusto-datatable",
+    "C": "github:github-rate-limits-prometheus-exporter:helm/github-rate-limits-prometheus-exporter",
+    "D": "meta:google/python-proto-converter",
+    "E": "meta:aws-samples/addons-transformer-for-amazon-eks"
+   }
+  },
+  "tasks_judge_fresh2:q03": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:aws-samples/generating-synthetic-datasets-for-evaluating-retrieval-augmented-generation-systems",
+    "B": "meta:microsoft/CodeMixed-Text-Generator",
+    "C": "meta:aws-samples/sample-code-for-Q-business-custom-plugins",
+    "D": "meta:aws-samples/sample-cdk-rds-pg-memdb-text-to-sql",
+    "E": "meta:apache/xmlgraphics-fop-pdf-images"
+   }
+  },
+  "tasks_judge_fresh2:q04": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:aws-samples/sample-synthetic-tokenized-fund",
+    "B": "meta:aws-samples/sample-tool-based-agents-functions",
+    "C": "meta:microsoft/advanced-formula-environment",
+    "D": "meta:aws-samples/amazon-transcribe-comprehend-podcast",
+    "E": "github:rust:src/tools/miri/bench-cargo-miri/range-iteration"
+   }
+  },
+  "tasks_judge_fresh2:q05": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:aws-samples/analyzing-reddit-sentiment-with-aws",
+    "B": "meta:aws-samples/Setup-Amazon-Bedrock-Agent-for-Text2SQL-Using-Amazon-Redshift-Serverless-with-Streamlit",
+    "C": "meta:google/json5format",
+    "D": "meta:aws-samples/sample-language-detection-for-amazon-connect",
+    "E": "meta:microsoft/PowerBI-visuals-TextFilter"
+   }
+  },
+  "tasks_judge_fresh2:q06": {
+   "kind": "control",
+   "gold": null,
+   "letters": {
+    "A": "meta:hashicorp/go-version",
+    "B": "meta:aws-samples/sample-laya-system-one-ecs-gpu",
+    "C": "meta:hashicorp/actions-validate-product-version",
+    "D": "meta:aws-samples/sample-bedrock-knowledge-base-drift-detection",
+    "E": "meta:microsoft/semantic-link-functions"
+   }
+  }
+ }
+}

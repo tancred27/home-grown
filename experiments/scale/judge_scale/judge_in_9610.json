@@ -1,0 +1,2448 @@
+[
+ {
+  "tid": "tasks:d01",
+  "request": "Our API metrics are exploding because every request path contains user and order ids. Add a function to metrics.py that turns a path like /users/123/orders/456 into a route template before we use it as a label.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "clusterurl",
+    "description": "The goal of this package is to provide a simple way to process and cluster a URL to extract a generic page route from it. These generic routes can then be used to aggregate data from multiple URLs under a single route.",
+    "purpose": "Go package that clusters URLs to extract generic page route patterns.",
+    "evidence": [
+     "Asserted by its own tests: Path Trie Soft Threshold.",
+     "Asserted by its own tests: Path Trie Depth Based Thresholds.",
+     "Asserted by its own tests: Path Trie No Limit With Minus One.",
+     "Asserted by its own tests: Path Trie Max Patterns Enforce Limit.",
+     "Asserted by its own tests: Path Trie Max Patterns Deepest Collapsed First.",
+     "Asserted by its own tests: Path Trie Max Patterns No Candidates."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "single-use-signed-url",
+    "description": "AWS CDK to create a CloudFront distribution with a request Lambda to allow single use signed URL file downloads. Each file is tracked by an identifier which is stored in a DynamoDB database. Each request will check the identifier against values stored in the database. If the identifier is found the file process continues and the files is received, the id is then removed from the database. If the i",
+    "purpose": "Serve single-use signed URL file downloads using CloudFront, Lambda and DynamoDB.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "Templates-For-Dynamics-365-Supply-Chain-Management-Demand-Forecasting-With-Azure-Machine-Learning",
+    "description": "Samples, templates and setup guides in order to run demand forecasting in Azure Machine Learning Service and integrate with Dynamics 365 SCM",
+    "purpose": "Run demand forecasting in Azure ML integrated with Dynamics 365 Supply Chain.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "sample-api-proxy-for-multi-region-location-service",
+    "description": "A server-side proxy for Amazon Location Service that keeps API keys off the client and routes address search and map requests to the ALS region matching each user's country.",
+    "purpose": "Proxy Amazon Location Service requests server-side to hide API keys and route to the user's region.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "custom-metrics-apiserver",
+    "description": "Framework for implementing custom metrics support for Kubernetes",
+    "purpose": "Implement a custom metrics API server for Kubernetes autoscaling using a framework.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d02",
+  "request": "Finance wants our AWS and GCP spend as Prometheus metrics. Write a small exporter that pulls cost and pricing data from both providers and serves it on /metrics.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "cloudcost-exporter",
+    "description": "Cloud Cost Exporter is a Prometheus exporter that collects cost and pricing data from cloud providers (AWS, GCP, Azure) in real-time.",
+    "purpose": "Prometheus exporter for cloud cost metrics across cloud providers.",
+    "evidence": [
+     "Asserted by its own tests: Node Store Populate Concurrency Limit.",
+     "Asserted by its own tests: parse Capacity Block Usage Type.",
+     "Asserted by its own tests: parse Capacity Block Costs nets Refunds.",
+     "Asserted by its own tests: cluster Name From Instance.",
+     "Asserted by its own tests: List Active Capacity Reservations.",
+     "Asserted by its own tests: Generate Capacity Block Pricing Map prices Per Reservation."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "cloudwatch_exporter",
+    "description": "Metrics exporter for Amazon AWS CloudWatch",
+    "purpose": "Export AWS CloudWatch metrics for Prometheus.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "aws-cloudfront-real-time-metrics-sample",
+    "description": "This repository provides infrastructure and code to parse CloudFront real-time logs and convert these logs into CloudWatch custom metrics. These Custom metrics in CloudWatch can provide low-level insight into how well a CloudFront distribution is performing and even enable monitoring the operational health of specific CloudFront edge locations. This can assist in the identification of common probl",
+    "purpose": "Convert CloudFront real-time logs into CloudWatch custom metrics to monitor distributions and edge locations.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "tailscale-exporter",
+    "description": "A Prometheus exporter that collects metrics from both Tailscale and Headscale tailnets.",
+    "purpose": "Export Tailscale and Headscale tailnet metrics to Prometheus.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "sample-cur-filtered-data-exports",
+    "description": "Deploy an AWS Cost and Usage Report (CUR 2.0) Data Export that filters billing data to a specific list of linked accounts at the source, driven by a CSV file and a single CloudFormation deploy.",
+    "purpose": "Export AWS cost and usage data filtered to specific linked accounts with CloudFormation.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d03",
+  "request": "Add Prometheus metrics for our Celery workers: queue length plus task success and failure counts, exposed for scraping.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "celery-exporter",
+    "description": "Prometheus metrics exporter for Celery 5",
+    "purpose": "Export Celery 5 task queue metrics to Prometheus.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "cloudwatch_exporter",
+    "description": "Metrics exporter for Amazon AWS CloudWatch",
+    "purpose": "Export AWS CloudWatch metrics for Prometheus.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "snowflake-prometheus-exporter",
+    "description": "A golang based prometheus metrics exporter for Snowflake.",
+    "purpose": "Export Snowflake metrics to Prometheus.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "kafka_exporter",
+    "description": "Kafka exporter for Prometheus",
+    "purpose": "Export Kafka metrics for Prometheus.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "ibm-db2-prometheus-exporter",
+    "description": "A golang based prometheus metrics exporter for IBM DB2.",
+    "purpose": "Export IBM DB2 metrics to Prometheus.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d04",
+  "request": "Our CI bots keep hitting GitHub API limits. Write a script that polls the rate-limit endpoint for our GitHub App and exposes the remaining calls as a metric so we can alert.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "A Prometheus exporter which scrapes GitHub API for the rate limits used by PAT/GitHub App.",
+    "purpose": "Export GitHub API rate limit usage as Prometheus metrics, using App or PAT credentials.",
+    "evidence": [
+     "Asserted by its own tests: Get Remaining Limits.",
+     "Asserted by its own tests: New Limits Collector."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "This helm chart helps to install and configure github-rate-limits-prometheus-exporter",
+    "purpose": "Helm chart to install and configure a GitHub rate limits Prometheus exporter.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "PR-Metrics",
+    "description": "A GitHub Action & Azure Pipelines task for augmenting pull request titles to let reviewers quickly determine PR size and test coverage.",
+    "purpose": "Annotate pull request titles with size and test coverage indicators in GitHub Actions or Azure Pipelines to help reviewers.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "multichannel-app-to-person-alerting",
+    "description": "This sample deploys a multi-channel Application-to-Person alerting system for hospital staff that takes a clinician's contact preferences into account based on the message's severity level. Amazon API Gateway acts as the front-door, while the processing and message publication are handled by AWS Lambda using a synchronous invocation pattern.",
+    "purpose": "Multi-channel severity-based alerting system for hospital staff.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "typescript-bot-test-triggerer",
+    "description": "A quick azure function for reading comments on the TypeScript repo and then doing things like running tests",
+    "purpose": "Trigger test runs from GitHub comments on a repository using an Azure Function bot.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d05",
+  "request": "Add a CI step that checks our exported dashboard JSON files for common mistakes and fails the build if it finds any.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "dashboard-linter",
+    "description": "This tool is a command-line application to lint Grafana dashboards for common mistakes, and suggest best practices.",
+    "purpose": "Lint Grafana dashboards.",
+    "evidence": [
+     "Asserted by its own tests: Element Reference Rule Sorts And Deduplicates Missing Elements.",
+     "Asserted by its own tests: V2 Required Fields Rule Missing Fields.",
+     "Asserted by its own tests: Element Reference Rule Reports Missing And Orphaned Together.",
+     "Asserted by its own tests: Element Reference Rule Reports Missing Elements.",
+     "Asserted by its own tests: Template On Time Range Reload Rule."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "azure-policy-linter",
+    "description": "Repository for the Azure Policy Linter tool that you can run against your authored policy definitions to check for rules and best practices.",
+    "purpose": "Lint Azure Policy definitions for rule violations and best practices.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "devsecops-workshop-on-aws",
+    "description": "In this workshop we will build a pipeline for a sample WordPress site in a stack. We will explore how to validate, lint and test templates, and dive deeper in tools that help you enforce compliance and network analysis, together with your development pipeline, for a full DevSecOps CI/CD.",
+    "purpose": "Workshop building a DevSecOps CI/CD pipeline that validates, lints, tests and checks compliance of templates.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "plugin-ci-workflows",
+    "description": "Re-usable GitHub Actions workflows for building, testing, releasing and deploying plugins",
+    "purpose": "Reusable GitHub Actions workflows for building, testing, releasing and deploying plugins.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "jmeter-performance-analyzer-devops-extension",
+    "description": "This task enables to run Performance testng using Apache Jmeter, Analyze report and post results. This task uses Apache Jmeter 5.5 and expects a valid parametrized JMX File, Any input Files, and property file for JMX. The task runs the jmx files according to the configured values in JMX and publishes the result to build artifacts and $web of your storage container. Provides control to fail pipelin",
+    "purpose": "Pipeline task to run JMeter performance tests, analyze reports and publish results.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d06",
+  "request": "Our synthetic monitoring leaks Chromium processes. Write a supervisor that starts headless Chromium on demand and reaps the ones that die.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "crocochrome",
+    "description": "Crocochrome is a chromium supervisor, which runs and reaps chromium processes on demand.",
+    "purpose": "Supervise Chromium browser processes.",
+    "evidence": [
+     "A test is disabled with the reason: Skipping integration test due to -short",
+     "Asserted by its own tests: Check Capabilities.",
+     "A test is disabled with the reason: skipping long tests",
+     "Asserted by its own tests: Integration Missing Capabilities.",
+     "Asserted by its own tests: Chromium Process Type missing Cmdline."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "synthetic-monitoring-agent",
+    "description": "Synthetic Monitoring agent",
+    "purpose": "Run an agent that performs synthetic monitoring checks.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "sample-knowledgeforge",
+    "description": "KnowledgeForge - AI-powered knowledge base lifecycle platform for IT Service Management. It mines resolved incident tickets into new Knowledge Base and Root Cause Analysis articles and curates existing ones by classifying, deduplicating, quality-scoring, and enriching them with an LLM before routing to Jira Service Management for review.",
+    "purpose": "Turn resolved IT incident tickets into knowledge base and RCA articles with an LLM.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "chromium-swiftshader-alpine",
+    "description": "Chromium container image used with Synthetic Monitoring",
+    "purpose": "Run Chromium in a container image for synthetic monitoring checks.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "sample-rds-sql-server-proactive-monitoring",
+    "description": "A serverless solution providing automated monitoring for Amazon RDS SQL Server instances with instant Slack notifications. Built using AWS native services, this solution features smart alert de-duplication, automated log cleanup, and one-click deployment, eliminating manual monitoring while improving incident response times.",
+    "purpose": "Proactive RDS SQL Server monitoring with deduplicated Slack alerts.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d07",
+  "request": "Add request middleware that validates incoming access tokens and checks the caller is allowed to perform the action before the handler runs.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "authorization-lambda-at-edge",
+    "description": "Code demonstrates authorization with Lambda@Edge and JSON Web Tokens (JWTs)",
+    "purpose": "Authorize requests with JWTs at the edge using Lambda@Edge.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "service-screener",
+    "description": "A tool that allows AWS customers to automate checks on their environment and services based on AWS best practices and provide recommendations on how to improve.",
+    "purpose": "Automatically check AWS environments against best practices and get improvement recommendations.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "casbin-revel-authz",
+    "description": "revel-authz is an authorization middleware for Revel",
+    "purpose": "Authorization middleware for adding access control to Revel web applications.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "Multi-Agent-Custom-Automation-Engine-Solution-Accelerator",
+    "description": "The Multi-Agent Custom Automation Engine Solution Accelerator is an AI-driven system that manages a group of AI agents to accomplish tasks based on user input. Powered by Microsoft Agent Framework, Azure Foundry, Azure Cosmos DB, and infrastructure services, it provides a reference application, allowing you to hit the ground running.",
+    "purpose": "Orchestrate a group of AI agents to complete tasks from user input.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "casbin",
+    "description": "Apache Casbin: an authorization library that supports access control models like ACL, RBAC, ABAC.",
+    "purpose": "Add authorization and access control using ACL, RBAC, or ABAC models to an application.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d08",
+  "request": "Write a function that takes CPU usage series for all our hosts and flags the hosts whose series looks different from the rest.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-outlier",
+    "description": "Outlier detection for time series.",
+    "purpose": "Detect outliers in time series data.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "std_detect",
+    "description": "`std::detect` - Rust's standard library run-time CPU feature detection.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "augurs-outlier-js",
+    "description": "JavaScript bindings for the augurs-outlier library.",
+    "purpose": "Detect outliers in time-series data from JavaScript via augurs-outlier bindings.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "flagon",
+    "description": "Apache Flagon is a suite of comprehensive, thin-client behavioral logging tools",
+    "purpose": "Thin-client behavioral logging tools for capturing user activity.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "augurs",
+    "description": "A time-series toolkit for forecasting, outlier detection, clustering and more.",
+    "purpose": "Forecast time series, detect outliers, and cluster time-series data with a toolkit.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d09",
+  "request": "Our worker processes need to discover each other and split the work between them with consistent hashing. Implement the membership and hashing piece.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "se-workshop-hashicat-app",
+    "description": "Supporting application for HashiCorp SE Workshops",
+    "purpose": "Run a supporting sample application used in solutions engineering workshops.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "microservices-dotnet-aws-cdk",
+    "description": "This repository contains a sample implementation of Fanout Architecture using .NET6 Worker Services to process messages from Amazon SNS Topic and Amazon SQS Queue. Since the Worker Services would have no UI, to operate this solution, you need Observability implemented. In this repository, you can also find sample .NET Observability implementation using the combination of AWS X-Ray and Amazon Cloud",
+    "purpose": "Sample fanout architecture with .NET workers processing SNS and SQS messages with X-Ray observability.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "integration-template",
+    "description": "[CLOSED-BETA] This is a template repository for creating a new Integration for a HashiCorp product.",
+    "purpose": "Template repository for creating a new integration for a HashiCorp product.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "servicecomb-service-center",
+    "description": "A standalone service center to allow services to register their instance information and to discover providers of a given service",
+    "purpose": "Service registry for registering service instances and discovering providers of a service.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "research-docs",
+    "description": "Document repository for HashiCorp Research",
+    "purpose": "Document repository for research.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d10",
+  "request": "Write a relay that accepts Graphite plaintext metrics, aggregates them, and forwards them to our storage cluster.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "graphite_exporter",
+    "description": "Server that accepts metrics via the Graphite protocol and exports them as Prometheus metrics",
+    "purpose": "Accept metrics over the Graphite protocol and export them as Prometheus metrics.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "carbon-relay-ng",
+    "description": "Like carbon-relay from the graphite project, except it:",
+    "purpose": "Relay and aggregate carbon metrics quickly, with admin interfaces for live configuration changes.",
+    "evidence": [
+     "Asserted by its own tests: Invalid Regex.",
+     "Asserted by its own tests: Invalid Not Regex."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "route-optimization-accelerator",
+    "description": "Route Optimization Accelerator helps you run linear optimization tasks to solve vehicle routing and traveling salesman problems. It supports multiple constraints such as capacity constraint, time window constraint, duration constraint, distance constraint and more which can be configured on demand to meet your optimization requirements.",
+    "purpose": "Solve vehicle routing and traveling salesman problems with configurable constraints.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "graphite-mt",
+    "description": "Graphite-web tailored for running with a metrictank backend",
+    "purpose": "Graphite web frontend adapted to query metrics from a metrictank backend.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "clusterurl",
+    "description": "The goal of this package is to provide a simple way to process and cluster a URL to extract a generic page route from it. These generic routes can then be used to aggregate data from multiple URLs under a single route.",
+    "purpose": "Go package that clusters URLs to extract generic page route patterns.",
+    "evidence": [
+     "Asserted by its own tests: Path Trie Soft Threshold.",
+     "Asserted by its own tests: Path Trie Depth Based Thresholds.",
+     "Asserted by its own tests: Path Trie No Limit With Minus One.",
+     "Asserted by its own tests: Path Trie Max Patterns Enforce Limit.",
+     "Asserted by its own tests: Path Trie Max Patterns Deepest Collapsed First.",
+     "Asserted by its own tests: Path Trie Max Patterns No Candidates."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d11",
+  "request": "Write a script that generates a few hundred random alert rules so we can load-test the alerting service.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "alerting-gen",
+    "description": "A tiny CLI to generate random Grafana Alerting rules and Recording rules using:",
+    "purpose": "Generate random Grafana alerting and recording rules from a small CLI.",
+    "evidence": [
+     "Asserted by its own tests: Generate Rules Determinism With Seed.",
+     "Asserted by its own tests: Generate Rules Determinism With Seed.",
+     "Asserted by its own tests: Group Rules Groups Per Folder Greater Than One.",
+     "Asserted by its own tests: Group Rules Defaults When Zero Or Empty.",
+     "Asserted by its own tests: Group Rules Defaults When Zero Or Empty.",
+     "Asserted by its own tests: Group Rules Non Even Partition."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "terraform-azurerm-avm-res-alertsmanagement-actionrule",
+    "description": "Terraform Azure Verified Resource Module for Action Rules",
+    "purpose": "Deploy Azure alert action rules with Terraform.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "vscode-makefile-tools",
+    "description": "Makefile Tools offers a robust workflow for Makefile projects in VS Code, with pre and post-configure script automation, easy configuration switching, and IntelliSense support for Makefile. The customizable user interface and environment variable management simplify development. It can also generate a compilation database for use with other tools.",
+    "purpose": "Build, configure and get IntelliSense for Makefile projects in VS Code, including generating a compilation database.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "provisioning-alerting-examples",
+    "description": "Examples provisioning alerting resources",
+    "purpose": "Examples of provisioning alerting resources as configuration.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "diskspd",
+    "description": "DISKSPD is a storage load generator / performance test tool from the Windows/Windows Server and Cloud Server Infrastructure Engineering teams",
+    "purpose": "Generate storage load and measure disk performance.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d12",
+  "request": "Add a helper that works out the dominant period of a metric automatically, so we can set the forecasting window.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-seasons",
+    "description": "Seasonality detection using periodograms",
+    "purpose": "Detect seasonality in time series using periodograms.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "robust-time-series-forecasting-with-mlops",
+    "description": "Robust Time Series Forecasting with MLOps on Amazon SageMaker",
+    "purpose": "Build robust time series forecasting with MLOps on SageMaker.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "augurs-seasons-js",
+    "description": "JavaScript bindings for the augurs-seasons library.",
+    "purpose": "Use seasonality detection from augurs-seasons in JavaScript through bindings.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "dstoolkit-time-series-forecasting",
+    "description": "A flexible, extensible framework for training and evaluating time-series forecasting models.",
+    "purpose": "Train and evaluate time-series forecasting models with an extensible framework.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "augurs",
+    "description": "Python bindings for the augurs time series library.",
+    "purpose": "Python bindings for the augurs time series library.",
+    "evidence": [
+     "Asserted by its own tests: different min cluster sizes.",
+     "Asserted by its own tests: with threshold.",
+     "Asserted by its own tests: with min period.",
+     "Asserted by its own tests: with max period.",
+     "Asserted by its own tests: with min and max period.",
+     "Asserted by its own tests: with threshold."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks:c01",
+  "request": "Add a function that converts a temperature from Celsius to Fahrenheit, rounded to one decimal place.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "test-float-parse",
+    "description": "These are tests designed to test decimal to float conversions (dec2flt) used",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "sample-greengrassv2-opcua-simulator",
+    "description": "OPC UA server that simulates industrial sensor data, deployed as an AWS IoT Greengrass V2 component (Docker). Ships with one motor (temperature, current, vibration, running). Add or change simulated equipment such as motors and pumps with one command. Designed for AWS IoT SiteWise Edge PoC.",
+    "purpose": "Simulate industrial sensor data with an OPC UA server deployed as a Greengrass component.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "double-conversion",
+    "description": "Efficient binary-decimal and decimal-binary conversion routines for IEEE doubles.",
+    "purpose": "Fast conversion between binary IEEE doubles and decimal strings.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "Introduction to the Grafana data structure",
+    "description": "Grafana supports a variety of different data sources, each with its own data model. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a **data frame**. The **data plane** adds a property layer to the data frame with i",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "cctz",
+    "description": "CCTZ is a C++ library for translating between absolute and civil times using the rules of a time zone.",
+    "purpose": "Convert between absolute and civil times using time zone rules in C++.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:c02",
+  "request": "Write a function that validates the format of an email address for our signup form.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "libaddressinput",
+    "description": "Google\u2019s postal address library, powering Android and Chromium",
+    "purpose": "Parse, validate and format postal addresses.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "amazon-location-detected-addresses-to-map",
+    "description": "AWS CloudFormation template deploying a Step Functions that leverages Amazon Comprehend and Amazon Location Service. The Step Functions embeds the generated map in a HTML file which contains markers on the addresses that have been detected into the input text.",
+    "purpose": "Detect addresses in text and plot them as markers on a generated HTML map.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "aws-cloudformation-validator",
+    "description": "this is source code of python script use for validation CF template => more in the blog https://aws.amazon.com/blogs/devops/validating-aws-cloudformation-templates...",
+    "purpose": "Validate AWS CloudFormation templates with a Python script.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "aws-transfer-family-lake-formation-extracted-form-data-product",
+    "description": "In this builders\u2019 session, learn how AWS Transfer Family can automate the data processing pipeline for third-party data, validate the integrity of files transferred, apply PGP encryption and decryption and antimalware scans, and enrich and load the data into a secure data mesh integrated with AWS Lake Formation.",
+    "purpose": "Automate third-party file processing with Transfer Family, encryption, malware scans and Lake Formation.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "james-jspf",
+    "description": "Mirror of Apache James jSPF",
+    "purpose": "Mirror of an SPF email validation library; the text gives no further details.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:c03",
+  "request": "Add a helper that formats a duration in seconds as a human string such as 1h 3m 5s.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "json5format",
+    "description": "JSON5 (a.k.a., \"JSON for Humans\") formatter that preserves contextual comments",
+    "purpose": "Format JSON5 files while preserving comments.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "hrx",
+    "description": "HRX (Human-Readable Archive): a plain text archive format",
+    "purpose": "Plain-text, human-readable archive format for bundling multiple files.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "sample-aws-rdns-form-helper",
+    "description": "A sample browser userscript demonstrating how to automate form filling for reverse DNS (rDNS) records in AWS Support Console.",
+    "purpose": "Automate filling reverse DNS request forms in the AWS Support Console with a userscript.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "model-mondays",
+    "description": "Model Mondays is a weekly livestream with Discord office hours - to help you navigate the fast-moving ecosystem of generative AI models with 5-minute roundups and 15-minute spotlight sessions. Build your model IQ - and make informed model choices!",
+    "purpose": "Livestream series on choosing generative AI models.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "gts",
+    "description": "\u2602\ufe0f TypeScript style guide, formatter, and linter.",
+    "purpose": "Format and lint TypeScript code according to a style guide.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:c04",
+  "request": "Write a function that splits a full name into first and last name, handling middle names.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "ts-parsec",
+    "description": "Writing a custom parser is a fairly common need. Although there are already parser combinators in others languages, TypeScript provides a powerful and well-structured foundation for building this. Common parser combinators\u2019 weakness are error handling and ambiguity resolving, but these are ts-parsec\u2019s important features. Additionally, ts-parsec provides a very easy to use programming interface, th",
+    "purpose": "Write custom parsers in TypeScript with parser combinators and good error handling.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "sample-azure-functions-to-aws-lambda",
+    "description": "This repository provides side-by-side .NET code samples for migrating Azure Functions to AWS Lambda.  It covers three common serverless patterns: HTTP APIs, queue-based message processing, and event-driven file upload handling. Each scenario includes the original Azure Functions implementation alongside its AWS Lambda equivalent.",
+    "purpose": "Side-by-side .NET samples for migrating Azure Functions to AWS Lambda.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "swift-guide",
+    "description": "This guide contains best practices for writing Swift. Guidance here comes from a combination of our collective practical experiences and documentation from Apple. This is meant to be a living document and all contents are perpetually open for debate and improvement.",
+    "purpose": "Best-practice style guide for writing Swift.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "azure-functions-golang-worker",
+    "description": "Run your Go serverless workloads on Azure Functions with first-class runtime support.",
+    "purpose": "Run Go serverless functions on Azure Functions with native runtime support.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "regexpand",
+    "description": "regexpand is a Golang library that provides information about the strings a regular expression matches.",
+    "purpose": "Find which strings a regular expression matches in Go.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:h01",
+  "request": "Every one of our plugins reimplements AWS session setup. Write a shared module that handles credentials, assume-role and region configuration for all of them.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "grafana-aws-sdk",
+    "description": "This is a common package that can be used for all amazon plugins.",
+    "purpose": "Common AWS configuration code for Grafana plugins.",
+    "evidence": [
+     "Asserted by its own tests: Get AWSConfig Grafana Assume Role Uses Shared Credentials When Files Are Missing.",
+     "Asserted by its own tests: Get AWSConfig Unknown Or Missing.",
+     "Asserted by its own tests: Signer Round Tripper invalid Sig V4 JSONIs Downstream.",
+     "Asserted by its own tests: Get AWSConfig Auth Type Not Allowed.",
+     "Asserted by its own tests: Grafana Assume Role Provider Rejects Empty Credential File.",
+     "Asserted by its own tests: Query Data Malformed JSON Falls Back To Sync."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "aws-cloudformation-modules-sharing",
+    "description": "This project contains sample templates for deploying CloudFormation Modules across accounts using CloudFormation StackSets",
+    "purpose": "Share CloudFormation modules across accounts with StackSets.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "terraform-dynamic-credentials-setup-examples",
+    "description": "Example code for bootstrapping trust between Terraform Cloud and cloud providers in order to use TFC's Workload Identity",
+    "purpose": "Example code for setting up trust between Terraform Cloud and cloud providers for workload identity credentials.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "terraform-aws-module-installer-acctest",
+    "description": "A placeholder Terraform module for acceptance tests of Terraform's module installer",
+    "purpose": "Use a placeholder Terraform module for module installer acceptance tests.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "provider-aws-test-infra",
+    "description": "Shared test infrastructure for the AWS cloud provider repositories",
+    "purpose": "Shared test infrastructure for AWS cloud provider repositories.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:h02",
+  "request": "Generate the configuration file for our pull-request review bot from CODEOWNERS, so each directory requires approval from its owners.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "generate-policy-bot-config",
+    "description": "This script generates the [Policy Bot][policy-bot] configuration file.",
+    "purpose": "Generate policy-bot configuration files to enforce that conditional workflows passed.",
+    "evidence": [
+     "Asserted by its own tests: Renaming Writer Mem FS.",
+     "Asserted by its own tests: Renaming Writer Abort.",
+     "Asserted by its own tests: Renaming Writer Abort Ignores Close Error.",
+     "Asserted by its own tests: Renaming Writer File.",
+     "Asserted by its own tests: Renaming Writer Multiple Calls.",
+     "Asserted by its own tests: Merge Configs Preserves Explicitly Empty Values."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "terraform",
+    "description": "Terraform enables you to safely and predictably create, change, and improve infrastructure. It is a source-available tool that codifies APIs into declarative configuration files that can be shared amongst team members, treated as code, edited, reviewed, and versioned.",
+    "purpose": "Define, create and change infrastructure as declarative, versioned configuration code.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "sample-terraform-pr-automation-utility",
+    "description": "Configuration-driven automation tool for creating Pull Requests across multiple Terraform repositories",
+    "purpose": "Create pull requests across many Terraform repositories from configuration.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "vscode-makefile-tools",
+    "description": "Makefile Tools offers a robust workflow for Makefile projects in VS Code, with pre and post-configure script automation, easy configuration switching, and IntelliSense support for Makefile. The customizable user interface and environment variable management simplify development. It can also generate a compilation database for use with other tools.",
+    "purpose": "Build, configure and get IntelliSense for Makefile projects in VS Code, including generating a compilation database.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "code-review-bot",
+    "description": "Code review bot and CLA verifier",
+    "purpose": "Automate code reviews and verify contributor license agreements.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:h03",
+  "request": "Add the ability to produce and consume Kafka messages from our k6 load-test scripts.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "xk6-kafka",
+    "description": "Official pure-Go k6 extension for load testing Apache Kafka",
+    "purpose": "k6 extension for load testing Kafka.",
+    "evidence": [
+     "Asserted by its own tests: Acks From Int.",
+     "Asserted by its own tests: Timing Metrics Are Untagged.",
+     "Asserted by its own tests: Encode Wire Format Out Of Range.",
+     "Asserted by its own tests: Req Context Nil VU.",
+     "Asserted by its own tests: Flush Nil VUAnd Nil Collector.",
+     "Asserted by its own tests: JKSTo PEMRejects Non JKS."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "xk6-client-prometheus-remote",
+    "description": "A k6 extension for testing Prometheus Remote Write endpoints",
+    "purpose": "Load test Prometheus Remote Write endpoints with a k6 extension.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "streaming-data-pipeline-from-kafka-to-s3-using-aws-kinesis-firehose",
+    "description": "Streaming data pipeline to continuously load data from an Amazon MSK or MSK Serverless cluster to Amazon S3 using Amazon Kinesis Data Firehose.",
+    "purpose": "Stream data from Kafka (MSK) to S3 with Kinesis Firehose.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "xk6-sm",
+    "description": "k6 output extension for Synthetic Monitoring",
+    "purpose": "Send k6 test output to a synthetic monitoring service via an output extension.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "azureloadtesting-extension",
+    "description": "VS Code extension for Azure Load Testing",
+    "purpose": "VS Code extension for Azure Load Testing.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:h04",
+  "request": "Write a function that detects the points in a latency series where its behaviour shifts.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-changepoint",
+    "description": "Changepoint detection using Bayesian Online Change Point Detection and more.",
+    "purpose": "Detect changepoints in time series using Bayesian Online Change Point Detection and other methods.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "augurs-changepoint-js",
+    "description": "JavaScript bindings for the augurs-changepoint library.",
+    "purpose": "JavaScript bindings for the augurs changepoint detection library.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "std_detect",
+    "description": "`std::detect` - Rust's standard library run-time CPU feature detection.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "LinuxTracepoints",
+    "description": "C/C++ libraries for working with Linux Tracepoints and user_events",
+    "purpose": "C/C++ libraries for Linux tracepoints and user_events.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "sample-amazon-ivs-python-demos",
+    "description": "A comprehensive collection of Python demo scripts demonstrating Amazon IVS (Interactive Video Service) capabilities across Real-Time Stages (WebRTC) and Channels (low-latency HLS). Features AI-powered video analysis, real-time transcription, speech-to-speech functionality, timed metadata publishing, and advanced media processing.",
+    "purpose": "Use Python scripts to stream, transcribe, analyze video, and publish metadata with Amazon IVS real-time and low-latency channels.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:h05",
+  "request": "Create a single Docker image with an OpenTelemetry backend for traces, logs and metrics so developers can test locally.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "docker-otel-lgtm",
+    "description": "An OpenTelemetry backend in a Docker image. It bundles the OpenTelemetry Collector,",
+    "purpose": "Run an OpenTelemetry observability backend locally in a Docker container.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "faro-otel-swift-exporter",
+    "description": "The Faro OpenTelemetry-Swift Exporter, part of the Grafana Faro project, is an OpenTelemetry exporter for Swift. It instruments iOS applications to send trace and log telemetry to Grafana Faro, enabling real user monitoring (RUM) and contributing to full-stack observability.",
+    "purpose": "OpenTelemetry Swift exporter that sends iOS app traces and logs for real user monitoring.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "mise-npm-install",
+    "description": "An OpenTelemetry backend in a Docker container image",
+    "purpose": "Run an OpenTelemetry backend in a Docker container image.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "aws-bookstore-demo-app",
+    "description": "AWS Bookstore Demo App is a full-stack sample web application that creates a storefront (and backend) for customers to shop for fictitious books. The entire application can be created with a single template. Built on AWS Full-Stack Template.",
+    "purpose": "Full-stack sample online bookstore web app on AWS.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "opentelemetry-go-build-tools",
+    "description": "Build tools for use by the Go API/SDK, the collector, and their associated contrib repositories",
+    "purpose": "Build tools for OpenTelemetry Go SDK, collector and contrib repositories.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:h06",
+  "request": "Write a routine that safely reads memory at an arbitrary address from inside a signal handler without crashing the process.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "kindasafe_init",
+    "description": "Signal handler initialization for the kindasafe signal-safe memory reading library",
+    "purpose": "Initialize signal handlers for a signal-safe memory reading library.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "kindasafe",
+    "description": "Signal-safe memory reading for x86_64 and aarch64 using naked functions and crash recovery",
+    "purpose": "Read memory signal-safely with crash recovery on x86_64 and aarch64.",
+    "evidence": [
+     "Asserted by its own tests: u64 unaligned page boundary.",
+     "Asserted by its own tests: vec sigsegv page boundary.",
+     "Asserted by its own tests: u64 unaligned page boundary.",
+     "Asserted by its own tests: vec sigsegv page boundary."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "pyroscope-kinda-safe",
+    "description": "Signal-safe memory reading for x8664 and aarch64 on Linux.",
+    "purpose": "Signal-safe memory reading on Linux for x86-64 and aarch64.",
+    "evidence": [
+     "Asserted by its own tests: u64 unaligned page boundary.",
+     "Asserted by its own tests: vec sigsegv page boundary."
+    ]
+   },
+   {
+    "letter": "D",
+    "name": "sanitizers",
+    "description": "AddressSanitizer, ThreadSanitizer, MemorySanitizer",
+    "purpose": "Detect memory errors, data races and uninitialized reads with sanitizers.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "batch-processing-kit",
+    "description": "Generic batch processing framework for managing the orchestration, dispatch, fault tolerance, and monitoring of arbitrary work items against many endpoints. Extensible via dependency injection. Includes examples against Cognitive Service containers for ML eval workloads.",
+    "purpose": "Batch processing framework for dispatching work items with fault tolerance and monitoring.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k01",
+  "request": "Write a function that checks whether a string is a palindrome, ignoring punctuation and case.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "swift-guide",
+    "description": "This guide contains best practices for writing Swift. Guidance here comes from a combination of our collective practical experiences and documentation from Apple. This is meant to be a living document and all contents are perpetually open for debate and improvement.",
+    "purpose": "Best-practice style guide for writing Swift.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "aws-augmentability",
+    "description": "AWS AugmentAbility is a mobile web app which showcases 5 AWS AI services (Amazon Transcribe, Amazon Translate, Amazon Polly, Amazon Rekognition and Amazon Textract) and, at the same time, provides features that may benefit people with a visual or communication impairment, including difficulties in reading written text (text recognition), hearing (live transcription), speaking (text-to-speech), or ",
+    "purpose": "Provide accessibility features like text recognition, live transcription, and text-to-speech in a mobile web app using AWS AI services.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "effcee",
+    "description": "Effcee is a C++ library for stateful pattern matching of strings, inspired by LLVM's FileCheck",
+    "purpose": "Match string patterns statefully in C++ for FileCheck-style testing.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "kubectl-check-ownerreferences",
+    "description": "Read-only tool to check metadata.ownerReferences.",
+    "purpose": "Read-only tool to check Kubernetes metadata.ownerReferences.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "regexpand",
+    "description": "regexpand is a Golang library that provides information about the strings a regular expression matches.",
+    "purpose": "Find which strings a regular expression matches in Go.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k02",
+  "request": "Add a helper that converts a list of dicts to a CSV string with a header row.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "sample-s3-listobjectversions-to-csv",
+    "description": "A script for listing S3 object versions, in CSV format, at scale.",
+    "purpose": "List S3 object versions at scale into CSV.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "fsharplu",
+    "description": "This library provides a set of F# helpers for string manipulations, logging, collection data structures, file operations, text processing, security, async, parsing, diagnostics, configuration files and Json serialization.",
+    "purpose": "Use F# helpers for strings, logging, files, async, parsing, configuration and JSON.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "commons-csv",
+    "description": "Apache Commons CSV",
+    "purpose": "Java CSV library; the text gives no further details.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "riegeli",
+    "description": "Riegeli/records is a file format for storing a sequence of string records, typically serialized protocol buffers.",
+    "purpose": "File format for storing sequences of records such as serialized protocol buffers.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "avro",
+    "description": "Apache Avro is a data serialization system.",
+    "purpose": "Serialize and deserialize structured data with a data serialization system.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k03",
+  "request": "Write a function that counts the business days between two dates, skipping weekends.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "azure-functions-durable-python",
+    "description": "Python library for using the Durable Functions bindings.",
+    "purpose": "Write Durable Functions workflows in Python.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "data flow",
+    "description": "description: Learn how to use the multifarious editing data functionality in the Business Table panel to provide extensive capabilities for working with table data.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "powerbi-visuals-timeline",
+    "description": "Timeline slicer is a graphical date range selector used as a filtering component in the report canvas",
+    "purpose": "Filter Power BI reports by date range with a timeline slicer visual.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "calculate-file-content-size-for-vector-db",
+    "description": "Analyzes PDF files to calculate the actual text content size (excluding formatting and images) to provide accurate estimates for vector database storage.",
+    "purpose": "Estimate vector database storage by calculating actual text content size of PDF files.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "business-panel",
+    "description": "Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration",
+    "purpose": "Dashboard panel that shows events in a calendar view, pulling data from multiple data sources.",
+    "evidence": [
+     "Asserted by its own tests: Should update colors options correctly via thresholds.",
+     "Asserted by its own tests: Should not update colors options if set only base threshold value.",
+     "Asserted by its own tests: Should show color Field if thresholds is selected.",
+     "Asserted by its own tests: Should render view for duration more or equal 45 minutes.",
+     "Asserted by its own tests: Should return event with color if thresholds is not specified.",
+     "Asserted by its own tests: Should recompute minutes Offset when time Range changes."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k04",
+  "request": "Add a helper that masks all but the last four digits of a credit card number.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "contact-card",
+    "description": "Contact card control",
+    "purpose": "UI control for displaying contact cards.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "digital-content-distribution-toolkit",
+    "description": "A low-cost satellite and edge-based technology which seeks to deliver digital content to underserved users at the last mile.",
+    "purpose": "Deliver digital content to underserved users via satellite and edge technology.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "mask-words-in-image",
+    "description": "A tool that can mask words that match regular expression, keywords or PII (Personally Identifiable Information) in an image file.",
+    "purpose": "Mask words, keywords or PII in images.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "sample-multi-agent-financial-health-with-bedrock-agentcore",
+    "description": "Multi-agent financial health analysis with Amazon Bedrock AgentCore and the Strands Agents SDK. Reads credit card statements, diagnoses financial health, finds recurring expenses, and builds an optimized payment plan. Spanish UI, for Latin American credit markets.",
+    "purpose": "Multi-agent analysis of credit card statements to diagnose financial health and plan payments.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "data-perimeter-helper",
+    "description": "Data perimeter helper is a tool that helps you design and anticipate the impact of your data perimeter controls",
+    "purpose": "Design data perimeter controls and anticipate their impact before applying them.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k05",
+  "request": "Write a function that generates a random, URL-safe password reset token.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "security-utilities",
+    "description": "Security utilities for key generation, string redaction, etc.",
+    "purpose": "Generate keys and redact secrets from strings with security utilities.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "aws-lambda-function-url-secured",
+    "description": "Protecting a Lambda Function URL with Amazon CloudFront and Lambda@Edge",
+    "purpose": "Protect a Lambda function URL behind CloudFront and Lambda@Edge.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "MSR-JavaScript-Crypto",
+    "description": "Microsoft JavaScript Cryptography Library",
+    "purpose": "Perform cryptography in JavaScript.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "sample-securing-amazon-s3-presigned-urls-for-serverless-applications",
+    "description": "Sample serverless application that demonstrates multiple techniques used to secure S3 presigned URLs, including adding a Content-MD5 checksum, expiring URLs dynamically, and generating UUIDs to replace object names",
+    "purpose": "Secure S3 presigned URLs in serverless apps with checksums, expiry and UUIDs.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "amazon-location-detected-addresses-to-map",
+    "description": "AWS CloudFormation template deploying a Step Functions that leverages Amazon Comprehend and Amazon Location Service. The Step Functions embeds the generated map in a HTML file which contains markers on the addresses that have been detected into the input text.",
+    "purpose": "Detect addresses in text and plot them as markers on a generated HTML map.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k06",
+  "request": "Add a function that converts a hex colour such as #ff8800 into an RGB tuple.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "vscode-hexeditor",
+    "description": "VS Code Hex Editor",
+    "purpose": "Edit binary files in hex inside VS Code.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "blue-green-deployment-pipeline-for-efs",
+    "description": "Blue/Green deployment with AWS Developer tools on Amazon EC2 using Amazon EFS to host application source code",
+    "purpose": "Do blue/green deployments on EC2 with source code hosted on EFS.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "colorstring",
+    "description": "Go (golang) library for colorizing strings for terminal output.",
+    "purpose": "Go library for colorizing strings in terminal output.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "opentelemetry-lambda",
+    "description": "Create your own Lambda Layer in each OTel language using this starter code. Add the Lambda Layer to your Lambda Function to get tracing with OpenTelemetry.",
+    "purpose": "Starter code for building Lambda layers that add OpenTelemetry tracing to AWS Lambda functions.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "powerbi-visuals-utils-colorutils",
+    "description": "color utility interfaces for creating powerbi custom visuals",
+    "purpose": "Color utilities for building Power BI custom visuals.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k07",
+  "request": "Write a function that removes duplicates from a list while keeping the original order.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "keep-sorted",
+    "description": "keep-sorted is a language-agnostic formatter that sorts lines between two markers in a larger file.",
+    "purpose": "Keep lines sorted between markers in any file with a language-agnostic formatter.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "amazon-route-53-resolver-dns-firewall-automation-examples",
+    "description": "Automated approaches involving an Amazon Route 53 Firewall Domain List, paired with an AWS Lambda function to parse an external source, and keep the Rule Group automatically up to date",
+    "purpose": "Automatically keep a Route 53 DNS Firewall domain list updated from an external source.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "sample-automatic-removal-of-event-hold-for-amazon-s3",
+    "description": "Automatically releases the S3 Object Lock event hold on noncurrent object versions so the post-event retention countdown begins and a NoncurrentVersionExpiration lifecycle rule can eventually delete them.",
+    "purpose": "Automatically release S3 Object Lock event holds on noncurrent object versions so lifecycle rules can delete them.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "sample-simple-dynamic-origin-routing-using-amazon-cloudfront-functions",
+    "description": "This project demonstrates dynamic business logic routing at the edge using Amazon CloudFront Functions and Amazon CloudFront Key Value Store (KVS)",
+    "purpose": "Route requests to different origins at the edge using CloudFront Functions and Key Value Store.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "bindiff",
+    "description": "Quickly find differences and similarities in disassembled code",
+    "purpose": "Find differences and similarities in disassembled binary code.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k08",
+  "request": "Add a helper that pluralises an English noun for labels in the UI.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "mdbook-i18n-helpers",
+    "description": "Translation support for mdbook. The plugins here give you a structured way to maintain a translated book.",
+    "purpose": "Translate and maintain localized versions of mdbook documentation.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "LID-tool",
+    "description": "This code provides word level language identification tool for identifying language for individual words in Code-Mixed text. e.g. The text that includes words from two languages such as Hindi written in roman script, mixed with English.",
+    "purpose": "Identify the language of each word in code-mixed text.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "dstoolkit-labelling-app",
+    "description": "A web application for collecting feedback on machine learning-generated outputs, developed with Streamlit.",
+    "purpose": "Collect feedback on ML outputs with a Streamlit labelling app.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "cognito-user-token-helper",
+    "description": "Python script to help create users in Amazon Cognito User Pools, and generate JWT tokens for authorization",
+    "purpose": "Create Amazon Cognito users and generate JWT tokens for testing authorization.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "Tokenizer",
+    "description": "Typescript and .NET implementation of BPE tokenizer for OpenAI LLMs.",
+    "purpose": "Tokenize text with a BPE tokenizer for OpenAI models in TypeScript and .NET.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:f01",
+  "request": "Our NOC wall screens need a big panel showing the current time in Tokyo, London and New York.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "clock-panel",
+    "description": "Clock Panel Plugin for Grafana",
+    "purpose": "Display a clock on Grafana dashboards with a panel plugin.",
+    "evidence": [
+     "Asserted by its own tests: max Past Query Calculation from query field.",
+     "Asserted by its own tests: max Query Calculation from query field.",
+     "Asserted by its own tests: min Query Calculation from query field.",
+     "Asserted by its own tests: min Future Query Calculation from query field.",
+     "Asserted by its own tests: should have no description height when description options are missing.",
+     "Asserted by its own tests: undefined as input from query field."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "business-panel",
+    "description": "Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration",
+    "purpose": "Dashboard panel that shows events in a calendar view, pulling data from multiple data sources.",
+    "evidence": [
+     "Asserted by its own tests: Should update colors options correctly via thresholds.",
+     "Asserted by its own tests: Should not update colors options if set only base threshold value.",
+     "Asserted by its own tests: Should show color Field if thresholds is selected.",
+     "Asserted by its own tests: Should render view for duration more or equal 45 minutes.",
+     "Asserted by its own tests: Should return event with color if thresholds is not specified.",
+     "Asserted by its own tests: Should recompute minutes Offset when time Range changes."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "business-variable",
+    "description": "The Business Variable panel enhances Grafana\u2019s dashboard variables by presenting them in a dedicated, customizable panel. Position it anywhere on your dashboard and choose from a variety of layouts, including an advanced TreeView option, to streamline filtering and improve usability.",
+    "purpose": "Display Grafana dashboard variables in a customizable panel, including a tree view, for easier filtering.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "UTCM-ControlPanel",
+    "description": "Control Panel Single Page Application for UTCM",
+    "purpose": "Single page control panel web app for UTCM.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "real-time-intelligence-operations-solution-accelerator",
+    "description": "This solution accelerator provides the architecture and working solution for real-time intelligence for operations. Key features include real-time dashboard, anomaly detection, and fabric data agent.",
+    "purpose": "Real-time operations intelligence with dashboards and anomaly detection.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:f02",
+  "request": "Operators want to submit maintenance requests from inside a dashboard and have them written to our ticketing API.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "business-panel",
+    "description": "Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration",
+    "purpose": "Dashboard panel that shows events in a calendar view, pulling data from multiple data sources.",
+    "evidence": [
+     "Asserted by its own tests: Should update colors options correctly via thresholds.",
+     "Asserted by its own tests: Should not update colors options if set only base threshold value.",
+     "Asserted by its own tests: Should show color Field if thresholds is selected.",
+     "Asserted by its own tests: Should render view for duration more or equal 45 minutes.",
+     "Asserted by its own tests: Should return event with color if thresholds is not specified.",
+     "Asserted by its own tests: Should recompute minutes Offset when time Range changes."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "Business Forms",
+    "description": "description: Learn how to insert and update application data and modify configuration directly from your Grafana dashboard using the Business Forms panel.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "api-management-developer-portal",
+    "description": "Developer portal provided by the Azure API Management service.",
+    "purpose": "Customizable developer portal for APIs published through Azure API Management.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "real-time-intelligence-operations-solution-accelerator",
+    "description": "This solution accelerator provides the architecture and working solution for real-time intelligence for operations. Key features include real-time dashboard, anomaly detection, and fabric data agent.",
+    "purpose": "Real-time operations intelligence with dashboards and anomaly detection.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "business-links",
+    "description": "The Business Links panel for Grafana provides a streamlined interface to navigate effortlessly using external links, internal dashboards, and dynamic dropdown menus. Designed for seamless integration, it enables users to access critical resources, switch between dashboards, or interact with custom workflows efficiently.",
+    "purpose": "Navigate between dashboards and external links with dropdown menus in a Grafana panel.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:f03",
+  "request": "Split our request-rate series into trend plus daily and weekly seasonal parts so we can alert on the residual.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-mstl",
+    "description": "Multiple Seasonal-Trend decomposition with LOESS (MSTL) using the augurs time series library.",
+    "purpose": "Decompose time series into multiple seasonal and trend components using MSTL.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "augurs-seasons",
+    "description": "Seasonality detection using periodograms",
+    "purpose": "Detect seasonality in time series using periodograms.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "secret-creator-secrets-manager",
+    "description": "The purpose of this project is to enable the creation of multiple secrets in AWS Secrets Manager. It is a AWS Serverless Application Model (SAM) based app. The secrets creation process performs rate limiting to adhere to the published Secrets Manager Rate Quota for the CreateRequest request type.",
+    "purpose": "Bulk create secrets in AWS Secrets Manager with rate limiting.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "azure-boards-split",
+    "description": "Split a work item to track work that will continue into the next sprint.",
+    "purpose": "Split Azure Boards work items to carry work into the next sprint.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "augurs-core",
+    "description": "Core data structures and traits for the augurs time series library.",
+    "purpose": "Core data structures and traits for the augurs time series library.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:f04",
+  "request": "Show each team what its GCP and AWS usage costs per day, as metrics we can put on a dashboard.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "cloudcost-exporter",
+    "description": "Cloud Cost Exporter is a Prometheus exporter that collects cost and pricing data from cloud providers (AWS, GCP, Azure) in real-time.",
+    "purpose": "Prometheus exporter for cloud cost metrics across cloud providers.",
+    "evidence": [
+     "Asserted by its own tests: Node Store Populate Concurrency Limit.",
+     "Asserted by its own tests: parse Capacity Block Usage Type.",
+     "Asserted by its own tests: parse Capacity Block Costs nets Refunds.",
+     "Asserted by its own tests: cluster Name From Instance.",
+     "Asserted by its own tests: List Active Capacity Reservations.",
+     "Asserted by its own tests: Generate Capacity Block Pricing Map prices Per Reservation."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "vpc-flow-logs-analyzer",
+    "description": "Analyze AWS, GCP, and Azure VPC flow logs to understand network traffic patterns and data transfer costs",
+    "purpose": "Analyze AWS, GCP and Azure VPC flow logs to understand network traffic and data transfer costs.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "sample-cur-filtered-data-exports",
+    "description": "Deploy an AWS Cost and Usage Report (CUR 2.0) Data Export that filters billing data to a specific list of linked accounts at the source, driven by a CSV file and a single CloudFormation deploy.",
+    "purpose": "Export AWS cost and usage data filtered to specific linked accounts with CloudFormation.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "cloudwatch_exporter",
+    "description": "Metrics exporter for Amazon AWS CloudWatch",
+    "purpose": "Export AWS CloudWatch metrics for Prometheus.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "cloudopt",
+    "description": "Cloud Efficiency and Growth Shaping - A read-only CLI tool that collects Azure signals and metrics data and generates dashboard to support Cloud Efficiency and Growth Shaping optimizations.",
+    "purpose": "Collect Azure metrics and generate dashboards for cloud efficiency optimization.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g01",
+  "request": "Write a function that parses an ISO 8601 week date like 2026-W45-3 into a calendar date.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "libphonenumber",
+    "description": "Google's common Java, C++ and JavaScript library for parsing, formatting, and validating international phone numbers.",
+    "purpose": "Parse, format and validate international phone numbers in Java, C++ or JavaScript.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "amazon-route-53-resolver-dns-firewall-automation-examples",
+    "description": "Automated approaches involving an Amazon Route 53 Firewall Domain List, paired with an AWS Lambda function to parse an external source, and keep the Rule Group automatically up to date",
+    "purpose": "Automatically keep a Route 53 DNS Firewall domain list updated from an external source.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "cctz",
+    "description": "CCTZ is a C++ library for translating between absolute and civil times using the rules of a time zone.",
+    "purpose": "Convert between absolute and civil times using time zone rules in C++.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "azure-functions-connector-extension",
+    "description": "A webhook-style Azure Functions extension that exposes HTTP endpoints for receiving JSON/string payloads from external services like O365, SharePoint, Teams, etc.",
+    "purpose": "Azure Functions extension exposing webhook endpoints for external service payloads.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "cronexpr",
+    "description": "Cron expression parser in Go language (golang)",
+    "purpose": "Parse cron expressions in Go.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g02",
+  "request": "Add a helper that resizes an uploaded profile photo to 256 by 256 and crops it to a circle.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "automate-image-processing-with-amazon-bedrock",
+    "description": "Automate process to change image background using Amazon Bedrock and AWS Step Functions",
+    "purpose": "Automate changing image backgrounds using generative AI and Step Functions.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "sample-s3-semantic-search",
+    "description": "Serverless photo sharing app with AI-powered semantic search using Amazon S3 Vectors and Bedrock Nova Multimodal Embeddings. Built with .NET 10, presigned S3 uploads, and event-driven processing on AWS Lambda.",
+    "purpose": "Build a serverless photo sharing app with AI semantic search using S3 Vectors and multimodal embeddings in .NET.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "lambda-edge-resizing-images-custom-origin",
+    "description": "Sample code for resizing Images with Lambda@Edge using the Custom Origin. You can deploy using AWS CDK.",
+    "purpose": "Resize images on the fly at the CDN edge with a custom origin.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "windows-host-process-containers-base-image",
+    "description": "A lightweight base container image to be used with Windows host process containers",
+    "purpose": "Lightweight base image for Windows host process containers.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "amazon-sagemaker-workshop-for-huggingface",
+    "description": "Workshop for running HuggingFace Models on Amazon SageMaker.",
+    "purpose": "Workshop for running Hugging Face models on SageMaker.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g03",
+  "request": "Write a function that converts Roman numerals to integers and back.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "commons-numbers",
+    "description": "Apache Commons Numbers",
+    "purpose": "Use number types and numeric utilities in Java.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "step-functions-direct-integrations",
+    "description": "Architecture optimization with direct service integrations",
+    "purpose": "Optimize Step Functions architectures with direct service integrations.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "python-proto-converter",
+    "description": "The Python Proto Converter converts between protos in Python. Proto conversion is often needed when converting between Database Access Object (DAO) and API proto.",
+    "purpose": "Convert between protobuf messages in Python.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "sample-appsync-dotnet-lambda-resolvers",
+    "description": "This sample project demonstrates how to build a serverless GraphQL API using AWS AppSync with .NET Lambda functions as direct resolvers. The application is a simple Todo management system that showcases best practices for implementing AWS AppSync APIs with .NET Lambda functions.",
+    "purpose": "Build a serverless GraphQL API with AppSync and .NET Lambda resolvers.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "backtraces",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g04",
+  "request": "Add server-side validation that a UK postcode is well-formed.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "libaddressinput",
+    "description": "Google\u2019s postal address library, powering Android and Chromium",
+    "purpose": "Parse, validate and format postal addresses.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "aws-transfer-family-lake-formation-extracted-form-data-product",
+    "description": "In this builders\u2019 session, learn how AWS Transfer Family can automate the data processing pipeline for third-party data, validate the integrity of files transferred, apply PGP encryption and decryption and antimalware scans, and enrich and load the data into a secure data mesh integrated with AWS Lake Formation.",
+    "purpose": "Automate third-party file processing with Transfer Family, encryption, malware scans and Lake Formation.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "uk-official-three-tier-webapp",
+    "description": "Azure Blueprint Automation: Three Tier Web Applications for UK-OFFICIAL",
+    "purpose": "Deploy a three-tier web application for UK-OFFICIAL compliance on Azure.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "wopi-validator-core",
+    "description": "A tool to test and validate server-side WOPI implementations",
+    "purpose": "Test and validate a server-side WOPI protocol implementation.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "aws-cloudformation-validator",
+    "description": "this is source code of python script use for validation CF template => more in the blog https://aws.amazon.com/blogs/devops/validating-aws-cloudformation-templates...",
+    "purpose": "Validate AWS CloudFormation templates with a Python script.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g05",
+  "request": "Write a script that sends a birthday greeting email to every employee on their birthday.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "scripts",
+    "description": "",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: brackets and escaped quotes in string values do not affect root property matching.",
+     "Asserted by its own tests: cleanup refuses an unrelated directory even inside the run root."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "aws-iam-access-key-auto-rotation",
+    "description": "This set of CloudFormation templates and Python scripts will set up an auto-rotation function that will automatically rotate your AWS IAM User Access Keys every 90 days.",
+    "purpose": "Automatically rotate IAM user access keys every 90 days.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "james-project",
+    "description": "Emails at the heart of your business logic!",
+    "purpose": "Build email handling into business logic with a mail server project.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "amazon-ivs-auto-record-to-s3-web-demo",
+    "description": "This repository contains a basic livestream to video on-demand web application. The app is built on Amazon IVS and uses the Auto-record to S3 feature to automatically record streams. Recorded streams are played back using the Amazon IVS Player SDK.",
+    "purpose": "Build a livestream web app that auto-records streams to S3 for on-demand playback with Amazon IVS.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "omi-script-provider",
+    "description": "Script Provider for the OMI Project",
+    "purpose": "Write OMI providers using scripts.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g06",
+  "request": "Add a function that computes the great-circle distance between two latitude/longitude points.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "s2-geometry-library-java",
+    "description": "Automatically exported from code.google.com/p/s2-geometry-library-java",
+    "purpose": "Do spherical geometry computations in Java with the S2 library.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "distributed_point_functions",
+    "description": "An Implementation of Incremental Distributed Point Functions in C++",
+    "purpose": "C++ implementation of incremental distributed point functions for cryptographic protocols.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "country-tracker",
+    "description": "A collaborative travel tracker and interactive world map built with Next.js, TypeScript, and Mantine UI, featuring pluggable PocketBase and Firebase backends.",
+    "purpose": "Track travel collaboratively on an interactive world map with pluggable backends.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "azure-functions-openai-extension",
+    "description": "An extension that adds support for Azure OpenAI/ OpenAI bindings in Azure Functions for LLM (GPT-3.5-Turbo, GPT-4, etc)",
+    "purpose": "Add OpenAI and Azure OpenAI LLM bindings to Azure Functions.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "amazon-location-detected-addresses-to-map",
+    "description": "AWS CloudFormation template deploying a Step Functions that leverages Amazon Comprehend and Amazon Location Service. The Step Functions embeds the generated map in a HTML file which contains markers on the addresses that have been detected into the input text.",
+    "purpose": "Detect addresses in text and plot them as markers on a generated HTML map.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g07",
+  "request": "Write a helper that wraps long lines of text at 80 characters without breaking words.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "text-size",
+    "description": "Newtypes for text offsets",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "LID-tool",
+    "description": "This code provides word level language identification tool for identifying language for individual words in Code-Mixed text. e.g. The text that includes words from two languages such as Hindi written in roman script, mixed with English.",
+    "purpose": "Identify the language of each word in code-mixed text.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "LongRoPE",
+    "description": "LongRoPE is a novel method that can extends the context window of pre-trained LLMs to an impressive 2048k tokens.",
+    "purpose": "Extend LLM context windows to millions of tokens.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "aws-step-functions-long-lived-transactions",
+    "description": "Deal with the complexities of dealing with a long lived transaction across distributed components in your microservices architecture using AWS Step Functions.",
+    "purpose": "Handle long-lived distributed transactions across microservices with Step Functions.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "budoux-extension",
+    "description": "Chrome extension that applies phrase-based line breaking and visible phrase boundaries to the current page.",
+    "purpose": "Chrome extension for phrase-based line breaking on web pages.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g08",
+  "request": "Add a tiny feature that lets users switch the web app between light and dark themes.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "theme-quietlight",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "FeatureFlightingManagement",
+    "description": "Feature flighting in an Enterprise application allows you release your features in a controlled fashion using feature flags (aka feature toggles). The feature flighting service allows you to manage feature toggles/flags for your application. The service is built on top of Azure App Configuration and offers additional capabilities like Ring rollouts, customized operations, integration with Microsof",
+    "purpose": "Manage feature flags and ring rollouts for enterprise apps on top of Azure App Configuration.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "theme-solarized-dark",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "amazon-ivs-auto-record-to-s3-web-demo",
+    "description": "This repository contains a basic livestream to video on-demand web application. The app is built on Amazon IVS and uses the Auto-record to S3 feature to automatically record streams. Recorded streams are played back using the Amazon IVS Player SDK.",
+    "purpose": "Build a livestream web app that auto-records streams to S3 for on-demand playback with Amazon IVS.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "material-design-lite",
+    "description": "Material Design Components in HTML/CSS/JS",
+    "purpose": "Add Material Design UI components to web pages with HTML, CSS and JS.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p01",
+  "request": "Every backend team keeps rewriting ring membership, rate limiting and service lifecycle code. Is there a shared Go library for that?",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "go-gcp-common",
+    "description": "Common code shared by GCP-maintained plugins",
+    "purpose": "Share common Go code across Google Cloud plugins.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "AzureDevOpsDemoGenerator",
+    "description": "Azure DevOps Demo Generator helps teams create projects on their Team Services account with pre-populated sample content that includes source code, work items, iterations, service endpoints, build and release definitions based on a chosen template",
+    "purpose": "Create Azure DevOps projects pre-populated with sample code, work items and pipelines from templates.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "FeatureManagement-Go",
+    "description": "This library provides standardized APIs for enabling feature flags within Go applications. Utilize this library to secure a consistent experience when developing applications that use patterns such as beta access, rollout, dark deployments, and more.",
+    "purpose": "Feature flags for Go applications supporting rollouts and beta access.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "Omex",
+    "description": "Shared components used by the Omex team to build scalable and highly available distributed systems",
+    "purpose": "Shared components for building scalable, highly available distributed systems.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "common",
+    "description": "Go libraries shared across Prometheus components and libraries.",
+    "purpose": "Reuse shared Go libraries across Prometheus components.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p02",
+  "request": "Our browser-based checks need a sidecar that launches Chrome on request and kills hung instances.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "aws-lambda-sidecar-manager",
+    "description": "An AWS Lambda layer to run any sidecar process in the same sandbox as the handler function.",
+    "purpose": "Run a sidecar process alongside a Lambda handler with a Lambda layer.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "amazon-ecs-catsndogs-workshop",
+    "description": "This is self-paced workshop designed to allow developers and system administrators to get hands on with Amazon Elastic Container Service concepts such as service and container-instance auto-scaling, spot-fleet integration, container placement strategies, service discovery, secrets management with AWS Systems Manager Parameter Store, time-based and event-based scheduling, and automated deployment p",
+    "purpose": "Workshop on ECS autoscaling, spot, placement, service discovery and secrets.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "sample-code-server-on-aws",
+    "description": "Provide a CloudFormation template to setup a code server running on a EC2 instance and expose via a CloudFront distribution.",
+    "purpose": "CloudFormation template to run a browser-based code server on EC2 behind CloudFront.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "sample-knowledgeforge",
+    "description": "KnowledgeForge - AI-powered knowledge base lifecycle platform for IT Service Management. It mines resolved incident tickets into new Knowledge Base and Root Cause Analysis articles and curates existing ones by classifying, deduplicating, quality-scoring, and enriching them with an LLM before routing to Jira Service Management for review.",
+    "purpose": "Turn resolved IT incident tickets into knowledge base and RCA articles with an LLM.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "service-worker-detector",
+    "description": "This extension detects if a website registers a Service Worker.",
+    "purpose": "Browser extension that detects whether a website registers a service worker.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p03",
+  "request": "Detect whether a metric has a weekly cycle before we pick a forecasting model.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-seasons",
+    "description": "Seasonality detection using periodograms",
+    "purpose": "Detect seasonality in time series using periodograms.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "dstoolkit-time-series-forecasting",
+    "description": "A flexible, extensible framework for training and evaluating time-series forecasting models.",
+    "purpose": "Train and evaluate time-series forecasting models with an extensible framework.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "augurs-seasons-js",
+    "description": "JavaScript bindings for the augurs-seasons library.",
+    "purpose": "Use seasonality detection from augurs-seasons in JavaScript through bindings.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "robust-time-series-forecasting-with-mlops",
+    "description": "Robust Time Series Forecasting with MLOps on Amazon SageMaker",
+    "purpose": "Build robust time series forecasting with MLOps on SageMaker.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "subseasonal_toolkit",
+    "description": "Subseasonal forecasting models",
+    "purpose": "Forecast weather at subseasonal time scales.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p04",
+  "request": "Across a fleet of pods, tell me which pod's latency curve does not look like the others.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-outlier",
+    "description": "Outlier detection for time series.",
+    "purpose": "Detect outliers in time series data.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "client-go",
+    "description": "Go clients for talking to a kubernetes cluster.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Rate Limiting Queue.",
+     "Asserted by its own tests: Minify Missing Context.",
+     "Asserted by its own tests: With Max Wait Rate Limiter.",
+     "Asserted by its own tests: Max Of Rate Limiter.",
+     "Asserted by its own tests: Install Hint Rate Limit.",
+     "Asserted by its own tests: Minify Success."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "augurs",
+    "description": "A time-series toolkit for forecasting, outlier detection, clustering and more.",
+    "purpose": "Forecast time series, detect outliers, and cluster time-series data with a toolkit.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "std_detect",
+    "description": "`std::detect` - Rust's standard library run-time CPU feature detection.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "augurs-clustering-js",
+    "description": "JavaScript bindings for the augurs-clustering library.",
+    "purpose": "JavaScript bindings for the augurs time series clustering library.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p05",
+  "request": "Before merging, reject dashboard JSON that uses deprecated panels or hard-coded datasources.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "dashboard-linter",
+    "description": "This tool is a command-line application to lint Grafana dashboards for common mistakes, and suggest best practices.",
+    "purpose": "Lint Grafana dashboards.",
+    "evidence": [
+     "Asserted by its own tests: Element Reference Rule Sorts And Deduplicates Missing Elements.",
+     "Asserted by its own tests: V2 Required Fields Rule Missing Fields.",
+     "Asserted by its own tests: Element Reference Rule Reports Missing And Orphaned Together.",
+     "Asserted by its own tests: Element Reference Rule Reports Missing Elements.",
+     "Asserted by its own tests: Template On Time Range Reload Rule."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "azure-policy-linter",
+    "description": "Repository for the Azure Policy Linter tool that you can run against your authored policy definitions to check for rules and best practices.",
+    "purpose": "Lint Azure Policy definitions for rule violations and best practices.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "detect-angular-dashboards",
+    "description": "Detect dashboards depending on Angular data source and panel plugins on a running Grafana instance using the Grafana API.",
+    "purpose": "Find Grafana dashboards that depend on Angular data source and panel plugins using the Grafana API.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "ec2-flexibility-score-dashboard",
+    "description": "EC2 Flexibility Score assesses any configuration used to launch instances through an Auto Scaling Group (ASG) against the recommended EC2 best practices. It converts the best practice adoption into a \u201cflexibility score\u201d that can be used to identify, improve, and monitor the configurations.",
+    "purpose": "Score Auto Scaling group configurations against EC2 flexibility best practices with a dashboard.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "eslint-plugin-powerbi-visuals",
+    "description": "contains ESLINT rules for ensuring powerbi custom visuals quality",
+    "purpose": "ESLint rules for checking Power BI custom visual code quality.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p06",
+  "request": "Alert us when our GitHub App is close to exhausting its API quota.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "A Prometheus exporter which scrapes GitHub API for the rate limits used by PAT/GitHub App.",
+    "purpose": "Export GitHub API rate limit usage as Prometheus metrics, using App or PAT credentials.",
+    "evidence": [
+     "Asserted by its own tests: Get Remaining Limits.",
+     "Asserted by its own tests: New Limits Collector."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "This helm chart helps to install and configure github-rate-limits-prometheus-exporter",
+    "purpose": "Helm chart to install and configure a GitHub rate limits Prometheus exporter.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "github-exporter",
+    "description": ":octocat: Prometheus exporter for github metrics",
+    "purpose": "Export GitHub metrics to Prometheus.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "secret-creator-secrets-manager",
+    "description": "The purpose of this project is to enable the creation of multiple secrets in AWS Secrets Manager. It is a AWS Serverless Application Model (SAM) based app. The secrets creation process performs rate limiting to adhere to the published Secrets Manager Rate Quota for the CreateRequest request type.",
+    "purpose": "Bulk create secrets in AWS Secrets Manager with rate limiting.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "PR-Metrics",
+    "description": "A GitHub Action & Azure Pipelines task for augmenting pull request titles to let reviewers quickly determine PR size and test coverage.",
+    "purpose": "Annotate pull request titles with size and test coverage indicators in GitHub Actions or Azure Pipelines to help reviewers.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p07",
+  "request": "A UI where people click together an OpenTelemetry collector pipeline instead of writing YAML by hand.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "opentelemetry-collector",
+    "description": "OpenTelemetry Collector",
+    "purpose": "Collector for receiving, processing and exporting telemetry data; the text gives no detail.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "collector-configurator",
+    "description": "The Collector Configuration Generator is an easy to use web interface for creating and editing OpenTelemetry Collector configuration files.",
+    "purpose": "Generate OpenTelemetry collector configurations with a configurator tool.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "opentelemetry-go-build-tools",
+    "description": "Build tools for use by the Go API/SDK, the collector, and their associated contrib repositories",
+    "purpose": "Build tools for OpenTelemetry Go SDK, collector and contrib repositories.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "opentelemetry-collector-contrib",
+    "description": "Grafana's fork of Contrib repository for the OpenTelemetry Collector for dev purposes - ask @Elfo404 if you need anything",
+    "purpose": "Development fork of OpenTelemetry Collector contrib components.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "visualblocks",
+    "description": "Visual Blocks for ML is a Google visual programming framework that lets you create ML pipelines in a no-code graph editor. You \u2013 and your users \u2013 can quickly prototype workflows by connecting drag-and-drop ML components, including models, user inputs, processors, and visualizations.",
+    "purpose": "Build ML pipelines visually in a no-code graph editor.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p08",
+  "request": "We need the logic that evaluates alert rules and routes notifications to chat and paging tools; we do not want to write our own.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "alerting",
+    "description": "This library contains utilities that are useful for building Alerting systems.",
+    "purpose": "Build alerting systems, including an Alertmanager, using shared libraries.",
+    "evidence": [
+     "A test is disabled with the reason: does not support http_config",
+     "Asserted by its own tests: Send Webhook Response Drain Limit.",
+     "Asserted by its own tests: Debug Filtering Every Threshold.",
+     "Asserted by its own tests: Opt In Caller Grafana Alertmanager Style Minus Caller.",
+     "A test is disabled with the reason: does not yet support http client",
+     "Asserted by its own tests: Delimited Strings."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "service-screener-v2",
+    "description": "A tool for customers to evaluate their AWS service configurations based on AWS and community best practices and receive recommendations on potential improvements.",
+    "purpose": "Evaluate AWS service configurations against best practices and get improvement recommendations.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "alertmanager",
+    "description": "Prometheus Alertmanager",
+    "purpose": "Route and manage alerts from Prometheus.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "amazon-connect-chat-ui",
+    "description": "These tools will allow for the building of a fully customized and expandable customer experience for use with any Amazon Connect chat instance. All of the tools are built using Typescript, the client uses the AWS SDK for Javascript to connect to the instance, the component library builds upon Material UI components and uses React framework, and the sample widget is built using React. The component",
+    "purpose": "Build a customized chat UI for Amazon Connect with React components.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "historian",
+    "description": "",
+    "purpose": "Build alerting systems, including an Alertmanager, using shared libraries.",
+    "evidence": [
+     "A test is disabled with the reason: set HISTORIAN_LOKI_URL (e.g. http://localhost:3100) to run the notification RBAC integration test",
+     "Asserted by its own tests: Run Query Truncates Merged Entries To Limit.",
+     "Asserted by its own tests: Run Query Truncates Merged Entries To Limit.",
+     "A test is disabled with the reason: set HISTORIAN_LOKI_URL (e.g. http://localhost:3100) to run the notification RBAC integration test",
+     "Asserted by its own tests: Loki Reader Query Non Empty Filter Applies Matcher.",
+     "Asserted by its own tests: Loki Reader Query Empty Filter Returns Empty Without Querying."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:q01",
+  "request": "Write a function that checks whether a year is a leap year.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-seasons-js",
+    "description": "JavaScript bindings for the augurs-seasons library.",
+    "purpose": "Use seasonality detection from augurs-seasons in JavaScript through bindings.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "azure-policy-linter",
+    "description": "Repository for the Azure Policy Linter tool that you can run against your authored policy definitions to check for rules and best practices.",
+    "purpose": "Lint Azure Policy definitions for rule violations and best practices.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "swift-guide",
+    "description": "This guide contains best practices for writing Swift. Guidance here comes from a combination of our collective practical experiences and documentation from Apple. This is meant to be a living document and all contents are perpetually open for debate and improvement.",
+    "purpose": "Best-practice style guide for writing Swift.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "amazon-route-53-resolver-dns-firewall-automation-examples",
+    "description": "Automated approaches involving an Amazon Route 53 Firewall Domain List, paired with an AWS Lambda function to parse an external source, and keep the Rule Group automatically up to date",
+    "purpose": "Automatically keep a Route 53 DNS Firewall domain list updated from an external source.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "js-bexpr",
+    "description": "Generic boolean expression evaluation in JavaScript",
+    "purpose": "Evaluate generic boolean expressions in JavaScript.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:q02",
+  "request": "Add a helper that converts kilometres per hour to miles per hour.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "go-azure-helpers",
+    "description": "This repository contains various helpers and wrappers for working with Azure and the Azure SDK for Go.",
+    "purpose": "Work with Azure and the Azure SDK for Go using helper wrappers.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "excel-to-kusto-datatable",
+    "description": "Excel add-in that converts highlighted cells to Kusto datatable syntax",
+    "purpose": "Convert Excel cells into Kusto datatable syntax.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "This helm chart helps to install and configure github-rate-limits-prometheus-exporter",
+    "purpose": "Helm chart to install and configure a GitHub rate limits Prometheus exporter.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "python-proto-converter",
+    "description": "The Python Proto Converter converts between protos in Python. Proto conversion is often needed when converting between Database Access Object (DAO) and API proto.",
+    "purpose": "Convert between protobuf messages in Python.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "addons-transformer-for-amazon-eks",
+    "description": "Addons Transformer to transform ISV Softwares to EKS Marketplace",
+    "purpose": "Transform ISV software into EKS marketplace add-ons.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:q03",
+  "request": "Generate a QR code PNG for a given URL.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "generating-synthetic-datasets-for-evaluating-retrieval-augmented-generation-systems",
+    "description": "The repository guides you through generating a synthetic dataset for a QA-RAG application using the Bedrock API, Python and Langchain.",
+    "purpose": "Generate synthetic datasets for evaluating RAG question-answering systems.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "CodeMixed-Text-Generator",
+    "description": "This tool helps automatic generation of grammatically valid synthetic Code-mixed data by utilizing linguistic theories such as Equivalence Constant Theory and Matrix Language Theory.",
+    "purpose": "Generate synthetic code-mixed text data that is grammatically valid.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "sample-code-for-Q-business-custom-plugins",
+    "description": "Sample code to show off the art of the possible with Q Business custom plugins",
+    "purpose": "Sample custom plugins for Amazon Q Business.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "sample-cdk-rds-pg-memdb-text-to-sql",
+    "description": "In the below URL, we explore how to use Amazon RDS for PostgreSQL and Amazon Bedrock, along with Amazon MemoryDB with vector search to provide semantic caching, to build a generative AI text-to-SQL chatbot application using Retrieval Augmented Generation (RAG)",
+    "purpose": "Build a text-to-SQL RAG chatbot with semantic caching using PostgreSQL, Bedrock, and MemoryDB vector search.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "xmlgraphics-fop-pdf-images",
+    "description": "Apache XML Graphics FOP PDF Images",
+    "purpose": "Embed PDF images into documents generated with FOP.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:q04",
+  "request": "Write a function that calculates compound interest for a savings plan.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "sample-synthetic-tokenized-fund",
+    "description": "AWS sample for synthetic tokenized funds using Chainlink CRE, Solidity, USDC collateral, and real-time market data to create synthetic on-chain S&P 500 exposure.",
+    "purpose": "Create synthetic tokenized funds with on-chain S&P 500 exposure using Chainlink and Solidity.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "sample-tool-based-agents-functions",
+    "description": "Agents that invoke external functions to act beyond pure reasoning: calculations, real-time data, database queries, and external systems.",
+    "purpose": "AI agents that call external functions for calculations, real-time data and database queries.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "advanced-formula-environment",
+    "description": "Create, edit, and reuse formulas in Excel",
+    "purpose": "Create, edit, and reuse formulas in Excel.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "amazon-transcribe-comprehend-podcast",
+    "description": "A demo application that transcribes and indexes podcast episodes so the listeners can explore and discover episodes of interest and podcast owners can do analytics on the content over time. This solution leverages Amazon Transcribe, Amazon Comprehend, Amazon ElasticSearch AWS Step Functions and AWS Lambda.",
+    "purpose": "Transcribe and index podcasts for search and content analytics.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "range-iteration",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:q05",
+  "request": "Add a profanity filter for user-submitted comments.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "analyzing-reddit-sentiment-with-aws",
+    "description": "Learn how to use Kinesis Firehose, AWS Glue, S3, and Amazon Athena by streaming and analyzing reddit comments in realtime. 100-200 level tutorial.",
+    "purpose": "Tutorial for streaming and analyzing Reddit comments with Firehose, Glue and Athena.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "Setup-Amazon-Bedrock-Agent-for-Text2SQL-Using-Amazon-Redshift-Serverless-with-Streamlit",
+    "description": "This project integrates AWS services to create a natural language interface for querying Amazon Redshift Serverless databases. It utilizes Amazon Bedrock for AI-powered text-to-SQL conversion, AWS Lambda for database operations, and a Streamlit frontend for user interaction. The system is deployed using AWS CloudFormation.",
+    "purpose": "Query Redshift Serverless in natural language with a text-to-SQL agent and Streamlit UI.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "json5format",
+    "description": "JSON5 (a.k.a., \"JSON for Humans\") formatter that preserves contextual comments",
+    "purpose": "Format JSON5 files while preserving comments.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "sample-language-detection-for-amazon-connect",
+    "description": "Implementation sample that enables automatic spoken language detection (English / Spanish) for inbound calls on Amazon Connect \u2014 without requiring callers to navigate an IVR menu.",
+    "purpose": "Automatically detect a caller's spoken language for inbound Amazon Connect calls without an IVR menu.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "PowerBI-visuals-TextFilter",
+    "description": "Text Filter PowerBI Visualization",
+    "purpose": "Power BI visual for filtering reports by text input.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:q06",
+  "request": "Parse two semantic version strings and tell which one is newer.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "go-version",
+    "description": "A Go (golang) library for parsing and verifying versions and version constraints.",
+    "purpose": "Parse and verify versions and version constraints in Go.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "sample-laya-system-one-ecs-gpu",
+    "description": "Deploy a System One Model (Laya) on GPU with Amazon ECS Managed Instances in an internet-free VPC, with a Streamlit playground that compares Laya with Amazon Nova on Amazon Bedrock. Sample code for the tutorial \"Deploy your first System One Model on AWS with Laya\".",
+    "purpose": "Deploy a model on GPU with ECS Managed Instances in a private VPC and compare it in a Streamlit playground.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "actions-validate-product-version",
+    "description": "GitHub Action to validate a product version string",
+    "purpose": "Validate a product version string in a GitHub Actions workflow.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "sample-bedrock-knowledge-base-drift-detection",
+    "description": "Detect semantic drift in Amazon Bedrock Knowledge Base RAG pipelines \u2014 monitor embedding freshness, source document changes, and retrieval quality   degradation over time.",
+    "purpose": "Detect semantic drift and retrieval quality degradation in RAG knowledge bases.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "semantic-link-functions",
+    "description": "Semantic Functions for Semantic Link",
+    "purpose": "Semantic functions for Semantic Link.",
+    "evidence": []
+   }
+  ]
+ }
+]

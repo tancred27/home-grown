@@ -1,0 +1,2851 @@
+[
+ {
+  "tid": "tasks:d01",
+  "request": "Our API metrics are exploding because every request path contains user and order ids. Add a function to metrics.py that turns a path like /users/123/orders/456 into a route template before we use it as a label.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "clusterurl",
+    "description": "The goal of this package is to provide a simple way to process and cluster a URL to extract a generic page route from it. These generic routes can then be used to aggregate data from multiple URLs under a single route.",
+    "purpose": "Go package that clusters URLs to extract generic page route patterns.",
+    "evidence": [
+     "Asserted by its own tests: Path Trie Soft Threshold.",
+     "Asserted by its own tests: Path Trie Depth Based Thresholds.",
+     "Asserted by its own tests: Path Trie No Limit With Minus One.",
+     "Asserted by its own tests: Path Trie Max Patterns Enforce Limit.",
+     "Asserted by its own tests: Path Trie Max Patterns Deepest Collapsed First.",
+     "Asserted by its own tests: Path Trie Max Patterns No Candidates."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "catalog-otel-metrics",
+    "description": "Catalog service that pushes metrics via the OpenTelemetry SDK over OTLP/HTTP",
+    "purpose": "See an example catalog service that pushes OpenTelemetry metrics over OTLP/HTTP.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "apiserver",
+    "description": "Generic library for building a Kubernetes aggregated API server.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Input Stream Internal Server Error Transport.",
+     "Asserted by its own tests: Generic Http Response Checker Limit Reader.",
+     "Asserted by its own tests: KMSMax Timeout.",
+     "Asserted by its own tests: With Watch Termination During Shutdown.",
+     "Asserted by its own tests: Rule For Min Size.",
+     "Asserted by its own tests: Server Run Options With Shutdown Watch Termination Grace Period."
+    ]
+   },
+   {
+    "letter": "D",
+    "name": "docker",
+    "description": "",
+    "purpose": "Template repository for auto-applying Adaptive Metrics recommendations.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "kube-controller-manager",
+    "description": "This library contains code to expose kube-controller-manager API.",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d02",
+  "request": "Finance wants our AWS and GCP spend as Prometheus metrics. Write a small exporter that pulls cost and pricing data from both providers and serves it on /metrics.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "cloudcost-exporter",
+    "description": "Cloud Cost Exporter is a Prometheus exporter that collects cost and pricing data from cloud providers (AWS, GCP, Azure) in real-time.",
+    "purpose": "Prometheus exporter for cloud cost metrics across cloud providers.",
+    "evidence": [
+     "Asserted by its own tests: Node Store Populate Concurrency Limit.",
+     "Asserted by its own tests: parse Capacity Block Usage Type.",
+     "Asserted by its own tests: parse Capacity Block Costs nets Refunds.",
+     "Asserted by its own tests: cluster Name From Instance.",
+     "Asserted by its own tests: List Active Capacity Reservations.",
+     "Asserted by its own tests: Generate Capacity Block Pricing Map prices Per Reservation."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "A Prometheus exporter which scrapes GitHub API for the rate limits used by PAT/GitHub App.",
+    "purpose": "Export GitHub API rate limit usage as Prometheus metrics, using App or PAT credentials.",
+    "evidence": [
+     "Asserted by its own tests: Get Remaining Limits.",
+     "Asserted by its own tests: New Limits Collector."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "celery-exporter",
+    "description": "Prometheus metrics exporter for Celery 5",
+    "purpose": "Export Celery 5 task queue metrics to Prometheus.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "Creating a New Module",
+    "description": "This document outlines the process for creating a new module for the Cloud Cost Exporter.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "This helm chart helps to install and configure github-rate-limits-prometheus-exporter",
+    "purpose": "Helm chart to install and configure a GitHub rate limits Prometheus exporter.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d03",
+  "request": "Add Prometheus metrics for our Celery workers: queue length plus task success and failure counts, exposed for scraping.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "celery-exporter",
+    "description": "Prometheus metrics exporter for Celery 5",
+    "purpose": "Export Celery 5 task queue metrics to Prometheus.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "A Prometheus exporter which scrapes GitHub API for the rate limits used by PAT/GitHub App.",
+    "purpose": "Export GitHub API rate limit usage as Prometheus metrics, using App or PAT credentials.",
+    "evidence": [
+     "Asserted by its own tests: Get Remaining Limits.",
+     "Asserted by its own tests: New Limits Collector."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "catalog-prom-client",
+    "description": "Catalog service that exposes /metrics via the native Prometheus client for Alloy to scrape",
+    "purpose": "Sample catalog service exposing Prometheus /metrics for Alloy to scrape.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "This helm chart helps to install and configure github-rate-limits-prometheus-exporter",
+    "purpose": "Helm chart to install and configure a GitHub rate limits Prometheus exporter.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "cloudcost-exporter",
+    "description": "Cloud Cost Exporter is a Prometheus exporter that collects cost and pricing data from cloud providers (AWS, GCP, Azure) in real-time.",
+    "purpose": "Prometheus exporter for cloud cost metrics across cloud providers.",
+    "evidence": [
+     "Asserted by its own tests: Node Store Populate Concurrency Limit.",
+     "Asserted by its own tests: parse Capacity Block Usage Type.",
+     "Asserted by its own tests: parse Capacity Block Costs nets Refunds.",
+     "Asserted by its own tests: cluster Name From Instance.",
+     "Asserted by its own tests: List Active Capacity Reservations.",
+     "Asserted by its own tests: Generate Capacity Block Pricing Map prices Per Reservation."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d04",
+  "request": "Our CI bots keep hitting GitHub API limits. Write a script that polls the rate-limit endpoint for our GitHub App and exposes the remaining calls as a metric so we can alert.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "A Prometheus exporter which scrapes GitHub API for the rate limits used by PAT/GitHub App.",
+    "purpose": "Export GitHub API rate limit usage as Prometheus metrics, using App or PAT credentials.",
+    "evidence": [
+     "Asserted by its own tests: Get Remaining Limits.",
+     "Asserted by its own tests: New Limits Collector."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "This helm chart helps to install and configure github-rate-limits-prometheus-exporter",
+    "purpose": "Helm chart to install and configure a GitHub rate limits Prometheus exporter.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "citool",
+    "description": "This is a simple Rust script that determines which jobs should be executed on CI based on the situation (pull request, try job, merge attempt). It also provides a simple way of executing (some) CI jobs locally.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "kube-controller-manager",
+    "description": "This library contains code to expose kube-controller-manager API.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "github-authentication",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d05",
+  "request": "Add a CI step that checks our exported dashboard JSON files for common mistakes and fails the build if it finds any.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "dashboard-linter",
+    "description": "This tool is a command-line application to lint Grafana dashboards for common mistakes, and suggest best practices.",
+    "purpose": "Lint Grafana dashboards.",
+    "evidence": [
+     "Asserted by its own tests: Element Reference Rule Sorts And Deduplicates Missing Elements.",
+     "Asserted by its own tests: V2 Required Fields Rule Missing Fields.",
+     "Asserted by its own tests: Element Reference Rule Reports Missing And Orphaned Together.",
+     "Asserted by its own tests: Element Reference Rule Reports Missing Elements.",
+     "Asserted by its own tests: Template On Time Range Reload Rule."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "ci-integration",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "pod-security-admission",
+    "description": "The Pod Security Standards are a set of best-practice profiles for running pods securely.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Capabilities Baseline.",
+     "Asserted by its own tests: Capabilities Restricted 1 25.",
+     "Asserted by its own tests: Capabilities Restricted 1 22.",
+     "Asserted by its own tests: Check Registry Empty.",
+     "Asserted by its own tests: Check App Armor Forbidden.",
+     "Asserted by its own tests: Load From File."
+    ]
+   },
+   {
+    "letter": "D",
+    "name": "tidy",
+    "description": "Tidy is the Rust project's custom internal linter and a crucial part of our testing and continuous integration (CI) infrastructure. It is designed to enforce a consistent style and formatting across the entire codebase, but its role extends beyond simple linting. Tidy also helps with infrastructure, policy, and documentation, ensuring the project remains organized, functional, and... tidy.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "opt-dist",
+    "description": "This binary implements a heavily optimized build pipeline for rustc and LLVM artifacts that are used for both for",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d06",
+  "request": "Our synthetic monitoring leaks Chromium processes. Write a supervisor that starts headless Chromium on demand and reaps the ones that die.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "crocochrome",
+    "description": "Crocochrome is a chromium supervisor, which runs and reaps chromium processes on demand.",
+    "purpose": "Supervise Chromium browser processes.",
+    "evidence": [
+     "A test is disabled with the reason: Skipping integration test due to -short",
+     "Asserted by its own tests: Check Capabilities.",
+     "A test is disabled with the reason: skipping long tests",
+     "Asserted by its own tests: Integration Missing Capabilities.",
+     "Asserted by its own tests: Chromium Process Type missing Cmdline."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "citool",
+    "description": "This is a simple Rust script that determines which jobs should be executed on CI based on the situation (pull request, try job, merge attempt). It also provides a simple way of executing (some) CI jobs locally.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "Query and troubleshoot local telemetry with gcx",
+    "description": "Use gcx from your host to query telemetry in a local LGTM instance, then use one",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "panic-handler",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "controller-manager",
+    "description": "This library contains common code for controller managers. Principally its for",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Dynamic Derived Builders Concurrent Config.",
+     "Asserted by its own tests: Concurrent Checks."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d07",
+  "request": "Add request middleware that validates incoming access tokens and checks the caller is allowed to perform the action before the handler runs.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "authlib",
+    "description": "The Authlib library provides a modular and secure approach to handling authentication and authorization within the Grafana ecosystem. It's designed to be flexible and easily adaptable to different deployment scenarios.",
+    "purpose": "Common utilities for Grafana authentication and authorization.",
+    "evidence": [
+     "Asserted by its own tests: Filter Authorized Early Termination.",
+     "Asserted by its own tests: Client Get User Permissions Accepts Empty Stream.",
+     "Asserted by its own tests: Filter Authorized Missing Auth Info.",
+     "Asserted by its own tests: Filter Authorized Empty Input.",
+     "Asserted by its own tests: Filter Authorized All Denied.",
+     "Asserted by its own tests: Client Invalidate User Permissions Evicts Cached Snapshot."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "How it works for Grafana Plugins",
+    "description": "This library empowers your Grafana plugins with straightforward access control mechanisms using the `EnforcementClient`. This client simplifies the enforcement of Grafana's Role-Based Access Control (RBAC) within your plugin.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "apiextensions-apiserver",
+    "description": "Implements: https://github.com/kubernetes/design-proposals-archive/blob/main/api-machinery/thirdpartyresources.md",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Estimate Max Length JSON.",
+     "Asserted by its own tests: CELValidation Limit.",
+     "Asserted by its own tests: CELMax Recursion Depth.",
+     "Asserted by its own tests: Prune Non Nullable Nulls Without Defaults.",
+     "Asserted by its own tests: Scale Update Without Resource Version With Conflicts.",
+     "Asserted by its own tests: Optional Old Self Check For Null."
+    ]
+   },
+   {
+    "letter": "D",
+    "name": "citool",
+    "description": "This is a simple Rust script that determines which jobs should be executed on CI based on the situation (pull request, try job, merge attempt). It also provides a simple way of executing (some) CI jobs locally.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "apiserver",
+    "description": "Generic library for building a Kubernetes aggregated API server.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Input Stream Internal Server Error Transport.",
+     "Asserted by its own tests: Generic Http Response Checker Limit Reader.",
+     "Asserted by its own tests: KMSMax Timeout.",
+     "Asserted by its own tests: With Watch Termination During Shutdown.",
+     "Asserted by its own tests: Rule For Min Size.",
+     "Asserted by its own tests: Server Run Options With Shutdown Watch Termination Grace Period."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d08",
+  "request": "Write a function that takes CPU usage series for all our hosts and flags the hosts whose series looks different from the rest.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-outlier",
+    "description": "Outlier detection for time series.",
+    "purpose": "Detect outliers in time series data.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "std_detect",
+    "description": "`std::detect` - Rust's standard library run-time CPU feature detection.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "augurs-outlier-js",
+    "description": "JavaScript bindings for the augurs-outlier library.",
+    "purpose": "Detect outliers in time-series data from JavaScript via augurs-outlier bindings.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "augurs",
+    "description": "A time-series toolkit for forecasting, outlier detection, clustering and more.",
+    "purpose": "Forecast time series, detect outliers, and cluster time-series data with a toolkit.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "augurs-clustering-js",
+    "description": "JavaScript bindings for the augurs-clustering library.",
+    "purpose": "JavaScript bindings for the augurs time series clustering library.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d09",
+  "request": "Our worker processes need to discover each other and split the work between them with consistent hashing. Implement the membership and hashing piece.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "rustc-std-workspace-alloc",
+    "description": "crate for integration of crates.io crates into rust-lang/rust standard library workspace\n",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "clusterurl",
+    "description": "The goal of this package is to provide a simple way to process and cluster a URL to extract a generic page route from it. These generic routes can then be used to aggregate data from multiple URLs under a single route.",
+    "purpose": "Go package that clusters URLs to extract generic page route patterns.",
+    "evidence": [
+     "Asserted by its own tests: Path Trie Soft Threshold.",
+     "Asserted by its own tests: Path Trie Depth Based Thresholds.",
+     "Asserted by its own tests: Path Trie No Limit With Minus One.",
+     "Asserted by its own tests: Path Trie Max Patterns Enforce Limit.",
+     "Asserted by its own tests: Path Trie Max Patterns Deepest Collapsed First.",
+     "Asserted by its own tests: Path Trie Max Patterns No Candidates."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "rustc-std-workspace-core",
+    "description": "crate for integration of crates.io crates into rust-lang/rust standard library workspace\n",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "shim_utils",
+    "description": "shimutils is a small library crate containing shared code that is used by",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "rustc-std-workspace-std",
+    "description": "crate for integration of crates.io crates into rust-lang/rust standard library workspace\n",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d10",
+  "request": "Write a relay that accepts Graphite plaintext metrics, aggregates them, and forwards them to our storage cluster.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "carbon-relay-ng",
+    "description": "Like carbon-relay from the graphite project, except it:",
+    "purpose": "Relay and aggregate carbon metrics quickly, with admin interfaces for live configuration changes.",
+    "evidence": [
+     "Asserted by its own tests: Invalid Regex.",
+     "Asserted by its own tests: Invalid Not Regex."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "clusterurl",
+    "description": "The goal of this package is to provide a simple way to process and cluster a URL to extract a generic page route from it. These generic routes can then be used to aggregate data from multiple URLs under a single route.",
+    "purpose": "Go package that clusters URLs to extract generic page route patterns.",
+    "evidence": [
+     "Asserted by its own tests: Path Trie Soft Threshold.",
+     "Asserted by its own tests: Path Trie Depth Based Thresholds.",
+     "Asserted by its own tests: Path Trie No Limit With Minus One.",
+     "Asserted by its own tests: Path Trie Max Patterns Enforce Limit.",
+     "Asserted by its own tests: Path Trie Max Patterns Deepest Collapsed First.",
+     "Asserted by its own tests: Path Trie Max Patterns No Candidates."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "cluster-bootstrap",
+    "description": "Set of constants and helpers in support of",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "cloud-setup",
+    "description": "Grafana Cloud's interactive setup wizard, powered by Grafana Assistant.",
+    "purpose": "Set up Grafana Cloud interactively with an AI assistant-powered wizard.",
+    "evidence": [
+     "Asserted by its own tests: run Task does not retry a deliberate terminal state.",
+     "Asserted by its own tests: commands without URL flags reach the interactive-terminal gate.",
+     "Asserted by its own tests: partial wiring and a failed package install both remain in the recovery details.",
+     "Asserted by its own tests: any non-empty NO COLOR value opts out, per the spec.",
+     "Asserted by its own tests: list dir returns a non-empty placeholder for an empty directory.",
+     "Asserted by its own tests: an existing browser check missing the v2 channel is updated, not a noop."
+    ]
+   },
+   {
+    "letter": "E",
+    "name": "grafana-pyroscope-datasource",
+    "description": "Data source for Grafana Pyroscope, horizontally-scalable, highly-available, multi-tenant continuous profiling aggregation system.",
+    "purpose": "Grafana data source for querying continuous profiling data from Pyroscope.",
+    "evidence": [
+     "Asserted by its own tests: escapes backslashes in label name on empty input.",
+     "Asserted by its own tests: escapes double quotes in label names.",
+     "Asserted by its own tests: parses label name with escaped double quote.",
+     "Asserted by its own tests: escapes double quotes in label name inside braces.",
+     "Asserted by its own tests: escapes double quotes in label name on empty input.",
+     "Asserted by its own tests: parses label name with escaped backslash."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d11",
+  "request": "Write a script that generates a few hundred random alert rules so we can load-test the alerting service.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "alerting-gen",
+    "description": "A tiny CLI to generate random Grafana Alerting rules and Recording rules using:",
+    "purpose": "Generate random Grafana alerting and recording rules from a small CLI.",
+    "evidence": [
+     "Asserted by its own tests: Generate Rules Determinism With Seed.",
+     "Asserted by its own tests: Generate Rules Determinism With Seed.",
+     "Asserted by its own tests: Group Rules Groups Per Folder Greater Than One.",
+     "Asserted by its own tests: Group Rules Defaults When Zero Or Empty.",
+     "Asserted by its own tests: Group Rules Defaults When Zero Or Empty.",
+     "Asserted by its own tests: Group Rules Non Even Partition."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "alerting",
+    "description": "This library contains utilities that are useful for building Alerting systems.",
+    "purpose": "Build alerting systems, including an Alertmanager, using shared libraries.",
+    "evidence": [
+     "A test is disabled with the reason: does not support http_config",
+     "Asserted by its own tests: Send Webhook Response Drain Limit.",
+     "Asserted by its own tests: Debug Filtering Every Threshold.",
+     "Asserted by its own tests: Opt In Caller Grafana Alertmanager Style Minus Caller.",
+     "A test is disabled with the reason: does not yet support http client",
+     "Asserted by its own tests: Delimited Strings."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "miropt-test-tools",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "scripts",
+    "description": "",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: brackets and escaped quotes in string values do not affect root property matching.",
+     "Asserted by its own tests: cleanup refuses an unrelated directory even inside the run root."
+    ]
+   },
+   {
+    "letter": "E",
+    "name": "intrinsic-test",
+    "description": "Generate and run programs using equivalent C and Rust intrinsics, checking that",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:d12",
+  "request": "Add a helper that works out the dominant period of a metric automatically, so we can set the forecasting window.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-seasons",
+    "description": "Seasonality detection using periodograms",
+    "purpose": "Detect seasonality in time series using periodograms.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "augurs",
+    "description": "A time-series toolkit for forecasting, outlier detection, clustering and more.",
+    "purpose": "Forecast time series, detect outliers, and cluster time-series data with a toolkit.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "augurs-seasons-js",
+    "description": "JavaScript bindings for the augurs-seasons library.",
+    "purpose": "Use seasonality detection from augurs-seasons in JavaScript through bindings.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "augurs-mstl",
+    "description": "Multiple Seasonal-Trend decomposition with LOESS (MSTL) using the augurs time series library.",
+    "purpose": "Decompose time series into multiple seasonal and trend components using MSTL.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "augurs",
+    "description": "Python bindings for the augurs time series library.",
+    "purpose": "Python bindings for the augurs time series library.",
+    "evidence": [
+     "Asserted by its own tests: different min cluster sizes.",
+     "Asserted by its own tests: with threshold.",
+     "Asserted by its own tests: with min period.",
+     "Asserted by its own tests: with max period.",
+     "Asserted by its own tests: with min and max period.",
+     "Asserted by its own tests: with threshold."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks:c01",
+  "request": "Add a function that converts a temperature from Celsius to Fahrenheit, rounded to one decimal place.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "test-float-parse",
+    "description": "These are tests designed to test decimal to float conversions (dec2flt) used",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "Introduction to the Grafana data structure",
+    "description": "Grafana supports a variety of different data sources, each with its own data model. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a **data frame**. The **data plane** adds a property layer to the data frame with i",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "augurs-seasons-js",
+    "description": "JavaScript bindings for the augurs-seasons library.",
+    "purpose": "Use seasonality detection from augurs-seasons in JavaScript through bindings.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "Data frames",
+    "description": "A data frame is a collection of fields, where each field corresponds to a column. Each field, in turn, consists of a collection of values and metadata, such as the data type of those values.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "std_float",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:c02",
+  "request": "Write a function that validates the format of an email address for our signup form.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "html-checker",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "tidy",
+    "description": "Tidy is the Rust project's custom internal linter and a crucial part of our testing and continuous integration (CI) infrastructure. It is designed to enforce a consistent style and formatting across the entire codebase, but its role extends beyond simple linting. Tidy also helps with infrastructure, policy, and documentation, ensuring the project remains organized, functional, and... tidy.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "javascript",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "Context parameters",
+    "description": "description: Learn how to use context parameters to access panel data, form elements, Grafana services, and other functionality in custom code.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "business-forms",
+    "description": "Insert, update application data, and modify configuration",
+    "purpose": "Forms for inserting and updating application data and modifying configuration.",
+    "evidence": [
+     "Asserted by its own tests: Should update slider value when min and max are not set.",
+     "Asserted by its own tests: Should update date min.",
+     "Asserted by its own tests: Should make initial datasource request for streaming data state.",
+     "Asserted by its own tests: Should normalize is Escaping for code and textarea elements.",
+     "Asserted by its own tests: Should update date max.",
+     "Asserted by its own tests: Should show mini map if value more than 100 symbols."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks:c03",
+  "request": "Add a helper that formats a duration in seconds as a human string such as 1h 3m 5s.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "javascript",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "component-helpers",
+    "description": "This repository provides helpers primarily for core components (core components as described in Create a k8s.io/component-base repo) which are required by at least two separate binaries in kubernetes org.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Pod Requests And Limits.",
+     "Asserted by its own tests: Pod Requests And Limits Without Overhead.",
+     "Asserted by its own tests: Pod Resource Limits.",
+     "Asserted by its own tests: Is Pod Level Limits Set.",
+     "Asserted by its own tests: Pod Requests And Limits With DRA.",
+     "Asserted by its own tests: Aggregate Container Requests And Limits."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "markdown-math",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "smol_str",
+    "description": "small-string optimized string type with O(1) clone",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "prompt",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks:c04",
+  "request": "Write a function that splits a full name into first and last name, handling middle names.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "clusterurl",
+    "description": "The goal of this package is to provide a simple way to process and cluster a URL to extract a generic page route from it. These generic routes can then be used to aggregate data from multiple URLs under a single route.",
+    "purpose": "Go package that clusters URLs to extract generic page route patterns.",
+    "evidence": [
+     "Asserted by its own tests: Path Trie Soft Threshold.",
+     "Asserted by its own tests: Path Trie Depth Based Thresholds.",
+     "Asserted by its own tests: Path Trie No Limit With Minus One.",
+     "Asserted by its own tests: Path Trie Max Patterns Enforce Limit.",
+     "Asserted by its own tests: Path Trie Max Patterns Deepest Collapsed First.",
+     "Asserted by its own tests: Path Trie Max Patterns No Candidates."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "tidy",
+    "description": "Tidy is the Rust project's custom internal linter and a crucial part of our testing and continuous integration (CI) infrastructure. It is designed to enforce a consistent style and formatting across the entire codebase, but its role extends beyond simple linting. Tidy also helps with infrastructure, policy, and documentation, ensuring the project remains organized, functional, and... tidy.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "slice-chunked",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "test-float-parse",
+    "description": "These are tests designed to test decimal to float conversions (dec2flt) used",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "smol_str",
+    "description": "small-string optimized string type with O(1) clone",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:h01",
+  "request": "Every one of our plugins reimplements AWS session setup. Write a shared module that handles credentials, assume-role and region configuration for all of them.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "grafana-aws-sdk",
+    "description": "This is a common package that can be used for all amazon plugins.",
+    "purpose": "Common AWS configuration code for Grafana plugins.",
+    "evidence": [
+     "Asserted by its own tests: Get AWSConfig Grafana Assume Role Uses Shared Credentials When Files Are Missing.",
+     "Asserted by its own tests: Get AWSConfig Unknown Or Missing.",
+     "Asserted by its own tests: Signer Round Tripper invalid Sig V4 JSONIs Downstream.",
+     "Asserted by its own tests: Get AWSConfig Auth Type Not Allowed.",
+     "Asserted by its own tests: Grafana Assume Role Provider Rejects Empty Credential File.",
+     "Asserted by its own tests: Query Data Malformed JSON Falls Back To Sync."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "cloudcost-exporter",
+    "description": "Cloud Cost Exporter is a Prometheus exporter that collects cost and pricing data from cloud providers (AWS, GCP, Azure) in real-time.",
+    "purpose": "Prometheus exporter for cloud cost metrics across cloud providers.",
+    "evidence": [
+     "Asserted by its own tests: Node Store Populate Concurrency Limit.",
+     "Asserted by its own tests: parse Capacity Block Usage Type.",
+     "Asserted by its own tests: parse Capacity Block Costs nets Refunds.",
+     "Asserted by its own tests: cluster Name From Instance.",
+     "Asserted by its own tests: List Active Capacity Reservations.",
+     "Asserted by its own tests: Generate Capacity Block Pricing Map prices Per Reservation."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "cloud-setup",
+    "description": "Grafana Cloud's interactive setup wizard, powered by Grafana Assistant.",
+    "purpose": "Set up Grafana Cloud interactively with an AI assistant-powered wizard.",
+    "evidence": [
+     "Asserted by its own tests: run Task does not retry a deliberate terminal state.",
+     "Asserted by its own tests: commands without URL flags reach the interactive-terminal gate.",
+     "Asserted by its own tests: partial wiring and a failed package install both remain in the recovery details.",
+     "Asserted by its own tests: any non-empty NO COLOR value opts out, per the spec.",
+     "Asserted by its own tests: list dir returns a non-empty placeholder for an empty directory.",
+     "Asserted by its own tests: an existing browser check missing the v2 channel is updated, not a noop."
+    ]
+   },
+   {
+    "letter": "D",
+    "name": "tidy",
+    "description": "Tidy is the Rust project's custom internal linter and a crucial part of our testing and continuous integration (CI) infrastructure. It is designed to enforce a consistent style and formatting across the entire codebase, but its role extends beyond simple linting. Tidy also helps with infrastructure, policy, and documentation, ensuring the project remains organized, functional, and... tidy.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "cloud-provider",
+    "description": "This repository defines the cloud-provider interface and mechanism to initialize",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Get Load Balancer Source Ranges.",
+     "Asserted by its own tests: Load Balancer Status Equal.",
+     "Asserted by its own tests: Sync Load Balancer If Needed.",
+     "Asserted by its own tests: Update Nodes In External Load Balancer.",
+     "Asserted by its own tests: Node Changes In External Load Balancer.",
+     "Asserted by its own tests: Slow Node Sync."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:h02",
+  "request": "Generate the configuration file for our pull-request review bot from CODEOWNERS, so each directory requires approval from its owners.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "generate-policy-bot-config",
+    "description": "This script generates the [Policy Bot][policy-bot] configuration file.",
+    "purpose": "Generate policy-bot configuration files to enforce that conditional workflows passed.",
+    "evidence": [
+     "Asserted by its own tests: Renaming Writer Mem FS.",
+     "Asserted by its own tests: Renaming Writer Abort.",
+     "Asserted by its own tests: Renaming Writer Abort Ignores Close Error.",
+     "Asserted by its own tests: Renaming Writer File.",
+     "Asserted by its own tests: Renaming Writer Multiple Calls.",
+     "Asserted by its own tests: Merge Configs Preserves Explicitly Empty Values."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "collect-license-metadata",
+    "description": "Runs the reuse tool and caches the output, so rust toolchain devs don't need to have reuse installed",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "collector-configurator",
+    "description": "The Collector Configuration Generator is an easy to use web interface for creating and editing OpenTelemetry Collector configuration files.",
+    "purpose": "Generate OpenTelemetry collector configurations with a configurator tool.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "generate-copyright",
+    "description": "Produces a manifest of all the copyrighted materials in the Rust Toolchain",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "crossplane-provider-grafana",
+    "description": "provider-grafana is a Crossplane provider that is built using Upjet code generation tools and exposes XRM-conformant managed resources for the Grafana API.",
+    "purpose": "Manage Grafana resources from Kubernetes with a Crossplane provider.",
+    "evidence": [
+     "A test is disabled with the reason: Skipping integration test: SM_ACCESS_TOKEN environment variable not set",
+     "Asserted by its own tests: Resolve Probe Names Missing Credentials."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:h03",
+  "request": "Add the ability to produce and consume Kafka messages from our k6 load-test scripts.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "xk6-kafka",
+    "description": "Official pure-Go k6 extension for load testing Apache Kafka",
+    "purpose": "k6 extension for load testing Kafka.",
+    "evidence": [
+     "Asserted by its own tests: Acks From Int.",
+     "Asserted by its own tests: Timing Metrics Are Untagged.",
+     "Asserted by its own tests: Encode Wire Format Out Of Range.",
+     "Asserted by its own tests: Req Context Nil VU.",
+     "Asserted by its own tests: Flush Nil VUAnd Nil Collector.",
+     "Asserted by its own tests: JKSTo PEMRejects Non JKS."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "k6-loadtester",
+    "description": "Using k6 to do load testing of the canary before rolling out traffic",
+    "purpose": "Run k6 load tests against a canary deployment before shifting traffic to it.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "visualization-runner",
+    "description": "This extension add \"Visualize Test\" code actions to tests that have [visualizable] in their name:",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "simulation-test-runner",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "flagger-k6-webhook",
+    "description": "Using k6 to do load testing of the canary before rolling out traffic",
+    "purpose": "Load test a canary deployment with k6 before shifting traffic during rollout.",
+    "evidence": [
+     "Asserted by its own tests: New Launch Payload.",
+     "Asserted by its own tests: Bad Payload."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:h04",
+  "request": "Write a function that detects the points in a latency series where its behaviour shifts.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-changepoint",
+    "description": "Changepoint detection using Bayesian Online Change Point Detection and more.",
+    "purpose": "Detect changepoints in time series using Bayesian Online Change Point Detection and other methods.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "augurs-changepoint-js",
+    "description": "JavaScript bindings for the augurs-changepoint library.",
+    "purpose": "JavaScript bindings for the augurs changepoint detection library.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "std_detect",
+    "description": "`std::detect` - Rust's standard library run-time CPU feature detection.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "augurs-clustering-js",
+    "description": "JavaScript bindings for the augurs-clustering library.",
+    "purpose": "JavaScript bindings for the augurs time series clustering library.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "augurs-outlier",
+    "description": "Outlier detection for time series.",
+    "purpose": "Detect outliers in time series data.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:h05",
+  "request": "Create a single Docker image with an OpenTelemetry backend for traces, logs and metrics so developers can test locally.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "docker-otel-lgtm",
+    "description": "An OpenTelemetry backend in a Docker image. It bundles the OpenTelemetry Collector,",
+    "purpose": "Run an OpenTelemetry observability backend locally in a Docker container.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "mise-npm-install",
+    "description": "An OpenTelemetry backend in a Docker container image",
+    "purpose": "Run an OpenTelemetry backend in a Docker container image.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "catalog-otel-traces",
+    "description": "Catalog service that emits traces via the OpenTelemetry SDK over OTLP/HTTP",
+    "purpose": "Sample catalog service that emits OpenTelemetry traces over OTLP/HTTP.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "instrumentation",
+    "description": "This directory contains the regression test for controlling the list of stable metrics.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "catalog-otel-metrics",
+    "description": "Catalog service that pushes metrics via the OpenTelemetry SDK over OTLP/HTTP",
+    "purpose": "See an example catalog service that pushes OpenTelemetry metrics over OTLP/HTTP.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:h06",
+  "request": "Write a routine that safely reads memory at an arbitrary address from inside a signal handler without crashing the process.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "kindasafe_init",
+    "description": "Signal handler initialization for the kindasafe signal-safe memory reading library",
+    "purpose": "Initialize signal handlers for a signal-safe memory reading library.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "kindasafe",
+    "description": "Signal-safe memory reading for x86_64 and aarch64 using naked functions and crash recovery",
+    "purpose": "Read memory signal-safely with crash recovery on x86_64 and aarch64.",
+    "evidence": [
+     "Asserted by its own tests: u64 unaligned page boundary.",
+     "Asserted by its own tests: vec sigsegv page boundary.",
+     "Asserted by its own tests: u64 unaligned page boundary.",
+     "Asserted by its own tests: vec sigsegv page boundary."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "pyroscope-kinda-safe",
+    "description": "Signal-safe memory reading for x8664 and aarch64 on Linux.",
+    "purpose": "Signal-safe memory reading on Linux for x86-64 and aarch64.",
+    "evidence": [
+     "Asserted by its own tests: u64 unaligned page boundary.",
+     "Asserted by its own tests: vec sigsegv page boundary."
+    ]
+   },
+   {
+    "letter": "D",
+    "name": "panic_unwind",
+    "description": "Implementation of Rust panics via stack unwinding",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "panic-handler",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k01",
+  "request": "Write a function that checks whether a string is a palindrome, ignoring punctuation and case.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "text-size",
+    "description": "Newtypes for text offsets",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "kindasafe",
+    "description": "Signal-safe memory reading for x86_64 and aarch64 using naked functions and crash recovery",
+    "purpose": "Read memory signal-safely with crash recovery on x86_64 and aarch64.",
+    "evidence": [
+     "Asserted by its own tests: u64 unaligned page boundary.",
+     "Asserted by its own tests: vec sigsegv page boundary.",
+     "Asserted by its own tests: u64 unaligned page boundary.",
+     "Asserted by its own tests: vec sigsegv page boundary."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "html-checker",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "business-text",
+    "description": "Data-driven text with Markdown and Handlebars support",
+    "purpose": "Render data-driven text using Markdown and Handlebars templates.",
+    "evidence": [
+     "Asserted by its own tests: Should not show mini map button when value is short.",
+     "Asserted by its own tests: Should return undefined if the index is out of range.",
+     "Asserted by its own tests: Should show mini map button when value exceeds 100 characters.",
+     "Asserted by its own tests: Should unescape value for display when is Escaping is true.",
+     "Asserted by its own tests: Should pass value as-is when is Escaping is false.",
+     "Asserted by its own tests: Should escape newlines in on Change when is Escaping is true."
+    ]
+   },
+   {
+    "letter": "E",
+    "name": "test-float-parse",
+    "description": "These are tests designed to test decimal to float conversions (dec2flt) used",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k02",
+  "request": "Add a helper that converts a list of dicts to a CSV string with a header row.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "go-offsets-tracker",
+    "description": "This tool allows generating a JSON description of the byte offsets of a set of field structs,",
+    "purpose": "Track byte offsets of struct fields across different library versions.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "Business Text",
+    "description": "description: Learn how to convert plain text and table data into visually appealing information cards using Markdown, Handlebars, CSS, and JavaScript.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "rustbook",
+    "description": "This is a wrapper around mdbook, which is used to generate the book-style documentation in the Rust project. This wrapper serves a few purposes:",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "Add data",
+    "description": "description: Learn how to add new rows to your Business Table panel with configurable data entry options.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "Data frames",
+    "description": "A data frame is a collection of fields, where each field corresponds to a column. Each field, in turn, consists of a collection of values and metadata, such as the data type of those values.",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k03",
+  "request": "Write a function that counts the business days between two dates, skipping weekends.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "business-panel",
+    "description": "Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration",
+    "purpose": "Dashboard panel that shows events in a calendar view, pulling data from multiple data sources.",
+    "evidence": [
+     "Asserted by its own tests: Should update colors options correctly via thresholds.",
+     "Asserted by its own tests: Should not update colors options if set only base threshold value.",
+     "Asserted by its own tests: Should show color Field if thresholds is selected.",
+     "Asserted by its own tests: Should render view for duration more or equal 45 minutes.",
+     "Asserted by its own tests: Should return event with color if thresholds is not specified.",
+     "Asserted by its own tests: Should recompute minutes Offset when time Range changes."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "data flow",
+    "description": "description: Learn how to use the multifarious editing data functionality in the Business Table panel to provide extensive capabilities for working with table data.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "backtraces",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "markdown-checkbox-count-demo",
+    "description": "Demonstrates a Markdown code block editor communicating with its extension host.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "augurs-mstl",
+    "description": "Multiple Seasonal-Trend decomposition with LOESS (MSTL) using the augurs time series library.",
+    "purpose": "Decompose time series into multiple seasonal and trend components using MSTL.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k04",
+  "request": "Add a helper that masks all but the last four digits of a credit card number.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "keytar",
+    "description": "OVERRIDE Keytar since we don't need the feature",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "component-helpers",
+    "description": "This repository provides helpers primarily for core components (core components as described in Create a k8s.io/component-base repo) which are required by at least two separate binaries in kubernetes org.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Pod Requests And Limits.",
+     "Asserted by its own tests: Pod Requests And Limits Without Overhead.",
+     "Asserted by its own tests: Pod Resource Limits.",
+     "Asserted by its own tests: Is Pod Level Limits Set.",
+     "Asserted by its own tests: Pod Requests And Limits With DRA.",
+     "Asserted by its own tests: Aggregate Container Requests And Limits."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "less",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "Add data",
+    "description": "description: Learn how to add new rows to your Business Table panel with configurable data entry options.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "javascript",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k05",
+  "request": "Write a function that generates a random, URL-safe password reset token.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "alerting-gen",
+    "description": "A tiny CLI to generate random Grafana Alerting rules and Recording rules using:",
+    "purpose": "Generate random Grafana alerting and recording rules from a small CLI.",
+    "evidence": [
+     "Asserted by its own tests: Generate Rules Determinism With Seed.",
+     "Asserted by its own tests: Generate Rules Determinism With Seed.",
+     "Asserted by its own tests: Group Rules Groups Per Folder Greater Than One.",
+     "Asserted by its own tests: Group Rules Defaults When Zero Or Empty.",
+     "Asserted by its own tests: Group Rules Defaults When Zero Or Empty.",
+     "Asserted by its own tests: Group Rules Non Even Partition."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "kindasafe",
+    "description": "Signal-safe memory reading for x86_64 and aarch64 using naked functions and crash recovery",
+    "purpose": "Read memory signal-safely with crash recovery on x86_64 and aarch64.",
+    "evidence": [
+     "Asserted by its own tests: u64 unaligned page boundary.",
+     "Asserted by its own tests: vec sigsegv page boundary.",
+     "Asserted by its own tests: u64 unaligned page boundary.",
+     "Asserted by its own tests: vec sigsegv page boundary."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "github-authentication",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "generate-policy-bot-config",
+    "description": "This script generates the [Policy Bot][policy-bot] configuration file.",
+    "purpose": "Generate policy-bot configuration files to enforce that conditional workflows passed.",
+    "evidence": [
+     "Asserted by its own tests: Renaming Writer Mem FS.",
+     "Asserted by its own tests: Renaming Writer Abort.",
+     "Asserted by its own tests: Renaming Writer Abort Ignores Close Error.",
+     "Asserted by its own tests: Renaming Writer File.",
+     "Asserted by its own tests: Renaming Writer Multiple Calls.",
+     "Asserted by its own tests: Merge Configs Preserves Explicitly Empty Values."
+    ]
+   },
+   {
+    "letter": "E",
+    "name": "pod-security-admission",
+    "description": "The Pod Security Standards are a set of best-practice profiles for running pods securely.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Capabilities Baseline.",
+     "Asserted by its own tests: Capabilities Restricted 1 25.",
+     "Asserted by its own tests: Capabilities Restricted 1 22.",
+     "Asserted by its own tests: Check Registry Empty.",
+     "Asserted by its own tests: Check App Armor Forbidden.",
+     "Asserted by its own tests: Load From File."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k06",
+  "request": "Add a function that converts a hex colour such as #ff8800 into an RGB tuple.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "cog",
+    "description": "Code Generation with a human touch",
+    "purpose": "Generate code with human-friendly output.",
+    "evidence": [
+     "Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Concrete Reference With Discriminator Field And Mapping Set.",
+     "Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Scalar Discriminator Non Constant Reference.",
+     "Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Concrete Discriminator.",
+     "Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Unknown Discriminator Field.",
+     "Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata.",
+     "Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Scalar With Discriminator Field Set."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "visualization-runner",
+    "description": "This extension add \"Visualize Test\" code actions to tests that have [visualizable] in their name:",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "vscode-colorize-tests",
+    "description": "Colorize tests for VS Code",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "rustc_codegen_llvm",
+    "description": "The codegen crate contains the code to convert from MIR into LLVM IR,",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "vscode-colorize-perf-tests",
+    "description": "Colorize performance tests for VS Code",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k07",
+  "request": "Write a function that removes duplicates from a list while keeping the original order.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "range-iteration",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "update-api-list",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "clippy_utils",
+    "description": "Helpful tools for writing lints, provided as they are used in Clippy",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "api-list-common",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "instrumentation",
+    "description": "This directory contains the regression test for controlling the list of stable metrics.",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_heldout:k08",
+  "request": "Add a helper that pluralises an English noun for labels in the UI.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "text-size",
+    "description": "Newtypes for text offsets",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "Introduction to the Grafana data structure",
+    "description": "Grafana supports a variety of different data sources, each with its own data model. To make this possible, Grafana consolidates the query results from each of these data sources into one unified data structure called a **data frame**. The **data plane** adds a property layer to the data frame with i",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "markdown-language-features",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "component-helpers",
+    "description": "This repository provides helpers primarily for core components (core components as described in Create a k8s.io/component-base repo) which are required by at least two separate binaries in kubernetes org.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Pod Requests And Limits.",
+     "Asserted by its own tests: Pod Requests And Limits Without Overhead.",
+     "Asserted by its own tests: Pod Resource Limits.",
+     "Asserted by its own tests: Is Pod Level Limits Set.",
+     "Asserted by its own tests: Pod Requests And Limits With DRA.",
+     "Asserted by its own tests: Aggregate Container Requests And Limits."
+    ]
+   },
+   {
+    "letter": "E",
+    "name": "typescript-language-features",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:f01",
+  "request": "Our NOC wall screens need a big panel showing the current time in Tokyo, London and New York.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "clock-panel",
+    "description": "Clock Panel Plugin for Grafana",
+    "purpose": "Display a clock on Grafana dashboards with a panel plugin.",
+    "evidence": [
+     "Asserted by its own tests: max Past Query Calculation from query field.",
+     "Asserted by its own tests: max Query Calculation from query field.",
+     "Asserted by its own tests: min Query Calculation from query field.",
+     "Asserted by its own tests: min Future Query Calculation from query field.",
+     "Asserted by its own tests: should have no description height when description options are missing.",
+     "Asserted by its own tests: undefined as input from query field."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "business-panel",
+    "description": "Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration",
+    "purpose": "Dashboard panel that shows events in a calendar view, pulling data from multiple data sources.",
+    "evidence": [
+     "Asserted by its own tests: Should update colors options correctly via thresholds.",
+     "Asserted by its own tests: Should not update colors options if set only base threshold value.",
+     "Asserted by its own tests: Should show color Field if thresholds is selected.",
+     "Asserted by its own tests: Should render view for duration more or equal 45 minutes.",
+     "Asserted by its own tests: Should return event with color if thresholds is not specified.",
+     "Asserted by its own tests: Should recompute minutes Offset when time Range changes."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "Business Forms",
+    "description": "description: Learn how to insert and update application data and modify configuration directly from your Grafana dashboard using the Business Forms panel.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "Business Calendar",
+    "description": "description: Learn how to display events in a stylish calendar format using the Business Calendar panel plugin.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "detect-angular-dashboards",
+    "description": "Detect dashboards depending on Angular data source and panel plugins on a running Grafana instance using the Grafana API.",
+    "purpose": "Find Grafana dashboards that depend on Angular data source and panel plugins using the Grafana API.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:f02",
+  "request": "Operators want to submit maintenance requests from inside a dashboard and have them written to our ticketing API.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "business-panel",
+    "description": "Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration",
+    "purpose": "Dashboard panel that shows events in a calendar view, pulling data from multiple data sources.",
+    "evidence": [
+     "Asserted by its own tests: Should update colors options correctly via thresholds.",
+     "Asserted by its own tests: Should not update colors options if set only base threshold value.",
+     "Asserted by its own tests: Should show color Field if thresholds is selected.",
+     "Asserted by its own tests: Should render view for duration more or equal 45 minutes.",
+     "Asserted by its own tests: Should return event with color if thresholds is not specified.",
+     "Asserted by its own tests: Should recompute minutes Offset when time Range changes."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "Business Forms",
+    "description": "description: Learn how to insert and update application data and modify configuration directly from your Grafana dashboard using the Business Forms panel.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "detect-angular-dashboards",
+    "description": "Detect dashboards depending on Angular data source and panel plugins on a running Grafana instance using the Grafana API.",
+    "purpose": "Find Grafana dashboards that depend on Angular data source and panel plugins using the Grafana API.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "Custom code",
+    "description": "description: Learn how to use custom code to access panel options, REST API responses, form elements, and Grafana services in Business Forms.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "data flow",
+    "description": "description: Learn how to use the multifarious editing data functionality in the Business Table panel to provide extensive capabilities for working with table data.",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:f03",
+  "request": "Split our request-rate series into trend plus daily and weekly seasonal parts so we can alert on the residual.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-mstl",
+    "description": "Multiple Seasonal-Trend decomposition with LOESS (MSTL) using the augurs time series library.",
+    "purpose": "Decompose time series into multiple seasonal and trend components using MSTL.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "augurs-seasons",
+    "description": "Seasonality detection using periodograms",
+    "purpose": "Detect seasonality in time series using periodograms.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "augurs-core",
+    "description": "Core data structures and traits for the augurs time series library.",
+    "purpose": "Core data structures and traits for the augurs time series library.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "augurs-transforms-js",
+    "description": "JavaScript bindings for augurs' data transformations.",
+    "purpose": "JavaScript bindings for augurs time series data transformations.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "augurs",
+    "description": "Python bindings for the augurs time series library.",
+    "purpose": "Python bindings for the augurs time series library.",
+    "evidence": [
+     "Asserted by its own tests: different min cluster sizes.",
+     "Asserted by its own tests: with threshold.",
+     "Asserted by its own tests: with min period.",
+     "Asserted by its own tests: with max period.",
+     "Asserted by its own tests: with min and max period.",
+     "Asserted by its own tests: with threshold."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:f04",
+  "request": "Show each team what its GCP and AWS usage costs per day, as metrics we can put on a dashboard.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "cloudcost-exporter",
+    "description": "Cloud Cost Exporter is a Prometheus exporter that collects cost and pricing data from cloud providers (AWS, GCP, Azure) in real-time.",
+    "purpose": "Prometheus exporter for cloud cost metrics across cloud providers.",
+    "evidence": [
+     "Asserted by its own tests: Node Store Populate Concurrency Limit.",
+     "Asserted by its own tests: parse Capacity Block Usage Type.",
+     "Asserted by its own tests: parse Capacity Block Costs nets Refunds.",
+     "Asserted by its own tests: cluster Name From Instance.",
+     "Asserted by its own tests: List Active Capacity Reservations.",
+     "Asserted by its own tests: Generate Capacity Block Pricing Map prices Per Reservation."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "cloudcost-exporter",
+    "description": "{{ template \"chart.versionBadge\" . }}{{ template \"chart.typeBadge\" . }}{{ template \"chart.appVersionBadge\" . }}",
+    "purpose": "Cloud cost exporter, likely a chart; the description contains only template placeholders.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "Creating a New Module",
+    "description": "This document outlines the process for creating a new module for the Cloud Cost Exporter.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "metrics",
+    "description": "Kubernetes metrics API type definitions and clients.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "cloud-provider",
+    "description": "This repository defines the cloud-provider interface and mechanism to initialize",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Get Load Balancer Source Ranges.",
+     "Asserted by its own tests: Load Balancer Status Equal.",
+     "Asserted by its own tests: Sync Load Balancer If Needed.",
+     "Asserted by its own tests: Update Nodes In External Load Balancer.",
+     "Asserted by its own tests: Node Changes In External Load Balancer.",
+     "Asserted by its own tests: Slow Node Sync."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g01",
+  "request": "Write a function that parses an ISO 8601 week date like 2026-W45-3 into a calendar date.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "business-panel",
+    "description": "Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration",
+    "purpose": "Dashboard panel that shows events in a calendar view, pulling data from multiple data sources.",
+    "evidence": [
+     "Asserted by its own tests: Should update colors options correctly via thresholds.",
+     "Asserted by its own tests: Should not update colors options if set only base threshold value.",
+     "Asserted by its own tests: Should show color Field if thresholds is selected.",
+     "Asserted by its own tests: Should render view for duration more or equal 45 minutes.",
+     "Asserted by its own tests: Should return event with color if thresholds is not specified.",
+     "Asserted by its own tests: Should recompute minutes Offset when time Range changes."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "Business Calendar",
+    "description": "description: Learn how to display events in a stylish calendar format using the Business Calendar panel plugin.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "test-float-parse",
+    "description": "These are tests designed to test decimal to float conversions (dec2flt) used",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "smol_str",
+    "description": "small-string optimized string type with O(1) clone",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "rustc_parse_format",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g02",
+  "request": "Add a helper that resizes an uploaded profile photo to 256 by 256 and crops it to a circle.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "canvas",
+    "description": "Draw pictures with the Canvas visualization panel plugin, then paint by numbers with your Grafana metrics data!",
+    "purpose": "Draw custom pictures and color them with metrics data in a Grafana canvas panel.",
+    "evidence": [
+     "Asserted by its own tests: clamps to config.min when the field has no value range.",
+     "Asserted by its own tests: corrects input as per min and max.",
+     "Asserted by its own tests: does not call hide Popper for non-Escape keys but still stops propagation.",
+     "Asserted by its own tests: clamps out of range values.",
+     "Asserted by its own tests: keeps remainder after divisible by max.",
+     "Asserted by its own tests: maps each value through thresholds for a by-value field."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "component-helpers",
+    "description": "This repository provides helpers primarily for core components (core components as described in Create a k8s.io/component-base repo) which are required by at least two separate binaries in kubernetes org.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Pod Requests And Limits.",
+     "Asserted by its own tests: Pod Requests And Limits Without Overhead.",
+     "Asserted by its own tests: Pod Resource Limits.",
+     "Asserted by its own tests: Is Pod Level Limits Set.",
+     "Asserted by its own tests: Pod Requests And Limits With DRA.",
+     "Asserted by its own tests: Aggregate Container Requests And Limits."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "Migration: generated MCP setup replaced by gcx guidance",
+    "description": "Starting with the docker-otel-lgtm `v0.36.0` release, the image will no longer",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "profile",
+    "description": "A collection of tools for profiling rust-analyzer.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "rustc_monomorphize",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g03",
+  "request": "Write a function that converts Roman numerals to integers and back.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "backtraces",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "smol_str",
+    "description": "small-string optimized string type with O(1) clone",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "julia",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "string-replace",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "syntax-bridge",
+    "description": "Conversions between syntax nodes and token trees for rust-analyzer.",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g04",
+  "request": "Add server-side validation that a UK postcode is well-formed.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "business-forms",
+    "description": "Insert, update application data, and modify configuration",
+    "purpose": "Forms for inserting and updating application data and modifying configuration.",
+    "evidence": [
+     "Asserted by its own tests: Should update slider value when min and max are not set.",
+     "Asserted by its own tests: Should update date min.",
+     "Asserted by its own tests: Should make initial datasource request for streaming data state.",
+     "Asserted by its own tests: Should normalize is Escaping for code and textarea elements.",
+     "Asserted by its own tests: Should update date max.",
+     "Asserted by its own tests: Should show mini map if value more than 100 symbols."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "lsp-server",
+    "description": "Generic LSP server scaffold.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "html-checker",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "sdata",
+    "description": "sdata package provides utilities to build data frames in a structural way and ensure the data frames adhere to data frame contract.",
+    "purpose": "Build data frames structurally and validate they follow a data frame contract.",
+    "evidence": [
+     "Asserted by its own tests: Multi Frame Series Validate With Frames Invalid Cases.",
+     "Asserted by its own tests: Multi Frame Series Get Metric Refs Empty Invalid Edge Cases.",
+     "Asserted by its own tests: Multi Frame Series Validate With Frames Invalid Cases.",
+     "Asserted by its own tests: Multi Frame Series Get Metric Refs Empty Invalid Edge Cases."
+    ]
+   },
+   {
+    "letter": "E",
+    "name": "Custom code",
+    "description": "description: Learn how to use custom code to access panel options, REST API responses, form elements, and Grafana services in Business Forms.",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g05",
+  "request": "Write a script that sends a birthday greeting email to every employee on their birthday.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "scripts",
+    "description": "",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: brackets and escaped quotes in string values do not affect root property matching.",
+     "Asserted by its own tests: cleanup refuses an unrelated directory even inside the run root."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "coffeescript",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "miri-script",
+    "description": "Helpers for miri maintenance",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "alerting-gen",
+    "description": "A tiny CLI to generate random Grafana Alerting rules and Recording rules using:",
+    "purpose": "Generate random Grafana alerting and recording rules from a small CLI.",
+    "evidence": [
+     "Asserted by its own tests: Generate Rules Determinism With Seed.",
+     "Asserted by its own tests: Generate Rules Determinism With Seed.",
+     "Asserted by its own tests: Group Rules Groups Per Folder Greater Than One.",
+     "Asserted by its own tests: Group Rules Defaults When Zero Or Empty.",
+     "Asserted by its own tests: Group Rules Defaults When Zero Or Empty.",
+     "Asserted by its own tests: Group Rules Non Even Partition."
+    ]
+   },
+   {
+    "letter": "E",
+    "name": "shellscript",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g06",
+  "request": "Add a function that computes the great-circle distance between two latitude/longitude points.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-ets-js",
+    "description": "JavaScript bindings for the augurs-ets library.",
+    "purpose": "Use exponential smoothing forecasting from augurs-ets in JavaScript through bindings.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "Add data",
+    "description": "description: Learn how to add new rows to your Business Table panel with configurable data entry options.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "stdarch-gen-hexagon",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "build_helper",
+    "description": "Types and functions shared across tools in this workspace.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "augurs-changepoint-js",
+    "description": "JavaScript bindings for the augurs-changepoint library.",
+    "purpose": "JavaScript bindings for the augurs changepoint detection library.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g07",
+  "request": "Write a helper that wraps long lines of text at 80 characters without breaking words.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "text-size",
+    "description": "Newtypes for text offsets",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "build_helper",
+    "description": "Types and functions shared across tools in this workspace.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "markdown",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "business-text",
+    "description": "Data-driven text with Markdown and Handlebars support",
+    "purpose": "Render data-driven text using Markdown and Handlebars templates.",
+    "evidence": [
+     "Asserted by its own tests: Should not show mini map button when value is short.",
+     "Asserted by its own tests: Should return undefined if the index is out of range.",
+     "Asserted by its own tests: Should show mini map button when value exceeds 100 characters.",
+     "Asserted by its own tests: Should unescape value for display when is Escaping is true.",
+     "Asserted by its own tests: Should pass value as-is when is Escaping is false.",
+     "Asserted by its own tests: Should escape newlines in on Change when is Escaping is true."
+    ]
+   },
+   {
+    "letter": "E",
+    "name": "lld-wrapper",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh:g08",
+  "request": "Add a tiny feature that lets users switch the web app between light and dark themes.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "theme-quietlight",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "theme-kimbie-dark",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "theme-solarized-dark",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "theme-solarized-light",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "theme-monokai-dimmed",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p01",
+  "request": "Every backend team keeps rewriting ring membership, rate limiting and service lifecycle code. Is there a shared Go library for that?",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "code-generator",
+    "description": "Golang code-generators used to implement Kubernetes-style API types.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Non String Discriminator.",
+     "Asserted by its own tests: Negative Minimum Struct.",
+     "Asserted by its own tests: Multiple Discriminators.",
+     "Asserted by its own tests: Parse Numeric Limit.",
+     "Asserted by its own tests: Nil Copy.",
+     "Asserted by its own tests: Is Nilable Type."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "shim_utils",
+    "description": "shimutils is a small library crate containing shared code that is used by",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "client-go",
+    "description": "Go clients for talking to a kubernetes cluster.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Rate Limiting Queue.",
+     "Asserted by its own tests: Minify Missing Context.",
+     "Asserted by its own tests: With Max Wait Rate Limiter.",
+     "Asserted by its own tests: Max Of Rate Limiter.",
+     "Asserted by its own tests: Install Hint Rate Limit.",
+     "Asserted by its own tests: Minify Success."
+    ]
+   },
+   {
+    "letter": "D",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "This helm chart helps to install and configure github-rate-limits-prometheus-exporter",
+    "purpose": "Helm chart to install and configure a GitHub rate limits Prometheus exporter.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "clusterurl",
+    "description": "The goal of this package is to provide a simple way to process and cluster a URL to extract a generic page route from it. These generic routes can then be used to aggregate data from multiple URLs under a single route.",
+    "purpose": "Go package that clusters URLs to extract generic page route patterns.",
+    "evidence": [
+     "Asserted by its own tests: Path Trie Soft Threshold.",
+     "Asserted by its own tests: Path Trie Depth Based Thresholds.",
+     "Asserted by its own tests: Path Trie No Limit With Minus One.",
+     "Asserted by its own tests: Path Trie Max Patterns Enforce Limit.",
+     "Asserted by its own tests: Path Trie Max Patterns Deepest Collapsed First.",
+     "Asserted by its own tests: Path Trie Max Patterns No Candidates."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p02",
+  "request": "Our browser-based checks need a sidecar that launches Chrome on request and kills hung instances.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "flagger-k6-webhook",
+    "description": "Using k6 to do load testing of the canary before rolling out traffic",
+    "purpose": "Load test a canary deployment with k6 before shifting traffic during rollout.",
+    "evidence": [
+     "Asserted by its own tests: New Launch Payload.",
+     "Asserted by its own tests: Bad Payload."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "citool",
+    "description": "This is a simple Rust script that determines which jobs should be executed on CI based on the situation (pull request, try job, merge attempt). It also provides a simple way of executing (some) CI jobs locally.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "crocochrome",
+    "description": "Crocochrome is a chromium supervisor, which runs and reaps chromium processes on demand.",
+    "purpose": "Supervise Chromium browser processes.",
+    "evidence": [
+     "A test is disabled with the reason: Skipping integration test due to -short",
+     "Asserted by its own tests: Check Capabilities.",
+     "A test is disabled with the reason: skipping long tests",
+     "Asserted by its own tests: Integration Missing Capabilities.",
+     "Asserted by its own tests: Chromium Process Type missing Cmdline."
+    ]
+   },
+   {
+    "letter": "D",
+    "name": "go",
+    "description": "",
+    "purpose": "Frontend application observability with a web SDK that instruments browser apps to capture telemetry.",
+    "evidence": [
+     "Asserted by its own tests: Meta Sampling Absent Is Nil.",
+     "Asserted by its own tests: Meta Sampling Partial Decodes.",
+     "Asserted by its own tests: Meta Sampling Absent Is Nil.",
+     "Asserted by its own tests: Meta Sampling Partial Decodes."
+    ]
+   },
+   {
+    "letter": "E",
+    "name": "controller-manager",
+    "description": "This library contains common code for controller managers. Principally its for",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Dynamic Derived Builders Concurrent Config.",
+     "Asserted by its own tests: Concurrent Checks."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p03",
+  "request": "Detect whether a metric has a weekly cycle before we pick a forecasting model.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-seasons",
+    "description": "Seasonality detection using periodograms",
+    "purpose": "Detect seasonality in time series using periodograms.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "augurs-mstl",
+    "description": "Multiple Seasonal-Trend decomposition with LOESS (MSTL) using the augurs time series library.",
+    "purpose": "Decompose time series into multiple seasonal and trend components using MSTL.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "augurs-seasons-js",
+    "description": "JavaScript bindings for the augurs-seasons library.",
+    "purpose": "Use seasonality detection from augurs-seasons in JavaScript through bindings.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "augurs",
+    "description": "A time-series toolkit for forecasting, outlier detection, clustering and more.",
+    "purpose": "Forecast time series, detect outliers, and cluster time-series data with a toolkit.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "augurs",
+    "description": "Python bindings for the augurs time series library.",
+    "purpose": "Python bindings for the augurs time series library.",
+    "evidence": [
+     "Asserted by its own tests: different min cluster sizes.",
+     "Asserted by its own tests: with threshold.",
+     "Asserted by its own tests: with min period.",
+     "Asserted by its own tests: with max period.",
+     "Asserted by its own tests: with min and max period.",
+     "Asserted by its own tests: with threshold."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p04",
+  "request": "Across a fleet of pods, tell me which pod's latency curve does not look like the others.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-outlier",
+    "description": "Outlier detection for time series.",
+    "purpose": "Detect outliers in time series data.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "client-go",
+    "description": "Go clients for talking to a kubernetes cluster.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Rate Limiting Queue.",
+     "Asserted by its own tests: Minify Missing Context.",
+     "Asserted by its own tests: With Max Wait Rate Limiter.",
+     "Asserted by its own tests: Max Of Rate Limiter.",
+     "Asserted by its own tests: Install Hint Rate Limit.",
+     "Asserted by its own tests: Minify Success."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "augurs",
+    "description": "A time-series toolkit for forecasting, outlier detection, clustering and more.",
+    "purpose": "Forecast time series, detect outliers, and cluster time-series data with a toolkit.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "std_detect",
+    "description": "`std::detect` - Rust's standard library run-time CPU feature detection.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "augurs-clustering-js",
+    "description": "JavaScript bindings for the augurs-clustering library.",
+    "purpose": "JavaScript bindings for the augurs time series clustering library.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p05",
+  "request": "Before merging, reject dashboard JSON that uses deprecated panels or hard-coded datasources.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "dashboard-linter",
+    "description": "This tool is a command-line application to lint Grafana dashboards for common mistakes, and suggest best practices.",
+    "purpose": "Lint Grafana dashboards.",
+    "evidence": [
+     "Asserted by its own tests: Element Reference Rule Sorts And Deduplicates Missing Elements.",
+     "Asserted by its own tests: V2 Required Fields Rule Missing Fields.",
+     "Asserted by its own tests: Element Reference Rule Reports Missing And Orphaned Together.",
+     "Asserted by its own tests: Element Reference Rule Reports Missing Elements.",
+     "Asserted by its own tests: Template On Time Range Reload Rule."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "detect-angular-dashboards",
+    "description": "Detect dashboards depending on Angular data source and panel plugins on a running Grafana instance using the Grafana API.",
+    "purpose": "Find Grafana dashboards that depend on Angular data source and panel plugins using the Grafana API.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "Custom code",
+    "description": "description: Learn how to use custom code to access panel options, REST API responses, form elements, and Grafana services in Business Forms.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "Usage",
+    "description": "A command-line application to lint Grafana dashboards.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "business-panel",
+    "description": "Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration",
+    "purpose": "Dashboard panel that shows events in a calendar view, pulling data from multiple data sources.",
+    "evidence": [
+     "Asserted by its own tests: Should update colors options correctly via thresholds.",
+     "Asserted by its own tests: Should not update colors options if set only base threshold value.",
+     "Asserted by its own tests: Should show color Field if thresholds is selected.",
+     "Asserted by its own tests: Should render view for duration more or equal 45 minutes.",
+     "Asserted by its own tests: Should return event with color if thresholds is not specified.",
+     "Asserted by its own tests: Should recompute minutes Offset when time Range changes."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p06",
+  "request": "Alert us when our GitHub App is close to exhausting its API quota.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "A Prometheus exporter which scrapes GitHub API for the rate limits used by PAT/GitHub App.",
+    "purpose": "Export GitHub API rate limit usage as Prometheus metrics, using App or PAT credentials.",
+    "evidence": [
+     "Asserted by its own tests: Get Remaining Limits.",
+     "Asserted by its own tests: New Limits Collector."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "This helm chart helps to install and configure github-rate-limits-prometheus-exporter",
+    "purpose": "Helm chart to install and configure a GitHub rate limits Prometheus exporter.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "historian",
+    "description": "",
+    "purpose": "Build alerting systems, including an Alertmanager, using shared libraries.",
+    "evidence": [
+     "A test is disabled with the reason: set HISTORIAN_LOKI_URL (e.g. http://localhost:3100) to run the notification RBAC integration test",
+     "Asserted by its own tests: Run Query Truncates Merged Entries To Limit.",
+     "Asserted by its own tests: Run Query Truncates Merged Entries To Limit.",
+     "A test is disabled with the reason: set HISTORIAN_LOKI_URL (e.g. http://localhost:3100) to run the notification RBAC integration test",
+     "Asserted by its own tests: Loki Reader Query Non Empty Filter Applies Matcher.",
+     "Asserted by its own tests: Loki Reader Query Empty Filter Returns Empty Without Querying."
+    ]
+   },
+   {
+    "letter": "D",
+    "name": "code-generator",
+    "description": "Golang code-generators used to implement Kubernetes-style API types.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Non String Discriminator.",
+     "Asserted by its own tests: Negative Minimum Struct.",
+     "Asserted by its own tests: Multiple Discriminators.",
+     "Asserted by its own tests: Parse Numeric Limit.",
+     "Asserted by its own tests: Nil Copy.",
+     "Asserted by its own tests: Is Nilable Type."
+    ]
+   },
+   {
+    "letter": "E",
+    "name": "apiextensions-apiserver",
+    "description": "Implements: https://github.com/kubernetes/design-proposals-archive/blob/main/api-machinery/thirdpartyresources.md",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Estimate Max Length JSON.",
+     "Asserted by its own tests: CELValidation Limit.",
+     "Asserted by its own tests: CELMax Recursion Depth.",
+     "Asserted by its own tests: Prune Non Nullable Nulls Without Defaults.",
+     "Asserted by its own tests: Scale Update Without Resource Version With Conflicts.",
+     "Asserted by its own tests: Optional Old Self Check For Null."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p07",
+  "request": "A UI where people click together an OpenTelemetry collector pipeline instead of writing YAML by hand.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "collector-configurator",
+    "description": "The Collector Configuration Generator is an easy to use web interface for creating and editing OpenTelemetry Collector configuration files.",
+    "purpose": "Generate OpenTelemetry collector configurations with a configurator tool.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "demo-app",
+    "description": "A collection of working Alloy scenarios",
+    "purpose": "Explore working example scenarios for the Alloy telemetry collector.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "configuration-editing",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "demo",
+    "description": "A collection of working Alloy scenarios",
+    "purpose": "Explore working example scenarios for the Alloy telemetry collector.",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "docker-otel-lgtm",
+    "description": "An OpenTelemetry backend in a Docker image. It bundles the OpenTelemetry Collector,",
+    "purpose": "Run an OpenTelemetry observability backend locally in a Docker container.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:p08",
+  "request": "We need the logic that evaluates alert rules and routes notifications to chat and paging tools; we do not want to write our own.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "alerting",
+    "description": "This library contains utilities that are useful for building Alerting systems.",
+    "purpose": "Build alerting systems, including an Alertmanager, using shared libraries.",
+    "evidence": [
+     "A test is disabled with the reason: does not support http_config",
+     "Asserted by its own tests: Send Webhook Response Drain Limit.",
+     "Asserted by its own tests: Debug Filtering Every Threshold.",
+     "Asserted by its own tests: Opt In Caller Grafana Alertmanager Style Minus Caller.",
+     "A test is disabled with the reason: does not yet support http client",
+     "Asserted by its own tests: Delimited Strings."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "alerting-gen",
+    "description": "A tiny CLI to generate random Grafana Alerting rules and Recording rules using:",
+    "purpose": "Generate random Grafana alerting and recording rules from a small CLI.",
+    "evidence": [
+     "Asserted by its own tests: Generate Rules Determinism With Seed.",
+     "Asserted by its own tests: Generate Rules Determinism With Seed.",
+     "Asserted by its own tests: Group Rules Groups Per Folder Greater Than One.",
+     "Asserted by its own tests: Group Rules Defaults When Zero Or Empty.",
+     "Asserted by its own tests: Group Rules Defaults When Zero Or Empty.",
+     "Asserted by its own tests: Group Rules Non Even Partition."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "historian",
+    "description": "",
+    "purpose": "Build alerting systems, including an Alertmanager, using shared libraries.",
+    "evidence": [
+     "A test is disabled with the reason: set HISTORIAN_LOKI_URL (e.g. http://localhost:3100) to run the notification RBAC integration test",
+     "Asserted by its own tests: Run Query Truncates Merged Entries To Limit.",
+     "Asserted by its own tests: Run Query Truncates Merged Entries To Limit.",
+     "A test is disabled with the reason: set HISTORIAN_LOKI_URL (e.g. http://localhost:3100) to run the notification RBAC integration test",
+     "Asserted by its own tests: Loki Reader Query Non Empty Filter Applies Matcher.",
+     "Asserted by its own tests: Loki Reader Query Empty Filter Returns Empty Without Querying."
+    ]
+   },
+   {
+    "letter": "D",
+    "name": "clusterurl",
+    "description": "The goal of this package is to provide a simple way to process and cluster a URL to extract a generic page route from it. These generic routes can then be used to aggregate data from multiple URLs under a single route.",
+    "purpose": "Go package that clusters URLs to extract generic page route patterns.",
+    "evidence": [
+     "Asserted by its own tests: Path Trie Soft Threshold.",
+     "Asserted by its own tests: Path Trie Depth Based Thresholds.",
+     "Asserted by its own tests: Path Trie No Limit With Minus One.",
+     "Asserted by its own tests: Path Trie Max Patterns Enforce Limit.",
+     "Asserted by its own tests: Path Trie Max Patterns Deepest Collapsed First.",
+     "Asserted by its own tests: Path Trie Max Patterns No Candidates."
+    ]
+   },
+   {
+    "letter": "E",
+    "name": "authlib",
+    "description": "The Authlib library provides a modular and secure approach to handling authentication and authorization within the Grafana ecosystem. It's designed to be flexible and easily adaptable to different deployment scenarios.",
+    "purpose": "Common utilities for Grafana authentication and authorization.",
+    "evidence": [
+     "Asserted by its own tests: Filter Authorized Early Termination.",
+     "Asserted by its own tests: Client Get User Permissions Accepts Empty Stream.",
+     "Asserted by its own tests: Filter Authorized Missing Auth Info.",
+     "Asserted by its own tests: Filter Authorized Empty Input.",
+     "Asserted by its own tests: Filter Authorized All Denied.",
+     "Asserted by its own tests: Client Invalidate User Permissions Evicts Cached Snapshot."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:q01",
+  "request": "Write a function that checks whether a year is a leap year.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "augurs-seasons-js",
+    "description": "JavaScript bindings for the augurs-seasons library.",
+    "purpose": "Use seasonality detection from augurs-seasons in JavaScript through bindings.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": ".eslint-plugin-local",
+    "description": "We use a set of custom ESLint to enforce repo specific coding rules and styles. These custom rules are run in addition to many standard ESLint rules we enable in the project. Some example custom rules includes:",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "business-panel",
+    "description": "Displays events in a sleek calendar view, pulling from diverse data sources for seamless integration",
+    "purpose": "Dashboard panel that shows events in a calendar view, pulling data from multiple data sources.",
+    "evidence": [
+     "Asserted by its own tests: Should update colors options correctly via thresholds.",
+     "Asserted by its own tests: Should not update colors options if set only base threshold value.",
+     "Asserted by its own tests: Should show color Field if thresholds is selected.",
+     "Asserted by its own tests: Should render view for duration more or equal 45 minutes.",
+     "Asserted by its own tests: Should return event with color if thresholds is not specified.",
+     "Asserted by its own tests: Should recompute minutes Offset when time Range changes."
+    ]
+   },
+   {
+    "letter": "D",
+    "name": "Business Calendar",
+    "description": "description: Learn how to display events in a stylish calendar format using the Business Calendar panel plugin.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "augurs-seasons",
+    "description": "Seasonality detection using periodograms",
+    "purpose": "Detect seasonality in time series using periodograms.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:q02",
+  "request": "Add a helper that converts kilometres per hour to miles per hour.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "This helm chart helps to install and configure github-rate-limits-prometheus-exporter",
+    "purpose": "Helm chart to install and configure a GitHub rate limits Prometheus exporter.",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "component-helpers",
+    "description": "This repository provides helpers primarily for core components (core components as described in Create a k8s.io/component-base repo) which are required by at least two separate binaries in kubernetes org.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Pod Requests And Limits.",
+     "Asserted by its own tests: Pod Requests And Limits Without Overhead.",
+     "Asserted by its own tests: Pod Resource Limits.",
+     "Asserted by its own tests: Is Pod Level Limits Set.",
+     "Asserted by its own tests: Pod Requests And Limits With DRA.",
+     "Asserted by its own tests: Aggregate Container Requests And Limits."
+    ]
+   },
+   {
+    "letter": "C",
+    "name": "augurs-transforms-js",
+    "description": "JavaScript bindings for augurs' data transformations.",
+    "purpose": "JavaScript bindings for augurs time series data transformations.",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "Data frames",
+    "description": "A data frame is a collection of fields, where each field corresponds to a column. Each field, in turn, consists of a collection of values and metadata, such as the data type of those values.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "augurs-changepoint-js",
+    "description": "JavaScript bindings for the augurs-changepoint library.",
+    "purpose": "JavaScript bindings for the augurs changepoint detection library.",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:q03",
+  "request": "Generate a QR code PNG for a given URL.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "code-generator",
+    "description": "Golang code-generators used to implement Kubernetes-style API types.",
+    "purpose": "",
+    "evidence": [
+     "Asserted by its own tests: Non String Discriminator.",
+     "Asserted by its own tests: Negative Minimum Struct.",
+     "Asserted by its own tests: Multiple Discriminators.",
+     "Asserted by its own tests: Parse Numeric Limit.",
+     "Asserted by its own tests: Nil Copy.",
+     "Asserted by its own tests: Is Nilable Type."
+    ]
+   },
+   {
+    "letter": "B",
+    "name": "generate-copyright",
+    "description": "Produces a manifest of all the copyrighted materials in the Rust Toolchain",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "crossplane-provider-grafana",
+    "description": "provider-grafana is a Crossplane provider that is built using Upjet code generation tools and exposes XRM-conformant managed resources for the Grafana API.",
+    "purpose": "Manage Grafana resources from Kubernetes with a Crossplane provider.",
+    "evidence": [
+     "A test is disabled with the reason: Skipping integration test: SM_ACCESS_TOKEN environment variable not set",
+     "Asserted by its own tests: Resolve Probe Names Missing Credentials."
+    ]
+   },
+   {
+    "letter": "D",
+    "name": "clusterurl",
+    "description": "The goal of this package is to provide a simple way to process and cluster a URL to extract a generic page route from it. These generic routes can then be used to aggregate data from multiple URLs under a single route.",
+    "purpose": "Go package that clusters URLs to extract generic page route patterns.",
+    "evidence": [
+     "Asserted by its own tests: Path Trie Soft Threshold.",
+     "Asserted by its own tests: Path Trie Depth Based Thresholds.",
+     "Asserted by its own tests: Path Trie No Limit With Minus One.",
+     "Asserted by its own tests: Path Trie Max Patterns Enforce Limit.",
+     "Asserted by its own tests: Path Trie Max Patterns Deepest Collapsed First.",
+     "Asserted by its own tests: Path Trie Max Patterns No Candidates."
+    ]
+   },
+   {
+    "letter": "E",
+    "name": "cog",
+    "description": "Code Generation with a human touch",
+    "purpose": "Generate code with human-friendly output.",
+    "evidence": [
+     "Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Concrete Reference With Discriminator Field And Mapping Set.",
+     "Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Scalar Discriminator Non Constant Reference.",
+     "Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Non Concrete Discriminator.",
+     "Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata Unknown Discriminator Field.",
+     "Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object No Discriminator Metadata.",
+     "Asserted by its own tests: Disjunction Infer Mapping With Disjunction Of Refs As An Object Scalar With Discriminator Field Set."
+    ]
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:q04",
+  "request": "Write a function that calculates compound interest for a savings plan.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "range-iteration",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "github-rate-limits-prometheus-exporter",
+    "description": "This helm chart helps to install and configure github-rate-limits-prometheus-exporter",
+    "purpose": "Helm chart to install and configure a GitHub rate limits Prometheus exporter.",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "cpp",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "code-oss-dev",
+    "description": "This repository (\"Code - OSS\") is where we (Microsoft) develop the Visual Studio Code product together with the community. Not only do we work on code and issues here, but we also publish our roadmap, monthly iteration plans, and our endgame plans. This source code is available to everyone under the standard MIT license.",
+    "purpose": "",
+    "evidence": [
+     "A test is disabled with the reason: start debugging",
+     "A test is disabled with the reason: workbench.action.chat.open.blockOnResponse defaults to non-blocking for backwards compatibility",
+     "A test is disabled with the reason: workbench.action.chat.open.blockOnResponse resolves when waiting for user confirmation to run a tool",
+     "A test is disabled with the reason: workbench.action.chat.open.blockOnResponse resolves when an error is hit",
+     "A test is disabled with the reason: breakpoints are available before accessing debug extension API",
+     "A test is disabled with the reason: Can open an interactive window and execute from input box"
+    ]
+   },
+   {
+    "letter": "E",
+    "name": "markdown-math",
+    "description": "%description%",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:q05",
+  "request": "Add a profanity filter for user-submitted comments.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "rustc_sanitizers",
+    "description": "The rustcsanitizers crate contains the source code for providing support for",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "std_detect",
+    "description": "`std::detect` - Rust's standard library run-time CPU feature detection.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "alerting",
+    "description": "This library contains utilities that are useful for building Alerting systems.",
+    "purpose": "Build alerting systems, including an Alertmanager, using shared libraries.",
+    "evidence": [
+     "A test is disabled with the reason: does not support http_config",
+     "Asserted by its own tests: Send Webhook Response Drain Limit.",
+     "Asserted by its own tests: Debug Filtering Every Threshold.",
+     "Asserted by its own tests: Opt In Caller Grafana Alertmanager Style Minus Caller.",
+     "A test is disabled with the reason: does not yet support http client",
+     "Asserted by its own tests: Delimited Strings."
+    ]
+   },
+   {
+    "letter": "D",
+    "name": "business-text",
+    "description": "Data-driven text with Markdown and Handlebars support",
+    "purpose": "Render data-driven text using Markdown and Handlebars templates.",
+    "evidence": [
+     "Asserted by its own tests: Should not show mini map button when value is short.",
+     "Asserted by its own tests: Should return undefined if the index is out of range.",
+     "Asserted by its own tests: Should show mini map button when value exceeds 100 characters.",
+     "Asserted by its own tests: Should unescape value for display when is Escaping is true.",
+     "Asserted by its own tests: Should pass value as-is when is Escaping is false.",
+     "Asserted by its own tests: Should escape newlines in on Change when is Escaping is true."
+    ]
+   },
+   {
+    "letter": "E",
+    "name": "markdown-checkbox-count-demo",
+    "description": "Demonstrates a Markdown code block editor communicating with its extension host.",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ },
+ {
+  "tid": "tasks_judge_fresh2:q06",
+  "request": "Parse two semantic version strings and tell which one is newer.",
+  "candidates": [
+   {
+    "letter": "A",
+    "name": "parser",
+    "description": "The Rust parser for rust-analyzer.",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "B",
+    "name": "smol_str",
+    "description": "small-string optimized string type with O(1) clone",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "C",
+    "name": "rustc_parse",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "D",
+    "name": "rustc_attr_parsing",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   },
+   {
+    "letter": "E",
+    "name": "rustc_parse_format",
+    "description": "",
+    "purpose": "",
+    "evidence": []
+   }
+  ]
+ }
+]
