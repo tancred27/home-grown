@@ -1,17 +1,13 @@
-"""Tools for the gate-2 coding agent: a sandboxed workspace plus find_existing.
+"""Tools for the test coding agent: a sandboxed workspace plus find_existing.
 
-Gate 2 asks whether a coding agent calls find_existing before building something the
-organization already has. The tools are deliberately ordinary -- read, write, list, plus
-the memory lookup -- so the only thing that varies between conditions is the nudge.
-
-Nudge conditions:
+The tools are ordinary (read, write, list, plus the lookup), so the only thing that
+changes between variants is the nudge:
   none         tool present, neutral description
-  description  "call this BEFORE writing" tool description (the design's wording)
+  description  the tool description says to call it BEFORE writing
   instruction  a line in the system prompt, as an AGENTS.md / CLAUDE.md would add
-  all          description + instruction together: the strongest prompt-side nudge
-  hook         the GRAPH runs find_existing before the first write, whatever the model
-               does. The design's fallback if prompts do not move behaviour -- and the one
-               study it cites found prompts did not; removing the alternative route did.
+  all          description + instruction together
+  hook         the graph runs find_existing before the first write, whatever the
+               model does
 """
 
 from __future__ import annotations

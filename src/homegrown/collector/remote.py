@@ -20,8 +20,8 @@ API cost per new commit: 1 tree call + one call per fetched file (typically 5-30
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 from pathlib import Path, PurePosixPath
-from typing import Callable
 
 from ..extract.tests_extractor import is_test_file
 from ..extract.units import MANIFESTS

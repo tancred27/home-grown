@@ -50,7 +50,7 @@ def test_asset_rows_are_always_in_scope(corpus):
     for u in corpus["users"]:
         with as_user(u["id"]) as conn, conn.cursor() as cur:
             cur.execute("select id, discovery_scope from asset")
-            for aid, scope in cur.fetchall():
+            for _aid, scope in cur.fetchall():
                 checked += 1
                 if scope not in u["groups"]:
                     leaks += 1
@@ -76,7 +76,7 @@ def test_detail_requires_source_access(corpus):
                 select cv.asset_id, a.source_ref, cv.has_source_access, cv.detail
                   from card_visible cv join asset a on a.id = cv.asset_id
             """)
-            for asset_id, source_ref, has_access, detail in cur.fetchall():
+            for _asset_id, source_ref, has_access, detail in cur.fetchall():
                 expected = source_ref in u["sources"]
                 assert has_access == expected, (
                     f"{u['login']}: has_source_access wrong for {source_ref}")

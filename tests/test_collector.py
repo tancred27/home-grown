@@ -6,6 +6,7 @@ Postgres store. Run: .venv/Scripts/python -m pytest -q tests/test_collector.py
 
 from __future__ import annotations
 
+import json
 import uuid
 
 import pytest
@@ -18,11 +19,11 @@ from homegrown.db import admin_conn
 def make_repo(root, name):
     r = root / name
     (r / "pkg").mkdir(parents=True)
-    (r / "package.json").write_text('{"name": "%s", "description": "Retry HTTP calls with '
-                                    'exponential backoff and jitter", "version": "1.4.0"}'
-                                    % name)
-    (r / "README.md").write_text("# %s\n\nRetries failed HTTP requests with exponential "
-                                 "backoff and jitter for our services.\n" % name)
+    (r / "package.json").write_text(json.dumps({
+        "name": name, "version": "1.4.0",
+        "description": "Retry HTTP calls with exponential backoff and jitter"}))
+    (r / "README.md").write_text(f"# {name}\n\nRetries failed HTTP requests with exponential "
+                                 "backoff and jitter for our services.\n")
     (r / "retry.test.ts").write_text(
         "it('gives up after max attempts', () => {})\n"
         "it('rejects a negative delay', () => {})\n")
@@ -386,7 +387,7 @@ def test_repo_without_a_local_clone_is_processed_remotely(tmp_path):
 
     from homegrown.collector.remote import sparse_checkout
     name = f"zz-remote-{uuid.uuid4().hex[:6]}"
-    files = {"package.json": '{"name": "%s", "description": "Retry HTTP calls"}' % name,
+    files = {"package.json": json.dumps({"name": name, "description": "Retry HTTP calls"}),
              "README.md": f"# {name}\n\nRetries failed HTTP requests with backoff.\n",
              "retry.test.ts": "it('gives up after max attempts', () => {})\n"}
     get, _ = _fake_github(files)

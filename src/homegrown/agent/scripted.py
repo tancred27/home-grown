@@ -1,10 +1,9 @@
-"""A scripted chat model, for exercising the graph without an LLM.
+"""A scripted chat model, for testing the graph without an LLM.
 
-PLUMBING ONLY. It proves the graph routes, interrupts, resumes and logs correctly. It says
-nothing about whether a real model calls find_existing -- that is gate 2's question, and
-it needs a real model (scripts/gate2_run.py --model claude).
+It checks that the graph routes, pauses, resumes and logs correctly. It says nothing
+about whether a real model calls find_existing; that needs a real model.
 
-Two behaviours, the two ends of what gate 2 is distinguishing:
+Two behaviours:
   eager    writes the implementation immediately, never checks
   careful  calls find_existing with the ticket text first, then writes
 """
@@ -32,7 +31,7 @@ class ScriptedModel(BaseChatModel):
     def _llm_type(self) -> str:
         return f"scripted-{self.behaviour}"
 
-    def bind_tools(self, tools: Any, **kwargs: Any) -> "ScriptedModel":
+    def bind_tools(self, tools: Any, **kwargs: Any) -> ScriptedModel:
         return self
 
     def _generate(self, messages: list[BaseMessage], stop=None, run_manager=None,

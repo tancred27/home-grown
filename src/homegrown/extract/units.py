@@ -1,10 +1,7 @@
 """Layer 1: what exists. Deterministic, no model calls.
 
-Manifest-based unit detection. Measured at 96-100% recall against declared workspace
-members across 10 public repos (experiments/RESULTS.md run A). The hard part was never
-finding units -- babel yields 163 of them -- it was deciding which deserve a card.
-That judgment was removed from ingestion entirely and moved into the answer, where it
-can be labelled and measured. We index broadly and let the verdict discriminate.
+Finds units (packages, modules, services) from their manifest files. It indexes
+broadly; deciding whether a unit fits a request happens at question time.
 """
 
 from __future__ import annotations

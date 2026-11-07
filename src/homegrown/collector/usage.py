@@ -1,21 +1,17 @@
-"""Who depends on what -- and what that says about a solution's stage.
+"""Who depends on what, and what that says about a solution's stage.
 
-Stage inferred from releases is right for released products and wrong for internal
-libraries, which are consumed by commit hash, not by release: on real data the
-release-based rule called dskit "dev" while four other repositories in the corpus depend
-on it (experiments/collector/RESULTS.md). Usage is the better signal.
+Internal libraries are used by commit, not by release, so release history alone often
+calls them "dev" when other teams already depend on them. Usage is the better signal.
 
-This pass, run after a batch of events (it is a property across assets, not of one
-event):
+Runs after a batch of events (it looks across assets, not at one event):
   1. reads go.mod requires and package.json dependencies and writes `depends_on` edges
-     between assets, with the manifest as evidence. INCREMENTAL: pass `repos=` and only
-     those repos' manifests are read; their published names are stored in
-     `package_name` (db/005_scale.sql), so a dependency on a repo that was not rescanned
-     still resolves by lookup. Cost is proportional to what changed, not to the org;
-  2. lifts a stage the owner has not confirmed: an asset that two or more OTHER teams
-     depend on, or that a prod asset depends on, is in production use.
-It only ever lifts (dev/beta/unknown -> prod), never lowers, and never touches a stage
-an owner confirmed.
+     between assets, with the manifest as evidence. With `repos=`, only those repos'
+     manifests are read; published package names are kept in `package_name`, so a
+     dependency on a repo that wasn't rescanned still resolves.
+  2. marks an asset as prod when two or more OTHER teams depend on it, or a prod asset
+     does.
+It only ever raises a stage (dev/beta/unknown -> prod), and never touches a stage the
+owner confirmed.
 """
 
 from __future__ import annotations
@@ -174,4 +170,5 @@ def refresh(roots: list[Path], repos: set[str] | list[str] | None = None) -> dic
                     ev = cur.fetchone()[0]
                     cur.execute("update asset set stage = 'prod', stage_confidence = 0.65, "
                                 "stage_evidence_id = %s where id = %s", (ev, dst_id))
-    return {"published": len(published), "scanned_repos": len(scanned), "edges": edges, "lifted": lifted}
+    return {"published": len(published), "scanned_repos": len(scanned), "edges": edges,
+            "lifted": lifted}

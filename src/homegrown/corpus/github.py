@@ -1,9 +1,7 @@
-"""Fetch source-system metadata. GitHub for now, behind a thin interface.
+"""Repository metadata from GitHub.
 
-Only the repository's own `description` is used, and it matters more than it sounds:
-gate 1 showed that several assets were unfindable purely because their extracted
-summary was useless ("carbon-relay-ng", "> [!NOTE]"). A human-written one-liner from
-the source system beats anything scraped out of a README.
+Only the repository's own `description` is used. A one-line description written by a
+person is often better than anything extracted from a README.
 """
 
 from __future__ import annotations

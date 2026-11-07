@@ -1,21 +1,13 @@
-"""Layer 3: experience claims from discussions.
+"""Layer 3: experience claims from discussions (who tried it, who gave up, and why).
 
-The scarcest and most valuable layer: who tried it, who gave up, why, access friction.
-Measured at ~4-5% of human comments and ~2.4 strong claims per repo for its entire
-life, with four of eight repos producing none at all (experiments/density/RESULTS.md).
-So this extractor is expected to return little, and that is the design, not a bug.
+These are rare: most repositories have few or none, so this extractor is expected to
+return little.
 
-Two implementations behind one protocol:
+  RuleExtractor   phrase-based, no model needed.
+  ModelExtractor  not implemented yet.
 
-  RuleExtractor   phrase-based. Runs now, no API key, ~41-50% precision measured by
-                  hand. Good enough to build and test the whole pipeline end to end.
-  ModelExtractor  the real one. Sends the comment to a model that must return
-                  schema-conformant claims carrying evidence. NOT YET IMPLEMENTED --
-                  it needs a provider key, and claim accuracy is an open gate.
-
-Whichever runs, the model never gets tools and its output must match the schema, so a
-comment reading "ignore previous instructions" cannot cause an action. Source text is
-data.
+Source text is data: no extractor gets tools, and output must match the claim schema,
+so a comment saying "ignore previous instructions" can't cause anything.
 """
 
 from __future__ import annotations

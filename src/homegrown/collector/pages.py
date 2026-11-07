@@ -1,15 +1,8 @@
 """Is a documentation page worth remembering on its own? An LLM decides.
 
-The keyword rule this replaces scored precision 0.26 and recall 0.46 against hand labels
-on the 43 real pages from the collector replay (experiments/pages/): it kept product
-usage pages ("Usage", "Basic configuration") and dropped a "Deprecation Policy" and a
-"Migrating from ..." guide.
-
-The instruction below is the same written criterion the labels were made with, so an
-evaluation measures whether the model applies that rule as a careful human would; it
-does not validate the rule itself.
-
-Fails safe to the keyword rule when the model is unavailable.
+It keeps pages that record a solution, a decision or a pitfall, and skips ordinary
+usage docs. A keyword rule did this before and got it wrong too often (scores in
+experiments/pages/). If the model is unavailable, the collector falls back to that rule.
 """
 
 from __future__ import annotations

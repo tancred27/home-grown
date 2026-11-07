@@ -34,8 +34,15 @@ from pathlib import Path
 from langgraph.checkpoint.postgres import PostgresSaver
 from langgraph.types import Command
 
-from homegrown.agent import (VARIANTS, Workspace, build_graph, compact_verdicts,
-                          initial_state, make_tools, score_run)
+from homegrown.agent import (
+    VARIANTS,
+    Workspace,
+    build_graph,
+    compact_verdicts,
+    initial_state,
+    make_tools,
+    score_run,
+)
 from homegrown.config import settings
 from homegrown.db import admin_conn
 from homegrown.search import find_existing

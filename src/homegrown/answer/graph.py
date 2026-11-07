@@ -4,20 +4,19 @@
 
 Answers yes / no / unknown / possibly, and lists up to settings.answer_results (5)
 results: every candidate judged a fit first, then candidates the judge could not rule
-out (labelled unknown); not-a-fit candidates are never listed. For each: who built it, their team,
-line of business and manager, whether it is in dev or prod (and how sure we are), and
-whether the asker can read the code or must request access.
+out (labelled unknown); not-a-fit candidates are never listed. For each: who built
+it, their team, line of business and manager, whether it is in dev or prod (and how
+sure we are), and whether the asker can read the code or must request access.
 
 The answer word is deliberately conservative:
   model verdicts (settings.verdict_mode = "model")
       yes      a candidate was judged use-as-is or extend
       no       every candidate was judged not-a-fit
       unknown  otherwise, including when the model call failed (it fails safe)
-  rule verdicts (the default until the API has credit)
-      possibly a candidate looks relevant, but the rule-based verdict is unverified --
-               on held-out tickets it raised a false alarm on 8 of 8 controls
-               (experiments/gate2/RESULTS.md), so it never says a plain "yes"
-      unknown  nothing looked relevant; the rules cannot support a confident "no"
+  rule verdicts (settings.verdict_mode = "rules")
+      possibly a candidate looks relevant; the rules don't read the request, so they
+               never say a plain "yes"
+      unknown  nothing looked relevant; the rules can't support a confident "no"
 
 Every lookup runs as the asking user under row-level security: a match the asker may
 not discover is never returned, and neither is anything about who built it.

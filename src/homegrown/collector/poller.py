@@ -13,7 +13,7 @@ the truth).
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from .state import mark_dirty_many
 
@@ -32,7 +32,7 @@ def poll_org(org: str, since: datetime | None, get=None, max_pages: int = 100) -
             with _gh() as c:
                 r = c.get(url, headers=headers or {})
             return r.status_code, r.json()
-    started = datetime.now(timezone.utc)
+    started = datetime.now(UTC)
     changed: list[tuple[str, datetime | None]] = []
     calls = 0
     for page in range(1, max_pages + 1):

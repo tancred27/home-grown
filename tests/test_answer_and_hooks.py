@@ -7,6 +7,7 @@ import hmac
 import json
 import uuid
 
+import psycopg
 import pytest
 from langgraph.checkpoint.memory import InMemorySaver
 
@@ -14,7 +15,6 @@ from homegrown.collector import ChangedFile, Deps, Event, build_collector, run_e
 from homegrown.collector import adapters as A
 from homegrown.db import admin_conn, as_user
 from tests.test_collector import make_repo
-
 
 # ---------------------------------------------------------------- webhooks
 
@@ -90,7 +90,7 @@ def test_webhook_marks_the_repo_dirty_only_for_the_default_branch(monkeypatch):
 
 def test_app_role_cannot_read_login_mapping():
     with as_user(None) as conn, conn.cursor() as cur:
-        with pytest.raises(Exception):
+        with pytest.raises(psycopg.errors.InsufficientPrivilege):
             cur.execute("select count(*) from source_identity")
 
 

@@ -40,7 +40,7 @@ def test_hnsw_mode_matches_exact_scan(sees_everything, monkeypatch):
         monkeypatch.setattr(settings, "vector_search", mode)
         with as_user(sees_everything) as conn:
             top[mode] = [[r["asset_id"] for r in search(conn, q)[:5]] for q in qs]
-    same = sum(1 for a, b in zip(top["exact"], top["hnsw"]) if set(a) == set(b))
+    same = sum(1 for a, b in zip(top["exact"], top["hnsw"], strict=True) if set(a) == set(b))
     assert same >= 0.9 * len(qs), f"hnsw top-5 matched exact for only {same}/{len(qs)}"
 
 

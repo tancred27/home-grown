@@ -16,8 +16,8 @@ from pydantic import BaseModel, Field
 from ..db import admin_conn
 
 # "reconcile" is the backfill / nightly-reconcile event: "re-read every unit in this
-# repo". It goes through the same graph as a live commit (design: backfill is a driver
-# of the pipeline, not a separate system), and it is how lost webhooks get caught up.
+# repo". It goes through the same graph as a live commit (backfill is not a separate
+# system), and it is how missed changes get caught up.
 Kind = Literal["commit", "page_created", "page_updated", "release", "reconcile"]
 
 

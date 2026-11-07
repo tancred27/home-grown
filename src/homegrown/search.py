@@ -1,13 +1,8 @@
 """The read path: hybrid search, then a verdict.
 
-Everything here runs as the asking user under row-level security. The caller cannot
-widen their own visibility, because the filter is a database policy rather than a
-WHERE clause this module remembers to add.
-
-Vector search is an EXACT SCAN, never an approximate index. Measured: HNSW under RLS
-gave recall 0.42 and returned nothing at all for 56 of 100 users, silently
-(experiments/RESULTS.md run B). An index that quietly returns an empty list is worse
-than a slow scan.
+Everything here runs as the asking user under row-level security, so a caller can never
+see more than the database policies allow. The filter lives in the database, not in a
+WHERE clause this module has to remember.
 """
 
 from __future__ import annotations
@@ -15,6 +10,7 @@ from __future__ import annotations
 import json
 import re
 import string
+import time
 import uuid
 
 import psycopg
@@ -23,8 +19,8 @@ from .config import settings
 from .embed import embed_query
 from .models import Verdict, display_name
 
-# Stop words are dropped before building the tsquery; Postgres would drop them anyway,
-# but removing them here keeps the OR query from being all noise.
+# Dropped before building the keyword query, so a sentence-length request doesn't turn
+# into an OR of filler words.
 _STOP = frozenset("""a an the and or but if then than that this these those is are was
 were be been being to of in on at by for with from as it its into over under about can
 could will would should may might must do does did done have has had so such no not
@@ -32,17 +28,18 @@ only own same too very just now we i you they our your their them us me my what 
 who when where why how all any both each few more most other some want need get got
 make made use used using write writing new several""".split())
 
+# Turns off index scans for the rest of the transaction. Used before the exact vector
+# scan: a plain HNSW index under RLS silently drops most of the visible rows.
+_FORCE_EXACT = "set local enable_indexscan = off; set local enable_bitmapscan = off;"
 
 _mode_cache: dict[str, tuple[float, str]] = {}
 
 
 def vector_mode(cur) -> str:
-    """'exact' or 'hnsw' for this query. In 'auto', decided from Postgres's own row
-    estimate for `embedding` (free to read) and whether the HNSW index exists; cached
-    for a minute so it costs nothing per question."""
+    """'exact' or 'hnsw'. In 'auto' mode this uses Postgres's row estimate for the
+    embedding table and whether the HNSW index exists, cached for a minute."""
     if settings.vector_search in ("exact", "hnsw"):
         return settings.vector_search
-    import time
     hit = _mode_cache.get("mode")
     if hit and time.monotonic() - hit[0] < 60:
         return hit[1]
@@ -56,37 +53,18 @@ def vector_mode(cur) -> str:
 
 
 def _tsquery_or(text: str) -> str:
-    """Build an OR'd tsquery from free text.
+    """An OR'd tsquery from free text: 'word1 | word2 | ...'.
 
-    plainto_tsquery() ANDs every term, so a sentence-length intent like "join several
-    running processes into a ring" requires all eight words to appear and matches
-    nothing. That made the lexical half of this search contribute exactly zero on all
-    51 gate-1 queries while the vector half silently carried the result -- the kind of
-    failure that looks like a working system until something measures it.
+    plainto_tsquery() would AND every word, and a sentence-long request almost never
+    contains all of its words in one document, so it would match nothing.
     """
     words = [w for w in re.findall(r"[a-z0-9]{3,}", text.lower()) if w not in _STOP]
-    seen: list[str] = []
-    for w in words:
-        if w not in seen:
-            seen.append(w)
-    return " | ".join(seen[:40])
-
-# pgvector will happily use an HNSW index here and silently lose most rows once RLS
-# narrows the visible set. Disabling index scans for this statement forces the exact
-# scan the design requires. If latency ever makes this untenable, the documented
-# fallback is pgvector 0.8 iterative scans -- not re-enabling the plain index.
-_FORCE_EXACT = "set local enable_indexscan = off; set local enable_bitmapscan = off;"
+    return " | ".join(list(dict.fromkeys(words))[:40])
 
 
 def candidate_text(conn: psycopg.Connection, asset_id) -> str:
-    """What the cross-encoder reads for one candidate.
-
-    Lead with the description and keep claims few and short. The first version fed
-    name + summary + 12 claim bodies: the layer-1 claim body IS the summary, so the
-    description appeared twice, and then a dozen "Asserted by its own tests: escapes
-    backslashes in label names" lines buried it. A cross-encoder reads the pair as a
-    passage; give it a passage, not a test log.
-    """
+    """The passage the cross-encoder reads for one candidate: name and description
+    first, then a few short evidence lines."""
     with conn.cursor() as cur:
         cur.execute("select name, coalesce(summary,'') from asset where id = %s",
                     (asset_id,))
@@ -104,172 +82,131 @@ def candidate_text(conn: psycopg.Connection, asset_id) -> str:
     return ". ".join(parts)[:900]
 
 
-def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = None,
-           limit: int = 50, rerank: bool | None = None) -> list[dict]:
-    """Full-text and vector search in one pass, fused by reciprocal rank.
+def _lexical(cur, tsq: str, limit: int) -> list[tuple]:
+    """(asset_id, name, score) from keyword search.
 
-    `keywords` exists because agent-written synonyms moved retrieval quality more than
-    anything else we tested -- the caller usually knows alternative names we do not.
+    Goes through fts_hits() (db/008_fts.sql) because Postgres can't use a GIN index for
+    `@@` on a table with row-level security. fts_hits applies the same visibility rules
+    itself, and joining back to `asset` here (under RLS) checks them a second time.
     """
-    terms = " ".join([intent, *(keywords or [])])
-    qvec = embed_query(terms)
-    tsq = _tsquery_or(terms)
-
-    with conn.cursor() as cur:
-        # Keyword search runs WITH its GIN indexes. (Forcing exact scan here, as an
-        # earlier version did, made it scan and re-tokenise every visible claim: ~0.5 s at
-        # a few thousand claims, linear in the org's size. Found by the load test.)
-
-        # Lexical: asset name/aliases/summary, plus claim bodies, since the useful
-        # query is often about behaviour rather than about a package name.
-        lexical: list[tuple] = []
-        if tsq:
-            # Indexed keyword search under RLS goes through fts_hits() (db/008_fts.sql):
-            # Postgres can't use a GIN index for `@@` on an RLS table (the operator isn't
-            # leakproof), so a plain query re-tokenised every visible row per question.
-            # fts_hits applies the same visibility rules explicitly; joining its ids back
-            # to `asset` here, under RLS, is a second check. Same scores as before: the
-            # asset's text rank, plus its best visible claim rank.
-            cur.execute(
-                """
-                select a.id, a.name, f.arank, f.crank
-                  from fts_hits(to_tsquery('english', %(q)s), %(l)s) f
-                  join asset a on a.id = f.asset_id
-                 order by f.arank desc, f.crank desc
-                """,
-                {"q": tsq, "l": limit},
-            )
-            lexical = [(r[0], r[1], float(r[2]) + 0.5 * float(r[3])) for r in cur.fetchall()]
-
-        # One row per ASSET, scored by its best-matching embedding field. Assets now
-        # carry several fields ("card": name+summary+claims, "summary": name+summary
-        # only), and an ungrouped ORDER BY would return the same asset twice and push
-        # other candidates out of the list.
-        if vector_mode(cur) == "hnsw":
-            # Past ~1M vectors: the HNSW index (db/006_hnsw.sql) fetches a candidate
-            # POOL with iterative scan -- it keeps walking the graph until enough rows
-            # pass row-level security, so a selective filter can't silently return
-            # nothing -- and the pool is then ranked exactly, best field per asset.
-            pool = max(settings.hnsw_pool, limit * 4)
-            cur.execute("set local enable_indexscan = on")
-            cur.execute("set local hnsw.iterative_scan = relaxed_order")
-            cur.execute(f"set local hnsw.ef_search = {max(pool, settings.hnsw_ef_search)}")
-            cur.execute(
-                """
-                with pool as materialized (
-                    select e.asset_id, e.vec <=> %s as d
-                      from embedding e
-                     where e.model = %s
-                     order by e.vec <=> %s
-                     limit %s)
-                select a.id, a.name, 1 - min(p.d) as sim
-                  from pool p join asset a on a.id = p.asset_id
-                 group by a.id, a.name
-                 order by min(p.d)
-                 limit %s
-                """,
-                (qvec, settings.embed_model, qvec, pool, limit),
-            )
-        else:
-            # Exact vector scan over the rows the caller can see: index scans off for
-            # THIS statement's setting only (keyword search above keeps its indexes).
-            cur.execute(_FORCE_EXACT)
-            cur.execute(
-                """
-                select a.id, a.name, 1 - min(e.vec <=> %s) as sim
-                  from embedding e
-                  join asset a on a.id = e.asset_id
-                 where e.model = %s          -- never compare across models
-                 group by a.id, a.name
-                 order by min(e.vec <=> %s)
-                 limit %s
-                """,
-                (qvec, settings.embed_model, qvec, limit),
-            )
-        semantic = [(r[0], r[1], float(r[2])) for r in cur.fetchall()]
-
-    if settings.fusion == "interleave":
-        return _interleave(semantic, lexical, conn, terms, rerank)
-
-    # Fusion by MAX of reciprocal ranks, not sum.
-    #
-    # Summing (textbook RRF) measurably hurt on the gate-1 set: hybrid recall@5 fell
-    # to 0.61 against 0.71 for semantic alone on low-overlap queries, and one gold
-    # asset ranked #1 by vector search was pushed to #11. With K=60 and 20 candidates
-    # every reciprocal rank sits between 1/61 and 1/81, so "appears in both lists"
-    # almost always outscores "ranked first by the better list" -- which is the wrong
-    # trade when the two retrievers are not equally good, and here they are not.
-    #
-    # Max-fusion takes the best evidence for a candidate instead of rewarding
-    # agreement, so a strong single signal survives. Chosen after seeing the failure,
-    # which means the post-fix number on this same query set is optimistic; it needs a
-    # held-out set to confirm.
-    K = 60.0
-    fused: dict[uuid.UUID, dict] = {}
-
-    def _put(aid, name, rank, which, raw):
-        row = fused.setdefault(aid, {"asset_id": aid, "name": name, "score": 0.0,
-                                     "lexical": None, "semantic": None})
-        row["score"] = max(row["score"], 1.0 / (K + rank + 1))
-        row[which] = raw
-
-    for rank, (aid, name, score) in enumerate(lexical):
-        _put(aid, name, rank, "lexical", score)
-    for rank, (aid, name, score) in enumerate(semantic):
-        _put(aid, name, rank, "semantic", score)
-
-    # Tie-break on having both signals, which recovers the complementarity that
-    # max-fusion gives up without letting it override a strong single signal.
-    ordered = sorted(
-        fused.values(),
-        key=lambda r: (-r["score"], -(r["lexical"] is not None and r["semantic"] is not None)),
+    if not tsq:
+        return []
+    cur.execute(
+        """
+        select a.id, a.name, f.arank, f.crank
+          from fts_hits(to_tsquery('english', %(q)s), %(l)s) f
+          join asset a on a.id = f.asset_id
+         order by f.arank desc, f.crank desc
+        """,
+        {"q": tsq, "l": limit},
     )
-
-    use_rerank = settings.rerank_enabled if rerank is None else rerank
-    if not use_rerank or len(ordered) < 2:
-        return ordered
-
-    # Rerank only the head: the cross-encoder is the expensive step, and recall@10 was
-    # already 0.86 before reranking, so the right answer is usually near the top of
-    # the fused list even when it is not in the top 5.
-    from . import rerank as rr
-
-    head = ordered[: settings.rerank_depth]
-    tail = ordered[settings.rerank_depth :]
-    texts = [candidate_text(conn, r["asset_id"]) for r in head]
-    return rr.apply(terms, head, texts) + tail
+    return [(r[0], r[1], float(r[2]) + 0.5 * float(r[3])) for r in cur.fetchall()]
 
 
-def _interleave(semantic: list[tuple], lexical: list[tuple], conn, terms: str,
-                rerank: bool | None) -> list[dict]:
-    """Max-fusion with ties broken toward the stronger retriever.
+def _semantic(cur, qvec, limit: int) -> list[tuple]:
+    """(asset_id, name, similarity) from vector search, one row per asset, scored by
+    its best-matching embedding field."""
+    if vector_mode(cur) == "hnsw":
+        # The index fetches a candidate pool, which is then ranked exactly. Iterative
+        # scan keeps walking the graph until enough rows pass row-level security.
+        pool = max(settings.hnsw_pool, limit * 4)
+        cur.execute("set local enable_indexscan = on")
+        cur.execute("set local hnsw.iterative_scan = relaxed_order")
+        cur.execute(f"set local hnsw.ef_search = {max(pool, settings.hnsw_ef_search)}")
+        cur.execute(
+            """
+            with pool as materialized (
+                select e.asset_id, e.vec <=> %s as d
+                  from embedding e
+                 where e.model = %s
+                 order by e.vec <=> %s
+                 limit %s)
+            select a.id, a.name, 1 - min(p.d) as sim
+              from pool p join asset a on a.id = p.asset_id
+             group by a.id, a.name
+             order by min(p.d)
+             limit %s
+            """,
+            (qvec, settings.embed_model, qvec, pool, limit),
+        )
+    else:
+        cur.execute(_FORCE_EXACT)
+        cur.execute(
+            """
+            select a.id, a.name, 1 - min(e.vec <=> %s) as sim
+              from embedding e
+              join asset a on a.id = e.asset_id
+             where e.model = %s          -- never compare across models
+             group by a.id, a.name
+             order by min(e.vec <=> %s)
+             limit %s
+            """,
+            (qvec, settings.embed_model, qvec, limit),
+        )
+    return [(r[0], r[1], float(r[2])) for r in cur.fetchall()]
 
-    Under max-fusion semantic #1 and lexical #1 score an identical 1/61, so which comes
-    first is arbitrary, and lexical #1 is often noise -- recall@1 collapsed to ~0.33 for
-    every max-fused variant on the tuning set while semantic alone held ~0.58. Breaking
-    that tie toward semantic, the measured-stronger retriever, is the same as
-    interleaving the two ranked lists: s1, l1, s2, l2, ...
+
+def _interleave(semantic: list[tuple], lexical: list[tuple]) -> list[dict]:
+    """Merge the two ranked lists as s1, l1, s2, l2, ..., skipping repeats.
+
+    Semantic goes first in each pair because it is the stronger retriever here.
     """
-    out: list[dict] = []
-    seen: dict = {}
     sem = {aid: s for aid, _, s in semantic}
     lex = {aid: s for aid, _, s in lexical}
+    out: list[dict] = []
+    seen: set = set()
     for i in range(max(len(semantic), len(lexical))):
         for lst in (semantic, lexical):
             if i < len(lst):
                 aid, name, _ = lst[i]
                 if aid in seen:
                     continue
-                seen[aid] = True
+                seen.add(aid)
                 out.append({"asset_id": aid, "name": name,
                             "score": 1.0 / (61.0 + len(out)),
                             "semantic": sem.get(aid), "lexical": lex.get(aid)})
-    use_rerank = settings.rerank_enabled if rerank is None else rerank
-    if not use_rerank or len(out) < 2:
-        return out
-    from . import rerank as rr
+    return out
 
-    head, tail = out[: settings.rerank_depth], out[settings.rerank_depth :]
+
+def _max_fuse(semantic: list[tuple], lexical: list[tuple]) -> list[dict]:
+    """Reciprocal-rank fusion using the MAX of the two ranks instead of the sum, so one
+    strong signal isn't outvoted by two weak ones. Ties go to assets found by both."""
+    k = 60.0
+    fused: dict[uuid.UUID, dict] = {}
+    for which, lst in (("lexical", lexical), ("semantic", semantic)):
+        for rank, (aid, name, raw) in enumerate(lst):
+            row = fused.setdefault(aid, {"asset_id": aid, "name": name, "score": 0.0,
+                                         "lexical": None, "semantic": None})
+            row["score"] = max(row["score"], 1.0 / (k + rank + 1))
+            row[which] = raw
+    both = lambda r: r["lexical"] is not None and r["semantic"] is not None  # noqa: E731
+    return sorted(fused.values(), key=lambda r: (-r["score"], -both(r)))
+
+
+def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = None,
+           limit: int = 50, rerank: bool | None = None) -> list[dict]:
+    """Keyword and vector search, fused into one ranked list of assets.
+
+    `keywords` are extra terms from the caller (synonyms, alternative names), searched
+    together with the request.
+    """
+    terms = " ".join([intent, *(keywords or [])])
+    qvec = embed_query(terms)
+    with conn.cursor() as cur:
+        lexical = _lexical(cur, _tsquery_or(terms), limit)
+        semantic = _semantic(cur, qvec, limit)
+
+    if settings.fusion == "interleave":
+        ranked = _interleave(semantic, lexical)
+    else:
+        ranked = _max_fuse(semantic, lexical)
+
+    use_rerank = settings.rerank_enabled if rerank is None else rerank
+    if not use_rerank or len(ranked) < 2:
+        return ranked
+    # Only the head is cross-encoded: it is the slow step.
+    from . import rerank as rr
+    head, tail = ranked[:settings.rerank_depth], ranked[settings.rerank_depth:]
     return rr.apply(terms, head, [candidate_text(conn, r["asset_id"]) for r in head]) + tail
 
 
@@ -285,28 +222,20 @@ def load_claims(conn: psycopg.Connection, asset_id) -> list[dict]:
 
 
 def judge(intent: str, name: str, claims: list[dict], score: float) -> Verdict:
-    """Rule-based verdict, standing in for the model call.
+    """Rule-based verdict, used when no model is configured.
 
-    Deliberately conservative, and the layer weighting is the design position from
-    Layer 2 (tests) is authoritative about capability
-    because CI re-verifies it; layer 3 is authoritative about fit in practice. A
-    candidate with tests but no experience may be recommended on capability, but the
-    response must say nobody is known to have used it.
-
-    A wrong "use as-is" costs more than a rebuild, so thin evidence returns `unknown`
-    with the gap named rather than a guess. Replacing this with a model is gated on
-    claim accuracy; until then the rules keep the whole
-    read path runnable and testable.
+    It only looks at the evidence, never at whether the asset fits the request:
+    layer 2 (tests) speaks to what the asset can do, layer 3 (usage and discussions)
+    to how it works out in practice. Thin evidence gives `unknown` with the gap named.
     """
     l2 = [c for c in claims if c["layer"] == 2]
     l3 = [c for c in claims if c["layer"] == 3]
     refusals = [c for c in l2 if c["kind"] == "refusal"]
     limits = [c for c in l2 if c["kind"] in ("limit", "scale")]
 
-    reasons, unknowns = [], []
-    for c in (l2[:2] + l3[:1]):
-        reasons.append({"text": c["body"][:180], "claim_id": c["claim_id"],
-                        "layer": c["layer"]})
+    reasons = [{"text": c["body"][:180], "claim_id": c["claim_id"], "layer": c["layer"]}
+               for c in (l2[:2] + l3[:1])]
+    unknowns = []
 
     if not claims or score < 0.01:
         verdict = "unknown"
@@ -317,7 +246,7 @@ def judge(intent: str, name: str, claims: list[dict], score: float) -> Verdict:
     elif l2 and not l3:
         verdict = "use_as_is" if not refusals else "extend"
         unknowns.append("nobody outside its own team is known to have used this")
-    elif l3 and any(c["kind"] in ("outcome", "pitfall") for c in l3):
+    elif any(c["kind"] in ("outcome", "pitfall") for c in l3):
         verdict = "extend"
     else:
         verdict = "use_as_is"
@@ -368,19 +297,14 @@ def _candidate_letter(label: str, letters: list[str], names: list[str]) -> str |
 
 
 def judge_with_model(intent: str, cards: list[dict]) -> list[dict]:
-    """One model call judging every candidate against the request.
+    """One model call that judges every candidate against the request.
 
-    The design's verdict step. Needed because similarity
-    alone cannot tell that nothing matches: on the gate-1 tuning set, similarity to the
-    right asset and to the best wrong one have near-identical distributions
-    (experiments/gate2/calibration.txt). FAILS SAFE: on any error every candidate is
-    'unknown', so a broken judge can never send a developer to the wrong asset.
+    Similarity scores alone can't tell "this fits" from "nothing here fits", so a model
+    reads the candidates. Fails safe: on any error every candidate is 'unknown', so a
+    broken judge never sends a developer to the wrong asset.
     """
     from .llm import structured
 
-    # 26 labels. It used to be "ABCDEFGHIJ": a 15-candidate shortlist then indexed past
-    # the end while building the prompt -- OUTSIDE the try below -- so find_existing
-    # crashed instead of failing safe. Everything now happens inside the try.
     letters = string.ascii_uppercase
     try:
         cards = cards[:len(letters)]
@@ -390,9 +314,7 @@ def judge_with_model(intent: str, cards: list[dict]) -> list[dict]:
             + "\n".join(f"  evidence: {e}" for e in c.get("evidence", [])[:6])
             for i, c in enumerate(cards))
         used = list(letters[:len(cards)])
-        # Constrain the label to exactly the letters shown. The original schema allowed
-        # any string, and a model that wrote "Candidate A" was parsed by its first
-        # character, "C" -- scrambling every verdict (caught on Gemini).
+        # Only the letters shown are valid labels.
         schema = json.loads(json.dumps(_JUDGE_SCHEMA))
         schema["properties"]["verdicts"]["items"]["properties"]["candidate"]["enum"] = used
         out = structured(_JUDGE_SYSTEM, f"Request: {intent}\n\n{body}\n\n"
@@ -408,18 +330,15 @@ def judge_with_model(intent: str, cards: list[dict]) -> list[dict]:
                                            "reason": "judge returned no verdict"})
                 for i in range(len(cards))]
     except Exception as e:
-        # The reason names the failure (e.g. "429: quota") so an outage is diagnosable;
-        # error text from the provider never contains the key.
+        # Name the failure (e.g. "429: quota") so an outage can be diagnosed.
         why = f"{type(e).__name__}: {str(e)[:100]}".replace("\n", " ")
         return [{"verdict": "unknown", "reason": f"model verdict unavailable ({why})"}
                 for _ in cards]
 
 
-# Query rewriting. A ticket says "which pod's latency curve doesn't look like the
-# others"; the asset says "detect outliers in a group of time series". The model restates
-# the request as the purpose line of a component that would satisfy it, and that text is
-# searched alongside the request. Measured at ~1,900 assets (experiments/scale): test-set
-# recall@5 0.69 -> 0.82, and 0.90 -> 0.98 at 109 assets. Chosen on the tuning set only.
+# Query rewriting: a ticket says "which pod's latency curve doesn't look like the
+# others"; the component says "detect outliers in a group of time series". The model
+# restates the request in the second style, and both are searched.
 REWRITE_SYSTEM = (
     "A developer describes something they need. Write the one plain-language sentence "
     "(at most 30 words) that would describe an existing software component which does "
@@ -432,8 +351,8 @@ _rewrite_cache: dict[str, str | None] = {}
 
 
 def rewrite_query(intent: str) -> str | None:
-    """The request restated as a component purpose line, or None (fails safe: search
-    then runs on the request alone, exactly as before)."""
+    """The request restated as a component's purpose line, or None (then search runs
+    on the request alone)."""
     if not settings.query_rewrite or settings.verdict_mode != "model":
         return None
     if intent in _rewrite_cache:
@@ -452,24 +371,19 @@ def rewrite_query(intent: str) -> str | None:
 
 def find_existing(user_id: uuid.UUID | str, intent: str,
                   keywords: list[str] | None = None, top: int = 5) -> list[Verdict]:
-    """The one function the MCP tool, the CLI and the UI all call.
+    """Search, then judge. The one function the MCP tool, CLI and API all call.
 
-    settings.verdict_mode: "rules" (the original rule-based verdict: any candidate with
-    test claims can be "use_as_is", relevance never considered -- 8/8 false alarms on
-    held-out control tickets) or "model" (judge_with_model, fails safe to "unknown").
+    settings.verdict_mode picks the judge: "rules" (judge(), evidence only) or "model"
+    (judge_with_model(), which reads the request and fails safe to "unknown").
     """
     from .db import as_user
 
     model_mode = settings.verdict_mode == "model"
-    # With a model judge, judge a wider SHORTLIST than we return: search ranks the right
-    # asset near the top but, as the corpus grows, often not in the top 5 (recall@5 fell
-    # to 0.55 at 1,909 assets). The judge, not the rank, decides what comes back.
     depth = max(top, settings.verdict_shortlist) if model_mode else top
 
-    out: list[Verdict] = []
     rw = rewrite_query(intent)                # before taking a DB connection
     with as_user(user_id) as conn:
-        # Runs as the asker: the judge only ever sees candidates this user may discover.
+        # Runs as the asker, so the judge only sees candidates this user may discover.
         rows = search(conn, intent, [*(keywords or []), *([rw] if rw else [])])[:depth]
         claims_by = {r["asset_id"]: load_claims(conn, r["asset_id"]) for r in rows}
         summaries, purposes = {}, {}
@@ -478,6 +392,8 @@ def find_existing(user_id: uuid.UUID | str, intent: str,
                 cur.execute("select coalesce(summary,''), coalesce(purpose,'') from asset "
                             "where id = %s", (r["asset_id"],))
                 summaries[r["asset_id"]], purposes[r["asset_id"]] = cur.fetchone()
+
+    out: list[Verdict] = []
     for row in rows:
         v = judge(intent, row["name"], claims_by[row["asset_id"]], row["score"])
         v.asset_id = str(row["asset_id"])
@@ -491,7 +407,7 @@ def find_existing(user_id: uuid.UUID | str, intent: str,
         for v, mv in zip(out, judge_with_model(intent, cards), strict=True):
             v.verdict = mv["verdict"]
             v.unknowns = [mv["reason"]] + [u for u in v.unknowns if u != mv["reason"]]
-        # Judged fits first, then unknowns, then not-a-fit; retrieval rank breaks ties.
+        # Judged fits first, then unknowns, then not-a-fit; search rank breaks ties.
         order = {"use_as_is": 0, "extend": 1, "unknown": 2, "not_a_fit": 3}
         out = [v for _, v in sorted(enumerate(out),
                                     key=lambda iv: (order.get(iv[1].verdict, 2), iv[0]))]

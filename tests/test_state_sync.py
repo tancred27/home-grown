@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+import json
 import subprocess
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
@@ -15,7 +16,7 @@ from homegrown.collector.sync import Syncer, read_kind, unit_dirs
 from homegrown.config import settings
 from homegrown.db import admin_conn
 
-T0 = datetime(2026, 11, 8, 12, 0, tzinfo=timezone.utc)
+T0 = datetime(2026, 11, 8, 12, 0, tzinfo=UTC)
 
 
 def git(repo: Path, *args):
@@ -40,7 +41,7 @@ def mono(tmp_path):
     write(repo, "README.md", f"# {name}\n")
     for u, what in (("a", "retries HTTP calls"), ("b", "parses durations")):
         write(repo, f"pkg/{u}/package.json",
-              '{"name": "%s-%s", "description": "Library that %s"}' % (name, u, what))
+              json.dumps({"name": f"{name}-{u}", "description": f"Library that {what}"}))
         write(repo, f"pkg/{u}/README.md", f"# {u}\n\nThis library {what}.\n")
         write(repo, f"pkg/{u}/src/index.ts", "export const x = 1\n")
         write(repo, f"pkg/{u}/{u}.test.ts", f"it('handles the basic case for {u}', () => {{}})\n")
@@ -79,7 +80,8 @@ def test_only_changed_units_are_reprocessed(mono):
         "a source-only change alters nothing the collector reads"
 
     write(repo, "pkg/a/a.test.ts",
-          "it('handles the basic case for a', () => {})\nit('rejects a negative delay', () => {})\n")
+          "it('handles the basic case for a', () => {})\n"
+          "it('rejects a negative delay', () => {})\n")
     git(repo, "commit", "-qam", "new test in a")
     r2 = s.sync(full, r["head"])
     assert r2["status"] == "processed" and r2["changed_units"] == 1, "only unit a"
@@ -166,7 +168,7 @@ def _claim_for(repo, now, owner="w1"):
 def test_poller_marks_only_repos_pushed_since_last_poll():
     from homegrown.collector.poller import poll_org
     tag = uuid.uuid4().hex[:6]
-    since = datetime(2026, 11, 8, 12, 0, tzinfo=timezone.utc)
+    since = datetime(2026, 11, 8, 12, 0, tzinfo=UTC)
     repos = [{"full_name": f"zzorg-{tag}/r{i}", "archived": i == 1,
               "pushed_at": (since + timedelta(minutes=10 - i)).isoformat()} for i in range(5)]
     repos += [{"full_name": f"zzorg-{tag}/old{i}", "archived": False,

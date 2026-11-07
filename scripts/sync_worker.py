@@ -13,7 +13,7 @@ import socket
 import sys
 import time
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 
 from langgraph.checkpoint.postgres import PostgresSaver

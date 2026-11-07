@@ -41,7 +41,7 @@ def test_missing_gemini_key_is_unavailable_not_a_crash(monkeypatch):
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
     monkeypatch.setattr(llm.settings, "gemini_key_file", "")
     with pytest.raises(llm.LLMUnavailable):
-        llm._gemini_key()
+        llm._key("gemini")
 
 
 def test_judge_fails_safe_when_the_provider_is_down(monkeypatch):

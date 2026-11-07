@@ -1,15 +1,14 @@
-"""`homegrown find` -- the same find_existing, from a terminal or any coding agent's shell.
-
-The design (section 4) keeps REST/CLI/MCP as thin routes onto one function, so gate 2
-can measure which route agents actually use. Every call is logged to the `question`
-table with route='cli' (adherence is a number, not a hope).
+"""`homegrown find`: find_existing from a terminal or a coding agent's shell.
 
 Usage:
   homegrown find "turn request paths with ids into route templates" [-k cardinality,metrics]
               [--user gate2-dev] [--json]
 
-Identity: the caller is the app_user named by --user or $HOMEGROWN_USER. A real deployment
-gets this from the OAuth token (design section 8); the env var is the local stand-in.
+The CLI, the API and the MCP server all call the same function, and every call is
+logged to the `question` table with its route.
+
+Identity: the app_user named by --user or $HOMEGROWN_USER. A real deployment would
+take it from the caller's sign-in token instead.
 """
 
 from __future__ import annotations

@@ -159,7 +159,7 @@ def main() -> int:
 
     print(f"rows={rows:,}  users={USERS}  groups={GROUPS}  "
           f"visible/user~{rows*PER_USER//GROUPS:,} ({100*PER_USER/GROUPS:.1f}%)")
-    print(f"pgvector note: 0.8+ iterative scans are the documented fallback\n")
+    print("pgvector note: 0.8+ iterative scans are the documented fallback\n")
     setup(settings.admin_dsn)
 
     # NOTE on the second group of columns: they measure the PLANNER'S CHOICE with an

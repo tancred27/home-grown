@@ -91,7 +91,8 @@ def test_query_rewrite_joins_the_search_and_fails_safe(monkeypatch):
     monkeypatch.setattr(S.settings, "query_rewrite", True)
     S._rewrite_cache.clear()
     import homegrown.llm as L
-    monkeypatch.setattr(L, "structured", lambda *a, **k: {"purpose": "Detect outliers in a group of time series."})
+    monkeypatch.setattr(L, "structured",
+                        lambda *a, **k: {"purpose": "Detect outliers in a group of time series."})
     assert S.rewrite_query("which pod's latency curve looks different?") == \
         "Detect outliers in a group of time series."
     S._rewrite_cache.clear()

@@ -16,7 +16,7 @@ from __future__ import annotations
 import sys
 
 from homegrown.db import admin_conn, as_user
-from homegrown.search import find_existing, search
+from homegrown.search import find_existing
 
 
 def show(label: str, rows) -> None:

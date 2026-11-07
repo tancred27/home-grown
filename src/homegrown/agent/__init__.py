@@ -1,7 +1,6 @@
-"""Gate-2 coding agent: does a coding agent check the memory before building?
-
-See graph.py for the graph, tools.py for the nudge conditions, and
-scripts/gate2_run.py for the experiment runner.
+"""A small coding agent used to test whether coding agents check HomeGrown before
+building. See graph.py for the graph and tools.py for the prompt variants
+("nudges"); scripts/gate2_run.py runs the experiment.
 """
 
 from .graph import build_graph, initial_state, score_run  # noqa: F401

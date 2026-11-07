@@ -1,9 +1,7 @@
-"""Stage 1 of the ingestion funnel: deterministic drops, no model calls.
+"""Cheap, deterministic filters applied before anything else (no model calls).
 
-This stage is not an optimization. Measured on 2,343 real comments across 13 repos:
-68% of comments in popular repos and 58% in obscure ones are bot-authored. Most of
-the corpus is machine noise and removing it costs nothing.
-See experiments/density/RESULTS.md.
+Most comments in real repositories are written by bots, so dropping them first saves
+everything downstream.
 """
 
 from __future__ import annotations

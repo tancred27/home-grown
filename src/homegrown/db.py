@@ -13,18 +13,20 @@ import threading
 import uuid
 from collections.abc import Iterator
 from contextlib import contextmanager
+from typing import TYPE_CHECKING
 
 import psycopg
 from pgvector.psycopg import register_vector
 
 from .config import settings
 
+if TYPE_CHECKING:
+    from psycopg_pool import ConnectionPool
 
-# Connection pools, one per DSN, created on first use. Opening a fresh connection per
-# query cost ~41 connections per processed commit and dominated the write path
-# (experiments/scale/write_path.md). Pooled connections are safe for RLS: as_user()
-# sets app.user_id transaction-locally, so it can never outlive the request.
-_pools: dict[tuple[str, bool], "ConnectionPool"] = {}
+# Connection pools, one per DSN, created on first use. Pooling is safe with row-level
+# security: as_user() sets app.user_id for one transaction only, so it can't leak into
+# the next request that reuses the connection.
+_pools: dict[tuple[str, bool], ConnectionPool] = {}
 _pool_lock = threading.Lock()
 
 

@@ -1,20 +1,17 @@
 """MCP server: find_existing and friends for any MCP-capable coding agent.
 
-A thin adapter over the same functions the CLI and the gate-2 harness call (design
-section 4: REST/CLI/MCP are routes onto one core, so route choice can be measured).
-Tools (design section 7):
-
+Tools:
   find_existing          read-only   has the org already got this?
   get_asset              read-only   one card; `detail` only with source access
   report_reuse_outcome   write       reused / extended / rejected, and why
 
 Run (stdio):   python -m homegrown.mcp_server
 Register with Claude Code:
-  claude mcp add homegrown -e HOMEGROWN_USER=gate2-dev -- <repo>/.venv/Scripts/python -m homegrown.mcp_server
+  claude mcp add homegrown -e HOMEGROWN_USER=gate2-dev -- \
+      <repo>/.venv/Scripts/python -m homegrown.mcp_server
 
-Identity: $HOMEGROWN_USER names the app_user. The design's real path is an OAuth 2.1
-resource server that exchanges the caller's token (section 8); stdio + env var is the
-local stand-in, and every query still runs under that user's row-level security.
+Identity: $HOMEGROWN_USER names the app_user, and every query runs under that user's
+row-level security. A real deployment would take identity from an OAuth token.
 """
 
 from __future__ import annotations

@@ -1,34 +1,26 @@
-"""The one place this project calls a language model -- any provider.
+"""The one place this project calls a language model.
 
-Jobs (each must be BLIND to the evaluation):
-  * fit judgment: does a candidate let the developer avoid building what they asked for
-  * purpose lines: one "what is this for" sentence per unit, from its own source text
-  * page triage: is a documentation page a solution / decision / pitfall worth keeping
+Used for: judging whether a candidate fits a request, writing a unit's one-line
+purpose, deciding whether a documentation page is worth keeping, and rewriting queries.
 
 Providers (settings.llm_provider):
-  anthropic   claude-opus-5-5 via the Anthropic SDK (structured output, refusal
-              fallbacks). Needs API credit.
-  gemini      Google's OpenAI-compatible endpoint. The FREE TIER may use prompts to
-              improve Google's products: fine for this project's public repositories,
-              never for private code. Production needs the paid tier or `local`.
-  groq        Groq's OpenAI-compatible endpoint; default model openai/gpt-oss-120b
-              (OpenAI's open-weight model). FREE tier: same rule as Gemini -- public
-              repositories only.
-  local       any OpenAI-compatible server, e.g. Ollama at http://localhost:11434/v1.
-              Nothing leaves the machine.
+  anthropic   Claude via the Anthropic SDK.
+  gemini      Google's OpenAI-compatible endpoint.
+  groq        Groq's OpenAI-compatible endpoint (default model openai/gpt-oss-120b).
+  local       any OpenAI-compatible server, e.g. Ollama. Nothing leaves the machine.
+  disabled    every call raises LLMUnavailable.
 
-Repeatability: no sampling parameters are relied on. Outputs that feed an evaluation
-are cached on disk (`cached_json`) and committed, so a rerun re-scores the same text.
+Free tiers (Gemini, Groq) may use prompts for training: public code only.
 
-Every caller treats a raised exception as "no judgment" and fails safe (e.g. the fit
-judge then returns `unknown`), so a provider outage can never produce a reuse
-recommendation.
+Every function here raises on failure, and every caller treats that as "no answer"
+and falls back to something safe (the judge returns `unknown`, and so on).
 """
 
 from __future__ import annotations
 
 import hashlib
 import json
+import os
 import random
 import re
 import time
@@ -71,19 +63,13 @@ def _read_key_file(path: str) -> str | None:
     return None
 
 
-def _gemini_key() -> str:
-    import os
-    key = os.environ.get("GEMINI_API_KEY") or _read_key_file(settings.gemini_key_file)
+def _key(provider: str) -> str:
+    """The API key for 'gemini' or 'groq', from <PROVIDER>_API_KEY or the key file."""
+    env = f"{provider.upper()}_API_KEY"
+    key = os.environ.get(env) or _read_key_file(getattr(settings, f"{provider}_key_file"))
     if not key:
-        raise LLMUnavailable("no Gemini key: set GEMINI_API_KEY or HOMEGROWN_GEMINI_KEY_FILE")
-    return key
-
-
-def _groq_key() -> str:
-    import os
-    key = os.environ.get("GROQ_API_KEY") or _read_key_file(settings.groq_key_file)
-    if not key:
-        raise LLMUnavailable("no Groq key: set GROQ_API_KEY or HOMEGROWN_GROQ_KEY_FILE")
+        raise LLMUnavailable(f"no {provider} key: set {env} or "
+                             f"HOMEGROWN_{provider.upper()}_KEY_FILE")
     return key
 
 
@@ -118,7 +104,6 @@ def resolve_model() -> str:
 
 
 def _version_key(model_id: str):
-    import re
     nums = [int(x) for x in re.findall(r"\d+", model_id)]
     return (nums, model_id)
 
@@ -129,10 +114,8 @@ def _base() -> str:
 
 
 def _headers() -> dict:
-    if settings.llm_provider == "gemini":
-        return {"Authorization": f"Bearer {_gemini_key()}"}
-    if settings.llm_provider == "groq":
-        return {"Authorization": f"Bearer {_groq_key()}"}
+    if settings.llm_provider in ("gemini", "groq"):
+        return {"Authorization": f"Bearer {_key(settings.llm_provider)}"}
     return {"Authorization": "Bearer local"}
 
 
@@ -222,8 +205,7 @@ def _post_with_backoff(body: dict, model: str, attempts: int = 6) -> dict:
             _json_schema_supported[model] = False
             raise _Retry()
         if r.status_code == 429 and _DAILY_LIMIT.search(r.text):
-            # A per-day cap does not clear in seconds: retrying only stalls the caller
-            # (measured: ~9 minutes per call on Groq). Fail now; callers fail safe.
+            # A per-day cap won't clear in seconds; retrying would only stall the caller.
             raise QuotaExhausted(_quota_message(r.text))
         if r.status_code in (429, 500, 502, 503, 504) and i < attempts - 1:
             ra = r.headers.get("retry-after")
@@ -282,8 +264,8 @@ def _check(out, schema: dict) -> None:
 
 
 def cached_json(cache_file: Path, key_parts: list[str], make):
-    """Memoise `make()` on disk, keyed by a hash of its inputs. Committed alongside the
-    experiment, so a rerun scores the identical text and the cost is paid once."""
+    """Memoise `make()` on disk, keyed by a hash of its inputs. Evaluation scripts use
+    it so a rerun scores the same model output without paying for it again."""
     cache = {}
     if cache_file.is_file():
         cache = json.loads(cache_file.read_text(encoding="utf-8"))

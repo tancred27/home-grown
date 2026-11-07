@@ -1,7 +1,7 @@
 """The collection agent: decide whether a change is worth remembering, and store it.
 
-Triggered by every pushed commit and every created or updated documentation page
-(GitHub, Confluence, Notion, markdown docs -- see adapters.py). For each event:
+Runs once per event: a sync pass over a changed repo (collector/sync.py), or a created
+or updated documentation page (see adapters.py). Each event goes through:
 
   triage       no model. Drop bots, dependency bumps, lockfile/generated-only changes,
                trivially short pages. Most events should end here, cheaply.
@@ -23,17 +23,19 @@ Triggered by every pushed commit and every created or updated documentation page
   apply        one transaction: asset, claims, card, embeddings, contributors, stage,
                audit.
 
-Postgres checkpointer, thread_id = event id: an event paused for its owner resumes days
-later, in another process, from exactly where it stopped.
+With a Postgres checkpointer (thread_id = event id), an event paused for its owner can
+resume days later, in another process, from where it stopped.
 """
 
 from __future__ import annotations
 
+import hashlib
 import operator
 import re
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Annotated, Any, Callable, TypedDict
+from typing import Annotated, Any, TypedDict
 
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import interrupt
@@ -64,8 +66,8 @@ _SOLVED_SIGNAL = re.compile(
     r"architecture|design|migration guide|workaround|known issues?)\b", re.I)
 _MEETING = re.compile(r"\b(meeting notes|agenda|attendees|1:1|standup|retro notes)\b",
                       re.I)
-# Discussions and docs carry personnel data (absence, hiring, performance). Found while
-# sampling (experiments/density); never let it reach a claim.
+# Discussions and docs sometimes mention people's absence, hiring or performance. Claims
+# that do are dropped.
 _PERSONNEL = re.compile(
     r"\b(vacation|on leave|parental leave|sick|recruit\w*|hiring|interview(ing)?|"
     r"performance review|pip\b|salary|compensation|promotion|fired|laid off|layoff|"
@@ -105,6 +107,11 @@ class Deps:
             if (r / repo).is_dir():
                 return r / repo
         return None
+
+    def unit_dir(self, t: dict) -> Path:
+        """The folder of a target unit, in its checkout."""
+        root = Path(t["root"]) if t.get("root") else self.clone(t["repo"])
+        return root if t["path"] == "." else root / t["path"]
 
 
 class CollectState(TypedDict, total=False):
@@ -280,8 +287,7 @@ def build_collector(deps: Deps, checkpointer=None):
                     t["summary"], t["name"], t["kind"] = unit.summary, unit.name, unit.kind
                     t["aliases"] = unit.aliases
                     claims.extend(l1)
-                unit_dir = root if t["path"] == "." else root / t["path"]
-                for _, cl in tx.extract_repo(unit_dir, commit=version).items():
+                for _, cl in tx.extract_repo(deps.unit_dir(t), commit=version).items():
                     claims.extend(cl)
                 # A commit message can itself be experience: "fix X breaking above 1MB".
                 if ev.kind == "commit" and ev.body:
@@ -311,9 +317,7 @@ def build_collector(deps: Deps, checkpointer=None):
             if not P.needs_refresh(paths, t["path"], has_line, regenerate=regen):
                 skipped += 1
                 continue
-            root = (Path(t["root"]) if t.get("root") else deps.clone(t["repo"]))
-            unit_dir = root if t["path"] == "." else root / t["path"]
-            readme, rname = P.readme_excerpt(unit_dir)
+            readme, rname = P.readme_excerpt(deps.unit_dir(t))
             try:
                 writer = deps.purpose_writer or P.write_line
                 line = writer(t["name"], t.get("summary"), readme)
@@ -360,8 +364,7 @@ def build_collector(deps: Deps, checkpointer=None):
                                           reasons=["documentation page"]).model_dump()
                 continue
             meta = deps.repo_meta(t["full"]) or {}
-            root = (Path(t["root"]) if t.get("root") else deps.clone(t["repo"]))
-            unit_dir = root if t["path"] == "." else root / t["path"]
+            unit_dir = deps.unit_dir(t)
             readme = ""
             for f in sorted(unit_dir.glob("[Rr][Ee][Aa][Dd][Mm][Ee]*")):
                 readme = f.read_text(encoding="utf-8", errors="ignore")[:6000]
@@ -519,30 +522,7 @@ def build_collector(deps: Deps, checkpointer=None):
                                          "stage": stage, "scope":
                                          "org-wide" if scope == org_team else "team-only"}
             if emb_rows:
-                from ..config import settings
-                cards = [asset_text(u.name, u.summary, u.aliases, [c.body for c in cl])
-                         for _, u, cl in emb_rows]
-                summs = [f"{u.name.rsplit('/', 1)[-1]}: {u.summary}" if u.summary
-                         else u.name for _, u, _ in emb_rows]
-                # Re-embed only text that changed: a hash of the exact text is stored with
-                # the vector, and embedding is the most expensive step of a pass.
-                import hashlib
-                for field_name, texts in (("card", cards), ("summary", summs)):
-                    todo = []
-                    with conn.cursor() as cur:
-                        for (aid, _, _), txt in zip(emb_rows, texts, strict=True):
-                            h = hashlib.sha256(txt.encode("utf-8")).hexdigest()[:32]
-                            cur.execute("select text_hash from embedding where asset_id = %s "
-                                        "and field = %s and model = %s",
-                                        (aid, field_name, settings.embed_model))
-                            row = cur.fetchone()
-                            if not row or row[0] != h:
-                                todo.append((aid, txt, h))
-                    if todo:
-                        vecs = embed_texts([txt for _, txt, _ in todo])
-                        for (aid, _, h), v in zip(todo, vecs, strict=True):
-                            write_embedding(conn, aid, field_name, settings.embed_model, v,
-                                            text_hash=h)
+                _embed_changed(conn, emb_rows)
         return {"result": written, "log": [{"node": "apply", "written": written}]}
 
     # ------------------------------------------------------------ wiring
@@ -570,6 +550,31 @@ def build_collector(deps: Deps, checkpointer=None):
     return g.compile(checkpointer=checkpointer)
 
 
+def _embed_changed(conn, rows: list[tuple]) -> None:
+    """Write the card and summary embeddings for [(asset_id, unit, claims)], skipping
+    any whose text is unchanged (a hash of the text is stored with each vector).
+    Embedding is the slowest step of a pass, so this matters."""
+    cards = [asset_text(u.name, u.summary, u.aliases, [c.body for c in cl])
+             for _, u, cl in rows]
+    summs = [f"{u.name.rsplit('/', 1)[-1]}: {u.summary}" if u.summary else u.name
+             for _, u, _ in rows]
+    for field_name, texts in (("card", cards), ("summary", summs)):
+        todo = []
+        with conn.cursor() as cur:
+            for (aid, _, _), txt in zip(rows, texts, strict=True):
+                h = hashlib.sha256(txt.encode("utf-8")).hexdigest()[:32]
+                cur.execute("select text_hash from embedding where asset_id = %s "
+                            "and field = %s and model = %s",
+                            (aid, field_name, settings.embed_model))
+                row = cur.fetchone()
+                if not row or row[0] != h:
+                    todo.append((aid, txt, h))
+        if todo:
+            vecs = embed_texts([txt for _, txt, _ in todo])
+            for (aid, _, h), v in zip(todo, vecs, strict=True):
+                write_embedding(conn, aid, field_name, settings.embed_model, v, text_hash=h)
+
+
 def resume_event(graph, event_id: str, answers: dict) -> dict[str, Any]:
     """Answer an owner's pending questions and finish the event -- from any process,
     days later. answers: {"<unit_id>:visibility": "org-wide" | "team-only",
@@ -594,9 +599,8 @@ def run_event(graph, event: Event, event_id: str, owner_policy: Callable | None 
     from langgraph.types import Command
 
     cfg = {"configurable": {"thread_id": f"collect-{event_id}"}}
-    # With the owner gate off nothing ever pauses, so saving the state after EVERY node
-    # is pure overhead: save once, at the end ("exit"). With the gate on, keep "sync" so
-    # a parked run can resume from another process.
+    # With the owner gate off nothing pauses, so save the state once at the end instead
+    # of after every node.
     kw = {}
     if getattr(graph, "checkpointer", None):
         kw["durability"] = "sync" if settings.owner_gate else "exit"

@@ -1,4 +1,4 @@
-"""The gate-2 coding agent, as a LangGraph graph.
+"""The test coding agent, as a LangGraph graph.
 
     START -> agent -> (no tool calls) ---------------------------------------> END
                |
@@ -10,15 +10,13 @@
                         +--(otherwise)--> agent
 
 * `agent` calls the model with the tools bound.
-* `hook_check` only exists in the "hook" condition: when the model's first write is about
-  to run and nothing has been checked yet, the GRAPH calls find_existing on the ticket
-  itself. Adherence then stops depending on the model choosing to call the tool.
-* `decide` pauses with `interrupt()` whenever a check returns a use-as-is / extend
-  candidate, and asks the developer: reuse, or build anyway? With a Postgres
-  checkpointer the pause survives a process restart; resume with
+* `hook_check` exists only in the "hook" variant: just before the model's first write,
+  if nothing has been checked yet, the graph itself calls find_existing on the ticket.
+* `decide` pauses with `interrupt()` when a check finds a use-as-is / extend candidate
+  and asks the developer: reuse, or build anyway? Resume with
   `Command(resume={"decision": "reuse" | "build", "asset_id": ...})`.
-* Every check and every write is appended to `events`, which is what gate 2 measures:
-  did a check happen before the first write, and was it the model or the hook?
+* Every check and write is appended to `events`, so a run can be scored: was there a
+  check before the first write, and did the model or the hook make it?
 """
 
 from __future__ import annotations
@@ -209,7 +207,7 @@ def initial_state(task: str, variant: str) -> AgentState:
 
 
 def score_run(events: list[dict], gold_asset_id: str | None) -> dict:
-    """What gate 2 measures, from one run's event log."""
+    """Score one run from its event log: was there a check before the first write?"""
     first_write = next((i for i, e in enumerate(events) if e["type"] == "write"), None)
     checks = [(i, e) for i, e in enumerate(events) if e["type"] == "find_existing"]
 

@@ -11,7 +11,6 @@ Usage: python -I scripts/build_map.py <repos-dir> [<repos-dir> ...] [--only-miss
 from __future__ import annotations
 
 import argparse
-import json
 import time
 from pathlib import Path
 

@@ -1,18 +1,10 @@
-"""Layer 2: boundary claims from tests.
+"""Layer 2: claims about behaviour, from test names.
 
-This is the highest-value extractor in the system, and the measurement says why.
-In five repos with zero usable discussion, test names alone produced 81 boundary
-claim candidates at ~89% precision on a hand-read sample -- against 41-50% for
-discussion extraction. See experiments/density/RESULTS.md run E3.
+A test describes one behaviour by convention, and it stays true or the build breaks,
+which makes test names a reliable source of "what does this actually do".
 
-Why test names work so well: a test exists to describe exactly one behaviour, so it
-is structured by convention rather than by whether the author felt like explaining.
-And unlike prose, a test claim stays true or the build breaks.
-
-NOTE on regex style: none of these patterns use re.VERBOSE. In verbose mode an
-unescaped '#' starts a comment and silently deletes the rest of the branch, leaving
-an empty alternative that matches at every position. That bug produced 1.75M bogus
-matches on the first run of this logic.
+Note: none of these patterns use re.VERBOSE. In verbose mode an unescaped '#' starts a
+comment and silently cuts the pattern short.
 """
 
 from __future__ import annotations

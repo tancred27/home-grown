@@ -12,7 +12,7 @@
 
 Merges, squash merges, rebases, force-pushes and reverts need no special case: two
 STATES are compared, never a commit history. Nothing is deleted when a unit disappears
-(design rule); its last state simply stops changing.
+(the agent never deletes); its last state simply stops changing.
 """
 
 from __future__ import annotations

@@ -6,9 +6,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="HOMEGROWN_", env_file=".env", extra="ignore")
 
-    # Two roles on purpose. admin_dsn owns the schema; app_dsn is NOT a superuser and
-    # is NOBYPASSRLS, so row-level security actually applies to it. Using admin_dsn at
-    # runtime would silently disable every policy in db/002_rls.sql.
+    # Two roles. admin_dsn owns the schema. app_dsn is not a superuser and can't bypass
+    # row-level security, so the policies in db/002_rls.sql apply to it. Serving
+    # requests with admin_dsn would silently turn every policy off.
     admin_dsn: str = "postgresql://homegrown:homegrown_dev_only@localhost:5433/homegrown"
     app_dsn: str = "postgresql://homegrown_app:homegrown_app_dev_only@localhost:5433/homegrown"
     db_pool_size: int = 10              # connections per pool (admin, app)
@@ -19,80 +19,60 @@ class Settings(BaseSettings):
 
     embed_model: str = "BAAI/bge-base-en-v1.5"
     embed_dim: int = 768
-    # Small cross-encoder (~130MB, onnxruntime). NOT the Xenova ms-marco exports: in
-    # this fastembed build both the L-6 and L-12 variants returned scores that rose
-    # monotonically with document POSITION regardless of content (-11.44, -11.40,
-    # -11.32 on a trivial case), ranking the correct answer last.
+    # Optional cross-encoder reranking. Off: it lowered recall in our evaluation
+    # (experiments/gate1/RESULTS.md).
     rerank_model: str = "jinaai/jina-reranker-v1-tiny-en"
-    # OFF by default: measured to hurt. On the held-out set, hybrid recall@5 was 0.73
-    # without reranking and 0.62 with it. See experiments/gate1/RESULTS.md.
     rerank_enabled: bool = False
-    rerank_depth: int = 30          # how many fused candidates get cross-encoded
-    # How lexical and semantic candidates are combined: "max" (max-fusion with a
-    # both-signals tie-break) or "interleave" (ties broken toward semantic).
-    # Selected on the tuning set and confirmed on the untouched test set (recall@5 0.82,
-    # recall@1 0.59); see experiments/gate1/RESULTS.md run 3.
+    rerank_depth: int = 30              # how many top results get reranked
+    # How keyword and vector results are merged: "interleave" (alternate, vector
+    # first) or "max" (reciprocal-rank fusion using the better of the two ranks).
     fusion: str = "interleave"
-    # "rules": the original rule-based verdict, which never looks at relevance.
-    # "model": an LLM judges each candidate against the request and fails safe to
-    # "unknown". See experiments/gate2/RESULTS.md.
+    # "rules": verdict from the evidence alone, no model needed.
+    # "model": an LLM judges each candidate against the request; fails safe to "unknown".
     verdict_mode: str = "rules"
-    # Vector search: "auto" (default), "exact" or "hnsw".
-    #   exact: scan every visible vector. Always exact, but the full permission-aware
-    #          search took ~1.5 s at 300k vectors (100k assets) and ~0.7 q/s.
-    #   hnsw:  an index fetches a candidate pool (iterative scan, safe under RLS), the
-    #          pool is ranked exactly: 77-112 ms, ~80 q/s at the same size.
-    #   auto:  hnsw once the embedding table passes hnsw_auto_threshold rows (and the
-    #          index exists), exact below it. experiments/scale/search_load_100k.txt
+    # Vector search: "exact" scans every visible vector; "hnsw" uses the index to fetch
+    # a candidate pool and ranks that exactly; "auto" switches to hnsw once the table
+    # has hnsw_auto_threshold vectors and the index exists. At 300k vectors: exact
+    # ~1.5 s per search, hnsw ~0.1 s (experiments/scale/search_load_100k.txt).
     vector_search: str = "auto"
-    hnsw_auto_threshold: int = 60_000   # vectors (~20k assets); exact is ~0.3 s there
+    hnsw_auto_threshold: int = 60_000
     hnsw_pool: int = 400
     hnsw_ef_search: int = 400
 
-    # Restate the request as a component purpose line before searching (one small LLM
-    # call per question; only in "model" mode, fails safe to plain search). Biggest
-    # measured gain at scale: test recall@5 0.69 -> 0.82 at ~1,900 assets.
+    # Model mode only: restate the request as a component's purpose line and search
+    # both (one small model call per question).
     query_rewrite: bool = True
-    # How many search results the model judge reads per question (only in "model" mode).
-    # 5, not 15: on all 30 gate-2 duplicate tickets, at 109, 515 and 1,932 assets, top 15
-    # held exactly as many gold assets as top 5; the misses sit at ranks 17-54. Depth 15
-    # cost ~3x the tokens per question for nothing (experiments/gate2/RESULTS.md).
+    # Model mode only: how many search results the judge reads per question.
     verdict_shortlist: int = 5
 
     # How many results the answering agent shows: every candidate judged a fit, then
     # (to fill up) candidates the judge could not rule out. Not-a-fit is never shown.
     answer_results: int = 5
 
-    # State-based sync (collector/state.py, collector/sync.py). A dirty repo is due when
-    # quiet for sync_quiet_s OR pending for sync_max_wait_s: worst-case staleness is
-    # about max_wait + processing (target: under 10 minutes).
+    # Sync (collector/state.py, collector/sync.py). A changed repo is processed once it
+    # has been quiet for sync_quiet_s, or waiting for sync_max_wait_s, whichever is first.
     sync_quiet_s: int = 120
     sync_max_wait_s: int = 480
     sync_lease_s: int = 900
     sync_poll_s: int = 300              # how often the poller lists changed repos
 
-    # Owner approval in the collection agent. OFF by default: new assets become
-    # discoverable at `default_visibility` with nobody asked, and nothing waits for a person.
-    # ON restores the interrupt() that asks the owner about visibility and deprecation.
-    # Either way the agent never applies a deprecation by itself (CLAUDE.md): with the
-    # gate off, a deprecation signal is recorded as an unconfirmed note in the stage basis.
+    # Owner approval. Off: new assets are published at `default_visibility` without
+    # asking anyone. On: the collector pauses and asks the owner about visibility and
+    # deprecation. Either way the agent never marks anything deprecated by itself.
     owner_gate: bool = False
     default_visibility: str = "org-wide"        # "org-wide" | "team-only"
 
-    # Which LLM. "anthropic" | "gemini" | "local" (any OpenAI-compatible server).
-    # The Gemini FREE tier may use prompts to improve Google's products: acceptable for
-    # this project's public repos, never for private code.
+    # Which LLM: "anthropic" | "gemini" | "groq" | "local" (any OpenAI-compatible server).
+    # Free tiers may train on your prompts: never send private code to them.
     llm_provider: str = "anthropic"
     llm_model: str = ""                  # empty = auto (Gemini: newest stable flash)
     llm_base_url: str = "http://localhost:11434/v1"    # for "local" (Ollama)
     gemini_key_file: str = ""
     groq_key_file: str = ""
 
-    # Discussion ingestion is a funnel. These are the gates, and they are settings
-    # rather than constants because run E2 showed the length gate does NOT generalise:
-    # comments >=500 chars held 79% of signal in popular repos but only 37% in obscure
-    # ones. Measure per corpus before trusting a value. See experiments/density.
-    min_comment_chars: int = 0          # 0 = no gate; raise only with measurement
+    # Discussion filters. A length cut-off that works for one org can drop most of the
+    # signal in another, so it is off unless you measure your own.
+    min_comment_chars: int = 0          # 0 = keep comments of any length
     drop_bot_comments: bool = True
 
     # Retrieval

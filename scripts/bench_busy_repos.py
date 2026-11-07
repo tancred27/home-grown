@@ -21,7 +21,7 @@ import statistics
 import subprocess
 import sys
 import time
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from homegrown.collector.source import LocalGitSource
@@ -55,7 +55,7 @@ def main() -> int:
         # The BUSIEST `hours` window of the default branch's first-parent line (each
         # first-parent commit is one change landing on main). Skip the oldest commit,
         # whose parents are cut off by the shallow clone.
-        times = sorted(datetime.fromisoformat(x).astimezone(timezone.utc) for x in
+        times = sorted(datetime.fromisoformat(x).astimezone(UTC) for x in
                        git(path, "log", "--first-parent", "--format=%cI", branch).split())[1:]
         best, j = (0, times[0]), 0
         for i, t_end in enumerate(times):
