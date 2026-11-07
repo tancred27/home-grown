@@ -31,7 +31,7 @@ dependencies = [
     # fastembed (onnxruntime) rather than sentence-transformers: same BGE models,
     # ~100MB install instead of pulling ~2.5GB of torch.
     "fastembed>=0.4",
-    "numpy>=1.26",
+    "numpy>=2.5.4",
     # The API only: spans and metrics are no-ops unless the [otel] extra is installed and
     # HOMEGROWN_OTEL_ENABLED is set (docs/observability.md).
     "opentelemetry-api>=1.27",
