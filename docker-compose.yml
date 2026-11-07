@@ -21,5 +21,60 @@ services:
       retries: 20
     shm_size: 1gb
 
+  # Observability (docs/observability.md). Not started by `docker compose up -d`:
+  #   docker compose --profile observability up -d
+  # Ports are bound to 127.0.0.1 only.
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.120.0
+    profiles: [observability]
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./deploy/observability/otel-collector.yaml:/etc/otelcol/config.yaml:ro
+    ports:
+      - "127.0.0.1:4318:4318"    # OTLP/HTTP, where HomeGrown sends
+      - "127.0.0.1:4317:4317"    # OTLP/gRPC
+    depends_on: [tempo]
+
+  tempo:
+    image: grafana/tempo:2.7.1
+    profiles: [observability]
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./deploy/observability/tempo.yaml:/etc/tempo.yaml:ro
+      - homegrown_tempo:/var/tempo
+    ports:
+      - "127.0.0.1:3200:3200"
+
+  prometheus:
+    image: prom/prometheus:v3.2.1
+    profiles: [observability]
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=30d
+    volumes:
+      - ./deploy/observability/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+      - homegrown_prometheus:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"
+
+  grafana:
+    image: grafana/grafana:11.5.2
+    profiles: [observability]
+    environment:
+      # Local use only: anyone who can reach 127.0.0.1:3000 may view. Sign in as
+      # admin/admin to edit; Grafana asks for a new password on first sign-in.
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/homegrown.json
+    volumes:
+      - ./deploy/observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./deploy/observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on: [prometheus, tempo]
+
 volumes:
   homegrown_pgdata:
+  homegrown_tempo:
+  homegrown_prometheus:
