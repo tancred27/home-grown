@@ -20,9 +20,11 @@ from __future__ import annotations
 import json
 import re
 import shutil
+import time
 from collections import defaultdict
 from pathlib import Path, PurePosixPath
 
+from .. import telemetry
 from ..db import admin_conn
 from ..extract.filters import is_noise_path
 from ..extract.tests_extractor import is_test_file
@@ -89,6 +91,24 @@ class Syncer:
 
     # --------------------------------------------------------------- one pass
     def sync(self, repo: str, last_sha: str | None, force: bool | None = None) -> dict:
+        t0 = time.monotonic()
+        status = "failed"
+        with telemetry.span("sync.pass", {"homegrown.repo": repo,
+                                          "homegrown.daily": self.daily}) as sp:
+            try:
+                stats = self._pass(repo, last_sha, force)
+                status = stats["status"]
+                sp.set_attributes({"homegrown.status": status,
+                                   "homegrown.units": stats["units"],
+                                   "homegrown.changed_units": stats["changed_units"],
+                                   "homegrown.files_changed": stats["files_changed"]})
+                return stats
+            finally:
+                telemetry.SYNC_PASSES.add(1, {"status": status, "daily": self.daily})
+                telemetry.SYNC_PASS_DURATION.record(time.monotonic() - t0,
+                                                    {"status": status})
+
+    def _pass(self, repo: str, last_sha: str | None, force: bool | None) -> dict:
         force = self.daily if force is None else force
         h = self.source.head(repo)
         if h is None:

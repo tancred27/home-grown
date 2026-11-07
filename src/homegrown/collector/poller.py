@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
+from .. import telemetry
 from .state import mark_dirty_many
 
 
@@ -22,6 +23,7 @@ def _ts(s: str | None) -> datetime | None:
     return datetime.fromisoformat(s.replace("Z", "+00:00")) if s else None
 
 
+@telemetry.traced("sync.poll")
 def poll_org(org: str, since: datetime | None, get=None, max_pages: int = 100) -> dict:
     """Mark every repo of `org` pushed after `since` dirty. -> {calls, changed, until}.
     `since=None` (first run) marks every repo dirty: the initial backfill."""
@@ -52,4 +54,6 @@ def poll_org(org: str, since: datetime | None, get=None, max_pages: int = 100) -
         if stop or len(batch) < 100:
             break
     mark_dirty_many(changed)
+    telemetry.annotate({"homegrown.org": org, "homegrown.calls": calls,
+                        "homegrown.changed": len(changed)})
     return {"org": org, "calls": calls, "changed": len(changed), "until": started}
