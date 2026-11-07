@@ -50,9 +50,19 @@ async def github_hook(request: Request,
         return {"ok": True, "pong": True}
     if x_github_event != "push":
         return {"ok": True, "ignored": x_github_event}
-    events = A.from_github_push(json.loads(body))
-    new = sum(enqueue(e) for e in events)
-    return {"ok": True, "received": len(events), "queued": new}
+    # State-based sync: a push only marks the repo dirty, and only when it hits the
+    # tracked (default) branch. The worker reads the current state itself, so delivery
+    # order and redeliveries don't matter.
+    payload = json.loads(body)
+    repo = (payload.get("repository") or {}).get("full_name")
+    branch = (payload.get("repository") or {}).get("default_branch")
+    if not repo:
+        return {"ok": True, "ignored": "no repository"}
+    if branch and payload.get("ref") not in (None, f"refs/heads/{branch}"):
+        return {"ok": True, "ignored": f"not the default branch ({payload.get('ref')})"}
+    from .collector.state import mark_dirty
+    mark_dirty(repo, default_branch=branch)
+    return {"ok": True, "dirty": repo}
 
 
 def _check_token(token: str | None) -> None:

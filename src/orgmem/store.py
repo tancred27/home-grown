@@ -151,9 +151,11 @@ def rebuild_card(conn: psycopg.Connection, asset_id: uuid.UUID) -> None:
 
 
 def write_embedding(conn: psycopg.Connection, asset_id: uuid.UUID, field: str,
-                    model: str, vec) -> None:
+                    model: str, vec, text_hash: str | None = None) -> None:
+    """text_hash: hash of the embedded text, so an unchanged text is never re-embedded."""
     with conn.cursor() as cur:
         cur.execute(
-            "insert into embedding (asset_id, field, model, vec) values (%s,%s,%s,%s) "
-            "on conflict (asset_id, field, model) do update set vec = excluded.vec",
-            (asset_id, field, model, vec))
+            "insert into embedding (asset_id, field, model, vec, text_hash) "
+            "values (%s,%s,%s,%s,%s) on conflict (asset_id, field, model) do update "
+            "set vec = excluded.vec, text_hash = excluded.text_hash",
+            (asset_id, field, model, vec, text_hash))

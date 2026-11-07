@@ -58,6 +58,14 @@ class Settings(BaseSettings):
     # (to fill up) candidates the judge could not rule out. Not-a-fit is never shown.
     answer_results: int = 5
 
+    # State-based sync (collector/state.py, collector/sync.py). A dirty repo is due when
+    # quiet for sync_quiet_s OR pending for sync_max_wait_s: worst-case staleness is
+    # about max_wait + processing (target: under 10 minutes).
+    sync_quiet_s: int = 120
+    sync_max_wait_s: int = 480
+    sync_lease_s: int = 900
+    sync_poll_s: int = 300              # how often the poller lists changed repos
+
     # Owner approval in the collection agent. OFF by default: new assets become
     # discoverable at `default_visibility` with nobody asked, and nothing waits for a person.
     # ON restores the interrupt() that asks the owner about visibility and deprecation.

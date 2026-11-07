@@ -52,28 +52,38 @@ def test_confluence_and_notion_map_to_the_same_envelope():
     assert (n.source, n.object_ref, n.actor) == ("notion", "notion:abc", "u2")
 
 
-def test_webhook_endpoint_rejects_unsigned_and_enqueues_signed(monkeypatch):
+def test_webhook_marks_the_repo_dirty_only_for_the_default_branch(monkeypatch):
     from fastapi.testclient import TestClient
 
     from orgmem import api
     monkeypatch.setattr(api.settings, "github_webhook_secret", "s3cret")
     client = TestClient(api.app)
-    sha = uuid.uuid4().hex
-    body = json.dumps({"repository": {"full_name": "acme/zz-hook-test"}, "commits": [
-        {"id": sha, "message": "x", "timestamp": "t", "author": {"username": "d"},
-         "added": [], "modified": ["a.py"], "removed": []}]}).encode()
-    assert client.post("/hooks/github", content=body,
-                       headers={"X-GitHub-Event": "push"}).status_code == 401
-    sig = "sha256=" + hmac.new(b"s3cret", body, hashlib.sha256).hexdigest()
-    h = {"X-GitHub-Event": "push", "X-Hub-Signature-256": sig}
+    repo = f"acme/zz-hook-{uuid.uuid4().hex[:6]}"
+
+    def post(ref, signed=True):
+        body = json.dumps({"ref": ref, "repository": {"full_name": repo,
+                                                       "default_branch": "main"}}).encode()
+        h = {"X-GitHub-Event": "push"}
+        if signed:
+            h["X-Hub-Signature-256"] = "sha256=" + hmac.new(b"s3cret", body,
+                                                            hashlib.sha256).hexdigest()
+        return client.post("/hooks/github", content=body, headers=h)
+
     try:
-        r1 = client.post("/hooks/github", content=body, headers=h).json()
-        r2 = client.post("/hooks/github", content=body, headers=h).json()
-        assert r1["queued"] == 1 and r2["queued"] == 0, "redelivery must be a no-op"
+        assert post("refs/heads/main", signed=False).status_code == 401
+        assert "ignored" in post("refs/heads/feature-x").json(), "feature branches ignored"
+        with admin_conn() as conn:
+            assert conn.execute("select count(*) from repo_state where repo = %s",
+                                (repo,)).fetchone()[0] == 0
+        assert post("refs/heads/main").json()["dirty"] == repo
+        assert post("refs/heads/main").json()["dirty"] == repo, "redelivery is harmless"
+        with admin_conn() as conn:
+            dirty, = conn.execute("select dirty from repo_state where repo = %s",
+                                  (repo,)).fetchone()
+        assert dirty
     finally:
-        with admin_conn() as conn, conn.cursor() as cur:
-            cur.execute("delete from event where idem_key = %s",
-                        (f"github:acme/zz-hook-test:{sha}",))
+        with admin_conn() as conn:
+            conn.execute("delete from repo_state where repo = %s", (repo,))
 
 
 # ---------------------------------------------------------------- security of new tables

@@ -93,6 +93,10 @@ class Deps:
     # collector.remote.sparse_checkout: fetch tree + manifests + READMEs + touched tests
     # instead of mirroring every repo. None = local checkouts only.
     remote: Callable[[str, str], Path | None] | None = None
+    # False in state-sync passes: contributors and stage of EXISTING assets are left to
+    # the daily job (they cost GitHub API calls and change slowly). New assets still get
+    # them at once.
+    daily_fields: bool = True
     org: str = "grafana"
     extra: dict = field(default_factory=dict)
 
@@ -330,6 +334,8 @@ def build_collector(deps: Deps, checkpointer=None):
         ev = Event.model_validate(state["event"])
         out: dict[str, list] = {}
         for t in state["targets"]:
+            if not deps.daily_fields and t.get("action") != "create":
+                continue            # refreshed by the daily job, not on every sync pass
             people = [] if t["kind"] == "solved_problem" else \
                 deps.contributors(t["full"], t["path"])
             people = [dict(p) for p in people]
@@ -347,6 +353,8 @@ def build_collector(deps: Deps, checkpointer=None):
         ev = Event.model_validate(state["event"])
         out = {}
         for t in state["targets"]:
+            if not deps.daily_fields and t.get("action") != "create":
+                continue            # refreshed by the daily job, not on every sync pass
             if t["kind"] == "solved_problem":
                 out[t["unit_id"]] = Stage(stage="unknown", confidence=0.0,
                                           reasons=["documentation page"]).model_dump()
@@ -472,25 +480,30 @@ def build_collector(deps: Deps, checkpointer=None):
                              p.get("last_at")))
                         people.append(str(pid))
 
-                # stage: deprecation only if the owner confirmed it
-                st = state["stages"].get(t["unit_id"], {})
-                stage = st.get("stage", "unknown")
-                confirmed = False
-                if st.get("needs_owner"):
-                    if answers.get(f"{t['unit_id']}:stage") == "confirm":
-                        stage, confirmed = st.get("proposed", stage), True
+                # stage: deprecation only if the owner confirmed it. Absent when this
+                # pass skipped it (sync mode, existing asset): keep the stored stage.
+                st = state["stages"].get(t["unit_id"])
                 with conn.cursor() as cur:
-                    cur.execute(
-                        "insert into evidence (source, ref, source_version, content_hash, "
-                        "excerpt, extractor_version) values (%s,%s,%s,%s,%s,%s) "
-                        "returning id",
-                        ("github_code", ev.url or ev.object_ref, ev.version, ev.version,
-                         "; ".join(st.get("reasons", []))[:500], "collector/stage/0.1"))
-                    sev = cur.fetchone()[0]
-                    cur.execute(
-                        "update asset set stage = %s, stage_confidence = %s, "
-                        "stage_evidence_id = %s, stage_confirmed = %s where id = %s",
-                        (stage, st.get("confidence"), sev, confirmed, aid))
+                    if st is None:
+                        cur.execute("select stage from asset where id = %s", (aid,))
+                        stage = cur.fetchone()[0]
+                    else:
+                        stage = st.get("stage", "unknown")
+                        confirmed = False
+                        if st.get("needs_owner"):
+                            if answers.get(f"{t['unit_id']}:stage") == "confirm":
+                                stage, confirmed = st.get("proposed", stage), True
+                        cur.execute(
+                            "insert into evidence (source, ref, source_version, content_hash, "
+                            "excerpt, extractor_version) values (%s,%s,%s,%s,%s,%s) "
+                            "returning id",
+                            ("github_code", ev.url or ev.object_ref, ev.version, ev.version,
+                             "; ".join(st.get("reasons", []))[:500], "collector/stage/0.1"))
+                        sev = cur.fetchone()[0]
+                        cur.execute(
+                            "update asset set stage = %s, stage_confidence = %s, "
+                            "stage_evidence_id = %s, stage_confirmed = %s where id = %s",
+                            (stage, st.get("confidence"), sev, confirmed, aid))
                     cur.execute(
                         "insert into audit (action, target, reason) values (%s,%s,%s)",
                         (f"collector:{t['action']}", aid,
@@ -511,9 +524,25 @@ def build_collector(deps: Deps, checkpointer=None):
                          for _, u, cl in emb_rows]
                 summs = [f"{u.name.rsplit('/', 1)[-1]}: {u.summary}" if u.summary
                          else u.name for _, u, _ in emb_rows]
+                # Re-embed only text that changed: a hash of the exact text is stored with
+                # the vector, and embedding is the most expensive step of a pass.
+                import hashlib
                 for field_name, texts in (("card", cards), ("summary", summs)):
-                    for (aid, _, _), v in zip(emb_rows, embed_texts(texts), strict=True):
-                        write_embedding(conn, aid, field_name, settings.embed_model, v)
+                    todo = []
+                    with conn.cursor() as cur:
+                        for (aid, _, _), txt in zip(emb_rows, texts, strict=True):
+                            h = hashlib.sha256(txt.encode("utf-8")).hexdigest()[:32]
+                            cur.execute("select text_hash from embedding where asset_id = %s "
+                                        "and field = %s and model = %s",
+                                        (aid, field_name, settings.embed_model))
+                            row = cur.fetchone()
+                            if not row or row[0] != h:
+                                todo.append((aid, txt, h))
+                    if todo:
+                        vecs = embed_texts([txt for _, txt, _ in todo])
+                        for (aid, _, h), v in zip(todo, vecs, strict=True):
+                            write_embedding(conn, aid, field_name, settings.embed_model, v,
+                                            text_hash=h)
         return {"result": written, "log": [{"node": "apply", "written": written}]}
 
     # ------------------------------------------------------------ wiring
@@ -565,8 +594,14 @@ def run_event(graph, event: Event, event_id: str, owner_policy: Callable | None 
     from langgraph.types import Command
 
     cfg = {"configurable": {"thread_id": f"collect-{event_id}"}}
+    # With the owner gate off nothing ever pauses, so saving the state after EVERY node
+    # is pure overhead: save once, at the end ("exit"). With the gate on, keep "sync" so
+    # a parked run can resume from another process.
+    kw = {}
+    if getattr(graph, "checkpointer", None):
+        kw["durability"] = "sync" if settings.owner_gate else "exit"
     out = graph.invoke({"event": event.model_dump(mode="json"), "event_id": event_id,
-                        "log": []}, cfg)
+                        "log": []}, cfg, **kw)
     while out.get("__interrupt__"):
         qs = out["__interrupt__"][0].value["questions"]
         if owner_policy is None:
