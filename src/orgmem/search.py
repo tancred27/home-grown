@@ -94,27 +94,28 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
     tsq = _tsquery_or(terms)
 
     with conn.cursor() as cur:
-        cur.execute(_FORCE_EXACT)
+        # Keyword search runs WITH its GIN indexes. (Forcing exact scan here, as an
+        # earlier version did, made it scan and re-tokenise every visible claim: ~0.5 s at
+        # a few thousand claims, linear in the org's size. Found by the load test.)
 
         # Lexical: asset name/aliases/summary, plus claim bodies, since the useful
         # query is often about behaviour rather than about a package name.
         lexical: list[tuple] = []
         if tsq:
+            # Indexed keyword search under RLS goes through fts_hits() (db/008_fts.sql):
+            # Postgres can't use a GIN index for `@@` on an RLS table (the operator isn't
+            # leakproof), so a plain query re-tokenised every visible row per question.
+            # fts_hits applies the same visibility rules explicitly; joining its ids back
+            # to `asset` here, under RLS, is a second check. Same scores as before: the
+            # asset's text rank, plus its best visible claim rank.
             cur.execute(
                 """
-                select a.id, a.name,
-                       max(ts_rank(a.tsv, to_tsquery('english', %s))) as arank,
-                       max(coalesce(ts_rank(to_tsvector('english', c.body),
-                                            to_tsquery('english', %s)), 0)) as crank
-                  from asset a
-                  left join claim c on c.asset_id = a.id and c.valid_to is null
-                 where a.tsv @@ to_tsquery('english', %s)
-                    or to_tsvector('english', coalesce(c.body,'')) @@ to_tsquery('english', %s)
-                 group by a.id, a.name
-                 order by 3 desc, 4 desc
-                 limit %s
+                select a.id, a.name, f.arank, f.crank
+                  from fts_hits(to_tsquery('english', %(q)s), %(l)s) f
+                  join asset a on a.id = f.asset_id
+                 order by f.arank desc, f.crank desc
                 """,
-                (tsq, tsq, tsq, tsq, limit),
+                {"q": tsq, "l": limit},
             )
             lexical = [(r[0], r[1], float(r[2]) + 0.5 * float(r[3])) for r in cur.fetchall()]
 
@@ -148,6 +149,9 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
                 (qvec, settings.embed_model, qvec, pool, limit),
             )
         else:
+            # Exact vector scan over the rows the caller can see: index scans off for
+            # THIS statement's setting only (keyword search above keeps its indexes).
+            cur.execute(_FORCE_EXACT)
             cur.execute(
                 """
                 select a.id, a.name, 1 - min(e.vec <=> %s) as sim

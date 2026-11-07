@@ -139,3 +139,69 @@ def test_search_never_returns_out_of_scope_results(corpus):
             for v in find_existing(u["id"], q):
                 assert v.asset_id in entitled, (
                     f"{u['login']}: search returned out-of-scope asset for {q!r}")
+
+
+# ------------------------------------------------------------------ fts_hits()
+# Indexed keyword search bypasses RLS internally (db/008_fts.sql) and re-applies the
+# visibility rules itself. These tests hold it to exactly the policies' rules.
+
+def test_fts_hits_never_returns_an_undiscoverable_asset(corpus):
+    from orgmem.search import _tsquery_or
+    queries = ["retry backoff http", "kafka consumer", "time series outlier",
+               "dashboard panel plugin", "alert rule notification", "parse configuration"]
+    checked = 0
+    for u in corpus["users"]:
+        entitled = {a["id"] for a in corpus["assets"] if a["scope"] in u["groups"]}
+        with as_user(u["id"]) as conn:
+            for q in queries:
+                for (aid,) in conn.execute(
+                        "select asset_id from fts_hits(to_tsquery('english', %s), 1000)",
+                        (_tsquery_or(q),)).fetchall():
+                    checked += 1
+                    assert aid in entitled, f"{u['login']}: fts_hits leaked an asset for {q!r}"
+    assert checked > 0, "test checked nothing"
+
+
+def test_fts_hits_sensitive_claim_words_need_source_access():
+    """A sensitive claim's words must not surface its asset to someone who can discover
+    the asset but can't read its source, and must for someone who can."""
+    import uuid
+    tag = uuid.uuid4().hex[:8]
+    word = f"zzsecret{tag}"
+    with admin_conn() as conn:
+        team = conn.execute("insert into team (name) values (%s) returning id",
+                            (f"team-fts-{tag}",)).fetchone()[0]
+        reader, outsider = (conn.execute(
+            "insert into app_user (login, team_id) values (%s,%s) returning id",
+            (f"fts-{k}-{tag}", team)).fetchone()[0] for k in ("reader", "outsider"))
+        for u in (reader, outsider):
+            conn.execute("insert into membership (user_id, group_id) values (%s,%s)", (u, team))
+        src = f"github:fts-{tag}"
+        conn.execute("insert into source_acl (user_id, source_ref) values (%s,%s)", (reader, src))
+        aid = conn.execute(
+            "insert into asset (kind, name, source_ref, unit_id, owner_team, discovery_scope, "
+            "summary) values ('library', %s, %s, %s, %s, %s, 'a plain library') returning id",
+            (f"fts-asset-{tag}", src, f"{src}:.", team, team)).fetchone()[0]
+        ev = conn.execute(
+            "insert into evidence (source, ref, source_version, content_hash, extractor_version) "
+            "values ('github_code', 'x', 'v', 'h', 't') returning id").fetchone()[0]
+        conn.execute(
+            "insert into claim (asset_id, layer, kind, body, evidence_id, extractor, confidence, "
+            "sensitive) values (%s, 3, 'pitfall', %s, %s, 'test', 0.9, true)",
+            (aid, f"internal note mentions {word}", ev))
+    try:
+        def hits(user):
+            with as_user(user) as conn:
+                return [r[0] for r in conn.execute(
+                    "select asset_id from fts_hits(to_tsquery('english', %s), 10)",
+                    (word,)).fetchall()]
+        assert hits(outsider) == [], "sensitive text surfaced to a user without source access"
+        assert hits(reader) == [aid]
+        assert hits(None) == [], "an unidentified caller must get nothing"
+    finally:
+        with admin_conn() as conn:
+            conn.execute("delete from asset where id = %s", (aid,))
+            conn.execute("delete from source_acl where source_ref = %s", (src,))
+            conn.execute("delete from membership where group_id = %s", (team,))
+            conn.execute("delete from app_user where team_id = %s", (team,))
+            conn.execute("delete from team where id = %s", (team,))
