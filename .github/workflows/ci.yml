@@ -8,6 +8,11 @@ on:
 permissions:
   contents: read
 
+# A new push to the same branch or pull request cancels the run it replaces.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -47,5 +52,59 @@ jobs:
             psql "postgresql://homegrown:homegrown_dev_only@localhost:5433/homegrown" \
               -v ON_ERROR_STOP=1 -q -f "$f"
           done
+      # Without the [otel] extra, so this also proves telemetry is optional. The tests
+      # that need the SDK are skipped here and run in the telemetry job.
       - name: Test
         run: pytest -q
+
+  telemetry:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: pgvector/pgvector:0.8.1-pg16
+        env:
+          POSTGRES_USER: homegrown
+          POSTGRES_PASSWORD: homegrown_dev_only
+          POSTGRES_DB: homegrown
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U homegrown -d homegrown"
+          --health-interval 3s --health-timeout 5s --health-retries 20
+    env:
+      FASTEMBED_CACHE_PATH: /home/runner/.cache/fastembed
+      HOMEGROWN_LLM_PROVIDER: disabled
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Cache embedding model
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.cache/fastembed
+          key: fastembed-bge-base-en-v1.5
+      - name: Install
+        run: pip install -e ".[dev,otel]"
+      - name: Apply schema
+        run: |
+          for f in db/*.sql; do
+            psql "postgresql://homegrown:homegrown_dev_only@localhost:5433/homegrown" \
+              -v ON_ERROR_STOP=1 -q -f "$f"
+          done
+      - name: Test telemetry
+        run: pytest -q tests/test_telemetry.py
+
+  # Builds the image to prove the Dockerfile works. Publishing is in release.yml.
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: homegrown:ci
