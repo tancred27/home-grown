@@ -1,8 +1,20 @@
 [project]
 name = "homegrown"
 version = "0.1.0"
-description = "HomeGrown - answers 'has someone here already solved this?' across team access boundaries"
+description = "Answers 'has someone in my org already built this?', across private repos and team boundaries"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "Viswa" }]
 requires-python = ">=3.12"
+keywords = ["langgraph", "agents", "code-search", "pgvector", "mcp", "developer-tools"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development",
+]
 dependencies = [
     "fastapi>=0.115",
     "uvicorn[standard]>=0.32",
@@ -14,13 +26,18 @@ dependencies = [
     "anthropic>=1.0",
     "langgraph>=1.0",
     "langgraph-checkpoint-postgres>=2.0",
-    "langchain-anthropic>=1.0",     # the gate-2 agent's chat model
+    "langchain-anthropic>=1.0",     # chat model for the test coding agent
     "mcp>=2.0",                     # MCPServer (FastMCP was renamed in 2.x)
     # fastembed (onnxruntime) rather than sentence-transformers: same BGE models,
     # ~100MB install instead of pulling ~2.5GB of torch.
     "fastembed>=0.4",
     "numpy>=1.26",
 ]
+
+[project.urls]
+Homepage = "https://github.com/tancred27/home-grown"
+Issues = "https://github.com/tancred27/home-grown/issues"
+Changelog = "https://github.com/tancred27/home-grown/blob/main/CHANGELOG.md"
 
 [project.scripts]
 homegrown = "homegrown.cli:main"

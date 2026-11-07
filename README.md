@@ -101,8 +101,20 @@ source .venv/bin/activate            # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 ```
 
-Point it at a GitHub organization. A token raises the API rate limit; it only needs
-read access to the repos you want indexed. Put it in a file and reference that file:
+Optionally, pick an LLM in `.env`. Without one, HomeGrown runs in rules mode: search
+works, and verdicts come from the evidence alone, so it answers "possibly" instead of
+"yes". Do this before the first sync, because a unit's one-line purpose is written when
+the unit is first indexed (and again when its README or manifest changes).
+
+```bash
+HOMEGROWN_LLM_PROVIDER=groq                   # or anthropic, gemini, local
+HOMEGROWN_VERDICT_MODE=model
+HOMEGROWN_GROQ_KEY_FILE=/path/to/groq-key.txt # or export GROQ_API_KEY in your shell
+```
+
+Point it at a GitHub organization. A token raises the API rate limit, and it only needs
+read access to the repos you want indexed. Put the token in a file and reference that
+file:
 
 ```bash
 echo "HOMEGROWN_GITHUB_TOKEN_FILE=/path/to/token.txt" >> .env
@@ -116,16 +128,6 @@ homegrown add-user alice
 export HOMEGROWN_USER=alice
 homegrown find "sign data so I can tell if it was tampered with"
 homegrown ask  "has anyone built a way to escape HTML safely in templates?"
-```
-
-With no LLM configured, HomeGrown runs in rules mode: search works, and verdicts come
-from the evidence alone, so it answers "possibly" instead of "yes". For model verdicts,
-set a provider in `.env`:
-
-```bash
-HOMEGROWN_LLM_PROVIDER=groq          # or anthropic, gemini, local
-HOMEGROWN_VERDICT_MODE=model
-GROQ_API_KEY=...                     # or HOMEGROWN_GROQ_KEY_FILE=/path/to/key
 ```
 
 All settings are in [docs/configuration.md](docs/configuration.md).

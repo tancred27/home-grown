@@ -73,12 +73,6 @@ class Settings(BaseSettings):
     # Discussion filters. A length cut-off that works for one org can drop most of the
     # signal in another, so it is off unless you measure your own.
     min_comment_chars: int = 0          # 0 = keep comments of any length
-    drop_bot_comments: bool = True
-
-    # Retrieval
-    search_candidates: int = 50          # pulled from each of FTS and vector
-    verdict_candidates: int = 5          # how many reach the verdict step
-    rerank_floor: float = 0.0            # below this, return nothing
 
     github_token_file: str = ""          # path to a file holding a GitHub token
     # Webhook secrets. Empty = every delivery is rejected (fail closed).

@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: pgvector/pgvector:0.8.1-pg16
+        env:
+          POSTGRES_USER: homegrown
+          POSTGRES_PASSWORD: homegrown_dev_only
+          POSTGRES_DB: homegrown
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U homegrown -d homegrown"
+          --health-interval 3s --health-timeout 5s --health-retries 20
+    env:
+      FASTEMBED_CACHE_PATH: /home/runner/.cache/fastembed
+      HOMEGROWN_LLM_PROVIDER: disabled
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Cache embedding model
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.cache/fastembed
+          key: fastembed-bge-base-en-v1.5
+      - name: Install
+        run: pip install -e ".[dev]"
+      - name: Lint
+        run: ruff check src tests
+      - name: Apply schema
+        run: |
+          for f in db/*.sql; do
+            psql "postgresql://homegrown:homegrown_dev_only@localhost:5433/homegrown" \
+              -v ON_ERROR_STOP=1 -q -f "$f"
+          done
+      - name: Test
+        run: pytest -q

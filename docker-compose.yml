@@ -1,21 +1,19 @@
 services:
   db:
-    # pgvector 0.8.x on Postgres 16. 0.8 matters: it added iterative index scans,
-    # which are the fallback if exact scan does not hold at real embedding dimensions
-
+    # pgvector 0.8+ on Postgres 16. 0.8 added iterative index scans, which the HNSW
+    # search mode needs to work correctly under row-level security.
     image: pgvector/pgvector:0.8.1-pg16
     container_name: homegrown-db
     environment:
       POSTGRES_USER: homegrown
-      POSTGRES_PASSWORD: homegrown_dev_only
+      POSTGRES_PASSWORD: homegrown_dev_only     # development only: change it for any real use
       POSTGRES_DB: homegrown
-      # Deterministic plan costs so the vector benchmark is comparable across runs.
       POSTGRES_INITDB_ARGS: "--data-checksums"
     ports:
       - "5433:5432"          # 5433 to avoid clashing with any local Postgres
     volumes:
       - homegrown_pgdata:/var/lib/postgresql/data
-      - ./db:/docker-entrypoint-initdb.d:ro
+      - ./db:/docker-entrypoint-initdb.d:ro     # schema, applied on first start only
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U homegrown -d homegrown"]
       interval: 3s
