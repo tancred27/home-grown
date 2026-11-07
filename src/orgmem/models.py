@@ -25,7 +25,7 @@ def display_name(name: str) -> str:
 
 
 class Layer(IntEnum):
-    """The three knowledge layers. They fail independently -- see docs/design.md 2.
+    """The three knowledge layers. They fail independently.
 
     ARTIFACT is always available. BEHAVIOUR is nearly always available because CI
     enforces it. EXPERIENCE is scarce and uneven (~2.4 claims per repo, ever).

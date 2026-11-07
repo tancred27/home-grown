@@ -1,6 +1,6 @@
 # Gate 2: do coding agents check the memory before building?
 
-Pass line (`docs/design.md` section 9): coding agents call `find_existing` in at least 60%
+Pass line (the design notes): coding agents call `find_existing` in at least 60%
 of runs where a duplicate exists, under the strongest nudges.
 
 **Status: the harness is built and tested; the gate itself is not yet measured.** The

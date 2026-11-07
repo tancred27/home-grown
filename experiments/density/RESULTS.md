@@ -1,6 +1,6 @@
 # Experiment E: are boundary and outcome claims extractable from discussions?
 
-Run 2026-11-05. This is step 1 of the build order in `docs/SCOPE.md`: the whole project
+Run 2026-11-05. This is step 1 of the build order in the build plan: the whole project
 rests on the assumption that issue and pull-request discussions contain the knowledge
 code cannot give you — where something breaks, what it refuses to do, what happened
 when another team tried it. If that knowledge is too sparse to mine, the memory can
@@ -137,7 +137,7 @@ an authenticated token for the budget.
 One sampled comment read: "Unassigning myself before the vacation… the first thing now
 is setting up the recruitment with @… before she leaves for offsites next week." Issue
 threads carry absence, performance and hiring information. Ingestion must not let this
-reach a card. Add it to the redaction rules in `docs/design.md` section 8 — it was not
+reach a card. Add it to the redaction rules in the design notes — it was not
 on the leak-path list, which only considered private *code*.
 
 ## The external-validity problem (raised 2026-11-05, unresolved)
@@ -299,7 +299,7 @@ the higher-precision of the two measured. Tests can answer *does this fit my
 requirement*; they cannot answer *did anyone try this and regret it*.
 
 Note also that "no discussions in the repo" usually means "discussions in Jira, Confluence
-or Slack" — an adapter problem, not an absence. The Confluence adapter in `design.md`
+or Slack" — an adapter problem, not an absence. The Confluence adapter in the design notes
 section 4 exists for exactly this and was cut from the POC for public-data reasons, not
 because it is unimportant in a real org.
 

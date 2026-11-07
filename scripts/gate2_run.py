@@ -1,6 +1,6 @@
 """Gate 2: do coding agents check the memory before building something that exists?
 
-Pass line (docs/design.md section 9): find_existing is called in >= 60% of runs where a
+Pass line: find_existing is called in >= 60% of runs where a
 duplicate exists, under the strongest nudges.
 
 Runs every (variant x ticket x repeat) through the LangGraph agent in orgmem.agent, with

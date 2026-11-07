@@ -1,6 +1,6 @@
 """Does exact vector scan hold at REAL embedding dimensions, under RLS?
 
-This closes an open question in docs/design.md section 10. The earlier measurement
+This closes an open design question. The earlier measurement
 (experiments/RESULTS.md run B) found exact scan at ~76 ms p50 on 500K rows -- but with
 64-DIMENSION synthetic vectors. Real embeddings are 384-1024+, which is 6-16x more
 arithmetic per row on a scan that has no index to help it. If exact scan does not hold,

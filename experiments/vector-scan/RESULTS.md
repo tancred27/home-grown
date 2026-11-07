@@ -1,6 +1,6 @@
 # Does exact vector scan hold at real embedding dimensions?
 
-Run 2026-11-05. Closes an open question from `docs/design.md` section 10.
+Run 2026-11-05. Closes an open question from the design notes.
 Reproduce: `python -I scripts/bench_vector.py 50000 384 768 1024`
 
 ## Why this needed re-measuring

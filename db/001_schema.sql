@@ -1,4 +1,4 @@
--- Org Capability Memory: schema. See docs/design.md section 5.
+-- Org Capability Memory: schema.
 -- Runs automatically on first container start (docker-entrypoint-initdb.d).
 
 create extension if not exists vector;

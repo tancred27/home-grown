@@ -1,4 +1,4 @@
--- Row-level security. See docs/design.md section 8.
+-- Row-level security.
 --
 -- The three visibility questions, enforced here rather than in application code:
 --   1. Can I know it exists?  -> asset.discovery_scope is one of my groups

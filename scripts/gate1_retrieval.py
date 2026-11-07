@@ -1,6 +1,6 @@
 """Gate 1: does retrieval find the right thing when the wording differs?
 
-Pass line (docs/design.md section 9): >=80% recall@5.
+Pass line: >=80% recall@5.
 
 WHY THIS IS BUILT THE WAY IT IS
 -------------------------------

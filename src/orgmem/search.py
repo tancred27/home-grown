@@ -1,4 +1,4 @@
-"""The read path: hybrid search, then a verdict. See docs/design.md section 7.
+"""The read path: hybrid search, then a verdict.
 
 Everything here runs as the asking user under row-level security. The caller cannot
 widen their own visibility, because the filter is a database policy rather than a
@@ -288,14 +288,14 @@ def judge(intent: str, name: str, claims: list[dict], score: float) -> Verdict:
     """Rule-based verdict, standing in for the model call.
 
     Deliberately conservative, and the layer weighting is the design position from
-    docs/design.md section 7: layer 2 (tests) is authoritative about capability
+    Layer 2 (tests) is authoritative about capability
     because CI re-verifies it; layer 3 is authoritative about fit in practice. A
     candidate with tests but no experience may be recommended on capability, but the
     response must say nobody is known to have used it.
 
     A wrong "use as-is" costs more than a rebuild, so thin evidence returns `unknown`
     with the gap named rather than a guess. Replacing this with a model is gated on
-    claim accuracy (docs/design.md section 9); until then the rules keep the whole
+    claim accuracy; until then the rules keep the whole
     read path runnable and testable.
     """
     l2 = [c for c in claims if c["layer"] == 2]
@@ -370,7 +370,7 @@ def _candidate_letter(label: str, letters: list[str], names: list[str]) -> str |
 def judge_with_model(intent: str, cards: list[dict]) -> list[dict]:
     """One model call judging every candidate against the request.
 
-    The design's verdict step (docs/design.md section 7.5). Needed because similarity
+    The design's verdict step. Needed because similarity
     alone cannot tell that nothing matches: on the gate-1 tuning set, similarity to the
     right asset and to the best wrong one have near-identical distributions
     (experiments/gate2/calibration.txt). FAILS SAFE: on any error every candidate is

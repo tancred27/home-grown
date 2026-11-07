@@ -4,7 +4,7 @@ Gate 2 asks whether a coding agent calls find_existing before building something
 organization already has. The tools are deliberately ordinary -- read, write, list, plus
 the memory lookup -- so the only thing that varies between conditions is the nudge.
 
-Nudge conditions (docs/design.md section 7, "Getting agents to call it"):
+Nudge conditions:
   none         tool present, neutral description
   description  "call this BEFORE writing" tool description (the design's wording)
   instruction  a line in the system prompt, as an AGENTS.md / CLAUDE.md would add

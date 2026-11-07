@@ -1,4 +1,4 @@
--- Org directory, contributors and solution stage. See docs/design.md section 5 and the
+-- Org directory, contributors and solution stage.
 -- collection agent in src/orgmem/collector/.
 --
 -- What the answering agent needs, beyond "does it exist": who built it, which team

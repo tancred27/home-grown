@@ -1,4 +1,4 @@
-"""Cross-encoder reranking. docs/design.md section 7 step 4.
+"""Cross-encoder reranking.
 
 Why a reranker and not more fusion tuning: the retrievers score a query against a
 document independently, so neither ever sees the pair together. A cross-encoder reads

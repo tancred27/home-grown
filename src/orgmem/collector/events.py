@@ -1,6 +1,6 @@
 """The common event envelope every source adapter produces, and the Postgres queue.
 
-docs/design.md section 6: every adapter (GitHub, Confluence, Notion, markdown docs)
+Every adapter (GitHub, Confluence, Notion, markdown docs)
 turns its own payload into one shape. The idempotency key is source + object + version,
 so a redelivered webhook, a reconcile job that re-reads the same commit, or an
 out-of-order Confluence event is harmless: the second insert is a no-op.

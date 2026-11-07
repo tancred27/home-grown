@@ -1,6 +1,6 @@
 """The permission leakage gate. Must pass on every change.
 
-docs/design.md section 8 requires this, and it specifically requires it against the
+The design requires this, and specifically against the
 REAL schema. The earlier harness (experiments/expb.py) only proved that Postgres
 enforces a single `scope in (...)` policy -- it never touched the parts this design
 actually depends on:

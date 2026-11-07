@@ -1,6 +1,6 @@
 # Gate 1: retrieval when the wording differs
 
-Run 2026-11-05. Pass line: hybrid recall@5 ≥ 0.80 (`docs/design.md` section 9).
+Run 2026-11-05. Pass line: hybrid recall@5 ≥ 0.80 (the design notes).
 Reproduce: `python -I scripts/gate1_retrieval.py`
 
 Corpus: 86 assets from 34 Grafana repos (1,054 layer-2 claims, 83 layer-3).

@@ -2,7 +2,7 @@ services:
   db:
     # pgvector 0.8.x on Postgres 16. 0.8 matters: it added iterative index scans,
     # which are the fallback if exact scan does not hold at real embedding dimensions
-    # (see docs/design.md section 10).
+
     image: pgvector/pgvector:0.8.1-pg16
     container_name: orgmem-db
     environment:

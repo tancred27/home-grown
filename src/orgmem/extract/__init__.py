@@ -1,2 +1,2 @@
-"""Extractors, one per knowledge layer. See docs/design.md section 6."""
+"""Extractors, one per knowledge layer."""
 from . import discussions, filters, tests_extractor, units  # noqa: F401

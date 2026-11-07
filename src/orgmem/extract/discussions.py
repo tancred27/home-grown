@@ -11,8 +11,7 @@ Two implementations behind one protocol:
                   hand. Good enough to build and test the whole pipeline end to end.
   ModelExtractor  the real one. Sends the comment to a model that must return
                   schema-conformant claims carrying evidence. NOT YET IMPLEMENTED --
-                  it needs a provider key, and claim accuracy is an open gate
-                  (docs/design.md section 9).
+                  it needs a provider key, and claim accuracy is an open gate.
 
 Whichever runs, the model never gets tools and its output must match the schema, so a
 comment reading "ignore previous instructions" cannot cause an action. Source text is
@@ -133,7 +132,7 @@ class ModelExtractor:
     def extract(self, body: str, url: str, version: str) -> list[Claim]:
         raise NotImplementedError(
             "ModelExtractor needs a provider key and a claim-accuracy gate first; "
-            "see docs/design.md section 9. Use RuleExtractor until then."
+            "Use RuleExtractor until then."
         )
 
 

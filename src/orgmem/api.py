@@ -14,7 +14,7 @@ it. The idempotency key makes redeliveries and the nightly reconcile harmless.
 Run: uvicorn orgmem.api:app --port 8080
 
 Identity on /ask is X-Orgmem-User, a LOCAL STAND-IN: a real deployment validates an
-OAuth 2.1 token here and maps it to app_user (docs/design.md section 8).
+OAuth 2.1 token here and maps it to app_user.
 """
 
 from __future__ import annotations
