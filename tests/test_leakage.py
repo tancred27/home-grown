@@ -149,6 +149,8 @@ def test_fts_hits_never_returns_an_undiscoverable_asset(corpus):
     from homegrown.search import _tsquery_or
     queries = ["retry backoff http", "kafka consumer", "time series outlier",
                "dashboard panel plugin", "alert rule notification", "parse configuration"]
+    # Plus the corpus's own asset names, so the test has hits on any corpus.
+    queries += [a["name"].rsplit("/", 1)[-1] for a in corpus["assets"][:10]]
     checked = 0
     for u in corpus["users"]:
         entitled = {a["id"] for a in corpus["assets"] if a["scope"] in u["groups"]}
