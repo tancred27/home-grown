@@ -82,3 +82,13 @@ The CLI and MCP server take the user from `--user` or `HOMEGROWN_USER`. The HTTP
 takes it from the `X-Homegrown-User` header. Create users with
 `homegrown add-user <login> [--team <team> ...]`. This is a stand-in for real sign-in;
 see [production.md](production.md).
+
+## Telemetry
+
+| Variable | Default | |
+|---|---|---|
+| `HOMEGROWN_OTEL_ENABLED` | `false` | Send traces and metrics over OpenTelemetry. Needs the `[otel]` extra |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | `http://localhost:4318` | Where to send them (OTLP/HTTP) |
+| `OTEL_SERVICE_NAME` | `homegrown-<component>` | For example `homegrown-api` or `homegrown-sync-worker` |
+
+What is and isn't recorded: [observability.md](observability.md).

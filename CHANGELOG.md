@@ -6,6 +6,15 @@ All notable changes are listed here. The format follows
 
 ## [Unreleased]
 
+### Added
+- Optional traces and metrics over OpenTelemetry (`HOMEGROWN_OTEL_ENABLED`, the `[otel]`
+  extra). They record counts, durations, labels and model usage, never question text,
+  prompts, model output or user identity. A `docker compose --profile observability`
+  stack runs a collector, Tempo, Prometheus and a Grafana dashboard, keeping data for
+  30 days. See `docs/observability.md`.
+- A Dockerfile, a release workflow (wheel, sdist and a GitHub Release, plus a
+  multi-arch image on GHCR) and Dependabot.
+
 ### Changed
 - In model mode, answers say "Yes" only when something fits as-is. When the best match
   would need extending, the answer is "Related", and results are grouped under
