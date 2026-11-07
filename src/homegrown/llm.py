@@ -28,6 +28,7 @@ from pathlib import Path
 
 import httpx
 
+from . import telemetry
 from .config import settings
 
 ANTHROPIC_MODEL = "claude-opus-5-5"
@@ -123,26 +124,72 @@ def _headers() -> dict:
 
 def structured(system: str, user: str, schema: dict, max_tokens: int = 2000) -> dict:
     """One call, JSON out, matching `schema`. Raises on any failure (callers fail safe)."""
-    if settings.llm_provider == "disabled":
-        raise LLMUnavailable("LLM disabled (llm_provider=disabled)")
-    if settings.llm_provider == "anthropic":
+    provider = settings.llm_provider
+    # The span and metrics carry provider, model, tokens and outcome; never the prompt
+    # or the answer.
+    with telemetry.span("llm.call", {"gen_ai.provider.name": provider,
+                                     "gen_ai.request.max_tokens": max_tokens}) as sp:
+        t0 = time.monotonic()
+        model, outcome = "", "error"
+        try:
+            if provider == "disabled":
+                raise LLMUnavailable("LLM disabled (llm_provider=disabled)")
+            model = resolve_model()
+            sp.set_attribute("gen_ai.request.model", model)
+            out = _call(provider, system, user, schema, max_tokens)
+            outcome = "ok"
+            return out
+        except LLMRefusal:
+            outcome = "refusal"
+            raise
+        except QuotaExhausted:
+            outcome = "quota"
+            raise
+        except LLMUnavailable:
+            outcome = "unavailable"
+            raise
+        finally:
+            sp.set_attributes({"homegrown.llm.outcome": outcome,
+                               "homegrown.llm.latency_s": time.monotonic() - t0})
+            telemetry.LLM_CALLS.add(1, {"provider": provider, "model": model,
+                                        "outcome": outcome})
+
+
+def _call(provider, system, user, schema, max_tokens) -> dict:
+    if provider == "anthropic":
         return _anthropic(system, user, schema, max_tokens)
     try:
         return _openai_compat(system, user, schema, max_tokens)
     except _Retry:
         # The endpoint rejected json_schema; _openai_compat has switched this model to
         # json_object mode with the schema in the prompt. Try once more that way.
+        telemetry.annotate({"homegrown.llm.json_object_fallback": True})
         return _openai_compat(system, user, schema, max_tokens)
+
+
+def _record_usage(model: str, input_tokens, output_tokens) -> None:
+    """Token counts, when the provider reports them."""
+    for kind, n in (("input", input_tokens), ("output", output_tokens)):
+        if isinstance(n, int):
+            telemetry.annotate({f"gen_ai.usage.{kind}_tokens": n})
+            telemetry.LLM_TOKENS.add(n, {"model": model, "type": kind})
 
 
 def _anthropic(system, user, schema, max_tokens) -> dict:
     import anthropic
-    resp = anthropic.Anthropic(max_retries=5).beta.messages.create(
+    # With our telemetry on, the SDK's own spans stay off: ours already cover the call,
+    # and its content mode could be switched on from the environment.
+    otel = {"open_telemetry": {"traces": {"enabled": False}, "propagation": False}} \
+        if telemetry.enabled() else {}
+    resp = anthropic.Anthropic(max_retries=5, **otel).beta.messages.create(
         model=resolve_model(), max_tokens=max_tokens, system=system,
         messages=[{"role": "user", "content": user}],
         output_config={"effort": "low",
                        "format": {"type": "json_schema", "schema": schema}},
         betas=["server-side-fallback-2026-07-01"], fallbacks="default")
+    usage = getattr(resp, "usage", None)
+    _record_usage(resolve_model(), getattr(usage, "input_tokens", None),
+                  getattr(usage, "output_tokens", None))
     if resp.stop_reason == "refusal":
         raise LLMRefusal("refused")
     if resp.stop_reason == "max_tokens":
@@ -186,6 +233,7 @@ def _post_with_backoff(body: dict, model: str, attempts: int = 6) -> dict:
     A 400 on response_format downgrades to json_object mode once, then retries."""
     delay = 4.0
     for i in range(attempts):
+        telemetry.annotate({"homegrown.llm.retries": i})
         try:
             r = httpx.post(f"{_base()}/chat/completions", headers=_headers(), json=body,
                            timeout=120)
@@ -199,6 +247,8 @@ def _post_with_backoff(body: dict, model: str, attempts: int = 6) -> dict:
         if r.status_code == 200:
             data = r.json()
             last_model_served[model] = data.get("model", model)
+            usage = data.get("usage") or {}
+            _record_usage(model, usage.get("prompt_tokens"), usage.get("completion_tokens"))
             return data
         if r.status_code == 400 and "response_format" in body and \
                 body["response_format"].get("type") == "json_schema":

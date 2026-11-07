@@ -15,6 +15,7 @@ import uuid
 
 import psycopg
 
+from . import telemetry
 from .config import settings
 from .embed import embed_query
 from .models import Verdict, display_name
@@ -82,6 +83,7 @@ def candidate_text(conn: psycopg.Connection, asset_id) -> str:
     return ". ".join(parts)[:900]
 
 
+@telemetry.traced("search.lexical")
 def _lexical(cur, tsq: str, limit: int) -> list[tuple]:
     """(asset_id, name, score) from keyword search.
 
@@ -100,13 +102,18 @@ def _lexical(cur, tsq: str, limit: int) -> list[tuple]:
         """,
         {"q": tsq, "l": limit},
     )
-    return [(r[0], r[1], float(r[2]) + 0.5 * float(r[3])) for r in cur.fetchall()]
+    rows = [(r[0], r[1], float(r[2]) + 0.5 * float(r[3])) for r in cur.fetchall()]
+    telemetry.annotate({"homegrown.results": len(rows)})
+    return rows
 
 
+@telemetry.traced("search.semantic")
 def _semantic(cur, qvec, limit: int) -> list[tuple]:
     """(asset_id, name, similarity) from vector search, one row per asset, scored by
     its best-matching embedding field."""
-    if vector_mode(cur) == "hnsw":
+    mode = vector_mode(cur)
+    telemetry.annotate({"homegrown.vector_mode": mode})
+    if mode == "hnsw":
         # The index fetches a candidate pool, which is then ranked exactly. Iterative
         # scan keeps walking the graph until enough rows pass row-level security.
         pool = max(settings.hnsw_pool, limit * 4)
@@ -143,7 +150,9 @@ def _semantic(cur, qvec, limit: int) -> list[tuple]:
             """,
             (qvec, settings.embed_model, qvec, limit),
         )
-    return [(r[0], r[1], float(r[2])) for r in cur.fetchall()]
+    rows = [(r[0], r[1], float(r[2])) for r in cur.fetchall()]
+    telemetry.annotate({"homegrown.results": len(rows)})
+    return rows
 
 
 def _interleave(semantic: list[tuple], lexical: list[tuple]) -> list[dict]:
@@ -183,6 +192,7 @@ def _max_fuse(semantic: list[tuple], lexical: list[tuple]) -> list[dict]:
     return sorted(fused.values(), key=lambda r: (-r["score"], -both(r)))
 
 
+@telemetry.traced("search")
 def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = None,
            limit: int = 50, rerank: bool | None = None) -> list[dict]:
     """Keyword and vector search, fused into one ranked list of assets.
@@ -191,7 +201,8 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
     together with the request.
     """
     terms = " ".join([intent, *(keywords or [])])
-    qvec = embed_query(terms)
+    with telemetry.span("search.embed"):
+        qvec = embed_query(terms)
     with conn.cursor() as cur:
         lexical = _lexical(cur, _tsquery_or(terms), limit)
         semantic = _semantic(cur, qvec, limit)
@@ -202,6 +213,10 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
         ranked = _max_fuse(semantic, lexical)
 
     use_rerank = settings.rerank_enabled if rerank is None else rerank
+    telemetry.annotate({"homegrown.lexical_results": len(lexical),
+                        "homegrown.semantic_results": len(semantic),
+                        "homegrown.results": len(ranked), "homegrown.fusion": settings.fusion,
+                        "homegrown.rerank": bool(use_rerank)})
     if not use_rerank or len(ranked) < 2:
         return ranked
     # Only the head is cross-encoded: it is the slow step.
@@ -296,6 +311,7 @@ def _candidate_letter(label: str, letters: list[str], names: list[str]) -> str |
     return hits[0] if len(hits) == 1 else None
 
 
+@telemetry.traced("search.judge_with_model")
 def judge_with_model(intent: str, cards: list[dict]) -> list[dict]:
     """One model call that judges every candidate against the request.
 
@@ -326,10 +342,14 @@ def judge_with_model(intent: str, cards: list[dict]) -> list[dict]:
                                        [c["name"] for c in cards])
             if letter and letter not in by_letter:
                 by_letter[letter] = v
+        telemetry.annotate({"homegrown.candidates": len(cards),
+                            "homegrown.judged": len(by_letter), "homegrown.outcome": "ok"})
         return [by_letter.get(letters[i], {"verdict": "unknown",
                                            "reason": "judge returned no verdict"})
                 for i in range(len(cards))]
     except Exception as e:
+        telemetry.annotate({"homegrown.candidates": len(cards),
+                            "homegrown.outcome": "failed", "error.type": type(e).__name__})
         # Name the failure (e.g. "429: quota") so an outage can be diagnosed.
         why = f"{type(e).__name__}: {str(e)[:100]}".replace("\n", " ")
         return [{"verdict": "unknown", "reason": f"model verdict unavailable ({why})"}
@@ -350,12 +370,15 @@ _REWRITE_SCHEMA = {"type": "object", "properties": {"purpose": {"type": "string"
 _rewrite_cache: dict[str, str | None] = {}
 
 
+@telemetry.traced("search.rewrite_query")
 def rewrite_query(intent: str) -> str | None:
     """The request restated as a component's purpose line, or None (then search runs
     on the request alone)."""
     if not settings.query_rewrite or settings.verdict_mode != "model":
+        telemetry.annotate({"homegrown.outcome": "skipped"})
         return None
     if intent in _rewrite_cache:
+        telemetry.annotate({"homegrown.outcome": "cached"})
         return _rewrite_cache[intent]
     try:
         from .llm import structured
@@ -363,12 +386,14 @@ def rewrite_query(intent: str) -> str | None:
                          max_tokens=600)["purpose"].strip()[:400] or None
     except Exception:
         out = None
+    telemetry.annotate({"homegrown.outcome": "rewritten" if out else "none"})
     if len(_rewrite_cache) > 2000:
         _rewrite_cache.clear()
     _rewrite_cache[intent] = out
     return out
 
 
+@telemetry.traced("search.find_existing")
 def find_existing(user_id: uuid.UUID | str, intent: str,
                   keywords: list[str] | None = None, top: int = 5) -> list[Verdict]:
     """Search, then judge. The one function the MCP tool, CLI and API all call.
@@ -380,6 +405,10 @@ def find_existing(user_id: uuid.UUID | str, intent: str,
 
     model_mode = settings.verdict_mode == "model"
     depth = max(top, settings.verdict_shortlist) if model_mode else top
+    # The question's length only: its text never goes into telemetry.
+    telemetry.annotate({"homegrown.question.length": len(intent),
+                        "homegrown.keywords": len(keywords or []),
+                        "homegrown.verdict_mode": settings.verdict_mode})
 
     rw = rewrite_query(intent)                # before taking a DB connection
     with as_user(user_id) as conn:
@@ -411,4 +440,8 @@ def find_existing(user_id: uuid.UUID | str, intent: str,
         order = {"use_as_is": 0, "extend": 1, "unknown": 2, "not_a_fit": 3}
         out = [v for _, v in sorted(enumerate(out),
                                     key=lambda iv: (order.get(iv[1].verdict, 2), iv[0]))]
-    return out[:top]
+    out = out[:top]
+    telemetry.annotate({"homegrown.results": len(out)})
+    for v in out:
+        telemetry.VERDICTS.add(1, {"verdict": v.verdict, "mode": settings.verdict_mode})
+    return out
