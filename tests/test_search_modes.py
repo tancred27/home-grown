@@ -49,3 +49,17 @@ def test_hnsw_mode_never_shows_a_hidden_asset(monkeypatch):
     monkeypatch.setattr(settings, "vector_search", "hnsw")
     with as_user(None) as conn:
         assert search(conn, "retry http requests with backoff") == []
+
+
+def test_auto_mode_switches_on_table_size(monkeypatch):
+    import orgmem.search as S
+    monkeypatch.setattr(settings, "vector_search", "auto")
+    with as_user(None) as conn, conn.cursor() as cur:
+        for threshold, expected in ((10**12, "exact"), (0, "hnsw")):
+            S._mode_cache.clear()
+            monkeypatch.setattr(settings, "hnsw_auto_threshold", threshold)
+            assert S.vector_mode(cur) == expected
+    S._mode_cache.clear()
+    monkeypatch.setattr(settings, "vector_search", "exact")
+    with as_user(None) as conn, conn.cursor() as cur:
+        assert S.vector_mode(cur) == "exact", "an explicit setting always wins"

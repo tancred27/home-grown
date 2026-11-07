@@ -33,6 +33,28 @@ who when where why how all any both each few more most other some want need get 
 make made use used using write writing new several""".split())
 
 
+_mode_cache: dict[str, tuple[float, str]] = {}
+
+
+def vector_mode(cur) -> str:
+    """'exact' or 'hnsw' for this query. In 'auto', decided from Postgres's own row
+    estimate for `embedding` (free to read) and whether the HNSW index exists; cached
+    for a minute so it costs nothing per question."""
+    if settings.vector_search in ("exact", "hnsw"):
+        return settings.vector_search
+    import time
+    hit = _mode_cache.get("mode")
+    if hit and time.monotonic() - hit[0] < 60:
+        return hit[1]
+    cur.execute("select coalesce((select reltuples from pg_class where relname = 'embedding'"
+                " and relkind = 'r'), -1), exists (select 1 from pg_indexes"
+                " where indexname = 'embedding_vec_hnsw')")
+    rows, has_index = cur.fetchone()
+    mode = "hnsw" if has_index and rows >= settings.hnsw_auto_threshold else "exact"
+    _mode_cache["mode"] = (time.monotonic(), mode)
+    return mode
+
+
 def _tsquery_or(text: str) -> str:
     """Build an OR'd tsquery from free text.
 
@@ -123,7 +145,7 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
         # carry several fields ("card": name+summary+claims, "summary": name+summary
         # only), and an ungrouped ORDER BY would return the same asset twice and push
         # other candidates out of the list.
-        if settings.vector_search == "hnsw":
+        if vector_mode(cur) == "hnsw":
             # Past ~1M vectors: the HNSW index (db/006_hnsw.sql) fetches a candidate
             # POOL with iterative scan -- it keeps walking the graph until enough rows
             # pass row-level security, so a selective filter can't silently return

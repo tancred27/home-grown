@@ -37,10 +37,15 @@ class Settings(BaseSettings):
     # "model": an LLM judges each candidate against the request and fails safe to
     # "unknown". See experiments/gate2/RESULTS.md.
     verdict_mode: str = "rules"
-    # Vector search: "exact" (default; correct, ~0.2-0.7 s at 1M vectors under RLS) or
-    # "hnsw" (index fetches a candidate pool with iterative scan, pool ranked exactly;
-    # ~4-10 ms at 1M). Switch to hnsw when the corpus outgrows exact scan.
-    vector_search: str = "exact"
+    # Vector search: "auto" (default), "exact" or "hnsw".
+    #   exact: scan every visible vector. Always exact, but the full permission-aware
+    #          search took ~1.5 s at 300k vectors (100k assets) and ~0.7 q/s.
+    #   hnsw:  an index fetches a candidate pool (iterative scan, safe under RLS), the
+    #          pool is ranked exactly: 77-112 ms, ~80 q/s at the same size.
+    #   auto:  hnsw once the embedding table passes hnsw_auto_threshold rows (and the
+    #          index exists), exact below it. experiments/scale/search_load_100k.txt
+    vector_search: str = "auto"
+    hnsw_auto_threshold: int = 60_000   # vectors (~20k assets); exact is ~0.3 s there
     hnsw_pool: int = 400
     hnsw_ef_search: int = 400
 
