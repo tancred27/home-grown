@@ -1,7 +1,7 @@
 # Floors only. The sandbox run (2026-11-04/05) did not capture exact versions, so the
 # recorded numbers in RESULTS.md are not reproducible to the patch level. Run
 # `pip freeze > requirements.lock.txt` on the next real run and commit the lock.
-numpy>=1.26
+numpy>=2.5.4
 scikit-learn>=1.4
 psycopg[binary]>=3.1
 pgvector>=0.2.5
