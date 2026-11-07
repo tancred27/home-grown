@@ -69,10 +69,14 @@ def init(component: str, span_exporter=None, metric_reader=None) -> bool:
     return True
 
 
+# A URL's query can carry the question: GET /ask?q=...
+_DROPPED_ATTRIBUTES = frozenset({"url.query", "url.full", "http.url", "http.target"})
+
+
 def _scrubbing(exporter):
-    """Wrap an exporter so no span leaves with exception events or a status message.
-    Ours never set them, but libraries (the MCP SDK) do, and an error message can quote
-    a request or a model's output."""
+    """Wrap an exporter so no span leaves with a URL query, exception events or a status
+    message. Ours never set them, but libraries do (FastAPI's request spans, the MCP
+    SDK), and an error message can quote a request or a model's output."""
     from opentelemetry.sdk.trace import ReadableSpan
     from opentelemetry.sdk.trace.export import SpanExporter
     from opentelemetry.trace import Status
@@ -81,7 +85,9 @@ def _scrubbing(exporter):
         def export(self, spans):
             return exporter.export([ReadableSpan(
                 name=s.name, context=s.context, parent=s.parent, resource=s.resource,
-                attributes=s.attributes, links=s.links, kind=s.kind,
+                attributes={k: v for k, v in (s.attributes or {}).items()
+                            if k not in _DROPPED_ATTRIBUTES},
+                links=s.links, kind=s.kind,
                 status=Status(s.status.status_code), start_time=s.start_time,
                 end_time=s.end_time, instrumentation_scope=s.instrumentation_scope)
                 for s in spans])

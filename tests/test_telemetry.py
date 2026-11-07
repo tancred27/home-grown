@@ -265,6 +265,28 @@ def test_no_span_attribute_holds_the_question_model_output_or_identity(
                 assert bad not in str(value), f"{s.name}.{key} contains {bad!r}"
 
 
+def test_an_http_question_leaves_no_query_or_login_in_its_spans(otel, asker):
+    """FastAPI traces requests itself, URL query included; the exporter drops it."""
+    from fastapi.testclient import TestClient
+
+    from homegrown import api
+    spans, _ = otel
+    login, uid = asker
+    r = TestClient(api.app).get("/ask", params={"q": QUESTION},
+                                headers={"X-Homegrown-User": login})
+    assert r.status_code == 200
+    got = _by_name(spans.get_finished_spans())
+    assert "answer.ask" in got and got["answer.ask"][0].attributes["homegrown.route"] == "http"
+    for s in got.get("GET /ask", []):           # FastAPI's span, in versions that have it
+        assert s.attributes["url.path"] == "/ask"
+    forbidden = _forbidden(login, uid)
+    for s in spans.get_finished_spans():
+        assert "url.query" not in s.attributes
+        for key, value in s.attributes.items():
+            for bad in forbidden:
+                assert bad not in str(value), f"{s.name}.{key} contains {bad!r}"
+
+
 def test_llm_metrics_carry_labels_never_prompts(otel, asker, model_mode):
     from homegrown.answer import ask
     _, reader = otel
