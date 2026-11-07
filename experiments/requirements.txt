@@ -3,5 +3,5 @@
 # `pip freeze > requirements.lock.txt` on the next real run and commit the lock.
 numpy>=1.26
 scikit-learn>=1.4
-psycopg[binary]>=3.1
+psycopg[binary]>=3.3.8
 pgvector>=0.2.5
