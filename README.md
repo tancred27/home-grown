@@ -1,26 +1,33 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/hero-dark.svg">
-  <img alt="HomeGrown: has someone in my company already built this?" src="docs/assets/hero-light.svg">
+  <img alt="HomeGrown: has anyone here already built it?" src="docs/assets/hero-light.svg">
 </picture>
 
 <p align="center">
   <a href="https://github.com/tancred27/home-grown/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/tancred27/home-grown/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-2f7d46"></a>
-  <img alt="Python 3.12+" src="https://img.shields.io/badge/python-3.12%2B-2f7d46">
-  <img alt="Status: prototype" src="https://img.shields.io/badge/status-prototype-c98a1b">
+  <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-4d4841"></a>
+  <img alt="Python 3.12+" src="https://img.shields.io/badge/python-3.12%2B-4d4841">
+  <img alt="Status: prototype" src="https://img.shields.io/badge/status-prototype-f0652b">
+</p>
+
+<p align="center">
+  <a href="https://tancred27.github.io/home-grown/"><b>Website</b></a> ·
+  <a href="#try-it"><b>Try it</b></a> ·
+  <a href="docs/architecture.md"><b>How it works</b></a> ·
+  <a href="docs/results.md"><b>Results</b></a>
 </p>
 
 ## Why
 
 Big companies build the same thing over and over. One team writes a retry library, and
 three teams later someone writes another. It's usually not laziness: most engineers can
-only see their own team's code, and so can their AI coding assistant.
+only see their own team's code, and so can their coding agent.
 
 Ask HomeGrown in plain English, and it tells you:
 
 - **what already exists** that does what you need,
 - **who built it**, their team and their manager,
-- **whether it's ready**: still in development or already in production,
+- **how ready it is**: dev, beta or prod,
 - **how to get it**: read the code yourself, or who to ask for access.
 
 It can do this even when you're not allowed to see the code. Knowing something exists
@@ -30,19 +37,18 @@ and who to ask is often enough.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/how-it-works-dark.svg">
-  <img alt="1. It watches your code and docs. 2. It remembers what each piece does, who built it, and whether it is live. 3. It answers questions, showing only what you may see." src="docs/assets/how-it-works-light.svg">
+  <img alt="1. It notices changes. 2. It writes down what each part does. 3. It answers, or says no, showing only what you may see." src="docs/assets/how-it-works-light.svg">
 </picture>
 
-Two AI agents share one database. The **collector** keeps track of everything your
-company has built. The **answerer** finds the best matches for a question and checks
-each one actually fits. It would rather say "I don't know" than send you to the wrong
-place.
+Two agents share one database. The **collector** keeps notes on everything your company
+has built. The **answerer** finds the best matches for a question and checks that each
+one fits. It would rather say "I don't know" than send you to the wrong place.
 
 ## What an answer looks like
 
-<img alt="Example answer: MarkupSafe and Jinja2 both escape HTML, both in production, with team, manager and how to get access" src="docs/assets/answer.svg">
+<img alt="Example answer: yes, xk6-kafka already does this. Beta, team-xk6-kafka in Developer Tools &amp; Testing, discoverable only: request access from the team lead." src="docs/assets/answer.svg">
 
-<sub>From a real run on the public <a href="https://github.com/pallets">pallets</a> organization, trimmed for space. People's names are replaced with pseudonyms.</sub>
+<sub>A real answer from a test run on Grafana's public repositories, trimmed for space. Public code has no org chart, so the teams, leads and access rules in that test are generated, and people are pseudonyms.</sub>
 
 ## Try it
 
@@ -76,22 +82,8 @@ homegrown ask "has anyone built a way to escape HTML safely?"
 ```
 
 Without a model, HomeGrown answers from the evidence alone and says "possibly" rather
-than "yes". With one, it checks each match against your question. This is a real answer
-from the Grafana test run, with a model on (people are pseudonyms):
-
-```text
-Yes - this has been done here.
-
-Use as-is:
-
-* xk6-kafka  [use_as_is]  stage: beta (inferred, 60% confidence, unconfirmed)
-  team: team-xk6-kafka  |  LOB: Developer Tools & Testing  |  manager: Lead, team-xk6-kafka
-  built by Engineer 4668f6 (team-xk6-kafka, reports to Lead, team-xk6-kafka, 77 commits, ...)
-  why: xk6-kafka is an official k6 extension that provides Kafka load testing capabilities
-  - Asserted by its own tests: Acks From Int.
-  access: discoverable only: request access to github:xk6-kafka from Lead, team-xk6-kafka
-  stage basis: released, but still 0.x (v0.1.0)
-```
+than "yes". With one, it checks each match against your question, as in the example
+above.
 
 ### 4. Add a model (optional)
 
