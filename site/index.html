@@ -20,6 +20,7 @@
 :root{--bg:#141210;--surface:#1c1a17;--surface2:#262320;--line:#36322d;--line2:#4d4841;--text:#f4f0e9;--muted:#b9b2a7;--faint:#958e83;--accent:#ff7a45;--accent-ink:#1a0f08;--accent-text:#ff8c5c;--prod:#5fd38a;--beta:#ffb27a;--dev:#f5e17a;--pink:#ff86b8;--blue:#8fbcff;color-scheme:dark}
 :root[data-theme="light"]{--bg:#faf6f0;--surface:#ffffff;--surface2:#f3ede4;--line:#e4dccf;--line2:#cbc0b0;--text:#1f1c18;--muted:#57514a;--faint:#6b655c;--accent:#f0652b;--accent-ink:#ffffff;--accent-text:#bf4612;--prod:#1d7f45;--beta:#b5530c;--dev:#806500;--pink:#c2306f;--blue:#2b67d1;color-scheme:light}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 'Figtree',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:var(--text);text-decoration:underline;text-decoration-color:var(--line2);text-underline-offset:3px}
@@ -137,6 +138,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
     <a class="navlink" href="#permissions">Who sees what</a>
     <a class="navlink" href="#agents">Coding agents</a>
     <a class="navlink" href="#results">Results</a>
+    <a class="navlink" href="demo/">Demo</a>
     <a class="navlink" href="https://github.com/tancred27/home-grown/tree/main/docs">Docs</a>
     <button type="button" class="icon-btn" id="themeBtn" aria-label="Switch to light theme">
       <svg id="iconSun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -155,6 +157,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
       <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
         <a class="btn" href="https://github.com/tancred27/home-grown">Get the code
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="ghost" href="demo/">See the demo dashboard</a>
         <a class="ghost" href="https://github.com/tancred27/home-grown#try-it">Try it on your machine</a>
       </div>
     </div>
@@ -231,7 +234,11 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
   <section id="map" class="wrap band">
     <div class="head">
       <h2 class="h2" style="max-width:16ch">A map of everything your company has built</h2>
-      <p class="lead">The dashboard lists every component you're allowed to find, by line of business, with its team, its stage and who else uses it.</p>
+      <div style="display:flex;flex-direction:column;gap:18px;align-items:flex-start">
+        <p class="lead">The dashboard lists every component you're allowed to find, by line of business, with its team, its stage and who else uses it.</p>
+        <a class="btn" href="demo/">Open the demo dashboard
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
     </div>
     <div class="tbl tbl-scroll">
       <table style="min-width:820px">

@@ -12,6 +12,7 @@
 
 <p align="center">
   <a href="https://tancred27.github.io/home-grown/"><b>Website</b></a> ·
+  <a href="https://tancred27.github.io/home-grown/demo/"><b>Demo dashboard</b></a> ·
   <a href="#try-it"><b>Try it</b></a> ·
   <a href="docs/architecture.md"><b>How it works</b></a> ·
   <a href="docs/results.md"><b>Results</b></a>
@@ -131,6 +132,12 @@ Free tiers may train on your prompts. Don't send private code to them.
 
 ### 5. Open the dashboard
 
+Want to look first? The [demo dashboard](https://tancred27.github.io/home-grown/demo/)
+is a frozen snapshot of the Grafana test run. It runs in your browser with no server,
+and lets you switch between two people with different access.
+
+To run it on your own data:
+
 ```bash
 uvicorn homegrown.api:app --port 8080
 ```
@@ -139,6 +146,10 @@ Then open <http://localhost:8080/ui> and enter a user, such as `alice`. The org 
 every component that user may find, grouped by line of business, with its team, stage,
 who else uses it and whether they can read the code. Each person sees only what the
 database lets them see.
+
+There's no real sign-in yet: you type a user name, which is fine on your own machine
+and not for a shared server. To refresh the demo from your own data, run
+`python -I scripts/export_demo.py`.
 
 ## Use it from your coding agent
 
@@ -192,7 +203,9 @@ Every limit we know of is in [docs/results.md](docs/results.md).
 - [x] Permissions enforced by PostgreSQL row-level security
 - [x] MCP server for coding agents
 - [x] Traces and metrics with OpenTelemetry ([docs/observability.md](docs/observability.md))
-- [x] Dashboard: the org map
+- [x] Dashboard: the org map, plus a [static demo](https://tancred27.github.io/home-grown/demo/)
+- [ ] Live demo: ask real questions against the demo repositories
+- [ ] Dashboard sign-in that fits each company's own SSO or sign-in setup
 - [ ] Dashboard: capabilities built more than once, and what people ask for that doesn't exist
 - [ ] Better recall in large orgs with many look-alike components
 - [ ] Caching across questions, scoped by permission

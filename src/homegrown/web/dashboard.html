@@ -11,6 +11,7 @@
 :root{--bg:#141210;--surface:#1c1a17;--surface2:#262320;--line:#36322d;--line2:#4d4841;--text:#f4f0e9;--muted:#b9b2a7;--faint:#958e83;--accent:#ff7a45;--accent-ink:#1a0f08;--accent-text:#ff8c5c;--prod:#5fd38a;--beta:#ffb27a;--dev:#f5e17a;--other:#b9b2a7;color-scheme:dark}
 :root[data-theme="light"]{--bg:#faf6f0;--surface:#ffffff;--surface2:#f3ede4;--line:#e4dccf;--line2:#cbc0b0;--text:#1f1c18;--muted:#57514a;--faint:#6b655c;--accent:#f0652b;--accent-ink:#ffffff;--accent-text:#bf4612;--prod:#1d7f45;--beta:#b5530c;--dev:#806500;--other:#57514a;color-scheme:light}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 'Figtree',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:inherit}
 button,input{font:inherit;color:inherit}
@@ -66,6 +67,8 @@ td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top;line
 th+th,td+td{border-left:1px solid var(--line)}
 tbody tr:hover td{background:color-mix(in srgb,var(--text) 4%,transparent)}
 .cname{font-weight:700}
+td:first-child{min-width:190px}
+td:nth-child(2){white-space:nowrap}
 .cpath{display:block;font-size:13px;color:var(--faint);word-break:break-all}
 .muted{color:var(--muted)}
 .faint{color:var(--faint)}
@@ -196,6 +199,47 @@ tbody tr:hover td{background:color-mix(in srgb,var(--text) 4%,transparent)}
     applyTheme(t);
   });
 
+  // ---------------------------------------------------------------- demo mode
+  // scripts/export_demo.py copies this page into site/demo/ with a
+  // <meta name="hg-snapshot"> tag. Then the page reads a frozen snapshot and never
+  // calls the API: no sign-in, no Ask box.
+  const SNAPSHOT = (document.querySelector('meta[name="hg-snapshot"]') || {}).content;
+  let snapshot = null, viewerIdx = 0;
+
+  async function loadDemo() {
+    $("askForm").hidden = true;
+    $("switchUser").hidden = true;
+    try {
+      const r = await fetch(SNAPSHOT);
+      if (!r.ok) throw new Error(`(${r.status})`);
+      snapshot = await r.json();
+    } catch (e) {
+      $("content").replaceChildren(el("p", { class: "notice" }, `Couldn't load the demo snapshot. ${e.message}`));
+      return;
+    }
+    const select = el("select", { id: "viewerSelect", style: "min-height:40px;padding:0 10px;border:1px solid var(--line2);border-radius:10px;background:var(--surface);font-weight:600" },
+      snapshot.viewers.map((v, i) => el("option", { value: String(i) }, v.label)));
+    select.addEventListener("change", () => { viewerIdx = Number(select.value); state.open.clear(); showDemoViewer(); });
+    const banner = el("div", { class: "card", style: "padding:16px 20px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;border-color:color-mix(in srgb,var(--accent) 35%,var(--line));background:color-mix(in srgb,var(--accent) 8%,var(--surface))" },
+      el("div", { style: "display:flex;flex-direction:column;gap:2px;flex:1 1 360px" },
+        el("strong", {}, "Demo: a frozen snapshot"),
+        el("span", { class: "muted", style: "font-size:14px" }, snapshot.note)),
+      el("label", { for: "viewerSelect", style: "font-weight:600" }, "View as"),
+      select);
+    $("main").insertBefore(banner, $("answer"));
+    showDemoViewer();
+  }
+
+  function showDemoViewer() {
+    const v = snapshot.viewers[viewerIdx];
+    state.data = v.map;
+    $("viewer").hidden = false;
+    $("viewerName").textContent = v.label;
+    $("viewerInitials").textContent = v.initials;
+    if (state.open.size === 0 && state.data.lobs.length) state.open.add(state.data.lobs[0].name);
+    render();
+  }
+
   // ---------------------------------------------------------------- api
   let login = store.get("hg-user");
   async function api(path) {
@@ -247,7 +291,7 @@ tbody tr:hover td{background:color-mix(in srgb,var(--text) 4%,transparent)}
   function render() {
     const d = state.data;
     $("navCount").textContent = d.components;
-    $("subtitle").textContent = `Everything you can see: ${plural(d.repositories, "repository", "repositories")}, ${plural(d.components, "component", "components")} and ${plural(d.doc_pages, "doc page", "doc pages")}`;
+    $("subtitle").textContent = `${snapshot ? "Everything this person can see" : "Everything you can see"}: ${plural(d.repositories, "repository", "repositories")}, ${plural(d.components, "component", "components")} and ${plural(d.doc_pages, "doc page", "doc pages")}`;
     if (!d.components) {
       $("content").replaceChildren(el("p", { class: "notice" }, "Nothing to show yet. Either nothing has been collected, or nothing is visible to this user."));
       return;
@@ -399,7 +443,7 @@ tbody tr:hover td{background:color-mix(in srgb,var(--text) 4%,transparent)}
       })));
   });
 
-  load();
+  SNAPSHOT ? loadDemo() : load();
 })();
 </script>
 </body>

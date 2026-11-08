@@ -1,0 +1,1048 @@
+{
+ "taken": "2026-11-08",
+ "note": "Taken on 8 November 2026 from a test run on 38 of Grafana's public repositories. Public code has no org chart, so the teams, lines of business and access rules are generated. Nothing on this page talks to a server.",
+ "viewers": [
+  {
+   "label": "Someone who can find everything",
+   "initials": "EV",
+   "map": {
+    "components": 86,
+    "repositories": 38,
+    "doc_pages": 23,
+    "by_stage": {
+     "prod": 9,
+     "beta": 19,
+     "dev": 58,
+     "deprecated": 0,
+     "retired": 0,
+     "unknown": 0
+    },
+    "lobs": [
+     {
+      "name": "Data Science",
+      "teams": 1,
+      "components": [
+       {
+        "name": "augurs",
+        "path": "",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Perform fast Rust-based time series forecasting, anomaly detection, clustering, seasonality and changepoint analysis, with Python/JS bindings.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs",
+        "path": "crates/augurs",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Perform time series forecasting, outlier detection, clustering, seasonality and changepoint analysis in Rust.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs",
+        "path": "crates/pyaugurs",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Python time series analysis with MSTL decomposition, exponential smoothing forecasts, and dynamic time warping via augurs library bindings.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-changepoint",
+        "path": "crates/augurs-changepoint",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Detect change points in time series data using Bayesian online change point detection.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-changepoint-js",
+        "path": "js/augurs-changepoint-js",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Detect structural changes in time-series data from JavaScript using Rust‑optimized changepoint detection via WebAssembly bindings.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-clustering",
+        "path": "crates/augurs-clustering",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Cluster time series data with DBSCAN by supplying a precomputed distance matrix",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-clustering-js",
+        "path": "js/augurs-clustering-js",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Cluster time series data in JavaScript using augurs‑clustering via WebAssembly bindings.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-core",
+        "path": "crates/augurs-core",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Provides shared structs and traits for building time-series analysis pipelines in the augurs framework",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-core-js",
+        "path": "js/augurs-core-js",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Use it to perform time-series forecasting, anomaly detection, clustering, seasonality and changepoint analysis in JavaScript via WebAssembly.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-dtw",
+        "path": "crates/augurs-dtw",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Compute similarity between time‑varying sequences using Dynamic Time Warping with Euclidean or Manhattan distance, including parallel distance matrices, in Rust.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-dtw-js",
+        "path": "js/augurs-dtw-js",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Run fast Dynamic Time Warping distance calculations on time-series data from JavaScript via WebAssembly.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-ets",
+        "path": "crates/augurs-ets",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Add exponential smoothing (ETS) time‑series forecasting models to augurs pipelines in Rust.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-ets-js",
+        "path": "js/augurs-ets-js",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Use JavaScript bindings to run augurs-ets time series forecasting, anomaly detection, and seasonality analysis in a web or Node.js app.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-forecaster",
+        "path": "crates/augurs-forecaster",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "High-level API to train and predict time series models with preprocessing (imputation, scaling, transforms) and automatic back‑transformation of forecasts and intervals.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-js-testpkg",
+        "path": "js/testpkg",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Perform forecasting, anomaly detection, clustering, and seasonality analysis on time series data using a high‑performance Rust library with Python and JavaScript bindings.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-mstl",
+        "path": "crates/augurs-mstl",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Decompose time series with multiple seasonalities and forecast trend using MSTL with customizable trend models.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-mstl-js",
+        "path": "js/augurs-mstl-js",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Run Rust‑powered time‑series forecasting, outlier detection, clustering, and seasonality analysis directly in JavaScript via WebAssembly bindings.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-outlier",
+        "path": "crates/augurs-outlier",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Detect when a time series deviates from a group of similar series (time series outlier detection).",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-outlier-js",
+        "path": "js/augurs-outlier-js",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Detect outliers in time series data from JavaScript using optimized Rust-based algorithms via WebAssembly.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-prophet",
+        "path": "crates/augurs-prophet",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Forecast large time‑series datasets in Rust using Prophet's MLE/MAP optimization for scalable predictions.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-prophet-js",
+        "path": "js/augurs-prophet-js",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Forecast time series data in JavaScript using optimized Prophet models via WebAssembly.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-prophet-wasmstan",
+        "path": "components/js/prophet-wasmstan",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Run Prophet time-series forecasting via a Stan model in WebAssembly for use with the @bsull/augurs JavaScript library.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-seasons",
+        "path": "crates/augurs-seasons",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Detect seasonality or periodic patterns in time series using periodograms.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-seasons-js",
+        "path": "js/augurs-seasons-js",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Add seasonality detection to JavaScript projects using the augurs‑seasons Rust library via WebAssembly.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-testing",
+        "path": "crates/augurs-testing",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Provides a test framework and sample data for validating augurs time series models and utilities.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "augurs-transforms-js",
+        "path": "js/augurs-transforms-js",
+        "repo": "github:augurs",
+        "team": "team-augurs",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Enable JavaScript developers to apply Augurs' Rust-based time series data transformations via WebAssembly bindings.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       }
+      ]
+     },
+     {
+      "name": "Developer Tools & Testing",
+      "teams": 5,
+      "components": [
+       {
+        "name": "crocochrome",
+        "path": "",
+        "repo": "github:crocochrome",
+        "team": "team-crocochrome",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Launch and supervise Chromium inside a container, automatically starting and reaping processes without sandboxing",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "dashboard-linter",
+        "path": "",
+        "repo": "github:dashboard-linter",
+        "team": "team-dashboard-linter",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Lint Grafana dashboard JSON files to catch common errors and enforce best‑practice conventions.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "flagger-k6-webhook",
+        "path": "",
+        "repo": "github:flagger-k6-webhook",
+        "team": "team-flagger-k6-webhook",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Run k6 load tests on a canary deployment via a pre‑rollout webhook to verify performance thresholds before promoting traffic.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "xk6-kafka",
+        "path": "",
+        "repo": "github:xk6-kafka",
+        "team": "team-xk6-kafka",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Load test Apache Kafka with k6, producing/consuming messages, managing topics and schema registry, all in pure Go without a C toolchain",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "fake-data-gen",
+        "path": "src",
+        "repo": "github:fake-data-gen",
+        "team": "team-fake-data-gen",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Generate synthetic time-series data for Grafana-supported TSDBs to test and develop datasource integrations.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "k6-loadtester",
+        "path": "charts/k6-loadtester",
+        "repo": "github:flagger-k6-webhook",
+        "team": "team-flagger-k6-webhook",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Execute k6 load tests on a canary version before traffic is shifted to verify performance thresholds.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       }
+      ]
+     },
+     {
+      "name": "Observability Data",
+      "teams": 8,
+      "components": [
+       {
+        "name": "celery-exporter",
+        "path": "",
+        "repo": "github:celery-exporter",
+        "team": "team-celery-exporter",
+        "stage": "prod",
+        "stage_confirmed": false,
+        "purpose": "Export Celery task and worker metrics to Prometheus for monitoring",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "cloudcost-exporter",
+        "path": "",
+        "repo": "github:cloudcost-exporter",
+        "team": "team-cloudcost-exporter",
+        "stage": "prod",
+        "stage_confirmed": false,
+        "purpose": "Export real-time per-minute cloud cost rates from AWS, GCP, and Azure as Prometheus metrics for monitoring and budgeting",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "catalog-otel-metrics",
+        "path": "app-instrumentation/metrics/opentelemetry-sdk/node",
+        "repo": "github:alloy-scenarios",
+        "team": "team-alloy-scenarios",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Export catalog service metrics to a monitoring backend via OpenTelemetry’s OTLP over HTTP.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "catalog-otel-traces",
+        "path": "app-instrumentation/traces/opentelemetry-sdk/node",
+        "repo": "github:alloy-scenarios",
+        "team": "team-alloy-scenarios",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Send OpenTelemetry trace data from a catalog service to an OTLP/HTTP endpoint for observability.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "catalog-prom-client",
+        "path": "app-instrumentation/metrics/prometheus-client/node",
+        "repo": "github:alloy-scenarios",
+        "team": "team-alloy-scenarios",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Need to expose catalog service metrics at /metrics for Grafana Alloy to scrape using the Prometheus client.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "docker-otel-lgtm",
+        "path": "",
+        "repo": "github:docker-otel-lgtm",
+        "team": "team-docker-otel-lgtm",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Run a full OpenTelemetry observability stack (metrics, traces, logs, profiles) locally via a single Docker container for development or testing",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "carbon-relay-ng",
+        "path": "",
+        "repo": "github:carbon-relay-ng",
+        "team": "team-carbon-relay-ng",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Fast, high-throughput carbon metric relay and aggregator that routes, validates, and aggregates incoming metrics with dynamic runtime routing and supports multiple output formats.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "cloudcost-exporter",
+        "path": "charts/cloudcost-exporter",
+        "repo": "github:cloudcost-exporter",
+        "team": "team-cloudcost-exporter",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Export and expose cloud provider cost metrics in Kubernetes via a Helm chart for integration with monitoring tools.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "demo",
+        "path": "continuous-profiling/app",
+        "repo": "github:alloy-scenarios",
+        "team": "team-alloy-scenarios",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Use this repository to quickly spin up ready‑made Grafana Alloy demo scenarios with Docker Compose for testing telemetry collection pipelines.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "demo-app",
+        "path": "beyla-zero-code-instrumentation/app",
+        "repo": "github:alloy-scenarios",
+        "team": "team-alloy-scenarios",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Need a ready-to-run example of Grafana Alloy telemetry pipelines with Docker Compose for Loki, Prometheus, Grafana, and Tempo.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "github-rate-limits-prometheus-exporter",
+        "path": "",
+        "repo": "github:github-rate-limits-prometheus-exporter",
+        "team": "team-github-rate-limits-prometheus-exporter",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Export GitHub API rate limit metrics to Prometheus for monitoring using PAT or GitHub App credentials",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "github-rate-limits-prometheus-exporter",
+        "path": "helm/github-rate-limits-prometheus-exporter",
+        "repo": "github:github-rate-limits-prometheus-exporter",
+        "team": "team-github-rate-limits-prometheus-exporter",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Deploy a Prometheus exporter to monitor GitHub API rate limits using a Helm chart with PAT or GitHub App credentials.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "go",
+        "path": "pkg/go",
+        "repo": "github:faro",
+        "team": "team-faro",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Instrument browser frontend applications to collect real‑user monitoring telemetry for full‑stack observability.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "inventory",
+        "path": "app-instrumentation/metrics/opentelemetry-sdk/go",
+        "repo": "github:alloy-scenarios",
+        "team": "team-alloy-scenarios",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Run ready-made Grafana Alloy telemetry collection scenarios with Docker Compose to test and demo data pipelines",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "inventory",
+        "path": "app-instrumentation/traces/opentelemetry-sdk/go",
+        "repo": "github:alloy-scenarios",
+        "team": "team-alloy-scenarios",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Run ready-made Grafana Alloy telemetry collection scenarios with Docker Compose to test and demo data pipelines",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "inventory",
+        "path": "app-instrumentation/metrics/prometheus-client/go",
+        "repo": "github:alloy-scenarios",
+        "team": "team-alloy-scenarios",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Run ready-made Grafana Alloy telemetry collection scenarios with Docker Compose to test and demo data pipelines",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "java",
+        "path": "app-instrumentation/traces/opentelemetry-sdk/java",
+        "repo": "github:alloy-scenarios",
+        "team": "team-alloy-scenarios",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Ready-to-run Docker Compose scenarios demonstrating Grafana Alloy telemetry collection and processing with Loki, Prometheus, Tempo, etc.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "java",
+        "path": "app-instrumentation/metrics/opentelemetry-sdk/java",
+        "repo": "github:alloy-scenarios",
+        "team": "team-alloy-scenarios",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Ready-to-run Docker Compose scenarios demonstrating Grafana Alloy telemetry collection and processing with Loki, Prometheus, Tempo, etc.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "java",
+        "path": "app-instrumentation/metrics/prometheus-client/java",
+        "repo": "github:alloy-scenarios",
+        "team": "team-alloy-scenarios",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Ready-to-run Docker Compose scenarios demonstrating Grafana Alloy telemetry collection and processing with Loki, Prometheus, Tempo, etc.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "kindasafe",
+        "path": "kindasafe",
+        "repo": "github:pyroscope-kinda-safe",
+        "team": "team-pyroscope-kinda-safe",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Perform signal‑safe memory reads on Linux x86_64/aarch64, preventing crashes by catching SIGSEGV/SIGBUS and skipping faulting instructions.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "kindasafe_init",
+        "path": "kindasafe_init",
+        "repo": "github:pyroscope-kinda-safe",
+        "team": "team-pyroscope-kinda-safe",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Install SIGSEGV and SIGBUS handlers to enable kindasafe’s signal‑safe memory reads without crashing.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "logging-example",
+        "path": "app-instrumentation/logging/popular-logging-frameworks/go",
+        "repo": "github:alloy-scenarios",
+        "team": "team-alloy-scenarios",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Run ready-to-use Grafana Alloy telemetry collection scenarios with Docker Compose for testing or learning.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "mise-npm-install",
+        "path": ".mise/locks/npm-renovate/44.132.2~aa673d8d",
+        "repo": "github:docker-otel-lgtm",
+        "team": "team-docker-otel-lgtm",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Run a complete OpenTelemetry observability stack (collector, metrics, traces, logs, profiling, Grafana) in a Docker container for development, demo, or testing environments.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "pyroscope-kinda-safe",
+        "path": "",
+        "repo": "github:pyroscope-kinda-safe",
+        "team": "team-pyroscope-kinda-safe",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Signal-safe memory read primitives for x86_64 and aarch64 Linux, enabling crash-recoverable reads from signal handlers.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "workload",
+        "path": "ebpf-host-profiling/app",
+        "repo": "github:alloy-scenarios",
+        "team": "team-alloy-scenarios",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Run ready-to-use Grafana Alloy telemetry collection and processing demos with Docker Compose backends like Loki, Prometheus, and Tempo.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       }
+      ]
+     },
+     {
+      "name": "Platform Engineering",
+      "teams": 15,
+      "components": [
+       {
+        "name": "dskit",
+        "path": "",
+        "repo": "github:dskit",
+        "team": "team-dskit",
+        "stage": "prod",
+        "stage_confirmed": false,
+        "purpose": "Utilities for building distributed Go services, providing backoff retries, cache, key‑value store, request hedging, RPC middleware, and service lifecycle management.",
+        "used_by_teams": 2,
+        "can_read_code": false
+       },
+       {
+        "name": "grafana-aws-sdk",
+        "path": "",
+        "repo": "github:grafana-aws-sdk",
+        "team": "team-grafana-aws-sdk",
+        "stage": "prod",
+        "stage_confirmed": false,
+        "purpose": "Need shared AWS configuration utilities for building Grafana plugins that interact with Amazon services.",
+        "used_by_teams": 1,
+        "can_read_code": false
+       },
+       {
+        "name": "authlib",
+        "path": "",
+        "repo": "github:authlib",
+        "team": "team-authlib",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Need a reusable Grafana auth library to handle JWT authentication, propagate identities, and query RBAC permissions for plugins or services.",
+        "used_by_teams": 1,
+        "can_read_code": false
+       },
+       {
+        "name": "types",
+        "path": "types",
+        "repo": "github:authlib",
+        "team": "team-authlib",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "A dependency‑free collection of shared types and interfaces to standardize contracts and prevent reliance on internal implementation details.",
+        "used_by_teams": 1,
+        "can_read_code": false
+       },
+       {
+        "name": "cloud-setup",
+        "path": "",
+        "repo": "github:cloud-setup",
+        "team": "team-cloud-setup",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Interactively set up Grafana Cloud Synthetics or Frontend Observability, installing required agents and skills",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "clusterurl",
+        "path": "",
+        "repo": "github:clusterurl",
+        "team": "team-clusterurl",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Extract a generic route from URLs to group similar pages for analytics or routing, using rule‑based parsing and gibberish detection.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "cog",
+        "path": "",
+        "repo": "github:cog",
+        "team": "team-cog",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Generate typed code and builder libraries from schemas (CUE, JSON Schema, OpenAPI, etc.) for multiple languages such as Go, Java, Python, TypeScript, and more.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "detect-angular-dashboards",
+        "path": "",
+        "repo": "github:detect-angular-dashboards",
+        "team": "team-detect-angular-dashboards",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Identify Grafana dashboards that rely on Angular data sources or panel plugins to assess migration or deprecation needs.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "generate-policy-bot-config",
+        "path": "",
+        "repo": "github:generate-policy-bot-config",
+        "team": "team-generate-policy-bot-config",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Generate a Policy Bot config that automatically requires any GitHub Actions workflow triggered on pull requests to pass, respecting path filters.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "go-offsets-tracker",
+        "path": "",
+        "repo": "github:go-offsets-tracker",
+        "team": "team-go-offsets-tracker",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Generate and query JSON of struct field byte offsets per Go/library version to locate fields in binaries lacking debug symbols.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "alerting",
+        "path": "",
+        "repo": "github:alerting",
+        "team": "team-alerting",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Utilities for building alerting systems, including Alertmanager integration, for Grafana and Mimir compatibility.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "alerting-gen",
+        "path": "testing/alerting-gen",
+        "repo": "github:alerting",
+        "team": "team-alerting",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Generate realistic random Grafana alerting and recording rule groups for testing or prototyping, with optional push to Grafana via provisioning API.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "ckit",
+        "path": "",
+        "repo": "github:ckit",
+        "team": "team-ckit",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Create a lightweight cluster that uses consistent hashing over HTTP/2 gossip for efficient workload distribution.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "collector-configurator",
+        "path": "",
+        "repo": "github:collector-configurator",
+        "team": "team-collector-configurator",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Web UI for creating and editing OpenTelemetry Collector configuration files",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "crossplane-provider-grafana",
+        "path": "",
+        "repo": "github:crossplane-provider-grafana",
+        "team": "team-crossplane-provider-grafana",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Provision and manage Grafana resources declaratively through Crossplane as XRM‑conformant managed resources",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "dataplane",
+        "path": "",
+        "repo": "github:dataplane",
+        "team": "team-dataplane",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Create and test typed Dataframe structures for Grafana's data plane using Go utilities and example JSON specifications.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "dataplane-website",
+        "path": "docusaurus/website",
+        "repo": "github:dataplane",
+        "team": "team-dataplane",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Create and test typed dataframes for Grafana data plane pipelines using Go and JSON specifications.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "docker",
+        "path": "docker",
+        "repo": "github:adaptive-metrics-autoapply",
+        "team": "team-adaptive-metrics-autoapply",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Automatically fetch and apply Adaptive Metrics recommendations on a schedule in Grafana Cloud using a GitHub Actions template repository.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "historian",
+        "path": "apps/historian",
+        "repo": "github:alerting",
+        "team": "team-alerting",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Libraries for building Grafana alerting systems with Alertmanager integration and Mimir compatibility",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "sdata",
+        "path": "sdata",
+        "repo": "github:dataplane",
+        "team": "team-dataplane",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Create and validate structured data frames that conform to a predefined contract.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       }
+      ]
+     },
+     {
+      "name": "Plugins & Integrations",
+      "teams": 9,
+      "components": [
+       {
+        "name": "clickhouse-datasource",
+        "path": "",
+        "repo": "github:clickhouse-datasource",
+        "team": "team-clickhouse-datasource",
+        "stage": "prod",
+        "stage_confirmed": false,
+        "purpose": "Query ClickHouse data in Grafana to build dashboards and annotate graphs with stored events",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "clock-panel",
+        "path": "",
+        "repo": "github:clock-panel",
+        "team": "team-clock-panel",
+        "stage": "prod",
+        "stage_confirmed": false,
+        "purpose": "Display a live clock or countdown/countup timer in Grafana dashboards.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "grafana-athena-datasource",
+        "path": "",
+        "repo": "github:athena-datasource",
+        "team": "team-athena-datasource",
+        "stage": "prod",
+        "stage_confirmed": false,
+        "purpose": "Query Amazon Athena data directly from Grafana dashboards",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "grafana-pyroscope-datasource",
+        "path": "",
+        "repo": "github:grafana-pyroscope-datasource",
+        "team": "team-grafana-pyroscope-datasource",
+        "stage": "prod",
+        "stage_confirmed": false,
+        "purpose": "Query and visualize continuous profiling data (CPU, memory, goroutine, etc.) from a Pyroscope server within Grafana.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "volkovlabs-table-panel",
+        "path": "",
+        "repo": "github:business-table",
+        "team": "team-business-table",
+        "stage": "prod",
+        "stage_confirmed": false,
+        "purpose": "Display and interact with hierarchical and multi-frame data in Grafana tables, with filtering, editing, and export features.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "business-forms",
+        "path": "",
+        "repo": "github:business-forms",
+        "team": "team-business-forms",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Enable inserting, updating, and modifying application data and configuration directly within Grafana dashboards",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "business-panel",
+        "path": "",
+        "repo": "github:business-calendar",
+        "team": "team-business-calendar",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Render schedules, deadlines, and time-based metrics as an interactive calendar, pulling events from any Grafana data source with day/week/month views.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "business-text",
+        "path": "",
+        "repo": "github:business-text",
+        "team": "team-business-text",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Create dynamic text panels in Grafana using Markdown or Handlebars templates populated with query data.",
+        "used_by_teams": 0,
+        "can_read_code": false
+       },
+       {
+        "name": "canvas",
+        "path": "",
+        "repo": "github:grafana-canvas-panel",
+        "team": "team-grafana-canvas-panel",
+        "stage": "beta",
+        "stage_confirmed": false,
+        "purpose": "Create custom, data-bound visual dashboards by placing and styling elements on a canvas and linking their properties to Grafana metric fields",
+        "used_by_teams": 0,
+        "can_read_code": false
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "label": "Someone on team-cloudcost-exporter",
+   "initials": "CC",
+   "map": {
+    "components": 2,
+    "repositories": 1,
+    "doc_pages": 23,
+    "by_stage": {
+     "prod": 1,
+     "beta": 0,
+     "dev": 1,
+     "deprecated": 0,
+     "retired": 0,
+     "unknown": 0
+    },
+    "lobs": [
+     {
+      "name": "Observability Data",
+      "teams": 1,
+      "components": [
+       {
+        "name": "cloudcost-exporter",
+        "path": "",
+        "repo": "github:cloudcost-exporter",
+        "team": "team-cloudcost-exporter",
+        "stage": "prod",
+        "stage_confirmed": false,
+        "purpose": "Export real-time per-minute cloud cost rates from AWS, GCP, and Azure as Prometheus metrics for monitoring and budgeting",
+        "used_by_teams": 0,
+        "can_read_code": true
+       },
+       {
+        "name": "cloudcost-exporter",
+        "path": "charts/cloudcost-exporter",
+        "repo": "github:cloudcost-exporter",
+        "team": "team-cloudcost-exporter",
+        "stage": "dev",
+        "stage_confirmed": false,
+        "purpose": "Export and expose cloud provider cost metrics in Kubernetes via a Helm chart for integration with monitoring tools.",
+        "used_by_teams": 0,
+        "can_read_code": true
+       }
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

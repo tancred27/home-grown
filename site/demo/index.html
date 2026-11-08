@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="hg-snapshot" content="snapshot.json">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HomeGrown · Org map demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#141210;--surface:#1c1a17;--surface2:#262320;--line:#36322d;--line2:#4d4841;--text:#f4f0e9;--muted:#b9b2a7;--faint:#958e83;--accent:#ff7a45;--accent-ink:#1a0f08;--accent-text:#ff8c5c;--prod:#5fd38a;--beta:#ffb27a;--dev:#f5e17a;--other:#b9b2a7;color-scheme:dark}
+:root[data-theme="light"]{--bg:#faf6f0;--surface:#ffffff;--surface2:#f3ede4;--line:#e4dccf;--line2:#cbc0b0;--text:#1f1c18;--muted:#57514a;--faint:#6b655c;--accent:#f0652b;--accent-ink:#ffffff;--accent-text:#bf4612;--prod:#1d7f45;--beta:#b5530c;--dev:#806500;--other:#57514a;color-scheme:light}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 'Figtree',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.disp{font-family:'Bricolage Grotesque',sans-serif;letter-spacing:-.02em}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.shell{display:flex;min-height:100vh}
+.side{position:sticky;top:0;align-self:flex-start;height:100vh;overflow-y:auto;flex:0 0 248px;padding:22px 14px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px;background:var(--surface)}
+.brand{display:flex;align-items:center;gap:10px;padding:0 10px 22px}
+.logo{width:32px;height:32px;border-radius:10px;background:var(--accent);display:inline-flex;align-items:center;justify-content:center;color:var(--accent-ink)}
+.nav{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:12px;color:var(--muted);font-weight:600;text-decoration:none}
+.nav.on{color:var(--text);background:var(--surface2)}
+.nav[aria-disabled="true"]{opacity:.7;cursor:default}
+.count{margin-left:auto;padding:1px 9px;border-radius:999px;background:var(--surface2);border:1px solid var(--line);font-size:13px;font-weight:700;color:var(--muted)}
+.soon{margin-left:auto;font-size:12px;font-weight:700;color:var(--faint)}
+.viewer{margin-top:auto;padding:14px 12px 0;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.avatar{width:34px;height:34px;border-radius:50%;background:#8fbcff;color:#1a1410;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:none;text-transform:uppercase}
+.linkbtn{border:0;background:none;padding:0;color:var(--accent-text);font-weight:700;cursor:pointer;min-height:24px}
+main{flex:1;min-width:0;padding:30px 40px 56px;display:flex;flex-direction:column;gap:24px}
+header.top{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.askform{display:flex;flex:1 1 380px;max-width:560px;align-items:center;border:1px solid var(--line2);border-radius:12px;background:var(--surface);overflow:hidden}
+.askform input{flex:1;min-width:0;min-height:44px;padding:0 12px;border:0;background:transparent}
+.askform input:focus{outline:none}
+.askform:focus-within{border-color:var(--accent)}
+.btn{min-height:44px;padding:0 18px;border:0;background:var(--accent);color:var(--accent-ink);font-weight:700;cursor:pointer}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;border:1px solid var(--line2);background:transparent;cursor:pointer;flex:none}
+.icon-btn:hover{background:var(--surface2)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.stat{padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.stat .k{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--muted)}
+.stat .v{font:700 38px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em}
+.stat .n{font-size:14px;color:var(--muted)}
+.bar{display:flex;height:14px;border-radius:999px;overflow:hidden;gap:3px;background:var(--surface2)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:14px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend strong{color:var(--text)}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.f{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border:1px solid var(--line2);border-radius:999px;background:var(--surface);color:var(--muted);font-weight:600;font-size:14px;cursor:pointer}
+.f[aria-pressed="true"]{background:var(--text);border-color:var(--text);color:var(--bg)}
+.lob{overflow:hidden}
+.lobhead{width:100%;display:flex;flex-wrap:wrap;align-items:center;gap:14px;min-height:64px;padding:10px 20px;border:0;background:transparent;text-align:left;cursor:pointer}
+.lobhead:hover{background:var(--surface2)}
+.chev{display:inline-flex;color:var(--faint);transition:transform .15s}
+.lobhead[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.swatch{width:14px;height:36px;border-radius:5px;flex:none}
+.meta{padding:3px 11px;border-radius:999px;border:1px solid var(--line);font-size:14px;font-weight:600;color:var(--muted);white-space:nowrap}
+.tablewrap{overflow-x:auto;border-top:1px solid var(--line2)}
+table{width:100%;min-width:1020px;border-collapse:collapse}
+th{padding:11px 16px;background:var(--surface2);font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.02em;text-transform:uppercase;text-align:left;border-bottom:1px solid var(--line2)}
+td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.5}
+th+th,td+td{border-left:1px solid var(--line)}
+tbody tr:hover td{background:color-mix(in srgb,var(--text) 4%,transparent)}
+.cname{font-weight:700}
+td:first-child{min-width:190px}
+td:nth-child(2){white-space:nowrap}
+.cpath{display:block;font-size:13px;color:var(--faint);word-break:break-all}
+.muted{color:var(--muted)}
+.faint{color:var(--faint)}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:2px 11px;border-radius:999px;font-size:14px;font-weight:600;white-space:nowrap}
+.pill.prod{color:var(--prod);background:color-mix(in srgb,var(--prod) 15%,transparent)}
+.pill.beta{color:var(--beta);background:color-mix(in srgb,var(--beta) 17%,transparent)}
+.pill.dev{color:var(--dev);background:color-mix(in srgb,var(--dev) 16%,transparent)}
+.pill.other{color:var(--other);background:var(--surface2)}
+.pill.lock{color:var(--accent-text);background:color-mix(in srgb,var(--accent) 15%,transparent)}
+.pill.open{color:var(--prod);background:color-mix(in srgb,var(--prod) 15%,transparent)}
+.foot{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 16px;font-size:14px;color:var(--faint)}
+.foot .linkbtn{margin-left:auto}
+.empty{margin:0;padding:18px 16px;color:var(--muted);border-bottom:1px solid var(--line)}
+.notice{padding:16px 20px;border-radius:14px;background:var(--surface2);color:var(--muted)}
+.answer{padding:20px;display:flex;flex-direction:column;gap:14px}
+.answer h2{margin:0;font-size:20px}
+.match{border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.signin{max-width:440px;margin:12vh auto;padding:28px;display:flex;flex-direction:column;gap:14px}
+.signin input{min-height:44px;padding:0 12px;border:1px solid var(--line2);border-radius:12px;background:var(--bg)}
+@media (max-width:820px){.shell{flex-direction:column}.side{position:static;height:auto;flex:none;border-right:0;border-bottom:1px solid var(--line)}.viewer{margin-top:8px}main{padding:22px 16px 40px}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="side" aria-label="Main">
+    <div class="brand">
+      <span class="logo"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-9"/><path d="M12 12c0-4 3-7 8-7 0 4-3 7-8 7z"/><path d="M12 14c0-3-2.5-5.5-7-5.5 0 3 2.5 5.5 7 5.5z"/></svg></span>
+      <span class="disp" style="font-size:21px;font-weight:700">HomeGrown</span>
+    </div>
+    <a class="nav on" href="#" aria-current="page">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      Org map <span class="count" id="navCount">–</span>
+    </a>
+    <span class="nav" aria-disabled="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
+      Capabilities <span class="soon">Planned</span>
+    </span>
+    <div class="viewer" id="viewer" hidden>
+      <span class="avatar" id="viewerInitials"></span>
+      <span style="display:flex;flex-direction:column;min-width:0">
+        <span class="faint" style="font-size:13px">Viewing as</span>
+        <span id="viewerName" style="font-weight:600;overflow-wrap:anywhere"></span>
+        <button type="button" class="linkbtn" id="switchUser" style="align-self:flex-start;font-size:13px">Switch user</button>
+      </span>
+    </div>
+  </nav>
+
+  <main id="main">
+    <header class="top">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <h1 class="disp" style="margin:0;font-size:42px;line-height:1;font-weight:700">Org map</h1>
+        <span class="muted" id="subtitle">Loading…</span>
+      </div>
+      <div style="display:flex;gap:10px;flex:1 1 420px;justify-content:flex-end">
+        <form class="askform" id="askForm" role="search">
+          <label for="ask" class="sr">Ask HomeGrown</label>
+          <span class="faint" style="padding-left:14px;display:inline-flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span>
+          <input id="ask" type="search" placeholder="Has anyone built a Kafka load tester?" autocomplete="off">
+          <button type="submit" class="btn">Ask</button>
+        </form>
+        <button type="button" class="icon-btn" id="themeBtn" aria-label="Switch to light theme">
+          <svg id="iconSun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg id="iconMoon" hidden width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <section id="answer" class="card" hidden aria-live="polite"></section>
+    <div id="content" style="display:flex;flex-direction:column;gap:24px"></div>
+  </main>
+</div>
+
+<template id="signinTpl">
+  <form class="card signin" id="signinForm">
+    <h1 class="disp" style="margin:0;font-size:28px">Who's looking?</h1>
+    <p class="muted" style="margin:0">HomeGrown shows each person only what they're allowed to see. Enter a user created with <code>homegrown add-user</code>. This is a local stand-in for sign-in.</p>
+    <label for="login" style="font-weight:600">User</label>
+    <input id="login" autocomplete="username" required>
+    <p id="signinError" style="margin:0;color:var(--accent-text)" hidden></p>
+    <button type="submit" class="btn" style="border-radius:12px">Open the org map</button>
+  </form>
+</template>
+
+<script>
+(function () {
+  "use strict";
+  const STAGES = {
+    prod: { label: "Prod", cls: "prod", color: "var(--prod)" },
+    beta: { label: "Beta", cls: "beta", color: "var(--beta)" },
+    dev: { label: "Dev", cls: "dev", color: "var(--dev)" },
+    deprecated: { label: "Deprecated", cls: "other", color: "var(--other)" },
+    retired: { label: "Retired", cls: "other", color: "var(--other)" },
+    unknown: { label: "Unknown", cls: "other", color: "var(--other)" },
+  };
+  const LOB_COLORS = ["#6aa9ff", "#ff7a45", "#b58cff", "#ff86b8", "#4fc3c8", "#f5e17a"];
+  const PAGE = 8;
+
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} },
+  };
+  const $ = (id) => document.getElementById(id);
+  function el(tag, attrs, ...kids) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (v == null || v === false) continue;
+      if (k === "class") n.className = v;
+      else if (k === "style") n.style.cssText = v;
+      else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v === true ? "" : v);
+    }
+    for (const kid of kids.flat()) if (kid != null && kid !== false) n.append(kid);
+    return n;
+  }
+  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+
+  // ---------------------------------------------------------------- theme
+  function applyTheme(t) {
+    document.documentElement.dataset.theme = t;
+    $("iconSun").hidden = t !== "dark";
+    $("iconMoon").hidden = t === "dark";
+    $("themeBtn").setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme");
+  }
+  applyTheme(store.get("hg-theme") || "dark");
+  $("themeBtn").addEventListener("click", () => {
+    const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    store.set("hg-theme", t);
+    applyTheme(t);
+  });
+
+  // ---------------------------------------------------------------- demo mode
+  // scripts/export_demo.py copies this page into site/demo/ with a
+  // <meta name="hg-snapshot"> tag. Then the page reads a frozen snapshot and never
+  // calls the API: no sign-in, no Ask box.
+  const SNAPSHOT = (document.querySelector('meta[name="hg-snapshot"]') || {}).content;
+  let snapshot = null, viewerIdx = 0;
+
+  async function loadDemo() {
+    $("askForm").hidden = true;
+    $("switchUser").hidden = true;
+    try {
+      const r = await fetch(SNAPSHOT);
+      if (!r.ok) throw new Error(`(${r.status})`);
+      snapshot = await r.json();
+    } catch (e) {
+      $("content").replaceChildren(el("p", { class: "notice" }, `Couldn't load the demo snapshot. ${e.message}`));
+      return;
+    }
+    const select = el("select", { id: "viewerSelect", style: "min-height:40px;padding:0 10px;border:1px solid var(--line2);border-radius:10px;background:var(--surface);font-weight:600" },
+      snapshot.viewers.map((v, i) => el("option", { value: String(i) }, v.label)));
+    select.addEventListener("change", () => { viewerIdx = Number(select.value); state.open.clear(); showDemoViewer(); });
+    const banner = el("div", { class: "card", style: "padding:16px 20px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;border-color:color-mix(in srgb,var(--accent) 35%,var(--line));background:color-mix(in srgb,var(--accent) 8%,var(--surface))" },
+      el("div", { style: "display:flex;flex-direction:column;gap:2px;flex:1 1 360px" },
+        el("strong", {}, "Demo: a frozen snapshot"),
+        el("span", { class: "muted", style: "font-size:14px" }, snapshot.note)),
+      el("label", { for: "viewerSelect", style: "font-weight:600" }, "View as"),
+      select);
+    $("main").insertBefore(banner, $("answer"));
+    showDemoViewer();
+  }
+
+  function showDemoViewer() {
+    const v = snapshot.viewers[viewerIdx];
+    state.data = v.map;
+    $("viewer").hidden = false;
+    $("viewerName").textContent = v.label;
+    $("viewerInitials").textContent = v.initials;
+    if (state.open.size === 0 && state.data.lobs.length) state.open.add(state.data.lobs[0].name);
+    render();
+  }
+
+  // ---------------------------------------------------------------- api
+  let login = store.get("hg-user");
+  async function api(path) {
+    const r = await fetch(path, { headers: { "X-Homegrown-User": login } });
+    if (r.status === 401 || r.status === 403) { const e = new Error("unknown user"); e.auth = true; throw e; }
+    if (!r.ok) throw new Error(`The server answered ${r.status}.`);
+    return r.json();
+  }
+
+  // ---------------------------------------------------------------- sign-in stand-in
+  function showSignin(message) {
+    $("viewer").hidden = true;
+    $("answer").hidden = true;
+    $("subtitle").textContent = "";
+    const content = $("content");
+    content.replaceChildren($("signinTpl").content.cloneNode(true));
+    if (message) { $("signinError").textContent = message; $("signinError").hidden = false; }
+    $("login").focus();
+    $("signinForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      login = $("login").value.trim();
+      if (!login) return;
+      store.set("hg-user", login);
+      load();
+    });
+  }
+  $("switchUser").addEventListener("click", () => { store.set("hg-user", null); login = null; showSignin(); });
+
+  // ---------------------------------------------------------------- org map
+  const state = { stage: "all", open: new Set(), all: new Set(), data: null };
+
+  async function load() {
+    if (!login) return showSignin();
+    $("content").replaceChildren(el("p", { class: "notice" }, "Loading the org map…"));
+    try {
+      state.data = await api("/api/org-map");
+    } catch (e) {
+      if (e.auth) { const tried = login; store.set("hg-user", null); login = null; return showSignin(`There's no user called “${tried}”.`); }
+      $("content").replaceChildren(el("p", { class: "notice" }, `Couldn't load the org map. ${e.message}`));
+      return;
+    }
+    $("viewer").hidden = false;
+    $("viewerName").textContent = login;
+    $("viewerInitials").textContent = login.replace(/[^a-z0-9]/gi, "").slice(0, 2) || "?";
+    if (state.open.size === 0 && state.data.lobs.length) state.open.add(state.data.lobs[0].name);
+    render();
+  }
+
+  function render() {
+    const d = state.data;
+    $("navCount").textContent = d.components;
+    $("subtitle").textContent = `${snapshot ? "Everything this person can see" : "Everything you can see"}: ${plural(d.repositories, "repository", "repositories")}, ${plural(d.components, "component", "components")} and ${plural(d.doc_pages, "doc page", "doc pages")}`;
+    if (!d.components) {
+      $("content").replaceChildren(el("p", { class: "notice" }, "Nothing to show yet. Either nothing has been collected, or nothing is visible to this user."));
+      return;
+    }
+    $("content").replaceChildren(summary(d), lobSection(d));
+  }
+
+  function summary(d) {
+    const s = d.by_stage;
+    const order = ["prod", "beta", "dev", "deprecated", "retired", "unknown"].filter((k) => s[k]);
+    const confirmed = d.lobs.reduce((n, l) => n + l.components.filter((c) => c.stage_confirmed).length, 0);
+    const used = d.lobs.reduce((n, l) => n + l.components.filter((c) => c.used_by_teams > 0).length, 0);
+    const readable = d.lobs.reduce((n, l) => n + l.components.filter((c) => c.can_read_code).length, 0);
+    return el("div", { class: "cards" },
+      el("div", { class: "card", style: "grid-column:span 2;padding:18px 20px;display:flex;flex-direction:column;gap:14px" },
+        el("div", { style: "display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px" },
+          el("span", { style: "font-weight:700;font-size:16px" }, `How ready the ${d.components} components are`),
+          el("span", { class: "faint", style: "font-size:14px" },
+            confirmed ? `${confirmed} confirmed by an owner, the rest inferred` : "Inferred from releases and usage; no owner has confirmed one yet")),
+        el("div", { class: "bar", role: "img", "aria-label": order.map((k) => `${s[k]} ${STAGES[k].label.toLowerCase()}`).join(", ") },
+          order.map((k) => el("span", { style: `flex:${s[k]};background:${STAGES[k].color}` }))),
+        el("div", { class: "legend" }, order.map((k) =>
+          el("span", {}, el("span", { class: "dot", style: `background:${STAGES[k].color}` }), el("strong", {}, String(s[k])), " " + STAGES[k].label.toLowerCase())))),
+      el("div", { class: "card stat" },
+        el("span", { class: "k" }, el("span", { class: "dot", style: "background:var(--accent)" }), "Code you can't open"),
+        el("span", { class: "v" }, String(d.components - readable)),
+        el("span", { class: "n" }, `You can find these, but need to ask the owning team for access. You can read ${readable}.`)),
+      el("div", { class: "card stat" },
+        el("span", { class: "k" }, el("span", { class: "dot", style: "background:var(--prod)" }), "Used by other teams"),
+        el("span", { class: "v" }, String(used)),
+        el("span", { class: "n" }, "Components that at least one other team depends on.")));
+  }
+
+  function lobSection(d) {
+    const filters = [["all", "All stages", "var(--muted)"], ["prod", "Prod", "var(--prod)"], ["beta", "Beta", "var(--beta)"], ["dev", "Dev", "var(--dev)"]];
+    return el("section", { "aria-label": "Lines of business", style: "display:flex;flex-direction:column;gap:14px" },
+      el("div", { class: "toolbar" },
+        el("h2", { class: "disp", style: "margin:0 auto 0 0;font-size:24px" }, "By line of business"),
+        el("span", { class: "faint", style: "font-size:14px;font-weight:600;margin-right:4px" }, "Show"),
+        filters.map(([id, label, color]) => el("button", {
+          type: "button", class: "f", "aria-pressed": String(state.stage === id),
+          onclick: () => { state.stage = id; render(); },
+        }, el("span", { class: "dot", style: `background:${color}` }), label))),
+      d.lobs.map((lob, i) => lobCard(lob, LOB_COLORS[i % LOB_COLORS.length])));
+  }
+
+  function lobCard(lob, color) {
+    const open = state.open.has(lob.name);
+    const rows = lob.components.filter((c) => state.stage === "all" || c.stage === state.stage);
+    const showAll = state.all.has(lob.name);
+    const shown = showAll ? rows : rows.slice(0, PAGE);
+    const id = "lob-" + lob.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+    const toggle = () => { open ? state.open.delete(lob.name) : state.open.add(lob.name); render(); };
+    return el("div", { class: "card lob" },
+      el("button", { type: "button", class: "lobhead", "aria-expanded": String(open), "aria-controls": id, onclick: toggle },
+        el("span", { class: "chev" }, chevron()),
+        el("span", { class: "swatch", style: `background:${color}` }),
+        el("span", { class: "disp", style: "font-size:19px;font-weight:700;margin-right:auto" }, lob.name),
+        el("span", { class: "meta" }, plural(lob.teams, "team", "teams")),
+        el("span", { class: "meta" }, plural(lob.components.length, "component", "components"))),
+      open && el("div", { class: "tablewrap", id },
+        el("table", {},
+          el("caption", { class: "sr" }, `${lob.name} components`),
+          el("thead", {}, el("tr", {},
+            ["Component", "Team", "Stage", "What it does", "Used by", "Code"].map((h) => el("th", { scope: "col" }, h)))),
+          el("tbody", {}, shown.map(row))),
+        rows.length === 0 && el("p", { class: "empty" }, `No ${STAGES[state.stage].label.toLowerCase()} components here.`),
+        el("div", { class: "foot" },
+          el("span", {}, `Showing ${shown.length} of ${rows.length}`),
+          rows.length > PAGE && el("button", { type: "button", class: "linkbtn", onclick: () => {
+            showAll ? state.all.delete(lob.name) : state.all.add(lob.name); render();
+          } }, showAll ? "Show fewer" : `Show all ${rows.length}`))));
+  }
+
+  function row(c) {
+    const st = STAGES[c.stage] || STAGES.unknown;
+    return el("tr", {},
+      el("td", {}, el("span", { class: "cname" }, c.name), c.path && el("span", { class: "cpath" }, c.path)),
+      el("td", { class: "muted" }, c.team || "—"),
+      el("td", {}, el("span", { class: `pill ${st.cls}`, title: c.stage_confirmed ? "Confirmed by the owner" : "Inferred, not confirmed by the owner" },
+        el("span", { class: "dot", style: `background:${st.color}` }), st.label)),
+      el("td", { class: "muted" }, c.purpose || "No description yet."),
+      el("td", { class: c.used_by_teams ? "" : "faint", style: c.used_by_teams ? "font-weight:600" : "" },
+        c.used_by_teams ? plural(c.used_by_teams, "team", "teams") : "No other team"),
+      el("td", {}, c.can_read_code
+        ? el("span", { class: "pill open" }, "You can read it")
+        : el("span", { class: "pill lock", title: `Ask ${c.team || "the owning team"} for access to ${c.repo}` }, lockIcon(), "Ask for access")));
+  }
+
+  function chevron() {
+    const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("width", "18"); s.setAttribute("height", "18"); s.setAttribute("viewBox", "0 0 24 24");
+    s.setAttribute("fill", "none"); s.setAttribute("stroke", "currentColor"); s.setAttribute("stroke-width", "2.4");
+    s.setAttribute("aria-hidden", "true");
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "path"); p.setAttribute("d", "M9 6l6 6-6 6");
+    s.append(p); return s;
+  }
+  function lockIcon() {
+    const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    for (const [k, v] of Object.entries({ width: 14, height: 14, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": 2.4, "aria-hidden": "true" })) s.setAttribute(k, v);
+    const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    for (const [k, v] of Object.entries({ x: 5, y: 11, width: 14, height: 10, rx: 2 })) r.setAttribute(k, v);
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "path"); p.setAttribute("d", "M8 11V7a4 4 0 0 1 8 0v4");
+    s.append(r, p); return s;
+  }
+
+  // ---------------------------------------------------------------- ask
+  const HEADLINES = {
+    yes: "Yes, this already exists.",
+    related: "Something close exists. Check it before you build.",
+    possibly: "Possibly. These look relevant, but no model checked them.",
+    no: "Nothing here does this. Go ahead and build it.",
+    unknown: "Nothing clearly fits, but that isn't proof it hasn't been built.",
+  };
+  const VERDICTS = { use_as_is: "Use as-is", extend: "Related", unknown: "Not ruled out" };
+
+  $("askForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const q = $("ask").value.trim();
+    if (!q || !login) return;
+    const box = $("answer");
+    box.hidden = false;
+    box.replaceChildren(el("div", { class: "answer" }, el("p", { class: "muted", style: "margin:0" }, "Looking…")));
+    let out;
+    try { out = await api("/ask?q=" + encodeURIComponent(q)); }
+    catch (err) {
+      box.replaceChildren(el("div", { class: "answer" }, el("p", { style: "margin:0" }, `Couldn't get an answer. ${err.message}`)));
+      return;
+    }
+    box.replaceChildren(el("div", { class: "answer" },
+      el("div", { style: "display:flex;justify-content:space-between;gap:12px;align-items:start" },
+        el("div", {},
+          el("span", { class: "faint", style: "font-size:14px" }, `You asked: ${out.question}`),
+          el("h2", { class: "disp" }, HEADLINES[out.answer] || out.answer)),
+        el("button", { type: "button", class: "icon-btn", "aria-label": "Close the answer", onclick: () => { box.hidden = true; } }, "×")),
+      out.matches.map((m) => {
+        const st = STAGES[m.stage.stage] || STAGES.unknown;
+        const canRead = m.access === "you can read the code";
+        return el("div", { class: "match" },
+          el("div", { style: "display:flex;flex-wrap:wrap;gap:8px;align-items:center" },
+            el("strong", { style: "font-size:17px" }, m.name),
+            m.where && el("span", { class: "faint" }, m.where),
+            el("span", { class: `pill ${st.cls}` }, el("span", { class: "dot", style: `background:${st.color}` }), st.label),
+            VERDICTS[m.verdict] && el("span", { class: "meta" }, VERDICTS[m.verdict])),
+          el("span", { class: "muted" }, [m.owner_team, m.lob].filter(Boolean).join(" · ") + (m.team_manager ? ` · ask ${m.team_manager}` : "")),
+          m.why && el("span", {}, m.why),
+          el("span", {}, canRead ? el("span", { class: "pill open" }, "You can read the code")
+                                 : el("span", { class: "pill lock" }, lockIcon(), "Ask for access")));
+      })));
+  });
+
+  SNAPSHOT ? loadDemo() : load();
+})();
+</script>
+</body>
+</html>

@@ -25,8 +25,9 @@ Roughly in order:
    duplicated, and what people ask for that doesn't exist yet.
 2. **Recall at scale:** better handling of look-alike components across teams.
 3. **Lower model cost:** cache results across questions, scoped by permission.
-4. **Real permissions:** sign-in through an identity provider, and team and access
-   sync from GitHub and directories.
+4. **Real permissions:** sign-in through each company's own identity provider (to be
+   decided: OIDC, SAML, or trusting the company's sign-in proxy), and team and access
+   sync from GitHub and directories. Until then the dashboard has no real sign-in.
 5. **More sources:** GitLab, Bitbucket, and more documentation systems.
 
 Done so far: traces and metrics (OpenTelemetry), and a separate "related, check these"

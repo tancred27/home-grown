@@ -90,3 +90,17 @@ def test_dashboard_page_is_served():
     assert r.status_code == 200
     assert "text/html" in r.headers["content-type"]
     assert "/api/org-map" in r.text
+
+
+def test_demo_page_matches_the_dashboard():
+    """site/demo/index.html is dashboard.html plus the snapshot tag. If this fails, the
+    dashboard changed: rerun scripts/export_demo.py."""
+    from pathlib import Path
+    root = Path(__file__).resolve().parent.parent
+    page = (root / "src" / "homegrown" / "web" / "dashboard.html").read_text(encoding="utf-8")
+    demo = (root / "site" / "demo" / "index.html").read_text(encoding="utf-8")
+    expected = page.replace('<meta charset="utf-8">',
+                            '<meta charset="utf-8">\n<meta name="hg-snapshot" '
+                            'content="snapshot.json">', 1).replace(
+        "<title>HomeGrown · Org map</title>", "<title>HomeGrown · Org map demo</title>", 1)
+    assert demo == expected
