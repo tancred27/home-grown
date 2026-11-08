@@ -21,15 +21,15 @@ respect permissions, and stay current without anyone maintaining a catalog by ha
 
 Roughly in order:
 
-1. **Observability:** traces and metrics for both agents, self-hosted and
-   vendor-neutral, with no prompt storage.
-2. **Admin dashboard:** what the org has built, where things are duplicated, and what
-   people ask for that doesn't exist yet.
-3. **Recall at scale:** better handling of look-alike components across teams.
-4. **Lower model cost:** cache results across questions, scoped by permission.
-5. **Real permissions:** sign-in through an identity provider, and team and access
+1. **Admin dashboard:** the org map is done. Still to come: where things are
+   duplicated, and what people ask for that doesn't exist yet.
+2. **Recall at scale:** better handling of look-alike components across teams.
+3. **Lower model cost:** cache results across questions, scoped by permission.
+4. **Real permissions:** sign-in through an identity provider, and team and access
    sync from GitHub and directories.
-6. **Clearer answers:** a separate "related, check these" group for `extend` verdicts.
-7. **More sources:** GitLab, Bitbucket, and more documentation systems.
+5. **More sources:** GitLab, Bitbucket, and more documentation systems.
+
+Done so far: traces and metrics (OpenTelemetry), and a separate "related, check these"
+group for `extend` verdicts.
 
 Ideas and pull requests toward any of these are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).

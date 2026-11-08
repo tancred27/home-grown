@@ -23,5 +23,5 @@ test set.
   cached across questions yet.
 - **Evidence quality varies by language.** Test names are the main evidence. JavaScript
   `it("rejects a payload over 1 MB")` says a lot; Python `test_max_age` says less.
-- **Not production-hardened.** There is no SSO, no syncing of real repo permissions, no
-  observability, and no real users yet. See [production.md](production.md).
+- **Not production-hardened.** There is no SSO, no syncing of real repo permissions,
+  and no real users yet. See [production.md](production.md).
