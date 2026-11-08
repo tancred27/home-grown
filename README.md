@@ -53,6 +53,11 @@ one fits. It would rather say "I don't know" than send you to the wrong place.
 
 ## Try it
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/try-it-dark.svg">
+  <img alt="Five steps: 1. Install. 2. Collect an organization. 3. Ask a question. 4. Add a model (optional). 5. Open the dashboard." src="docs/assets/try-it-light.svg">
+</picture>
+
 You need Docker, Python 3.12+ and Git.
 
 ### 1. Install
@@ -136,6 +141,8 @@ Want to look first? The [demo dashboard](https://tancred27.github.io/home-grown/
 is a frozen snapshot of the Grafana test run. It runs in your browser with no server,
 and lets you switch between two people with different access.
 
+<a href="https://tancred27.github.io/home-grown/demo/"><img alt="The demo dashboard: the org map for 38 Grafana repositories, with how ready the 86 components are, and a table per line of business showing each component's team, stage, what it does, who uses it and whether you can read the code" src="docs/assets/dashboard-demo.png"></a>
+
 To run it on your own data:
 
 ```bash
@@ -162,13 +169,10 @@ claude mcp add homegrown -e HOMEGROWN_USER=alice -- /path/to/.venv/bin/python -m
 
 A session then goes like this:
 
-> **You:** Add Kafka produce and consume steps to our k6 tests.
->
-> **Agent** calls `find_existing("produce and consume Kafka messages from k6 load tests")`
-> and gets back *xk6-kafka · beta · team-xk6-kafka · use as-is*.
->
-> **Agent:** xk6-kafka already does this. I'll build k6 with it instead of writing a new
-> Kafka client.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/agent-dark.svg">
+  <img alt="You: Add Kafka produce and consume steps to our k6 tests. The agent calls find_existing with 'Produce and consume Kafka messages from k6 load tests' and gets back xk6-kafka, beta, team-xk6-kafka, use as-is. Agent: xk6-kafka already does this. I'll build k6 with it instead of writing a new Kafka client." src="docs/assets/agent-light.svg">
+</picture>
 
 The server also offers `ask`, `get_asset` and `report_reuse_outcome`.
 
@@ -177,6 +181,11 @@ The server also offers `ask`, `get_asset` and `report_reuse_outcome`.
 Measured on real public code from Grafana, Microsoft, Google, AWS and others. Every
 number comes from a script in [`scripts/`](scripts) with a write-up in
 [`experiments/`](experiments).
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/results-dark.svg">
+  <img alt="94% right answer in the top 5 out of 109 components. 26 of 26: says so when nothing fits. 0.1 s search across 300,000 vectors. 225 s from a push to processed, 95% of the time." src="docs/assets/results-light.svg">
+</picture>
 
 | What we measured | Result | Where to check |
 |---|---|---|

@@ -1,7 +1,8 @@
 name: Pages
 
-# Publishes site/ (the landing page) to GitHub Pages.
+# Publishes site/ (the landing page and the demo dashboard) to GitHub Pages.
 # One-time setup: Settings > Pages > Build and deployment > Source: GitHub Actions.
+# This is the only Pages workflow: a second one would publish over it.
 
 on:
   push:
