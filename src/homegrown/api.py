@@ -11,12 +11,14 @@ Webhook handlers only verify and record; the agents never run inside a request.
   POST /hooks/confluence         X-Homegrown-Token checked
   POST /hooks/notion             X-Homegrown-Token checked
   GET  /ask?q=...                the answering agent
+  GET  /api/org-map              every component the caller may discover, by line of business
+  GET  /ui                       the dashboard (a static page that calls the two above)
   GET  /healthz
 
 Run: uvicorn homegrown.api:app --port 8080
 
-Identity on /ask comes from the X-Homegrown-User header. That is a local stand-in: a
-real deployment would validate a sign-in token here and map it to an app_user.
+Identity on /ask and /api/org-map comes from the X-Homegrown-User header. That is a
+local stand-in: a real deployment would validate a sign-in token here and map it to an app_user.
 """
 
 from __future__ import annotations
@@ -24,8 +26,10 @@ from __future__ import annotations
 import hmac
 import json
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi.responses import FileResponse
 
 from . import telemetry
 from .answer import ask
@@ -33,6 +37,9 @@ from .cli import resolve_user
 from .collector import adapters as A
 from .collector.events import enqueue
 from .config import settings
+from .orgmap import org_map
+
+_WEB = Path(__file__).parent / "web"
 
 
 @asynccontextmanager
@@ -99,14 +106,28 @@ async def notion_hook(request: Request,
     return {"ok": True, "queued": enqueue(ev)}
 
 
+def _caller(login: str | None) -> str:
+    if not login:
+        raise HTTPException(status_code=401, detail="no user")
+    try:
+        return resolve_user(login)
+    except SystemExit:
+        raise HTTPException(status_code=403, detail="unknown user") from None
+
+
 @app.get("/ask")
 def ask_endpoint(q: str, keywords: str = "",
                  x_homegrown_user: str | None = Header(default=None)) -> dict:
-    if not x_homegrown_user:
-        raise HTTPException(status_code=401, detail="no user")
-    try:
-        user = resolve_user(x_homegrown_user)
-    except SystemExit:
-        raise HTTPException(status_code=403, detail="unknown user") from None
+    user = _caller(x_homegrown_user)
     kws = [k.strip() for k in keywords.split(",") if k.strip()]
     return ask(user, q, kws, route="http")
+
+
+@app.get("/api/org-map")
+def org_map_endpoint(x_homegrown_user: str | None = Header(default=None)) -> dict:
+    return org_map(_caller(x_homegrown_user))
+
+
+@app.get("/ui", include_in_schema=False)
+def dashboard() -> FileResponse:
+    return FileResponse(_WEB / "dashboard.html", media_type="text/html")
