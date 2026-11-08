@@ -14,7 +14,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>
-  try { var t = localStorage.getItem("hg-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  // ?theme=dark|light in the address wins (the README links use it), then the visitor's last choice.
+  try { var q = new URLSearchParams(location.search).get("theme"), t = (q === "dark" || q === "light") ? q : localStorage.getItem("hg-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
 </script>
 <style>
 :root{--bg:#141210;--surface:#1c1a17;--surface2:#262320;--line:#36322d;--line2:#4d4841;--text:#f4f0e9;--muted:#b9b2a7;--faint:#958e83;--accent:#ff7a45;--accent-ink:#1a0f08;--accent-text:#ff8c5c;--prod:#5fd38a;--beta:#ffb27a;--dev:#f5e17a;--pink:#ff86b8;--blue:#8fbcff;color-scheme:dark}

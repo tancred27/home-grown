@@ -197,7 +197,8 @@ td:nth-child(2){white-space:nowrap}
     $("iconMoon").hidden = t === "dark";
     $("themeBtn").setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme");
   }
-  applyTheme(store.get("hg-theme") || "dark");
+  const themeParam = new URLSearchParams(location.search).get("theme");   // the README links use ?theme=dark
+  applyTheme(themeParam === "dark" || themeParam === "light" ? themeParam : (store.get("hg-theme") || "dark"));
   $("themeBtn").addEventListener("click", () => {
     const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
     store.set("hg-theme", t);

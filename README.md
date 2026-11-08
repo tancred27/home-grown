@@ -11,8 +11,8 @@
 </p>
 
 <p align="center">
-  <a href="https://tancred27.github.io/home-grown/"><b>Website</b></a> ·
-  <a href="https://tancred27.github.io/home-grown/demo/"><b>Demo dashboard</b></a> ·
+  <a href="https://tancred27.github.io/home-grown/?theme=dark"><b>Website</b></a> ·
+  <a href="https://tancred27.github.io/home-grown/demo/?theme=dark"><b>Demo dashboard</b></a> ·
   <a href="#try-it"><b>Try it</b></a> ·
   <a href="docs/architecture.md"><b>How it works</b></a> ·
   <a href="docs/results.md"><b>Results</b></a>
@@ -84,7 +84,7 @@ python -I scripts/sync_worker.py pallets --once
 
 ```bash
 homegrown add-user alice && export HOMEGROWN_USER=alice
-homegrown ask "has anyone built a way to escape HTML safely?"
+homegrown ask "has anyone built signed tokens that expire, for password reset links?"
 ```
 
 Without a model, HomeGrown answers from the evidence alone and says "possibly" rather
@@ -137,11 +137,11 @@ Free tiers may train on your prompts. Don't send private code to them.
 
 ### 5. Open the dashboard
 
-Want to look first? The [demo dashboard](https://tancred27.github.io/home-grown/demo/)
+Want to look first? The [demo dashboard](https://tancred27.github.io/home-grown/demo/?theme=dark)
 is a frozen snapshot of the Grafana test run. It runs in your browser with no server,
 and lets you switch between two people with different access.
 
-<a href="https://tancred27.github.io/home-grown/demo/"><img alt="The demo dashboard: the org map for 38 Grafana repositories, with how ready the 86 components are, and a table per line of business showing each component's team, stage, what it does, who uses it and whether you can read the code" src="docs/assets/dashboard-demo.png"></a>
+<a href="https://tancred27.github.io/home-grown/demo/?theme=dark"><img alt="The demo dashboard: the org map for 38 Grafana repositories, with how ready the 86 components are, and a table per line of business showing each component's team, stage, what it does, who uses it and whether you can read the code" src="docs/assets/dashboard-demo.png"></a>
 
 To run it on your own data:
 
@@ -216,7 +216,7 @@ Every limit we know of is in [docs/results.md](docs/results.md).
 - [x] Permissions enforced by PostgreSQL row-level security
 - [x] MCP server for coding agents
 - [x] Traces and metrics with OpenTelemetry ([docs/observability.md](docs/observability.md))
-- [x] Dashboard: the org map, plus a [static demo](https://tancred27.github.io/home-grown/demo/)
+- [x] Dashboard: the org map, plus a [static demo](https://tancred27.github.io/home-grown/demo/?theme=dark)
 - [ ] Live demo: ask real questions against the demo repositories
 - [ ] Dashboard sign-in that fits each company's own SSO or sign-in setup
 - [ ] Dashboard: capabilities built more than once, and what people ask for that doesn't exist
