@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#141210;--surface:#1c1a17;--surface2:#262320;--line:#36322d;--line2:#4d4841;--text:#f4f0e9;--muted:#b9b2a7;--faint:#958e83;--accent:#ff7a45;--accent-ink:#1a0f08;--accent-text:#ff8c5c;--prod:#5fd38a;--beta:#ffb27a;--dev:#f5e17a;--other:#b9b2a7;color-scheme:dark}
-:root[data-theme="light"]{--bg:#faf6f0;--surface:#ffffff;--surface2:#f3ede4;--line:#e4dccf;--line2:#cbc0b0;--text:#1f1c18;--muted:#57514a;--faint:#6b655c;--accent:#f0652b;--accent-ink:#ffffff;--accent-text:#bf4612;--prod:#1d7f45;--beta:#b5530c;--dev:#806500;--other:#57514a;color-scheme:light}
+:root[data-theme="light"]{--bg:#ffffff;--surface:#fafaf8;--surface2:#f1f0ec;--line:#e4dccf;--line2:#cbc0b0;--text:#1f1c18;--muted:#57514a;--faint:#6b655c;--accent:#f0652b;--accent-ink:#ffffff;--accent-text:#bf4612;--prod:#1d7f45;--beta:#b5530c;--dev:#806500;--other:#57514a;color-scheme:light}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 'Figtree',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
@@ -40,7 +40,7 @@ header.top{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-conte
 .btn{min-height:44px;padding:0 18px;border:0;background:var(--accent);color:var(--accent-ink);font-weight:700;cursor:pointer}
 .icon-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;border:1px solid var(--line2);background:transparent;cursor:pointer;flex:none}
 .icon-btn:hover{background:var(--surface2)}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
 .stat{padding:18px 20px;display:flex;flex-direction:column;gap:8px}
 .stat .k{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--muted)}
@@ -88,6 +88,10 @@ td:nth-child(2){white-space:nowrap}
 .match{border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
 .signin{max-width:440px;margin:12vh auto;padding:28px;display:flex;flex-direction:column;gap:14px}
 .signin input{min-height:44px;padding:0 12px;border:1px solid var(--line2);border-radius:12px;background:var(--bg)}
+/* light theme: filled surfaces need no outline */
+:root[data-theme="light"] .card,:root[data-theme="light"] .askform,:root[data-theme="light"] .f,:root[data-theme="light"] .count{border-color:transparent!important}
+:root[data-theme="light"] .side{border-right-color:transparent}
+:root[data-theme="light"] .demo-banner{background:var(--surface2)!important}
 @media (max-width:820px){.shell{flex-direction:column}.side{position:static;height:auto;flex:none;border-right:0;border-bottom:1px solid var(--line)}.viewer{margin-top:8px}main{padding:22px 16px 40px}}
 </style>
 </head>
@@ -227,7 +231,7 @@ td:nth-child(2){white-space:nowrap}
       },
     }, el("span", { class: "avatar", style: "width:26px;height:26px;font-size:11px;margin-left:-8px" }, v.initials), v.label));
     const select = el("div", { role: "group", "aria-labelledby": "viewAsLabel", style: "display:flex;flex-wrap:wrap;gap:8px" }, buttons);
-    const banner = el("div", { class: "card", style: "padding:16px 20px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;border-color:color-mix(in srgb,var(--accent) 35%,var(--line));background:color-mix(in srgb,var(--accent) 8%,var(--surface))" },
+    const banner = el("div", { class: "card demo-banner", style: "padding:16px 20px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center" },
       el("div", { style: "display:flex;flex-direction:column;gap:2px;flex:1 1 360px" },
         el("strong", {}, "Demo: a frozen snapshot"),
         el("span", { class: "muted", style: "font-size:14px" }, snapshot.note)),
@@ -323,11 +327,11 @@ td:nth-child(2){white-space:nowrap}
         el("div", { class: "legend" }, order.map((k) =>
           el("span", {}, el("span", { class: "dot", style: `background:${STAGES[k].color}` }), el("strong", {}, String(s[k])), " " + STAGES[k].label.toLowerCase())))),
       el("div", { class: "card stat" },
-        el("span", { class: "k" }, el("span", { class: "dot", style: "background:var(--accent)" }), "Code you can't open"),
+        el("span", { class: "k" }, "Code you can't open"),
         el("span", { class: "v" }, String(d.components - readable)),
         el("span", { class: "n" }, `You can find these, but need to ask the owning team for access. You can read ${readable}.`)),
       el("div", { class: "card stat" },
-        el("span", { class: "k" }, el("span", { class: "dot", style: "background:var(--prod)" }), "Used by other teams"),
+        el("span", { class: "k" }, "Used by other teams"),
         el("span", { class: "v" }, String(used)),
         el("span", { class: "n" }, "Components that at least one other team depends on.")));
   }

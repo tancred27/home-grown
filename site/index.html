@@ -18,7 +18,7 @@
 </script>
 <style>
 :root{--bg:#141210;--surface:#1c1a17;--surface2:#262320;--line:#36322d;--line2:#4d4841;--text:#f4f0e9;--muted:#b9b2a7;--faint:#958e83;--accent:#ff7a45;--accent-ink:#1a0f08;--accent-text:#ff8c5c;--prod:#5fd38a;--beta:#ffb27a;--dev:#f5e17a;--pink:#ff86b8;--blue:#8fbcff;color-scheme:dark}
-:root[data-theme="light"]{--bg:#faf6f0;--surface:#ffffff;--surface2:#f3ede4;--line:#e4dccf;--line2:#cbc0b0;--text:#1f1c18;--muted:#57514a;--faint:#6b655c;--accent:#f0652b;--accent-ink:#ffffff;--accent-text:#bf4612;--prod:#1d7f45;--beta:#b5530c;--dev:#806500;--pink:#c2306f;--blue:#2b67d1;color-scheme:light}
+:root[data-theme="light"]{--bg:#ffffff;--surface:#fafaf8;--surface2:#f1f0ec;--line:#e4dccf;--line2:#cbc0b0;--text:#1f1c18;--muted:#57514a;--faint:#6b655c;--accent:#f0652b;--accent-ink:#ffffff;--accent-text:#bf4612;--prod:#1d7f45;--beta:#b5530c;--dev:#806500;--pink:#c2306f;--blue:#2b67d1;color-scheme:light}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{scroll-behavior:smooth}
@@ -30,7 +30,7 @@ button{font:inherit;color:inherit}
 .disp{font-family:'Bricolage Grotesque',sans-serif;letter-spacing:-.02em}
 .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
 .wrap{max-width:1240px;margin:0 auto;padding:0 clamp(16px,5vw,72px)}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;padding:6px 14px;border:1px solid var(--line2);border-radius:999px;font-size:14px;font-weight:600;color:var(--muted)}
+.eyebrow{font-size:15px;font-weight:600;color:var(--muted)}
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
 .h2{margin:0;font:700 clamp(32px,3.8vw,50px)/1.05 'Bricolage Grotesque',sans-serif;letter-spacing:-.025em}
 .lead{margin:0;font-size:19px;line-height:1.6;color:var(--muted);max-width:58ch}
@@ -45,7 +45,7 @@ button{font:inherit;color:inherit}
 .ghost svg{color:var(--beta)}
 .icon-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;border:1px solid var(--line2);background:transparent;cursor:pointer;flex:none}
 .icon-btn:hover{background:var(--surface2)}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px}
 section{scroll-margin-top:16px}
 .band{padding-top:88px;padding-bottom:88px;border-top:1px solid var(--line)}
 .split{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:40px 56px;align-items:start}
@@ -79,17 +79,18 @@ section{scroll-margin-top:16px}
 .pill.dev{color:var(--dev);background:color-mix(in srgb,var(--dev) 16%,transparent)}
 .pill.lock{color:var(--accent-text);background:color-mix(in srgb,var(--accent) 15%,transparent)}
 .caption{margin:12px 4px 0;font-size:14px;color:var(--faint)}
-.stats{margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:16px}
-.stat{padding:22px 24px;display:flex;flex-direction:column;gap:6px}
-.stat dt{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--muted);font-weight:500}
-.stat dd{margin:0;font:700 40px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em}
+.stats{margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat{padding:22px 24px 22px 0;display:flex;flex-direction:column;gap:6px}
+.stat+.stat{padding-left:24px;border-left:1px solid var(--line)}
+.stat dt{font-size:15px;color:var(--muted)}
+.stat dd{margin:0;font:700 36px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em}
 
 /* steps */
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px}
 .step{display:flex;flex-direction:column;gap:16px;padding:28px}
 .step h3{margin:0;font-size:25px;font-weight:700}
 .step p{margin:0;font-size:17px;line-height:1.6;color:var(--muted)}
-.num{width:44px;height:44px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;font:700 20px 'Bricolage Grotesque',sans-serif;color:#1a1410}
+.num{font:600 14px 'JetBrains Mono',monospace;color:var(--accent-text)}
 .example{margin-top:auto;padding:12px 14px;border-radius:12px;background:var(--surface2);font-size:14px;line-height:1.6;color:var(--muted)}
 
 /* tables */
@@ -113,8 +114,8 @@ section{scroll-margin-top:16px}
 .label{font-size:14px;font-weight:600;color:var(--faint)}
 
 /* faq */
-.faqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
-.faq{padding:24px}
+.faqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));column-gap:56px}
+.faq{padding:22px 0;border-top:1px solid var(--line)}
 .faq h3{margin:0 0 8px;font-size:18px;font-weight:700}
 .faq p{margin:0;color:var(--muted);line-height:1.6}
 
@@ -122,6 +123,10 @@ section{scroll-margin-top:16px}
 .limits ul{margin:0;padding:0 0 0 20px;display:flex;flex-direction:column;gap:10px;line-height:1.55}
 
 footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64px;align-items:end;justify-content:space-between;background:var(--surface2)}
+
+/* light theme: filled surfaces need no outline */
+:root[data-theme="light"] .card,:root[data-theme="light"] .tbl,:root[data-theme="light"] .cmd{border-color:transparent}
+:root[data-theme="light"] .copy{border-left-color:transparent}
 
 @media (max-width:720px){
   .asker{border-right:0;border-bottom:1px solid var(--line)}
@@ -157,9 +162,9 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
 <main id="top">
   <section class="wrap" style="padding-top:48px;padding-bottom:88px;display:flex;flex-direction:column;gap:48px">
     <div style="max-width:900px;display:flex;flex-direction:column;gap:24px">
-      <span class="eyebrow"><span class="dot" style="background:var(--accent)"></span>Free and open source · works with public and private repositories</span>
+      <span class="eyebrow">Open source, Apache-2.0. Works with public and private repositories.</span>
       <h1 class="disp" style="margin:0;font-size:clamp(42px,5.4vw,76px);line-height:1;font-weight:700;letter-spacing:-.035em">Has anyone here<br><span style="color:var(--accent-text)">already built it?</span></h1>
-      <p class="lead" style="font-size:20px">Ask HomeGrown before you build. It tells you whether another team has made the thing already, who looks after it, how ready it is and how to get the code. That works even for repositories you can't open.</p>
+      <p class="lead" style="font-size:20px">Ask HomeGrown before you build. It tells you whether another team has already built it, who looks after it, how ready it is and how to get the code. That works even for repositories you can't open.</p>
       <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
         <a class="btn" href="https://github.com/tancred27/home-grown" target="_blank" rel="noopener">Get the code
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -207,34 +212,34 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
     </div>
 
     <dl class="stats">
-      <div class="card stat"><dt><span class="dot" style="background:var(--prod)"></span>Right answer in the top 5</dt><dd>94%</dd></div>
-      <div class="card stat"><dt><span class="dot" style="background:var(--beta)"></span>Says so when nothing fits</dt><dd>26 of 26</dd></div>
-      <div class="card stat"><dt><span class="dot" style="background:var(--blue)"></span>Search across 300,000 vectors</dt><dd>0.1 s</dd></div>
-      <div class="card stat"><dt><span class="dot" style="background:var(--pink)"></span>License</dt><dd>Apache-2.0</dd></div>
+      <div class="stat"><dd>94%</dd><dt>right answer in the top 5</dt></div>
+      <div class="stat"><dd>26 of 26</dd><dt>says so when nothing fits</dt></div>
+      <div class="stat"><dd>0.1 s</dd><dt>search across 300,000 vectors</dt></div>
+      <div class="stat"><dd>Apache-2.0</dd><dt>license</dt></div>
     </dl>
   </section>
 
   <section id="how" class="wrap band">
     <div class="head">
-      <h2 class="h2" style="max-width:15ch">It keeps notes on your code, so you don't have to</h2>
-      <p class="lead">One part keeps the notes up to date. Another answers questions, and only shows each person what they're allowed to see.</p>
+      <h2 class="h2">How it works</h2>
+      <p class="lead">A collector keeps a record of every component. An answerer searches that record as the person asking, so each person sees only what they may see.</p>
     </div>
     <div class="steps">
       <div class="card step">
-        <span class="num" style="background:var(--blue)">1</span>
-        <h3 class="disp">It notices changes</h3>
+        <span class="num">01</span>
+        <h3 class="disp">Watches your repositories</h3>
         <p>When someone pushes to a repository, HomeGrown rereads only the folders that changed. A webhook or a poller tells it what moved.</p>
         <div class="example">The poller lists an organization's repositories, most recently pushed first, a hundred per request.</div>
       </div>
       <div class="card step">
-        <span class="num" style="background:var(--beta)">2</span>
-        <h3 class="disp">It writes down what each part does</h3>
+        <span class="num">02</span>
+        <h3 class="disp">Records each component</h3>
         <p>What it's for, what its tests show, who built it and how ready it is. Every note points back to the file it came from.</p>
         <div class="example">dskit: prod, 224 facts on record.</div>
       </div>
       <div class="card step">
-        <span class="num" style="background:var(--dev)">3</span>
-        <h3 class="disp">It answers, or says no</h3>
+        <span class="num">03</span>
+        <h3 class="disp">Answers, or says nothing fits</h3>
         <p>It finds likely matches and checks each one against your question. If nothing fits, it says so instead of guessing.</p>
         <div class="example">Yes: xk6-kafka, beta. Ask the lead of team-xk6-kafka.</div>
       </div>
@@ -243,7 +248,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
 
   <section id="map" class="wrap band">
     <div class="head">
-      <h2 class="h2" style="max-width:16ch">A map of everything your company has built</h2>
+      <h2 class="h2" style="max-width:16ch">A map of what your company has built</h2>
       <div style="display:flex;flex-direction:column;gap:18px;align-items:flex-start">
         <p class="lead">The dashboard lists every component you're allowed to find, by line of business, with its team, its stage and who else uses it.</p>
         <a class="btn" href="demo/" target="_blank" rel="noopener">Open the demo dashboard
@@ -352,14 +357,14 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
   </section>
 
   <section id="faq" class="wrap band">
-    <h2 class="h2" style="margin-bottom:40px">Questions people ask</h2>
+    <h2 class="h2" style="margin-bottom:40px">Questions</h2>
     <div class="faqs">
-      <div class="card faq"><h3>Does our code leave our network?</h3><p>Only if you choose a hosted model. Search and embeddings run on your machines, and with a local model through Ollama nothing leaves them.</p></div>
-      <div class="card faq"><h3>What does it cost?</h3><p>Nothing. It's Apache-2.0. A hosted model adds two calls per question.</p></div>
-      <div class="card faq"><h3>Does it need a model at all?</h3><p>No. Without one it answers from what it has found, and says "possibly" instead of "yes".</p></div>
-      <div class="card faq"><h3>Where can it read from?</h3><p>GitHub repositories, plus Confluence and Notion pages. GitLab and Bitbucket are planned.</p></div>
-      <div class="card faq"><h3>How does it know what's in production?</h3><p>From releases and from use: a library that two other teams depend on counts. Until an owner confirms it, a stage is shown as inferred.</p></div>
-      <div class="card faq"><h3>Could someone see what they shouldn't?</h3><p>The database checks every query. Tests run every test user through real searches and fail if anything outside their access comes back.</p></div>
+      <div class="faq"><h3>Does our code leave our network?</h3><p>Only if you choose a hosted model. Search and embeddings run on your machines, and with a local model through Ollama nothing leaves them.</p></div>
+      <div class="faq"><h3>What does it cost?</h3><p>Nothing. It's Apache-2.0. A hosted model adds two calls per question.</p></div>
+      <div class="faq"><h3>Does it need a model at all?</h3><p>No. Without one it answers from what it has found, and says "possibly" instead of "yes".</p></div>
+      <div class="faq"><h3>Where can it read from?</h3><p>GitHub repositories, plus Confluence and Notion pages. GitLab and Bitbucket are planned.</p></div>
+      <div class="faq"><h3>How does it know what's in production?</h3><p>From releases and from use: a library that two other teams depend on counts. Until an owner confirms it, a stage is shown as inferred.</p></div>
+      <div class="faq"><h3>Could someone see what they shouldn't?</h3><p>The database checks every query. Tests run every test user through real searches and fail if anything outside their access comes back.</p></div>
     </div>
   </section>
 </main>
