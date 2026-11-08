@@ -54,10 +54,41 @@ def find_existing(intent: str, keywords: list[str] | None = None,
     verdicts = _find(user, intent, keywords or [])
     telemetry.record_question("mcp", "find", time.monotonic() - t0)
     log_question(user, intent, keywords or [], "mcp", verdicts)
+    access = _access(user, [v.asset_id for v in verdicts])
     return json.dumps({"results": [{
         "asset_id": v.asset_id, "name": display_name(v.name), "verdict": v.verdict,
         "reasons": [r["text"] for r in v.reasons[:3]], "unknowns": v.unknowns[:3],
-    } for v in verdicts], "note": None if verdicts else "nothing found"}, indent=1)
+        **access.get(v.asset_id, {}),
+    } for v in verdicts if v.asset_id in access],
+        "note": None if verdicts else "nothing found"}, indent=1)
+
+
+def _access(user: str, asset_ids: list[str]) -> dict[str, dict]:
+    """For each asset the caller may discover: can they read its code, who owns it, and
+    how to get it. Runs as the caller, so an asset they cannot discover has no row and is
+    dropped from the results rather than described."""
+    if not asset_ids:
+        return {}
+    with as_user(user) as conn, conn.cursor() as cur:
+        cur.execute("""
+            select a.id::text, caller_can_read_source(a.source_ref), a.source_ref,
+                   t.name, lead.display_name
+              from asset a
+              left join team t on t.id = a.owner_team
+              left join person lead on lead.team_id = t.id and lead.handle like 'lead-%%'
+             where a.id = any(%s::uuid[])""", (asset_ids,))
+        rows = cur.fetchall()
+    out = {}
+    for aid, can_read, source_ref, team, lead in rows:
+        contact = lead or team or "its owner"     # a lead's name already names the team
+        out[aid] = {
+            "owner_team": team,
+            "can_read_code": bool(can_read),
+            "how_to_get": (f"you can read the code: {source_ref}" if can_read else
+                           f"the code is private to you: ask {contact} for access to "
+                           f"{source_ref}"),
+        }
+    return out
 
 
 @server.tool(name="ask",

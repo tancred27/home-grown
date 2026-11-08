@@ -217,14 +217,21 @@ td:nth-child(2){white-space:nowrap}
       $("content").replaceChildren(el("p", { class: "notice" }, `Couldn't load the demo snapshot. ${e.message}`));
       return;
     }
-    const select = el("select", { id: "viewerSelect", style: "min-height:40px;padding:0 10px;border:1px solid var(--line2);border-radius:10px;background:var(--surface);font-weight:600" },
-      snapshot.viewers.map((v, i) => el("option", { value: String(i) }, v.label)));
-    select.addEventListener("change", () => { viewerIdx = Number(select.value); state.open.clear(); showDemoViewer(); });
+    const buttons = snapshot.viewers.map((v, i) => el("button", {
+      type: "button", class: "f", "aria-pressed": String(i === viewerIdx),
+      onclick: () => {
+        viewerIdx = i;
+        buttons.forEach((b, j) => b.setAttribute("aria-pressed", String(j === i)));
+        state.open.clear();
+        showDemoViewer();
+      },
+    }, el("span", { class: "avatar", style: "width:26px;height:26px;font-size:11px;margin-left:-8px" }, v.initials), v.label));
+    const select = el("div", { role: "group", "aria-labelledby": "viewAsLabel", style: "display:flex;flex-wrap:wrap;gap:8px" }, buttons);
     const banner = el("div", { class: "card", style: "padding:16px 20px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;border-color:color-mix(in srgb,var(--accent) 35%,var(--line));background:color-mix(in srgb,var(--accent) 8%,var(--surface))" },
       el("div", { style: "display:flex;flex-direction:column;gap:2px;flex:1 1 360px" },
         el("strong", {}, "Demo: a frozen snapshot"),
         el("span", { class: "muted", style: "font-size:14px" }, snapshot.note)),
-      el("label", { for: "viewerSelect", style: "font-weight:600" }, "View as"),
+      el("span", { id: "viewAsLabel", style: "font-weight:600" }, "View as"),
       select);
     $("main").insertBefore(banner, $("answer"));
     showDemoViewer();

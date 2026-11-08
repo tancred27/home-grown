@@ -48,3 +48,28 @@ def test_get_asset_hides_existence_of_invisible_assets(monkeypatch):
     res = asyncio.run(mcp_server.server.call_tool(
         "get_asset", {"asset_id": "00000000-0000-0000-0000-000000000000"}))
     assert json.loads(_text(res)) == {"error": "not found"}
+
+
+def test_find_existing_says_whether_the_caller_can_read_the_code(monkeypatch):
+    """Every result carries code access that matches source_acl, so an agent never
+    assumes it can build against code it cannot read."""
+    from homegrown.cli import resolve_user
+    from homegrown.db import admin_conn
+
+    for login in ("gate2-dev", "dev-cloudcost-exporter"):
+        try:
+            uid = resolve_user(login)
+        except SystemExit:  # pragma: no cover
+            pytest.skip(f"no user {login}")
+        with admin_conn() as conn, conn.cursor() as cur:
+            cur.execute("select source_ref from source_acl where user_id = %s", (uid,))
+            readable = {r[0] for r in cur.fetchall()}
+            cur.execute("select id::text, source_ref from asset")
+            refs = dict(cur.fetchall())
+        monkeypatch.setenv("HOMEGROWN_USER", login)
+        res = asyncio.run(mcp_server.server.call_tool(
+            "find_existing", {"intent": "load test Kafka from k6"}))
+        for r in json.loads(_text(res))["results"]:
+            assert r["can_read_code"] == (refs[r["asset_id"]] in readable), r["name"]
+            assert r["how_to_get"].startswith(
+                "you can read" if r["can_read_code"] else "the code is private to you")

@@ -135,12 +135,14 @@ for name, c in T.items():
         return out_, h
     b1, h1 = bubble(1200 - 60 - 560, 40, ["Add Kafka produce and consume steps", "to our k6 tests."], c["text"], c["bg"], 560)
     ty = 40 + h1 + 20
-    tool = (f'<rect x="60" y="{ty}" width="1080" height="118" rx="16" fill="none" stroke="{c["line"]}" stroke-width="2" stroke-dasharray="7 6"/>'
+    lock = c["accent_text"]
+    tool = (f'<rect x="60" y="{ty}" width="1080" height="150" rx="16" fill="none" stroke="{c["line"]}" stroke-width="2" stroke-dasharray="7 6"/>'
             + t(84, ty + 34, "Agent calls find_existing", 16, c["muted"], 700)
             + t(84, ty + 64, "“Produce and consume Kafka messages from k6 load tests”", 18, c["text"])
-            + f'<text x="84" y="{ty + 96}" font-family="{F}" font-size="18"><tspan fill="{c["text"]}" font-weight="700">xk6-kafka</tspan><tspan fill="{c["n2"] if name == "dark" else "#b5530c"}" font-weight="700">   beta</tspan><tspan fill="{c["muted"]}">   team-xk6-kafka · use as-is</tspan></text>')
-    b2, h2 = bubble(60, ty + 118 + 20, ["xk6-kafka already does this. I'll build k6 with it", "instead of writing a new Kafka client."], c["surface"], c["text"], 640)
-    H = ty + 118 + 20 + h2 + 40
+            + f'<text x="84" y="{ty + 96}" font-family="{F}" font-size="18"><tspan fill="{c["text"]}" font-weight="700">xk6-kafka</tspan><tspan fill="{c["n2"] if name == "dark" else "#b5530c"}" font-weight="700">   beta</tspan><tspan fill="{c["muted"]}">   team-xk6-kafka · use as-is</tspan></text>'
+            + f'<text x="84" y="{ty + 128}" font-family="{F}" font-size="18"><tspan fill="{lock}" font-weight="700">can_read_code: false</tspan><tspan fill="{c["muted"]}">   ask Lead, team-xk6-kafka for access</tspan></text>')
+    b2, h2 = bubble(60, ty + 150 + 20, ["team-xk6-kafka already built this: xk6-kafka, in beta.", "Its code is private to you, so I won't write a new Kafka", "client yet. Shall I draft an access request to their lead?"], c["surface"], c["text"], 640)
+    H = ty + 150 + 20 + h2 + 40
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="{H}" viewBox="0 0 1200 {H}">
   <rect width="1200" height="{H}" rx="24" fill="{c['bg']}" stroke="{c['line']}" stroke-width="2"/>
   {b1}{tool}{b2}

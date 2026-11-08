@@ -167,12 +167,16 @@ other MCP clients can check it before they write new code:
 claude mcp add homegrown -e HOMEGROWN_USER=alice -- /path/to/.venv/bin/python -m homegrown.mcp_server
 ```
 
-A session then goes like this:
+Each match says whether the person asking can read its code. When they can't, the agent
+doesn't build against it or quietly write a copy. It says who owns it and offers to ask
+for access:
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/agent-dark.svg">
-  <img alt="You: Add Kafka produce and consume steps to our k6 tests. The agent calls find_existing with 'Produce and consume Kafka messages from k6 load tests' and gets back xk6-kafka, beta, team-xk6-kafka, use as-is. Agent: xk6-kafka already does this. I'll build k6 with it instead of writing a new Kafka client." src="docs/assets/agent-light.svg">
+  <img alt="You: Add Kafka produce and consume steps to our k6 tests. The agent calls find_existing with 'Produce and consume Kafka messages from k6 load tests' and gets back xk6-kafka, beta, team-xk6-kafka, use as-is, can_read_code false, ask Lead, team-xk6-kafka for access. Agent: team-xk6-kafka already built this: xk6-kafka, in beta. Its code is private to you, so I won't write a new Kafka client yet. Shall I draft an access request to their lead?" src="docs/assets/agent-light.svg">
 </picture>
+
+If the code is readable, the agent uses it instead of writing a new Kafka client.
 
 The server also offers `ask`, `get_asset` and `report_reuse_outcome`.
 
