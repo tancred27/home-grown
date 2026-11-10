@@ -50,18 +50,20 @@ class AnswerState(TypedDict, total=False):
     answer: str
     verdict_source: str
     text: str
+    trace: dict                     # explain.new(): filled as the answer is built
 
 
 def _retrieve_and_judge(state: AnswerState) -> dict:
     model = settings.verdict_mode == "model"
     vs = find_existing(state["user_id"], state["question"], state.get("keywords") or [],
-                       top=settings.answer_results)
+                       top=settings.answer_results, trace=state.get("trace"))
     # In model mode the judge's own reason is unknowns[0] (see search.find_existing).
     cands = [{"asset_id": v.asset_id, "name": display_name(v.name),
               "verdict": v.verdict, "reasons": [r["text"] for r in v.reasons[:3]],
               "why": (v.unknowns[0] if model and v.unknowns else ""),
               "unknowns": v.unknowns[:2]} for v in vs]
-    return {"candidates": cands, "verdict_source": settings.verdict_mode}
+    return {"candidates": cands, "verdict_source": settings.verdict_mode,
+            "trace": state.get("trace")}
 
 
 def _unit_path(unit_id: str | None) -> str:
@@ -71,6 +73,7 @@ def _unit_path(unit_id: str | None) -> str:
     without the path an answer lists the same name twice."""
     parts = (unit_id or "").split(":", 2)
     path = parts[2] if len(parts) == 3 else ""
+    path = path.split("#", 1)[0]          # crawler units: '<repo path>#<unit slug>'
     return "" if path in ("", ".") else path
 
 
@@ -93,8 +96,10 @@ def _enrich(state: AnswerState) -> dict:
             cur.execute("""
                 select a.stage, a.stage_confidence, a.stage_confirmed, e.excerpt,
                        t.name, l.name, lead.display_name, a.status,
-                       caller_can_read_source(a.source_ref), a.source_ref, a.unit_id
+                       caller_can_read_source(a.source_ref), a.source_ref, a.unit_id,
+                       a.parent_id, par.name
                   from asset a
+                  left join asset par on par.id = a.parent_id
                   left join team t on t.id = a.owner_team
                   left join lob l on l.id = t.lob_id
                   left join person lead on lead.team_id = t.id
@@ -105,8 +110,19 @@ def _enrich(state: AnswerState) -> dict:
             if not row:
                 continue          # not discoverable for this user: say nothing about it
             (stage, conf, confirmed, basis, team, lob, lead, status, can_read,
-             source_ref, unit_id) = row
-            c = {**c, "where": _unit_path(unit_id)}
+             source_ref, unit_id, parent_id, parent_name) = row
+            c = {**c, "where": _unit_path(unit_id),
+                 "repo": display_name(parent_name) if parent_name else None}
+            # A crawler unit has no history of its own: who built it and its stage come
+            # from its repo.
+            people_of = parent_id or c["asset_id"]
+            if parent_id and stage is None:
+                cur.execute("select a.stage, a.stage_confidence, a.stage_confirmed, e.excerpt "
+                            "from asset a left join evidence e on e.id = a.stage_evidence_id "
+                            "where a.id = %s", (parent_id,))
+                prow = cur.fetchone()
+                if prow:
+                    stage, conf, confirmed, basis = prow
             cur.execute("""
                 select p.display_name, p.handle, pt.name, m.display_name,
                        ac.commits, ac.last_at, ac.role
@@ -115,7 +131,7 @@ def _enrich(state: AnswerState) -> dict:
                   left join team pt on pt.id = p.team_id
                   left join person m on m.id = p.manager_id
                  where ac.asset_id = %s
-                 order by ac.commits desc nulls last limit 3""", (c["asset_id"],))
+                 order by ac.commits desc nulls last limit 3""", (people_of,))
             people = [{"name": n, "handle": h, "team": pt, "manager": m, "commits": k,
                        "last_active": la.isoformat() if la else None, "role": r}
                       for n, h, pt, m, k, la, r in cur.fetchall()]
@@ -138,6 +154,11 @@ def _enrich(state: AnswerState) -> dict:
                         "access": ("you can read the code" if can_read else
                                    f"discoverable only: request access to {source_ref} "
                                    f"from {lead or team or 'its owner'}")})
+    # Units of the same repo stay together, in the order of the repo's best unit.
+    first = {}
+    for i, m in enumerate(out):
+        first.setdefault(m.get("repo") or m["asset_id"], i)
+    out.sort(key=lambda m: first[m.get("repo") or m["asset_id"]])
     return {"matches": out}
 
 
@@ -175,7 +196,8 @@ def _compose(state: AnswerState) -> dict:
         stage = f"{st['stage']}" + ("" if st["confirmed_by_owner"] else
                                     f" (inferred, {int((st['confidence'] or 0) * 100)}% "
                                     "confidence, unconfirmed)")
-        where = f" ({m['where']})" if m.get("where") else ""
+        where = (f" (in {m['repo']})" if m.get("repo") else
+                 f" ({m['where']})" if m.get("where") else "")
         lines.append(f"\n* {m['name']}{where}  [{m['verdict']}]  stage: {stage}")
         lines.append(f"  team: {m['owner_team']}  |  LOB: {m['lob']}  |  "
                      f"manager: {m['team_manager']}")
@@ -220,16 +242,32 @@ def build_answerer(checkpointer=None):
     return g.compile(checkpointer=checkpointer)
 
 
+class _V:  # the two fields explain.save reads from a verdict
+    def __init__(self, asset_id, verdict):
+        self.asset_id, self.verdict = asset_id, verdict
+
+
 def ask(user_id: str | uuid.UUID, question: str, keywords: list[str] | None = None,
         route: str = "python") -> dict:
-    """route (cli, mcp, http) only labels the telemetry."""
+    """route (cli, mcp, http) labels the telemetry and the stored question.
+
+    The answer carries a question_id: `homegrown explain <id>` shows why it came out so."""
+    from .. import explain
     t0 = time.monotonic()
+    trace = explain.new(question, keywords) if settings.trace_enabled else None
     with telemetry.span("answer.ask", {"homegrown.route": route}) as sp:
         out = build_answerer().invoke({"user_id": str(user_id), "question": question,
-                                       "keywords": keywords or []})
+                                       "keywords": keywords or [], "trace": trace})
         sp.set_attributes({"homegrown.answer": out["answer"],
                            "homegrown.matches": len(out["matches"])})
     telemetry.record_question(route, "ask", time.monotonic() - t0, out["answer"])
-    return {"question": question, "answer": out["answer"],
+    trace = out.get("trace") or trace
+    if trace is not None:
+        trace["shown"] = [{"asset_id": m.get("asset_id"), "verdict": m.get("verdict")}
+                          for m in out["matches"]]
+        trace["answer_label"] = out["answer"]
+    qid = explain.save(str(user_id), question, keywords or [], route,
+                       [_V(m.get("asset_id"), m.get("verdict")) for m in out["matches"]], trace)
+    return {"question_id": qid, "question": question, "answer": out["answer"],
             "verdict_source": out["verdict_source"], "matches": out["matches"],
             "text": out["text"]}

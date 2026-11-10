@@ -18,6 +18,7 @@ and falls back to something safe (the judge returns `unknown`, and so on).
 
 from __future__ import annotations
 
+import contextvars
 import hashlib
 import json
 import os
@@ -77,13 +78,23 @@ def _key(provider: str) -> str:
 _model_cache: dict[str, str] = {}
 
 
+# A per-call model chosen by the caller (for example Haiku for summaries, Sonnet for the
+# crawler's compiler). Set only for the duration of one structured() call.
+_model_override: contextvars.ContextVar[str | None] = contextvars.ContextVar(
+    "model_override", default=None)
+
+
 def resolve_model() -> str:
     """The model to use. An explicit setting wins; otherwise, for Gemini, pick the newest
     stable 'flash' model the key can actually see -- model names change too often to
     hard-code."""
+    if _model_override.get():
+        return _model_override.get()
     if settings.llm_model:
         return settings.llm_model
     p = settings.llm_provider
+    if p == "replay":
+        return "replay"
     if p == "anthropic":
         return ANTHROPIC_MODEL
     if p == "groq":
@@ -122,8 +133,21 @@ def _headers() -> dict:
 
 # ---------------------------------------------------------------- the call
 
-def structured(system: str, user: str, schema: dict, max_tokens: int = 2000) -> dict:
-    """One call, JSON out, matching `schema`. Raises on any failure (callers fail safe)."""
+def structured(system: str, user: str, schema: dict, max_tokens: int = 2000,
+               model: str | None = None) -> dict:
+    """One call, JSON out, matching `schema`. Raises on any failure (callers fail safe).
+
+    `model` overrides the configured model for this call only (the crawler uses a cheap model
+    for summaries and a stronger one for its compiler)."""
+    token = _model_override.set(model) if model else None
+    try:
+        return _structured(system, user, schema, max_tokens)
+    finally:
+        if token is not None:
+            _model_override.reset(token)
+
+
+def _structured(system: str, user: str, schema: dict, max_tokens: int) -> dict:
     provider = settings.llm_provider
     # The span and metrics carry provider, model, tokens and outcome; never the prompt
     # or the answer.
@@ -156,6 +180,8 @@ def structured(system: str, user: str, schema: dict, max_tokens: int = 2000) -> 
 
 
 def _call(provider, system, user, schema, max_tokens) -> dict:
+    if provider == "replay":
+        return _replay(system, user, schema)
     if provider == "anthropic":
         return _anthropic(system, user, schema, max_tokens)
     try:
@@ -186,7 +212,8 @@ def _anthropic(system, user, schema, max_tokens) -> dict:
         messages=[{"role": "user", "content": user}],
         output_config={"effort": "low",
                        "format": {"type": "json_schema", "schema": schema}},
-        betas=["server-side-fallback-2026-07-01"], fallbacks="default")
+        **({} if "haiku" in resolve_model() else      # Haiku has no server-side fallback
+           {"betas": ["server-side-fallback-2026-07-01"], "fallbacks": "default"}))
     usage = getattr(resp, "usage", None)
     _record_usage(resolve_model(), getattr(usage, "input_tokens", None),
                   getattr(usage, "output_tokens", None))
@@ -327,3 +354,31 @@ def cached_json(cache_file: Path, key_parts: list[str], make):
     cache_file.parent.mkdir(parents=True, exist_ok=True)
     cache_file.write_text(json.dumps(cache, indent=1, ensure_ascii=False), encoding="utf-8")
     return out
+
+# ---------------------------------------------------------------- replay provider
+# For development and evaluation without API credits: outputs recorded elsewhere (for
+# example by Claude agents given the exact same prompts) are served by prompt hash. A
+# missing recording is logged to <replay_file>.missing.jsonl and fails safe like any
+# unavailable model. Tests and production never need it.
+
+def replay_key(system: str, user: str, schema: dict) -> str:
+    raw = json.dumps([system, user, schema], sort_keys=True, ensure_ascii=False)
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:24]
+
+
+def _replay(system: str, user: str, schema: dict) -> dict:
+    if not settings.replay_file:
+        raise LLMUnavailable("replay provider needs HOMEGROWN_REPLAY_FILE")
+    path = Path(settings.replay_file)
+    key = replay_key(system, user, schema)
+    store = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
+    if key in store:
+        out = store[key]
+        _check(out, schema)
+        return out
+    missing = Path(str(path) + ".missing.jsonl")
+    with missing.open("a", encoding="utf-8") as f:
+        f.write(json.dumps({"key": key, "model": _model_override.get() or settings.llm_model,
+                            "system": system, "user": user, "schema": schema},
+                           ensure_ascii=False) + "\n")
+    raise LLMUnavailable(f"no replay recording for {key}")

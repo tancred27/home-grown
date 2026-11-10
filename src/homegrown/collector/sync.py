@@ -25,6 +25,7 @@ from collections import defaultdict
 from pathlib import Path, PurePosixPath
 
 from .. import telemetry
+from ..config import settings
 from ..db import admin_conn
 from ..extract.filters import is_noise_path
 from ..extract.tests_extractor import is_test_file
@@ -170,6 +171,17 @@ class Syncer:
                 self._dir["dir"] = None
                 shutil.rmtree(work.parent, ignore_errors=True)
 
+        if settings.crawl_enabled:
+            # Code is the source of truth: areas, summaries, units and profiles. Runs even when
+            # only source code changed (the manifest/README/test path above skips that case).
+            from .crawl import crawl_repo
+            try:
+                stats["crawl"] = crawl_repo(repo, sha, blobs,
+                                            lambda p, s: self._read_blob(repo, sha, p, s),
+                                            force=force)
+            except Exception as e:                    # the crawl never breaks a sync pass
+                stats["crawl"] = {"status": "error", "error": type(e).__name__}
+
         ci = self.source.ci(repo, sha)
         with admin_conn() as conn, conn.cursor() as cur:
             for u, (t, f) in new_fp.items():
@@ -183,6 +195,16 @@ class Syncer:
                             "where unit_id like %s", (ci, sha, f"github:{name}:%"))
         stats.update(status="processed" if changed else "fingerprints-only", ci=ci)
         return stats
+
+    def _read_blob(self, repo: str, sha: str, path: str, blob_sha: str) -> str:
+        """A file's text, cached by blob SHA (immutable), so it is fetched at most once."""
+        blob = CACHE / "blobs" / blob_sha[:2] / blob_sha
+        if blob.exists():
+            return blob.read_text(encoding="utf-8", errors="replace")
+        text = self.source.read(repo, sha, path) or ""
+        blob.parent.mkdir(parents=True, exist_ok=True)
+        blob.write_text(text[:500_000], encoding="utf-8")
+        return text[:500_000]
 
     def _materialise(self, repo: str, sha: str, blobs: dict[str, str],
                      changed: list[str]) -> Path:
@@ -208,13 +230,7 @@ class Syncer:
                 if tests[u] >= MAX_TESTS_PER_UNIT:
                     continue
                 tests[u] += 1
-            blob = CACHE / "blobs" / s[:2] / s
-            if blob.exists():
-                text = blob.read_text(encoding="utf-8", errors="replace")
-            else:
-                text = self.source.read(repo, sha, p) or ""
-                blob.parent.mkdir(parents=True, exist_ok=True)
-                blob.write_text(text[:500_000], encoding="utf-8")
+            text = self._read_blob(repo, sha, p, s)
             dest = work / p
             try:
                 dest.parent.mkdir(parents=True, exist_ok=True)

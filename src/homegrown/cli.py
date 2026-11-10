@@ -22,7 +22,8 @@ import sys
 import time
 
 from . import telemetry
-from .db import admin_conn, as_user
+from .config import settings
+from .db import admin_conn
 from .search import find_existing
 
 ICON = {"use_as_is": "USE AS-IS", "extend": "EXTEND", "not_a_fit": "not a fit",
@@ -42,18 +43,14 @@ def resolve_user(login: str | None) -> str:
 
 
 def log_question(user_id: str, intent: str, keywords: list[str], route: str,
-                 verdicts) -> None:
-    """Best-effort: a logging failure must never break the answer."""
-    try:
-        with as_user(user_id) as conn, conn.cursor() as cur:
-            cur.execute(
-                "insert into question (asker_id, intent, keywords, route, results) "
-                "values (%s, %s, %s, %s, %s)",
-                (user_id, intent, keywords, route, json.dumps(
-                    [{"asset_id": v.asset_id, "verdict": v.verdict} for v in verdicts])))
-            conn.commit()
-    except Exception as e:  # pragma: no cover
-        print(f"(question not logged: {type(e).__name__})", file=sys.stderr)
+                 verdicts, trace: dict | None = None) -> str | None:
+    """Best-effort: store the question (and its trace). Returns the question id, or None;
+    a logging failure must never break the answer."""
+    from .explain import save
+    qid = save(user_id, intent, keywords, route, verdicts, trace)
+    if qid is None:  # pragma: no cover
+        print("(question not logged)", file=sys.stderr)
+    return qid
 
 
 def add_user(login: str, teams: list[str]) -> None:
@@ -90,6 +87,9 @@ def main(argv: list[str] | None = None) -> int:
     a.add_argument("-k", "--keywords", default="")
     a.add_argument("--user", default=os.environ.get("HOMEGROWN_USER"))
     a.add_argument("--json", action="store_true")
+    e = sub.add_parser("explain", help="why did an answer come out that way? (by question id)")
+    e.add_argument("question_id")
+    e.add_argument("--user", default=os.environ.get("HOMEGROWN_USER"))
     u = sub.add_parser("add-user", help="create a user who can ask questions")
     u.add_argument("login")
     u.add_argument("--team", action="append", default=[],
@@ -101,6 +101,15 @@ def main(argv: list[str] | None = None) -> int:
         add_user(args.login, args.team)
         return 0
     user = resolve_user(args.user)
+    if args.cmd == "explain":
+        from .explain import load
+        trace = load(user, args.question_id)
+        if trace is None:
+            print("No trace for that question (unknown id, someone else's question, "
+                  "or tracing was off).")
+            return 1
+        print(json.dumps(trace, indent=1, default=str))
+        return 0
     if args.cmd == "ask":
         from .answer import ask
         kws = [k.strip() for k in args.keywords.split(",") if k.strip()]
@@ -108,13 +117,16 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(out, indent=1, default=str) if args.json else out["text"])
         return 0
     kws = [k.strip() for k in args.keywords.split(",") if k.strip()]
+    from . import explain
     t0 = time.monotonic()
-    verdicts = find_existing(user, args.intent, kws, top=args.top)
+    trace = explain.new(args.intent, kws) if settings.trace_enabled else None
+    verdicts = find_existing(user, args.intent, kws, top=args.top, trace=trace)
     telemetry.record_question("cli", "find", time.monotonic() - t0)
-    log_question(user, args.intent, kws, "cli", verdicts)
+    qid = log_question(user, args.intent, kws, "cli", verdicts, trace)
 
     if args.json:
-        print(json.dumps({"results": [v.model_dump() for v in verdicts]}, indent=1))
+        print(json.dumps({"question_id": qid, "results": [v.model_dump() for v in verdicts]},
+                         indent=1))
         return 0
     if not verdicts:
         print("Nothing found. Returning nothing is a valid answer.")
@@ -125,6 +137,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"     - {r['text'][:110]}")
         for u in v.unknowns[:1]:
             print(f"     ? {u[:110]}")
+    if qid:
+        print(f"\nWhy these results: homegrown explain {qid}")
     return 0
 
 

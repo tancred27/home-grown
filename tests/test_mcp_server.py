@@ -20,7 +20,8 @@ def _text(result) -> str:
 
 def test_tool_surface_and_annotations():
     tools = {t.name: t for t in asyncio.run(mcp_server.server.list_tools())}
-    assert set(tools) == {"find_existing", "ask", "get_asset", "report_reuse_outcome"}
+    assert set(tools) == {"find_existing", "ask", "get_asset", "report_reuse_outcome", "explain"}
+    assert tools["explain"].annotations.read_only_hint is True
     assert tools["find_existing"].description == FIND_EXISTING_DESCRIPTION
     assert tools["find_existing"].annotations.read_only_hint is True
     assert tools["report_reuse_outcome"].annotations.read_only_hint is False

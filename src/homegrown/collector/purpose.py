@@ -115,5 +115,6 @@ def store(conn, asset_id, line: dict, model: str, readme_ref: str | None,
             (line["purpose"], model, ev, line["confidence"], asset_id))
         cur.execute("select name from asset where id = %s", (asset_id,))
         name = cur.fetchone()[0]
-    vec = embed_texts([f"{display_name(name)}: {line['purpose']}"])[0]
-    write_embedding(conn, asset_id, "purpose", settings.embed_model, vec)
+    text = f"{display_name(name)}: {line['purpose']}"
+    write_embedding(conn, asset_id, "purpose", settings.embed_model, embed_texts([text])[0],
+                    text=text)

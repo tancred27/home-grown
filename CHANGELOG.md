@@ -7,6 +7,17 @@ All notable changes are listed here. The format follows
 ## [Unreleased]
 
 ### Added
+- A code-reading crawler (`HOMEGROWN_CRAWL_ENABLED`, bring your own model key). Sync
+  passes read source code, summarise it by area with a cheap model, and split each repo
+  into units with search profiles using a stronger model. Units are child assets of their
+  repo, their capabilities are claims backed by code-area evidence, and a secret filter
+  runs before anything is stored or sent to a model. Needs `db/010_units_profiles.sql`.
+- Answer traces: every answer returns a `question_id`, and `homegrown explain <id>`,
+  `GET /explain/{id}` or the MCP tool `explain` show how it was produced, step by step.
+  Only the asker can read a trace. `scripts/explain_report.py` shows where expected
+  answers were lost.
+- A `replay` model provider that serves recorded outputs, for development without API
+  credits.
 - Optional traces and metrics over OpenTelemetry (`HOMEGROWN_OTEL_ENABLED`, the `[otel]`
   extra). They record counts, durations, labels and model usage, never question text,
   prompts, model output or user identity. A `docker compose --profile observability`

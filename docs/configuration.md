@@ -19,7 +19,7 @@ before exposing the database anywhere.
 
 | Variable | Default | |
 |---|---|---|
-| `HOMEGROWN_LLM_PROVIDER` | `anthropic` | `anthropic`, `groq`, `gemini`, `local` (any OpenAI-compatible server) or `disabled` |
+| `HOMEGROWN_LLM_PROVIDER` | `anthropic` | `anthropic`, `groq`, `gemini`, `local` (any OpenAI-compatible server), `replay` (recorded outputs, for development) or `disabled` |
 | `HOMEGROWN_LLM_MODEL` | *(auto)* | Anthropic: `claude-opus-5-5`; Groq: `openai/gpt-oss-120b`; Gemini: newest stable flash model; `local`: required |
 | `HOMEGROWN_LLM_BASE_URL` | `http://localhost:11434/v1` | For `local`, e.g. Ollama |
 | `HOMEGROWN_VERDICT_MODE` | `rules` | `model` to have the LLM judge candidates. `rules` needs no model |
@@ -37,6 +37,38 @@ fall back to a keyword rule.
 
 Free tiers of hosted providers may use your prompts for training. Don't send private
 code to them; use a paid tier or `local`.
+
+## Code-reading crawler
+
+Off by default. When on, each sync pass also reads source code, summarises it by area,
+and splits each repo into units (services, libraries, tools, pipelines, integrations,
+shared standards) with search profiles. Bring your own model key: the crawler uses the
+provider and key above, with a cheap model for summaries and a stronger one for units.
+Without a working model the crawler changes nothing and the manifest, README and test
+path still runs.
+
+| Variable | Default | |
+|---|---|---|
+| `HOMEGROWN_CRAWL_ENABLED` | `false` | Read source code during sync |
+| `HOMEGROWN_CRAWL_SUMMARY_MODEL` | `claude-haiku-5-5` | Writes the short summary of each code area |
+| `HOMEGROWN_CRAWL_COMPILE_MODEL` | `claude-sonnet-5-5` | Splits a repo into units and writes their profiles |
+| `HOMEGROWN_CRAWL_MAX_FILES` | `3000` | Source files read per repo |
+| `HOMEGROWN_CRAWL_AREA_VECTORS` | `20` | Code-area summaries indexed per unit |
+| `HOMEGROWN_REPLAY_FILE` | *(none)* | With `HOMEGROWN_LLM_PROVIDER=replay`: recorded outputs keyed by prompt hash; missing ones are logged to `<file>.missing.jsonl` |
+
+Before anything is stored or sent to a model, the crawler removes strings that look like
+keys, tokens, passwords or credentials in URLs, and masks internal hostnames and private
+IP addresses. Summaries are cached by the hash of the code they describe, so a re-crawl
+only pays for areas that changed.
+
+## Answer traces
+
+Every answer stores a trace of how it was produced; see the architecture page.
+
+| Variable | Default | |
+|---|---|---|
+| `HOMEGROWN_TRACE_ENABLED` | `true` | Store a trace with every answer |
+| `HOMEGROWN_TRACE_RETENTION_DAYS` | `30` | Used by `explain.prune()`; run it on a schedule |
 
 ## Search
 

@@ -159,6 +159,7 @@ def asker():
     yield login, str(uid)
     with admin_conn() as conn:
         conn.execute("delete from membership where user_id = %s", (uid,))
+        conn.execute("delete from question where asker_id = %s", (uid,))
         conn.execute("delete from app_user where id = %s", (uid,))
 
 

@@ -590,8 +590,9 @@ def _embed_changed(conn, rows: list[tuple]) -> None:
                     todo.append((aid, txt, h))
         if todo:
             vecs = embed_texts([txt for _, txt, _ in todo])
-            for (aid, _, h), v in zip(todo, vecs, strict=True):
-                write_embedding(conn, aid, field_name, settings.embed_model, v, text_hash=h)
+            for (aid, txt, h), v in zip(todo, vecs, strict=True):
+                write_embedding(conn, aid, field_name, settings.embed_model, v, text_hash=h,
+                                text=txt)
 
 
 def resume_event(graph, event_id: str, answers: dict) -> dict[str, Any]:

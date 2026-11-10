@@ -49,18 +49,34 @@ def find_existing(intent: str, keywords: list[str] | None = None,
     """intent: what you need, in one or two sentences, with constraints.
     keywords: synonyms and other names someone might have used for this.
     kind: any | library | service | script | dataset | solved_problem."""
+    from . import explain
+    from .config import settings
     user = _user()
     t0 = time.monotonic()
-    verdicts = _find(user, intent, keywords or [])
+    trace = explain.new(intent, keywords) if settings.trace_enabled else None
+    verdicts = _find(user, intent, keywords or [], trace=trace)
     telemetry.record_question("mcp", "find", time.monotonic() - t0)
-    log_question(user, intent, keywords or [], "mcp", verdicts)
+    qid = log_question(user, intent, keywords or [], "mcp", verdicts, trace)
     access = _access(user, [v.asset_id for v in verdicts])
     return json.dumps({"results": [{
         "asset_id": v.asset_id, "name": display_name(v.name), "verdict": v.verdict,
         "reasons": [r["text"] for r in v.reasons[:3]], "unknowns": v.unknowns[:3],
         **access.get(v.asset_id, {}),
     } for v in verdicts if v.asset_id in access],
+        "question_id": qid,
         "note": None if verdicts else "nothing found"}, indent=1)
+
+
+@server.tool(name="explain", description=(
+    "Why did a find_existing answer come out that way? Give the question_id it returned. "
+    "Shows each step: keyword and vector matches per candidate, how they were combined, the "
+    "judge's verdicts and reasons, and where each candidate's description came from."),
+             annotations=ToolAnnotations(read_only_hint=True, open_world_hint=False))
+def explain_answer(question_id: str) -> str:
+    from .explain import load
+    trace = load(_user(), question_id)
+    return json.dumps(trace if trace is not None else
+                      {"note": "no trace for that question id"}, indent=1, default=str)
 
 
 def _access(user: str, asset_ids: list[str]) -> dict[str, dict]:

@@ -76,6 +76,21 @@ class Settings(BaseSettings):
     # Free tiers may train on your prompts: never send private code to them.
     llm_provider: str = "anthropic"
     llm_model: str = ""                  # empty = auto (Gemini: newest stable flash)
+    replay_file: str = ""                # llm_provider="replay": recorded outputs (development)
+
+    # Code-reading crawler (bring your own model key). Off by default: without it, assets
+    # come from manifests, READMEs and tests only. Areas are summarised by a cheap model and
+    # units and profiles written by a stronger one.
+    crawl_enabled: bool = False
+    crawl_summary_model: str = "claude-haiku-5-5"
+    crawl_compile_model: str = "claude-sonnet-5-5"
+    crawl_max_files: int = 3000            # per repo; larger repos are crawled by area order
+    crawl_area_vectors: int = 20           # area-summary vectors per unit
+
+    # Answer traces (explainability): every answer stores why it came out that way, readable
+    # by the person who asked. Off switch and retention (prune with explain.prune()).
+    trace_enabled: bool = True
+    trace_retention_days: int = 30
     llm_base_url: str = "http://localhost:11434/v1"    # for "local" (Ollama)
     gemini_key_file: str = ""
     groq_key_file: str = ""

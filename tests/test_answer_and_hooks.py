@@ -137,6 +137,7 @@ def two_users_one_asset(tmp_path):
     with admin_conn() as conn, conn.cursor() as cur:
         cur.execute("delete from asset where unit_id like %s", (f"github:{name}:%",))
         cur.execute("delete from membership where user_id = any(%s)", (list(ids.values()),))
+        cur.execute("delete from question where asker_id = any(%s)", (list(ids.values()),))
         cur.execute("delete from app_user where id = any(%s)", (list(ids.values()),))
 
 

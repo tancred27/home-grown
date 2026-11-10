@@ -123,6 +123,17 @@ def ask_endpoint(q: str, keywords: str = "",
     return ask(user, q, kws, route="http")
 
 
+@app.get("/explain/{question_id}")
+def explain_endpoint(question_id: str,
+                     x_homegrown_user: str | None = Header(default=None)) -> dict:
+    """Why an answer came out that way. Only the person who asked can read it."""
+    from .explain import load
+    trace = load(_caller(x_homegrown_user), question_id)
+    if trace is None:
+        raise HTTPException(status_code=404, detail="no trace for that question")
+    return trace
+
+
 @app.get("/api/org-map")
 def org_map_endpoint(x_homegrown_user: str | None = Header(default=None)) -> dict:
     return org_map(_caller(x_homegrown_user))

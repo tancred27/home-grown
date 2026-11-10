@@ -11,11 +11,12 @@ All of this lives in PostgreSQL (`db/*.sql`, applied in order on first start).
 |---|---|
 | `asset` | One row per reusable unit: name, summary, one-line purpose, stage, owning team, discovery scope |
 | `claim` | Facts about an asset, each with a link to its `evidence` (source, ref, version, excerpt) |
-| `embedding` | Vectors for each asset (fields `card`, `summary`, `purpose`), with a hash of the embedded text |
+| `embedding` | Vectors for each asset (fields `card`, `summary`, `purpose`; for crawled units also `capabilities`, `search_terms`, `question_N`, `area_N`), with the embedded text and its hash |
+| `area`, `profile` | Crawled code areas (summary, files, content hash) and each unit's search profile (purpose, capabilities, search terms, example questions) |
 | `team`, `lob`, `person`, `asset_contributor` | Who built what, their team, line of business and manager. People are pseudonymous |
 | `app_user`, `membership`, `source_acl` | Who can ask, which scopes they can discover, which sources they can read |
 | `repo_state`, `unit_fingerprint` | Sync bookkeeping: which repos changed, and the Git SHAs last seen for each unit |
-| `question` | Every question asked, with its route (CLI, MCP, HTTP) |
+| `question`, `query_trace` | Every question asked, with its route (CLI, MCP, HTTP), and the trace of how its answer was produced |
 
 Claims come in three layers:
 1. **What it is.** From manifests (`package.json`, `go.mod`, `pyproject.toml`, ...) and the
@@ -97,6 +98,28 @@ release history says.
 queue, which `scripts/collector_worker.py` drains. An LLM decides whether a page records
 a solution, decision or pitfall worth keeping (`pages.py`).
 
+## The code-reading crawler
+
+`src/homegrown/collector/crawl.py`, run by the sync pass when `HOMEGROWN_CRAWL_ENABLED` is
+on. Code is the source of truth; the README is one input.
+
+1. **Pick files** by rules (`extract/code.py`): source files only; no tests, vendored or
+   build output, configs, or generated or minified files (judged from content, not size).
+   A fingerprint of the repo's source files skips repos whose code did not change.
+2. **Extract without a model:** declaration lines and doc comments, then the secret
+   filter. Files are grouped into areas of at most three path levels.
+3. **Summarise each changed area** with a cheap model. Summaries are cached by the hash of
+   the area's text.
+4. **Compile units** with a stronger model from the README, the folder list, the area
+   summaries and the previous units. A unit has standalone reuse value; a small feature is
+   detail inside its unit. Every area belongs to exactly one unit. Skipped when the input
+   is unchanged; unit ids are kept across crawls by area overlap.
+5. **Write** each unit as an asset whose `parent_id` is the repo's asset, with its profile,
+   its capabilities as claims (evidence: the code areas at a commit), and its vectors.
+   Capabilities the code no longer supports are closed, not deleted.
+
+Every model call fails safe: the previous summary or units stay.
+
 ## The answering agent
 
 `src/homegrown/search.py` and `src/homegrown/answer/graph.py`
@@ -125,12 +148,33 @@ a solution, decision or pitfall worth keeping (`pages.py`).
 In rules mode (no model), verdicts come from the evidence alone, and the answer says
 "possibly" instead of "yes".
 
+## Explaining an answer
+
+Every answer returns a `question_id`, and `homegrown explain <id>` (or `GET /explain/{id}`,
+or the MCP tool `explain`) shows how it was produced:
+
+- the request, the model's rewrite and the keyword query;
+- for each candidate: its rank in keyword search with the BM25 score broken down by term
+  (term frequency in its text and claims, document frequency, idf, contribution); its rank
+  in vector search with its two best-matching fields, their similarity and text; and its
+  fused rank and score;
+- the judge's model, prompt version, shortlist, and each verdict with its reason;
+- which candidates were shown, in what order, and which were held back;
+- where each candidate came from: for a crawled unit, its repo, profile model and commit,
+  and the code areas and files behind it;
+- the time each step took.
+
+Traces live in `query_trace` under row-level security: only the person who asked can read
+theirs, and they contain only assets that person could already discover. Telemetry never
+carries any of it. `scripts/explain_report.py` reads traces to show where expected answers
+were lost (not indexed, not retrieved, ranked too low, judged not a fit, not shown).
+
 ## Entry points
 
 | | |
 |---|---|
-| `homegrown` CLI | `src/homegrown/cli.py`: `find`, `ask`, `add-user` |
+| `homegrown` CLI | `src/homegrown/cli.py`: `find`, `ask`, `explain`, `add-user` |
 | MCP server | `src/homegrown/mcp_server.py`, over stdio |
-| HTTP | `src/homegrown/api.py`: webhooks and `GET /ask` |
+| HTTP | `src/homegrown/api.py`: webhooks, `GET /ask` and `GET /explain/{id}` |
 | Sync worker | `scripts/sync_worker.py` |
 | Docs-page worker | `scripts/collector_worker.py` |

@@ -237,19 +237,24 @@ def _rrf(semantic: list[tuple], lexical: list[tuple], k: float = 60.0) -> list[d
 
 @telemetry.traced("search")
 def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = None,
-           limit: int = 50, rerank: bool | None = None) -> list[dict]:
+           limit: int = 50, rerank: bool | None = None, trace: dict | None = None) -> list[dict]:
     """Keyword and vector search, fused into one ranked list of assets.
 
     `keywords` are extra terms from the caller (synonyms, alternative names), searched
-    together with the request.
+    together with the request. `trace` (explain.new()) receives the lists, ranks and
+    per-candidate breakdowns.
     """
+    from . import explain
     terms = " ".join([intent, *(keywords or [])])
-    with telemetry.span("search.embed"):
+    with telemetry.span("search.embed"), explain.step(trace, "embed"):
         qvec = embed_query(terms)
     depth = max(limit, settings.fusion_depth) if settings.fusion == "rrf" else limit
+    tsq = _tsquery_or(terms)
     with conn.cursor() as cur:
-        lexical = _lexical(cur, _tsquery_or(terms), depth)
-        semantic = _semantic(cur, qvec, depth)
+        with explain.step(trace, "keyword_search"):
+            lexical = _lexical(cur, tsq, depth)
+        with explain.step(trace, "vector_search"):
+            semantic = _semantic(cur, qvec, depth)
 
     if settings.fusion == "rrf":
         ranked = _rrf(semantic, lexical)
@@ -257,6 +262,25 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
         ranked = _interleave(semantic, lexical)
     else:
         ranked = _max_fuse(semantic, lexical)
+
+    if trace is not None:
+        lex_rank = {r[0]: i + 1 for i, r in enumerate(lexical)}
+        sem_rank = {r[0]: i + 1 for i, r in enumerate(semantic)}
+        trace["search"] = {"terms": terms, "keyword_query": tsq, "lexical": settings.lexical,
+                           "dense_pool": settings.dense_pool, "fusion": settings.fusion,
+                           "depth": depth, "keyword_hits": len(lexical),
+                           "vector_hits": len(semantic)}
+        head = ranked[:max(limit, settings.verdict_shortlist, 30)]
+        for i, r in enumerate(head, 1):
+            explain.candidate(trace, r["asset_id"]).update(
+                name=r["name"], fused_rank=i, fused_score=round(r["score"], 6),
+                keyword_rank=lex_rank.get(r["asset_id"]), keyword_score=r.get("lexical"),
+                vector_rank=sem_rank.get(r["asset_id"]), vector_similarity=r.get("semantic"))
+        with conn.cursor() as cur, explain.step(trace, "breakdowns"):
+            ids = [r["asset_id"] for r in head]
+            explain.keyword_breakdown(cur, trace, tsq, ids)
+            explain.vector_breakdown(cur, trace, qvec, ids)
+            explain.provenance(cur, trace, ids)
 
     use_rerank = settings.rerank_enabled if rerank is None else rerank
     telemetry.annotate({"homegrown.lexical_results": len(lexical),
@@ -441,12 +465,15 @@ def rewrite_query(intent: str) -> str | None:
 
 @telemetry.traced("search.find_existing")
 def find_existing(user_id: uuid.UUID | str, intent: str,
-                  keywords: list[str] | None = None, top: int = 5) -> list[Verdict]:
+                  keywords: list[str] | None = None, top: int = 5,
+                  trace: dict | None = None) -> list[Verdict]:
     """Search, then judge. The one function the MCP tool, CLI and API all call.
 
     settings.verdict_mode picks the judge: "rules" (judge(), evidence only) or "model"
     (judge_with_model(), which reads the request and fails safe to "unknown").
+    `trace` (explain.new()) receives every step; callers store it with explain.save().
     """
+    from . import explain
     from .db import as_user
 
     model_mode = settings.verdict_mode == "model"
@@ -456,10 +483,17 @@ def find_existing(user_id: uuid.UUID | str, intent: str,
                         "homegrown.keywords": len(keywords or []),
                         "homegrown.verdict_mode": settings.verdict_mode})
 
-    rw = rewrite_query(intent)                # before taking a DB connection
+    with explain.step(trace, "rewrite"):
+        rw = rewrite_query(intent)            # before taking a DB connection
+    if trace is not None:
+        from .llm import resolve_model
+        trace["request"] = {"verdict_mode": settings.verdict_mode, "rewrite": rw,
+                            "rewrite_model": resolve_model() if rw else None,
+                            "rewrite_prompt": explain.prompt_version(REWRITE_SYSTEM)}
     with as_user(user_id) as conn:
         # Runs as the asker, so the judge only sees candidates this user may discover.
-        rows = search(conn, intent, [*(keywords or []), *([rw] if rw else [])])[:depth]
+        rows = search(conn, intent, [*(keywords or []), *([rw] if rw else [])],
+                      trace=trace)[:depth]
         claims_by = {r["asset_id"]: load_claims(conn, r["asset_id"]) for r in rows}
         summaries, purposes = {}, {}
         with conn.cursor() as cur:
@@ -479,13 +513,34 @@ def find_existing(user_id: uuid.UUID | str, intent: str,
                   "purpose": purposes[r["asset_id"]],
                   "evidence": [c["body"] for c in claims_by[r["asset_id"]]
                                if c["layer"] > 1]} for r in rows]
-        for v, mv in zip(out, judge_with_model(intent, cards), strict=True):
+        with explain.step(trace, "judge"):
+            judged = judge_with_model(intent, cards)
+        if trace is not None:
+            from .llm import resolve_model
+            trace["judge"] = {"mode": "model", "model": resolve_model(),
+                              "prompt": explain.prompt_version(_JUDGE_SYSTEM),
+                              "shortlist": [str(r["asset_id"]) for r in rows]}
+            for r, mv in zip(rows, judged, strict=True):
+                explain.candidate(trace, r["asset_id"])["judge"] = {
+                    "verdict": mv["verdict"], "reason": mv.get("reason")}
+        for v, mv in zip(out, judged, strict=True):
             v.verdict = mv["verdict"]
             v.unknowns = [mv["reason"]] + [u for u in v.unknowns if u != mv["reason"]]
         # Judged fits first, then unknowns, then not-a-fit; search rank breaks ties.
         order = {"use_as_is": 0, "extend": 1, "unknown": 2, "not_a_fit": 3}
         out = [v for _, v in sorted(enumerate(out),
                                     key=lambda iv: (order.get(iv[1].verdict, 2), iv[0]))]
+    if trace is not None:
+        if not model_mode:
+            trace["judge"] = {"mode": "rules", "shortlist": [str(r["asset_id"]) for r in rows]}
+            for v in out:
+                explain.candidate(trace, v.asset_id)["judge"] = {
+                    "verdict": v.verdict, "reason": "; ".join(v.unknowns[:2]) or None}
+        trace["answer"] = [{"asset_id": v.asset_id, "verdict": v.verdict, "position": i}
+                           for i, v in enumerate(out[:top], 1)]
+        trace["held_back"] = [{"asset_id": v.asset_id, "verdict": v.verdict,
+                               "why": "below the top results" if v.verdict != "not_a_fit"
+                               else "judged not a fit"} for v in out[top:]]
     out = out[:top]
     telemetry.annotate({"homegrown.results": len(out)})
     for v in out:
