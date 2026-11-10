@@ -119,11 +119,14 @@ Tested on real public code from Grafana, Microsoft, Google, AWS and others:
   (85% on the test questions, 92% on the same questions in casual wording).
 - **26 of 26** times it says nothing fits when nothing does (among 109 components, with
   the earlier search).
-- **~0.1 s** search across 300,000 vectors, with permission checks on.
+- **81%** on 69 real Stack Overflow questions whose answer links one of those 5,000
+  (100% on the 41 where the linked project really is the answer), with the judge.
+- **~0.1 s** meaning search across 300,000 vectors, with permission checks on.
 
-These numbers use component profiles (capabilities, search terms, example questions) that
-AI models wrote during testing. The code reader now writes such profiles itself, but its
-own results haven't been measured yet. No company runs it in production yet. Every number
+The 85–92% uses component profiles (capabilities, search terms, example questions) that
+AI models wrote during testing. The code reader now writes profiles itself: on 12 public
+repositories its components reached the judge's shortlist for 62–65% of questions about
+specific features, against 69–77% for the finer splits made in testing. No company runs it in production yet. Every number
 and known limit is in [docs/results.md](docs/results.md); what's next is in
 [VISION.md](VISION.md).
 
