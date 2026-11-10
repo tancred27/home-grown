@@ -133,6 +133,11 @@ Every model call fails safe: the previous summary or units stay.
      can discover, so hidden assets never shift anyone's ranking.
    - Each asset has several vectors (card, purpose, profile fields) and scores by the mean of its
      two best, so one lucky field can't carry it.
+   - A third list, code words (`code_words_hits`, `db/011_code_words.sql`), ranks crawled units
+     by BM25 over their own code: declarations and doc comments, scrubbed of secrets, with
+     identifiers split into words. It is kept separate so long code never dilutes the normal
+     keyword score. It ranks a unit for anyone who can discover it; a trace names the matched
+     words only to people who can read the unit's source.
    - The older choices (`ts_rank`, best single field, interleaving) remain as settings.
    - Below `hnsw_auto_threshold` vectors, vector search is an exact scan over the rows the
      user can see.

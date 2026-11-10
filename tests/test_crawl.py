@@ -215,3 +215,50 @@ def test_repo_without_a_manifest_gets_its_own_asset(monkeypatch):
                 conn.execute("delete from asset where id = %s", (root[0],))
             conn.execute("delete from area where repo = %s", (full,))
             conn.execute("delete from unit_fingerprint where unit_id = %s", (f"crawl:{full}",))
+
+
+def test_each_unit_gets_its_own_code_words_without_secrets(repo):
+    _run(repo)
+    with admin_conn() as conn:
+        rows = dict(conn.execute(
+            "select a.name, w.tsv::text from code_words w join asset a on a.id = w.asset_id "
+            "where a.parent_id = %s", (repo["root"],)).fetchall())
+    assert set(rows) == {"Refund API", "Invoice PDF"}
+    assert "'refundord'" in rows["Refund API"] and "'refund'" in rows["Refund API"]
+    assert "'invoic'" not in rows["Refund API"]                # another unit's code
+    assert "'render'" in rows["Invoice PDF"] and "'pdf'" in rows["Invoice PDF"]
+    assert "sk-live" not in rows["Invoice PDF"] and "abcdefghijklmnop" not in rows["Invoice PDF"]
+
+def test_search_finds_a_unit_by_a_word_only_its_code_has(repo):
+    """'layout17' appears only in the Invoice PDF unit's code, not in its card or profile.
+    The code-words list finds it; the trace shows the word only to someone who may read
+    the source."""
+    from homegrown import explain
+    from homegrown.db import as_user
+    from homegrown.search import search
+    _run(repo)
+    with admin_conn() as conn:
+        user = conn.execute("insert into app_user (login, team_id) values (%s,%s) returning id",
+                            (f"crawl-user-{uuid.uuid4().hex[:6]}", repo["team"])).fetchone()[0]
+        conn.execute("insert into membership (user_id, group_id) values (%s,%s)",
+                     (user, repo["team"]))
+        pdf = conn.execute("select id from asset where parent_id = %s and name = 'Invoice PDF'",
+                           (repo["root"],)).fetchone()[0]
+    try:
+        for can_read in (False, True):
+            if can_read:
+                with admin_conn() as conn:
+                    conn.execute("insert into source_acl (user_id, source_ref) values (%s,%s)",
+                                 (user, f"github:{repo['full']}"))
+            trace = explain.new("layout17", None)
+            with as_user(user) as conn:
+                hits = search(conn, "layout17", trace=trace)
+            assert hits and hits[0]["asset_id"] == pdf and hits[0]["code"] is not None
+            c = trace["candidates"][str(pdf)]
+            assert c["code_rank"] == 1 and c["code"]["matched_words"] == 1
+            assert (c["code"]["words"] is not None) == can_read
+    finally:
+        with admin_conn() as conn:
+            conn.execute("delete from source_acl where user_id = %s", (user,))
+            conn.execute("delete from membership where user_id = %s", (user,))
+            conn.execute("delete from app_user where id = %s", (user,))

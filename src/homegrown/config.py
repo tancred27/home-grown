@@ -37,6 +37,10 @@ class Settings(BaseSettings):
     # How deep each list goes before fusion, so an asset that is only fair on one side
     # isn't cut off before the merge.
     fusion_depth: int = 200
+    # The code's own words (db/011_code_words.sql) as a third keyword list, fused by RRF at
+    # this weight. Confirmed in experiments/scale/RESULTS_gate1.md, addendum 37. Only units
+    # the code reader has crawled have code words; 0 turns the list off.
+    code_words_weight: float = 1.0
     # "rules": verdict from the evidence alone, no model needed.
     # "model": an LLM judges each candidate against the request; fails safe to "unknown".
     verdict_mode: str = "rules"

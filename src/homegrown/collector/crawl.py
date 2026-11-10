@@ -236,9 +236,10 @@ def crawl_repo(repo: str, sha: str, blobs: dict[str, str],
     readme_path = next((p for p in sorted(blobs) if "/" not in p and _README.match(p)), None)
     readme = clean_readme(read(readme_path, blobs[readme_path]) or "", 1400) if readme_path else ""
     with admin_conn() as conn:
-        previous = [{"unit_id": u, "name": n, "areas": list(a or []), "input_hash": ih}
-                    for u, n, a, ih in conn.execute(
-                        "select x.unit_id, x.name, p.areas, p.input_hash from asset x "
+        previous = [{"unit_id": u, "name": n, "areas": list(a or []), "input_hash": ih,
+                     "asset_id": aid}
+                    for u, n, a, ih, aid in conn.execute(
+                        "select x.unit_id, x.name, p.areas, p.input_hash, x.id from asset x "
                         "join profile p on p.asset_id = x.id where x.parent_id = %s",
                         (root_id,)).fetchall()]
     payload = {
@@ -259,6 +260,10 @@ def crawl_repo(repo: str, sha: str, blobs: dict[str, str],
         stats["status"] = "no-summaries"
         return stats
     if previous and all(p["input_hash"] == input_hash for p in previous) and not force:
+        # The split is unchanged, but the code inside an area may not be: refresh code words.
+        with admin_conn() as conn:
+            for p in previous:
+                _save_code_words(conn, p["asset_id"], p["areas"], areas, sha)
         if complete:
             _save_fp(repo, fp)
         stats["status"] = "unchanged-units"
@@ -356,6 +361,21 @@ def _write_units(repo, sha, root_id, owner, scope, source_ref, units, ids, input
                          (aid, EXTRACTOR, u["capabilities"]))
             rebuild_card(conn, aid)
             _embed_unit(conn, aid, u, summaries, file_count)
+            _save_code_words(conn, aid, u["areas"], areas, sha)
+
+
+def _save_code_words(conn, aid, unit_areas: list[str], areas: dict, sha: str) -> None:
+    """The unit's code words (db/011): its areas' extracted, scrubbed text with identifiers
+    split, searched as a third keyword list. A unit with no extracted text gets none."""
+    text = "\n".join(areas[a]["text"] for a in sorted(unit_areas) if a in areas)
+    if not text.strip():
+        conn.execute("delete from code_words where asset_id = %s", (aid,))
+        return
+    conn.execute(
+        "insert into code_words (asset_id, tsv, commit_sha) "
+        "values (%s, to_tsvector('english', %s), %s) on conflict (asset_id) do update "
+        "set tsv = excluded.tsv, commit_sha = excluded.commit_sha, updated_at = now()",
+        (aid, code.code_words(text), sha))
 
 
 def _embed_unit(conn, aid, u: dict, summaries: dict, file_count: dict) -> None:

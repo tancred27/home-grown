@@ -80,6 +80,21 @@ def keyword_breakdown(cur, trace: dict, tsq: str, ids: list) -> None:
             c["keyword"]["terms"].sort(key=lambda t: -t["contribution"])
 
 
+def code_breakdown(cur, trace: dict, tsq: str, ids: list) -> None:
+    """How many query words each candidate's code contains (db/011 code_words_explain).
+    The words themselves only for candidates whose source the asker can read; for the
+    rest the trace says that the code matched, never with which words."""
+    if not tsq or not ids:
+        return
+    cur.execute(
+        "select asset_id, matched, terms from code_words_explain("
+        "coalesce(tsvector_to_array(to_tsvector('english', %s)), '{}'), %s)",
+        (tsq.replace("|", " "), list(ids)))
+    for aid, matched, terms in cur.fetchall():
+        candidate(trace, aid)["code"] = {"matched_words": matched, "words": terms,
+                                         "words_hidden": terms is None}
+
+
 def vector_breakdown(cur, trace: dict, qvec, ids: list) -> None:
     """Each candidate's two best-matching fields, with similarity and the field's text."""
     if not ids:

@@ -321,3 +321,75 @@ def test_bm25_sensitive_claim_words_need_source_access(two_teams):
         assert [a for a, _ in _bm25(conn, t["secret_word"])] == [t["visible"]]
     with as_user(None) as conn:
         assert _bm25(conn, t["word"]) == [], "an unidentified caller must get nothing"
+
+
+# Code words (db/011_code_words.sql): a third keyword list over the units' code. It ranks a
+# unit for anyone who can discover it, with statistics over discoverable units only, and the
+# matched words are shown only to people who can read the unit's source.
+
+def _code(conn, text: str, limit: int = 1000) -> list[tuple]:
+    from homegrown.search import _tsquery_or
+    tsq = _tsquery_or(text)
+    return conn.execute(
+        "select asset_id, score from code_words_hits(to_tsquery('english', %s), "
+        "coalesce(tsvector_to_array(to_tsvector('english', %s)), '{}'), %s)",
+        (tsq, tsq.replace("|", " "), limit)).fetchall()
+
+
+def _set_code_words(ids, text: str) -> None:
+    """Stored the way the crawler stores them (collector/crawl.py _save_code_words)."""
+    from homegrown.extract.code import code_words
+    text = code_words(text)
+    with admin_conn() as conn:
+        for aid in ids:
+            conn.execute("insert into code_words (asset_id, tsv) "
+                         "values (%s, to_tsvector('english', %s)) "
+                         "on conflict (asset_id) do update set tsv = excluded.tsv", (aid, text))
+
+
+def test_code_words_never_surface_an_undiscoverable_asset(two_teams):
+    t = two_teams
+    t["add_hidden"](3)
+    word = f"zzcode{t['tag']}"
+    _set_code_words([t["visible"]], f"export function {word}_handler() {{}}")
+    _set_code_words(t["hidden"], f"{word} {word} {word}")
+    with as_user(t["users"]["member"]) as conn:
+        assert [a for a, _ in _code(conn, word)] == [t["visible"]]
+    with as_user(t["users"]["other"]) as conn:
+        assert set(a for a, _ in _code(conn, word)) == set(t["hidden"])
+    with as_user(None) as conn:
+        assert _code(conn, word) == [], "an unidentified caller must get nothing"
+
+
+def test_code_words_statistics_ignore_assets_the_caller_cannot_see(two_teams):
+    t = two_teams
+    word = f"zzstat{t['tag']}"
+    _set_code_words([t["visible"]], f"{word} handler")
+    with as_user(t["users"]["member"]) as conn:
+        before = _code(conn, word)
+    t["add_hidden"](4)
+    _set_code_words(t["hidden"], f"{word} {word}")
+    with as_user(t["users"]["member"]) as conn:
+        assert _code(conn, word) == before, "hidden units changed a visible unit's code score"
+
+
+def test_matched_code_words_need_source_access(two_teams):
+    t = two_teams
+    word = f"zzexpl{t['tag']}"
+    _set_code_words([t["visible"]], f"export function {word}() {{}}")
+    sql = ("select asset_id, matched, terms from code_words_explain("
+           "tsvector_to_array(to_tsvector('english', %s)), %s)")
+    with as_user(t["users"]["member"]) as conn:           # can find it, cannot read its source
+        assert conn.execute(sql, (word, [t["visible"]])).fetchall() == [(t["visible"], 1, None)]
+    with as_user(t["users"]["reader"]) as conn:
+        [(aid, n, terms)] = conn.execute(sql, (word, [t["visible"]])).fetchall()
+        assert (aid, n) == (t["visible"], 1) and terms == [word]
+    with as_user(t["users"]["other"]) as conn:            # cannot even discover it
+        assert conn.execute(sql, (word, [t["visible"]])).fetchall() == []
+
+
+def test_app_role_cannot_read_code_words_directly(two_teams):
+    import psycopg
+    denied = psycopg.errors.InsufficientPrivilege
+    with as_user(two_teams["users"]["reader"]) as conn, pytest.raises(denied):
+        conn.execute("select count(*) from code_words").fetchone()

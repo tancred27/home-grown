@@ -72,3 +72,11 @@ def test_areas_merge_to_three_levels_share_the_cap_and_drop_tiny_ones():
     assert len(a["text"]) <= code.AREA_MAX_CHARS and len(a["files"]) == 40
     assert a["text"].count("## f") == 40            # every file kept a share
     assert code.build_areas(ex)["src/pay/refund"]["hash"] == a["hash"]
+
+
+def test_code_words_keep_identifiers_and_add_their_parts():
+    out = code.code_words("export function getUserToken(http_retry.backoff) {}\nclass XMLParser")
+    assert "getUserToken get user token" in out
+    assert "http_retry.backoff http retry backoff" in out
+    assert "XMLParser xml parser" in out
+    assert code.split_identifier("parseHTTPResponse2") == "parse http response 2"

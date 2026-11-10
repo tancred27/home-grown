@@ -564,6 +564,7 @@ td:nth-child(2){white-space:nowrap}
           el("span", { class: "muted" }, [
             c.keyword_rank ? `keyword rank ${c.keyword_rank}${terms ? ` (matched: ${terms})` : ""}` : "no keyword match",
             c.vector_rank ? `meaning rank ${c.vector_rank}${field ? ` (closest: ${field.field})` : ""}` : null,
+            c.code_rank ? `code rank ${c.code_rank}${(c.code || {}).words ? ` (code has: ${c.code.words.slice(0, 3).join(", ")})` : " (matched its code)"}` : null,
             c.fused_rank ? `overall ${c.fused_rank}` : null,
           ].filter(Boolean).join(" · ")),
           (c.judge || {}).reason && el("div", { class: "faint" }, `Judge: ${c.judge.reason}`),

@@ -7,6 +7,13 @@ All notable changes are listed here. The format follows
 ## [Unreleased]
 
 ### Added
+- Code words: search also looks in each crawled unit's own code (declarations and doc
+  comments, identifiers split into words) as a third ranked list, fused with keyword and
+  vector search. On 196 fresh test questions it put the right component in the top 5
+  8 to 11 points more often. Anyone who can find a unit can be matched through its code
+  words; which words matched is shown only to people who can read its source. Needs
+  `db/011_code_words.sql`; `HOMEGROWN_CODE_WORDS_WEIGHT=0` turns it off. Repos crawled
+  before this get code words on their next change, or on a forced re-crawl.
 - A code-reading crawler (`HOMEGROWN_CRAWL_ENABLED`, bring your own model key). Sync
   passes read source code, summarise it by area with a cheap model, and split each repo
   into units with search profiles using a stronger model. Units are child assets of their

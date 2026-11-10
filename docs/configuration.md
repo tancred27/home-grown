@@ -85,6 +85,7 @@ Every answer stores a trace of how it was produced; see the architecture page.
 | `HOMEGROWN_DENSE_POOL` | `top2` | How an asset's vectors score it: `top2` (mean of its two best) or `max` (its best) |
 | `HOMEGROWN_FUSION` | `rrf` | How keyword and vector results merge: `rrf` (sum of 1/(60+rank)), `interleave` or `max` |
 | `HOMEGROWN_FUSION_DEPTH` | `200` | How deep each list goes before fusion |
+| `HOMEGROWN_CODE_WORDS_WEIGHT` | `1.0` | Weight of the code-words list in fusion (`db/011_code_words.sql`); `0` turns it off. Only crawled units have code words |
 | `HOMEGROWN_RERANK_ENABLED` | `false` | Cross-encoder reranking. It lowered recall in our evaluation |
 | `HOMEGROWN_RERANK_MODEL` | `jinaai/jina-reranker-v1-tiny-en` | |
 | `HOMEGROWN_RERANK_DEPTH` | `30` | |

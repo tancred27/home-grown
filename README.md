@@ -117,11 +117,12 @@ Tested on real public code from Grafana, Microsoft, Google, AWS and others:
 
 - **85–92%** of the time the right component is in the top 5, among 5,000 components
   (85% on the test questions, 92% on the same questions in casual wording).
-- **26 of 26** times it says nothing fits when nothing does (among 109 components, with
-  the earlier search).
+- **23 of 26** times it says nothing fits when nothing does, among about 9,600 components
+  (26 of 26 among 109), with the earlier search.
 - **81%** on 69 real Stack Overflow questions whose answer links one of those 5,000
   (100% on the 41 where the linked project really is the answer), with the judge.
-- **~0.1 s** meaning search across 300,000 vectors, with permission checks on.
+- **~0.1 s** per meaning search among about 100,000 components (300,000 vectors), with
+  permission checks on.
 
 The 85–92% uses component profiles (capabilities, search terms, example questions) that
 AI models wrote during testing. The code reader now writes profiles itself: on 12 public

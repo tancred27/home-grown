@@ -123,6 +123,25 @@ def _lexical(cur, tsq: str, limit: int) -> list[tuple]:
     return rows
 
 
+def _code_lexical(cur, tsq: str, limit: int) -> list[tuple]:
+    """(asset_id, name, score) from BM25 over the units' code words (db/011): a separate
+    list, so long code text never dilutes an asset's normal keyword score."""
+    if not tsq or settings.code_words_weight <= 0:
+        return []
+    cur.execute(
+        """
+        select a.id, a.name, w.score
+          from code_words_hits(to_tsquery('english', %(q)s),
+                               coalesce(tsvector_to_array(to_tsvector('english', %(w)s)), '{}'),
+                               %(l)s) w
+          join asset a on a.id = w.asset_id
+         order by w.score desc, a.id
+        """,
+        {"q": tsq, "w": tsq.replace("|", " "), "l": limit},
+    )
+    return [(r[0], r[1], float(r[2])) for r in cur.fetchall()]
+
+
 @telemetry.traced("search.semantic")
 def _semantic(cur, qvec, limit: int) -> list[tuple]:
     """(asset_id, name, similarity) from vector search, one row per asset.
@@ -222,15 +241,18 @@ def _max_fuse(semantic: list[tuple], lexical: list[tuple]) -> list[dict]:
     return sorted(fused.values(), key=lambda r: (-r["score"], -both(r)))
 
 
-def _rrf(semantic: list[tuple], lexical: list[tuple], k: float = 60.0) -> list[dict]:
-    """Reciprocal-rank fusion: each list adds 1/(k + rank) for an asset, rank from 1.
-    Ties keep first-seen order, vector list first (as scripts/gate1_harness.py)."""
+def _rrf(semantic: list[tuple], lexical: list[tuple], k: float = 60.0,
+         code: list[tuple] | None = None, code_weight: float = 1.0) -> list[dict]:
+    """Reciprocal-rank fusion: each list adds weight/(k + rank) for an asset, rank from 1.
+    Ties keep first-seen order, vector list first (as scripts/gate1_harness.py). `code` is
+    the code-words list (addendum 37), weighted `code_weight`."""
     fused: dict[uuid.UUID, dict] = {}
-    for which, lst in (("semantic", semantic), ("lexical", lexical)):
+    for which, lst, w in (("semantic", semantic, 1.0), ("lexical", lexical, 1.0),
+                          ("code", code or [], code_weight)):
         for rank, (aid, name, raw) in enumerate(lst):
             row = fused.setdefault(aid, {"asset_id": aid, "name": name, "score": 0.0,
-                                         "lexical": None, "semantic": None})
-            row["score"] += 1.0 / (k + rank + 1)
+                                         "lexical": None, "semantic": None, "code": None})
+            row["score"] += w / (k + rank + 1)
             row[which] = raw
     return sorted(fused.values(), key=lambda r: -r["score"])
 
@@ -255,9 +277,13 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
             lexical = _lexical(cur, tsq, depth)
         with explain.step(trace, "vector_search"):
             semantic = _semantic(cur, qvec, depth)
+        code = []
+        if settings.fusion == "rrf":
+            with explain.step(trace, "code_search"):
+                code = _code_lexical(cur, tsq, depth)
 
     if settings.fusion == "rrf":
-        ranked = _rrf(semantic, lexical)
+        ranked = _rrf(semantic, lexical, code=code, code_weight=settings.code_words_weight)
     elif settings.fusion == "interleave":
         ranked = _interleave(semantic, lexical)
     else:
@@ -266,24 +292,29 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
     if trace is not None:
         lex_rank = {r[0]: i + 1 for i, r in enumerate(lexical)}
         sem_rank = {r[0]: i + 1 for i, r in enumerate(semantic)}
+        code_rank = {r[0]: i + 1 for i, r in enumerate(code)}
         trace["search"] = {"terms": terms, "keyword_query": tsq, "lexical": settings.lexical,
                            "dense_pool": settings.dense_pool, "fusion": settings.fusion,
                            "depth": depth, "keyword_hits": len(lexical),
-                           "vector_hits": len(semantic)}
+                           "vector_hits": len(semantic), "code_hits": len(code),
+                           "code_weight": settings.code_words_weight}
         head = ranked[:max(limit, settings.verdict_shortlist, 30)]
         for i, r in enumerate(head, 1):
             explain.candidate(trace, r["asset_id"]).update(
                 name=r["name"], fused_rank=i, fused_score=round(r["score"], 6),
                 keyword_rank=lex_rank.get(r["asset_id"]), keyword_score=r.get("lexical"),
-                vector_rank=sem_rank.get(r["asset_id"]), vector_similarity=r.get("semantic"))
+                vector_rank=sem_rank.get(r["asset_id"]), vector_similarity=r.get("semantic"),
+                code_rank=code_rank.get(r["asset_id"]), code_score=r.get("code"))
         with conn.cursor() as cur, explain.step(trace, "breakdowns"):
             ids = [r["asset_id"] for r in head]
             explain.keyword_breakdown(cur, trace, tsq, ids)
+            explain.code_breakdown(cur, trace, tsq, ids)
             explain.vector_breakdown(cur, trace, qvec, ids)
             explain.provenance(cur, trace, ids)
 
     use_rerank = settings.rerank_enabled if rerank is None else rerank
     telemetry.annotate({"homegrown.lexical_results": len(lexical),
+                        "homegrown.code_results": len(code),
                         "homegrown.semantic_results": len(semantic),
                         "homegrown.results": len(ranked), "homegrown.fusion": settings.fusion,
                         "homegrown.rerank": bool(use_rerank)})

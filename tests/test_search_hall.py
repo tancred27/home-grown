@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import uuid
 
+import pytest
+
 from homegrown.search import _rrf
 
 
@@ -27,3 +29,18 @@ def test_rrf_ties_keep_vector_list_first():
 
 def test_rrf_handles_empty_lists():
     assert _rrf([], []) == []
+
+
+def test_rrf_adds_the_code_words_list_at_its_weight():
+    from homegrown.search import _rrf
+    sem = [("a", "A", 0.9), ("b", "B", 0.8)]
+    lex = [("a", "A", 3.0)]
+    code = [("c", "C", 5.0), ("b", "B", 1.0)]
+    out = _rrf(sem, lex, code=code, code_weight=1.0)
+    score = {r["asset_id"]: r["score"] for r in out}
+    assert score["b"] == pytest.approx(1 / 62 + 1 / 62)
+    assert score["c"] == pytest.approx(1 / 61)
+    assert next(r for r in out if r["asset_id"] == "c")["code"] == 5.0
+    off = _rrf(sem, lex, code=code, code_weight=0.0)
+    assert {r["asset_id"]: r["score"] for r in off}["c"] == 0.0
+    assert [r["asset_id"] for r in _rrf(sem, lex)] == ["a", "b"]

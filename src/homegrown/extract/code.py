@@ -138,3 +138,25 @@ def build_areas(extracts: dict[str, str]) -> dict[str, dict]:
         out[area] = {"text": text, "files": [p for p, _ in files],
                      "hash": hashlib.sha256(text.encode("utf-8")).hexdigest()[:32]}
     return out
+
+
+# ---------------------------------------------------------------- code words
+
+# Identifiers worth splitting: dotted, snake or kebab names and camelCase / PascalCase.
+_IDENT = re.compile(r"[A-Za-z][A-Za-z0-9]*(?:[._\-][A-Za-z0-9]+)+"
+                    r"|[a-z]+[A-Z][A-Za-z0-9]*|[A-Z][a-z0-9]+[A-Z][A-Za-z0-9]*"
+                    r"|[A-Z]{2,}[a-z][A-Za-z0-9]*")
+_PARTS = re.compile(r"[A-Z]+(?![a-z])|[A-Z]?[a-z]+|[0-9]+")
+CODE_WORDS_MAX_CHARS = 100_000
+
+
+def split_identifier(tok: str) -> str:
+    """getUserToken -> 'get user token'; http_retry.backoff -> 'http retry backoff'."""
+    return " ".join(p.lower() for p in _PARTS.findall(tok))
+
+
+def code_words(text: str) -> str:
+    """Text for the code-words keyword list: each identifier kept and followed by its parts,
+    so both 'getUserToken' and 'user token' match. Input is already extracted and scrubbed."""
+    text = text[:CODE_WORDS_MAX_CHARS]
+    return _IDENT.sub(lambda m: f"{m.group(0)} {split_identifier(m.group(0))}", text)
