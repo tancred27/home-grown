@@ -251,9 +251,15 @@ def crawl_repo(repo: str, sha: str, blobs: dict[str, str],
         "previous_units": [{"name": p["name"], "areas": p["areas"]} for p in previous]}
     input_hash = _h(UNITS_PROMPT, settings.crawl_compile_model,
                     {k: v for k, v in payload.items() if k != "previous_units"})
-    if (previous and all(p["input_hash"] == input_hash for p in previous) and not force) \
-            or not payload["code_areas"]:
-        _save_fp(repo, fp)
+    # The fingerprint is saved only once every area has a summary, so failed summaries are
+    # retried on the next pass instead of waiting for the code to change.
+    complete = all(summaries.get(p) for p in areas)
+    if not payload["code_areas"]:
+        stats["status"] = "no-summaries"
+        return stats
+    if previous and all(p["input_hash"] == input_hash for p in previous) and not force:
+        if complete:
+            _save_fp(repo, fp)
         stats["status"] = "unchanged-units"
         return stats
 
@@ -273,7 +279,8 @@ def crawl_repo(repo: str, sha: str, blobs: dict[str, str],
             taken.add(uid)
     _write_units(repo, sha, root_id, owner, scope, source_ref, units, ids, input_hash,
                  summaries, areas)
-    _save_fp(repo, fp)
+    if complete:
+        _save_fp(repo, fp)
     stats.update(status="crawled", units=len(units), compiled=True)
     return stats
 

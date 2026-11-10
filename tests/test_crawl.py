@@ -167,3 +167,15 @@ def test_unit_keyword_text_includes_profile_search_terms(repo):
             "and a.tsv @@ plainto_tsquery('english', 'render invoice pdf')",
             (repo["root"],)).fetchall()
     assert ("Invoice PDF",) in hit
+
+
+def test_failed_summaries_are_retried_on_the_next_pass(repo, monkeypatch):
+    real = llm.structured
+
+    def no_model(*a, **k):
+        raise llm.LLMUnavailable("no key")
+    monkeypatch.setattr(llm, "structured", no_model)
+    assert _run(repo)["status"] == "no-summaries"
+    monkeypatch.setattr(llm, "structured", real)
+    st = _run(repo)                       # same code, no force: must not be skipped
+    assert st["status"] == "crawled" and st["summarised"] == 2
