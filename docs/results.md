@@ -19,7 +19,7 @@ test set.
 
 - **The 85–92% uses test profiles.** Its component profiles (capabilities, search terms,
   example questions) were written by AI models during testing, not by the product.
-- **The code reader splits too coarsely.** On 12 public repos it kept 4 repos whole and
+- **The code reader splits too coarsely.** On 12 public repos it kept 3 repos whole and
   made 60 components where testing made 85, and recall was lower (above). It has not
   been run on a real company's code.
 - **Short real questions are harder.** Stack Overflow titles score 81% against 85–92% on
