@@ -24,9 +24,19 @@ class Settings(BaseSettings):
     rerank_model: str = "jinaai/jina-reranker-v1-tiny-en"
     rerank_enabled: bool = False
     rerank_depth: int = 30              # how many top results get reranked
-    # How keyword and vector results are merged: "interleave" (alternate, vector
-    # first) or "max" (reciprocal-rank fusion using the better of the two ranks).
-    fusion: str = "interleave"
+    # The retrieval chosen in experiments/scale/RESULTS_gate1.md (addendum 15, "H-all"):
+    # BM25 keywords + top-2 pooled vectors, fused by reciprocal rank. The older choices
+    # stay available for comparison and rollback.
+    # Keyword scoring: "bm25" (db/009_bm25.sql) or "ts_rank" (db/008_fts.sql).
+    lexical: str = "bm25"
+    # How an asset's several vectors score it: "top2" (mean of its two best) or "max".
+    dense_pool: str = "top2"
+    # How keyword and vector results are merged: "rrf" (sum of 1/(60+rank)),
+    # "interleave" (alternate, vector first) or "max" (RRF using the better rank).
+    fusion: str = "rrf"
+    # How deep each list goes before fusion, so an asset that is only fair on one side
+    # isn't cut off before the merge.
+    fusion_depth: int = 200
     # "rules": verdict from the evidence alone, no model needed.
     # "model": an LLM judges each candidate against the request; fails safe to "unknown".
     verdict_mode: str = "rules"

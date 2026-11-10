@@ -49,7 +49,10 @@ code to them; use a paid tier or `local`.
 | `HOMEGROWN_HNSW_AUTO_THRESHOLD` | `60000` | Vectors (about 20k assets) |
 | `HOMEGROWN_HNSW_POOL` | `400` | Candidates the index fetches before exact ranking |
 | `HOMEGROWN_HNSW_EF_SEARCH` | `400` | HNSW search breadth |
-| `HOMEGROWN_FUSION` | `interleave` | How keyword and vector results merge: `interleave` or `max` |
+| `HOMEGROWN_LEXICAL` | `bm25` | Keyword scoring: `bm25` (`db/009_bm25.sql`) or `ts_rank` (the older `fts_hits`) |
+| `HOMEGROWN_DENSE_POOL` | `top2` | How an asset's vectors score it: `top2` (mean of its two best) or `max` (its best) |
+| `HOMEGROWN_FUSION` | `rrf` | How keyword and vector results merge: `rrf` (sum of 1/(60+rank)), `interleave` or `max` |
+| `HOMEGROWN_FUSION_DEPTH` | `200` | How deep each list goes before fusion |
 | `HOMEGROWN_RERANK_ENABLED` | `false` | Cross-encoder reranking. It lowered recall in our evaluation |
 | `HOMEGROWN_RERANK_MODEL` | `jinaai/jina-reranker-v1-tiny-en` | |
 | `HOMEGROWN_RERANK_DEPTH` | `30` | |

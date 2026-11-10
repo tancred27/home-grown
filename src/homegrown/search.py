@@ -93,6 +93,22 @@ def _lexical(cur, tsq: str, limit: int) -> list[tuple]:
     """
     if not tsq:
         return []
+    if settings.lexical == "bm25":
+        # The query's lexemes as BM25 counts them: the same stemming as the documents.
+        cur.execute(
+            """
+            select a.id, a.name, b.score
+              from bm25_hits(to_tsquery('english', %(q)s),
+                             coalesce(tsvector_to_array(to_tsvector('english', %(w)s)), '{}'),
+                             %(l)s) b
+              join asset a on a.id = b.asset_id
+             order by b.score desc, a.id
+            """,
+            {"q": tsq, "w": tsq.replace("|", " "), "l": limit},
+        )
+        rows = [(r[0], r[1], float(r[2])) for r in cur.fetchall()]
+        telemetry.annotate({"homegrown.results": len(rows)})
+        return rows
     cur.execute(
         """
         select a.id, a.name, f.arank, f.crank
@@ -109,10 +125,14 @@ def _lexical(cur, tsq: str, limit: int) -> list[tuple]:
 
 @telemetry.traced("search.semantic")
 def _semantic(cur, qvec, limit: int) -> list[tuple]:
-    """(asset_id, name, similarity) from vector search, one row per asset, scored by
-    its best-matching embedding field."""
+    """(asset_id, name, similarity) from vector search, one row per asset.
+
+    An asset has several vectors (card, purpose, profile fields). With dense_pool "top2"
+    it scores by the mean of its two best (its best if it has only one), so one lucky
+    field can't carry it; with "max" by its single best."""
     mode = vector_mode(cur)
-    telemetry.annotate({"homegrown.vector_mode": mode})
+    top = 2 if settings.dense_pool == "top2" else 1
+    telemetry.annotate({"homegrown.vector_mode": mode, "homegrown.dense_pool": settings.dense_pool})
     if mode == "hnsw":
         # The index fetches a candidate pool, which is then ranked exactly. Iterative
         # scan keeps walking the graph until enough rows pass row-level security.
@@ -123,32 +143,42 @@ def _semantic(cur, qvec, limit: int) -> list[tuple]:
         cur.execute(
             """
             with pool as materialized (
-                select e.asset_id, e.vec <=> %s as d
+                select e.asset_id, e.vec <=> %(q)s as d
                   from embedding e
-                 where e.model = %s
-                 order by e.vec <=> %s
-                 limit %s)
-            select a.id, a.name, 1 - min(p.d) as sim
-              from pool p join asset a on a.id = p.asset_id
+                 where e.model = %(m)s
+                 order by e.vec <=> %(q)s
+                 limit %(pool)s),
+            ranked as (
+                select p.asset_id, p.d,
+                       row_number() over (partition by p.asset_id order by p.d) as rn
+                  from pool p)
+            select a.id, a.name, 1 - avg(r.d) as sim
+              from ranked r join asset a on a.id = r.asset_id
+             where r.rn <= %(top)s
              group by a.id, a.name
-             order by min(p.d)
-             limit %s
+             order by avg(r.d), a.id
+             limit %(l)s
             """,
-            (qvec, settings.embed_model, qvec, pool, limit),
+            {"q": qvec, "m": settings.embed_model, "pool": pool, "top": top, "l": limit},
         )
     else:
         cur.execute(_FORCE_EXACT)
         cur.execute(
             """
-            select a.id, a.name, 1 - min(e.vec <=> %s) as sim
-              from embedding e
-              join asset a on a.id = e.asset_id
-             where e.model = %s          -- never compare across models
+            with ranked as (
+                select x.asset_id, x.d,
+                       row_number() over (partition by x.asset_id order by x.d) as rn
+                  from (select e.asset_id, e.vec <=> %(q)s as d
+                          from embedding e
+                         where e.model = %(m)s) x)      -- never compare across models
+            select a.id, a.name, 1 - avg(r.d) as sim
+              from ranked r join asset a on a.id = r.asset_id
+             where r.rn <= %(top)s
              group by a.id, a.name
-             order by min(e.vec <=> %s)
-             limit %s
+             order by avg(r.d), a.id
+             limit %(l)s
             """,
-            (qvec, settings.embed_model, qvec, limit),
+            {"q": qvec, "m": settings.embed_model, "top": top, "l": limit},
         )
     rows = [(r[0], r[1], float(r[2])) for r in cur.fetchall()]
     telemetry.annotate({"homegrown.results": len(rows)})
@@ -192,6 +222,19 @@ def _max_fuse(semantic: list[tuple], lexical: list[tuple]) -> list[dict]:
     return sorted(fused.values(), key=lambda r: (-r["score"], -both(r)))
 
 
+def _rrf(semantic: list[tuple], lexical: list[tuple], k: float = 60.0) -> list[dict]:
+    """Reciprocal-rank fusion: each list adds 1/(k + rank) for an asset, rank from 1.
+    Ties keep first-seen order, vector list first (as scripts/gate1_harness.py)."""
+    fused: dict[uuid.UUID, dict] = {}
+    for which, lst in (("semantic", semantic), ("lexical", lexical)):
+        for rank, (aid, name, raw) in enumerate(lst):
+            row = fused.setdefault(aid, {"asset_id": aid, "name": name, "score": 0.0,
+                                         "lexical": None, "semantic": None})
+            row["score"] += 1.0 / (k + rank + 1)
+            row[which] = raw
+    return sorted(fused.values(), key=lambda r: -r["score"])
+
+
 @telemetry.traced("search")
 def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = None,
            limit: int = 50, rerank: bool | None = None) -> list[dict]:
@@ -203,11 +246,14 @@ def search(conn: psycopg.Connection, intent: str, keywords: list[str] | None = N
     terms = " ".join([intent, *(keywords or [])])
     with telemetry.span("search.embed"):
         qvec = embed_query(terms)
+    depth = max(limit, settings.fusion_depth) if settings.fusion == "rrf" else limit
     with conn.cursor() as cur:
-        lexical = _lexical(cur, _tsquery_or(terms), limit)
-        semantic = _semantic(cur, qvec, limit)
+        lexical = _lexical(cur, _tsquery_or(terms), depth)
+        semantic = _semantic(cur, qvec, depth)
 
-    if settings.fusion == "interleave":
+    if settings.fusion == "rrf":
+        ranked = _rrf(semantic, lexical)
+    elif settings.fusion == "interleave":
         ranked = _interleave(semantic, lexical)
     else:
         ranked = _max_fuse(semantic, lexical)

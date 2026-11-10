@@ -37,7 +37,7 @@ There are two levels of visibility:
 - **Read:** you can see detail claims marked sensitive. That needs a `source_acl`
   entry for the asset's source.
 
-Keyword search goes through `fts_hits()` (`db/008_fts.sql`). Postgres can't use a full-text
+Keyword search goes through `bm25_hits()` (`db/009_bm25.sql`), or `fts_hits()` (`db/008_fts.sql`) with `lexical = ts_rank`. Postgres can't use a full-text
 index on a table with row-level security, so this function runs with elevated rights,
 applies the same visibility rules itself, and is owned by a role that can do nothing
 else. Results are joined back to `asset` under row-level security, which checks them a
@@ -103,8 +103,14 @@ a solution, decision or pitfall worth keeping (`pages.py`).
 
 1. **Rewrite** (model mode). The request is restated as the purpose line of a component
    that would satisfy it, in the vocabulary component descriptions use.
-2. **Search.** Keyword search (`fts_hits`) and vector search run together, and their
-   results are interleaved (vector first). Each asset is scored by its best-matching field.
+2. **Search.** Keyword search and vector search run together, each about 200 deep, and are
+   merged by reciprocal-rank fusion (each list adds 1/(60 + rank)).
+   - Keyword search is BM25 (`bm25_hits`, `db/009_bm25.sql`): an asset's text plus the claims
+     the caller may read, claims at half weight. Corpus statistics count only assets the caller
+     can discover, so hidden assets never shift anyone's ranking.
+   - Each asset has several vectors (card, purpose, profile fields) and scores by the mean of its
+     two best, so one lucky field can't carry it.
+   - The older choices (`ts_rank`, best single field, interleaving) remain as settings.
    - Below `hnsw_auto_threshold` vectors, vector search is an exact scan over the rows the
      user can see.
    - Above it, an HNSW index fetches a candidate pool with iterative scan, and the pool

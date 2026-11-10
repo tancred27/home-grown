@@ -6,9 +6,7 @@ test set.
 
 | What | Result | Source |
 |---|---|---|
-| Finding the right component (51 held-out questions, 109 assets) | right one in the top 5: **94%** | `experiments/scale/RESULTS.md` |
-| Same, with ~9,600 assets | **69%** (questions), **80%** (30 duplicate tickets) | same |
-| Query rewriting at ~1,900 assets | top-5 recall 69% → **82%** | same |
+| Finding the right component, 5,000 assets, 108 test questions | right one in the top 5: **85%**; **92%** with the same questions in casual wording (previous search: 79% / 88%) | evaluation write-up not published yet |
 | Fit judge, 30 duplicate tickets + 26 "nothing fits" controls, 109 assets | every findable duplicate caught; **0/26** false alarms | `experiments/scale/RESULTS_judge.md` |
 | Same at ~9,600 assets | every findable duplicate caught; 3/26 false alarms | same |
 | Search latency, 300k vectors, under row-level security | **~0.1 s** (index), 1.5 s (exact scan) | `experiments/scale/search_load_100k.txt` |
@@ -17,8 +15,11 @@ test set.
 
 ## Known limits
 
-- **Recall drops as the org grows**, from about 94% to 69–80% top-5 at ~9,600 assets.
-  Look-alike components from other teams are the main cause.
+- **Profiles are not built by the product yet.** The 85–92% uses component profiles
+  (capabilities, search terms, example questions) that AI models wrote during testing.
+  Until the crawler that writes them is in the product, expect lower accuracy.
+- **Recall drops as the org grows.** Look-alike components from other teams are the main
+  cause. The current search has not been measured beyond 5,000 assets.
 - **LLM cost.** Each question makes two model calls (rewrite and judge), and nothing is
   cached across questions yet.
 - **Evidence quality varies by language.** Test names are the main evidence. JavaScript

@@ -92,12 +92,14 @@ for access instead of writing a copy.
 
 Tested on real public code from Grafana, Microsoft, Google, AWS and others:
 
-- **94%** of the time the right component is in the top 5 (109 components); **69–80%**
-  at about 9,600.
+- **85–92%** of the time the right component is in the top 5, among 5,000 components
+  (85% on the test questions, 92% on the same questions in casual wording).
 - **26 of 26** times it says nothing fits when nothing does.
 - **~0.1 s** search across 300,000 vectors, with permission checks on.
 
-No company runs it in production yet, and accuracy drops as an org grows. Every number,
+These numbers use component profiles (capabilities, search terms, example questions) that
+AI models wrote during testing; the crawler that writes them is not in the product yet.
+No company runs it in production yet. Every number,
 script and known limit is in [docs/results.md](docs/results.md); what's next is in
 [VISION.md](VISION.md).
 

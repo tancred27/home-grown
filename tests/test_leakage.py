@@ -207,3 +207,117 @@ def test_fts_hits_sensitive_claim_words_need_source_access():
             conn.execute("delete from membership where group_id = %s", (team,))
             conn.execute("delete from app_user where team_id = %s", (team,))
             conn.execute("delete from team where id = %s", (team,))
+
+
+# ------------------------------------------------------------------ bm25_hits()
+# BM25 keyword search (db/009_bm25.sql) bypasses RLS internally like fts_hits, and also
+# computes corpus statistics. Both the hits and the statistics must follow the policies.
+
+def _bm25(conn, text: str, limit: int = 1000) -> list[tuple]:
+    from homegrown.search import _tsquery_or
+    tsq = _tsquery_or(text)
+    return conn.execute(
+        "select asset_id, score from bm25_hits(to_tsquery('english', %s), "
+        "coalesce(tsvector_to_array(to_tsvector('english', %s)), '{}'), %s)",
+        (tsq, tsq.replace("|", " "), limit)).fetchall()
+
+
+def test_bm25_hits_never_returns_an_undiscoverable_asset(corpus):
+    queries = ["retry backoff http", "kafka consumer", "time series outlier",
+               "dashboard panel plugin", "alert rule notification", "parse configuration"]
+    queries += [a["name"].rsplit("/", 1)[-1] for a in corpus["assets"][:10]]
+    checked = 0
+    for u in corpus["users"]:
+        entitled = {a["id"] for a in corpus["assets"] if a["scope"] in u["groups"]}
+        with as_user(u["id"]) as conn:
+            for q in queries:
+                for aid, _ in _bm25(conn, q):
+                    checked += 1
+                    assert aid in entitled, f"{u['login']}: bm25_hits leaked an asset for {q!r}"
+    assert checked > 0, "test checked nothing"
+
+
+@pytest.fixture
+def two_teams():
+    """Team A sees one asset; team B owns a hidden asset and a sensitive claim, both with
+    the same rare word. A 'reader' in team A may read team A's source."""
+    import uuid
+    tag = uuid.uuid4().hex[:8]
+    word = f"zzbm{tag}"
+    made = {"tag": tag, "word": word}
+    with admin_conn() as conn:
+        ta, tb = (conn.execute("insert into team (name) values (%s) returning id",
+                               (f"team-bm25-{k}-{tag}",)).fetchone()[0] for k in ("a", "b"))
+        users = {}
+        for k, team in (("member", ta), ("reader", ta), ("other", tb)):
+            uid = conn.execute("insert into app_user (login, team_id) values (%s,%s) returning id",
+                               (f"bm25-{k}-{tag}", team)).fetchone()[0]
+            conn.execute("insert into membership (user_id, group_id) values (%s,%s)", (uid, team))
+            users[k] = uid
+        src_a = f"github:bm25-a-{tag}"
+        conn.execute("insert into source_acl (user_id, source_ref) values (%s,%s)",
+                     (users["reader"], src_a))
+        ev = conn.execute(
+            "insert into evidence (source, ref, source_version, content_hash, extractor_version) "
+            "values ('github_code', 'x', 'v', 'h', 't') returning id").fetchone()[0]
+        visible = conn.execute(
+            "insert into asset (kind, name, source_ref, unit_id, owner_team, discovery_scope, "
+            "summary) values ('library', %s, %s, %s, %s, %s, %s) returning id",
+            (f"bm25-visible-{tag}", src_a, f"{src_a}:.", ta, ta,
+             f"handles {word} payloads")).fetchone()[0]
+        secret_word = f"zzsecret{tag}"
+        conn.execute(
+            "insert into claim (asset_id, layer, kind, body, evidence_id, extractor, confidence, "
+            "sensitive) values (%s, 3, 'pitfall', %s, %s, 'test', 0.9, true)",
+            (visible, f"internal note mentions {secret_word}", ev))
+        made.update(teams=(ta, tb), users=users, visible=visible, src=src_a, ev=ev,
+                    secret_word=secret_word, hidden=[])
+
+    def add_hidden(n: int) -> None:
+        with admin_conn() as conn:
+            for i in range(n):
+                src = f"github:bm25-b-{tag}-{len(made['hidden'])}"
+                made["hidden"].append(conn.execute(
+                    "insert into asset (kind, name, source_ref, unit_id, owner_team, "
+                    "discovery_scope, summary) values ('library', %s, %s, %s, %s, %s, %s) "
+                    "returning id",
+                    (f"bm25-hidden-{tag}-{i}", src, f"{src}:.", tb, tb,
+                     f"{word} {word} {word} everywhere")).fetchone()[0])
+    made["add_hidden"] = add_hidden
+    yield made
+    with admin_conn() as conn:
+        conn.execute("delete from asset where id = any(%s)", ([visible, *made["hidden"]],))
+        conn.execute("delete from evidence where id = %s", (made["ev"],))
+        conn.execute("delete from source_acl where source_ref = %s", (made["src"],))
+        conn.execute("delete from membership where group_id = any(%s)", (list(made["teams"]),))
+        conn.execute("delete from app_user where team_id = any(%s)", (list(made["teams"]),))
+        conn.execute("delete from team where id = any(%s)", (list(made["teams"]),))
+
+
+def test_bm25_statistics_ignore_assets_the_caller_cannot_see(two_teams):
+    """Another team's hidden assets must not change anyone's scores: document frequency
+    and average length count only what the caller can discover."""
+    t = two_teams
+
+    def score(user):
+        with as_user(user) as conn:
+            rows = _bm25(conn, t["word"])
+        return {aid: s for aid, s in rows}
+
+    before = score(t["users"]["member"])
+    assert list(before) == [t["visible"]]
+    t["add_hidden"](5)
+    after = score(t["users"]["member"])
+    assert after == before, "hidden assets changed a visible asset's BM25 score"
+    other = score(t["users"]["other"])
+    assert t["visible"] not in other and set(other) == set(t["hidden"])
+
+
+def test_bm25_sensitive_claim_words_need_source_access(two_teams):
+    t = two_teams
+    with as_user(t["users"]["member"]) as conn:
+        assert _bm25(conn, t["secret_word"]) == [], "sensitive text surfaced without source access"
+    with as_user(t["users"]["reader"]) as conn:
+        assert [a for a, _ in _bm25(conn, t["secret_word"])] == [t["visible"]]
+    with as_user(None) as conn:
+        assert _bm25(conn, t["word"]) == [], "an unidentified caller must get nothing"

@@ -16,6 +16,12 @@ All notable changes are listed here. The format follows
   multi-arch image on GHCR) and Dependabot.
 
 ### Changed
+- Search now ranks with BM25 keyword scoring, scores each component by its two
+  best-matching vectors, and merges the two lists by reciprocal-rank fusion. At 5,000
+  components the right one is in the top 5 for 85% of test questions (was 79%). BM25
+  statistics count only what the asker can see. Needs `db/009_bm25.sql`; the previous
+  behaviour stays available through `HOMEGROWN_LEXICAL`, `HOMEGROWN_DENSE_POOL` and
+  `HOMEGROWN_FUSION`.
 - In model mode, answers say "Yes" only when something fits as-is. When the best match
   would need extending, the answer is "Related", and results are grouped under
   "Use as-is", "Related, check these" and "Not ruled out".
