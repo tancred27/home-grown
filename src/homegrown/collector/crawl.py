@@ -192,8 +192,9 @@ def crawl_repo(repo: str, sha: str, blobs: dict[str, str],
                             "from asset where unit_id = %s", (root_uid,)).fetchone()
     old_fp = (json.loads(row[0]) if isinstance(row[0], str) else row[0]) if row else None
     if root is None:
-        stats["status"] = "no-root-asset"           # the collector graph has not run yet
-        return stats
+        # No manifest the collector recognises (for example a C# repo): the repo still gets
+        # an asset of its own, owned and scoped the way the collector would do it.
+        root = _ensure_root(repo, name, root_uid, blobs, read)
     if old_fp == fp and not force:
         return stats
 
@@ -283,6 +284,23 @@ def crawl_repo(repo: str, sha: str, blobs: dict[str, str],
         _save_fp(repo, fp)
     stats.update(status="crawled", units=len(units), compiled=True)
     return stats
+
+
+def _ensure_root(repo: str, name: str, root_uid: str, blobs: dict, read) -> tuple:
+    from . import directory
+    readme_path = next((p for p in sorted(blobs) if "/" not in p and _README.match(p)), None)
+    summary = (clean_readme(read(readme_path, blobs[readme_path]) or "", 300)
+               if readme_path else "") or None
+    with admin_conn() as conn:
+        team = directory.ensure_team_in_lob(conn, f"team-{name}", name)
+        scope = (directory.org_wide_team(conn)
+                 if settings.default_visibility == "org-wide" else team)
+        conn.execute(
+            "insert into asset (kind, name, source_ref, unit_id, owner_team, discovery_scope, "
+            "summary) values ('repo', %s, %s, %s, %s, %s, %s) on conflict (unit_id) do nothing",
+            (name, f"github:{repo}", root_uid, team, scope, summary))
+        return conn.execute("select id, name, summary, owner_team, discovery_scope, source_ref "
+                            "from asset where unit_id = %s", (root_uid,)).fetchone()
 
 
 def _save_fp(repo: str, fp: dict) -> None:

@@ -179,3 +179,39 @@ def test_failed_summaries_are_retried_on_the_next_pass(repo, monkeypatch):
     monkeypatch.setattr(llm, "structured", real)
     st = _run(repo)                       # same code, no force: must not be skipped
     assert st["status"] == "crawled" and st["summarised"] == 2
+
+
+def test_repo_without_a_manifest_gets_its_own_asset(monkeypatch):
+    """A repo the collector found no manifest in (no root asset) is still crawled."""
+    tag = uuid.uuid4().hex[:8]
+    full = f"test-org/nomanifest-{tag}"
+    files = {"README.md": "# Signing tool\nSigns payloads.",
+             "src/sign/core/signer.cs": "\n".join(
+                 f"public class Signer{i} {{ public byte[] Sign(byte[] d) }}" for i in range(30))}
+    blobs = {p: uuid.uuid4().hex for p in files}
+    by_sha = {s: files[p] for p, s in blobs.items()}
+
+    def fake(system, user, schema, max_tokens=2000, model=None):
+        if system == crawl.AREA_SYS:
+            return {"summary": "Signs byte payloads."}
+        areas = [a["area"] for a in json.loads(user)["code_areas"]]
+        return {"units": [{"name": "Payload signer", "unit_type": "library", "purpose": "Sign.",
+                           "capabilities": ["signing"], "search_terms": [],
+                           "example_questions": [], "distinct": "", "areas": areas}]}
+    monkeypatch.setattr(llm, "structured", fake)
+    try:
+        st = crawl.crawl_repo(full, "c1", blobs, lambda p, s: by_sha[s])
+        assert st["status"] == "crawled"
+        with admin_conn() as conn:
+            kind, summary = conn.execute("select kind, summary from asset where unit_id = %s",
+                                         (f"github:nomanifest-{tag}:.",)).fetchone()
+        assert kind == "repo" and "Signs payloads" in summary
+    finally:
+        with admin_conn() as conn:
+            root = conn.execute("select id, owner_team from asset where unit_id = %s",
+                                (f"github:nomanifest-{tag}:.",)).fetchone()
+            if root:
+                conn.execute("delete from asset where parent_id = %s", (root[0],))
+                conn.execute("delete from asset where id = %s", (root[0],))
+            conn.execute("delete from area where repo = %s", (full,))
+            conn.execute("delete from unit_fingerprint where unit_id = %s", (f"crawl:{full}",))
