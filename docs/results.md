@@ -12,7 +12,7 @@ test set.
 | Code words as a third search list, 12 public repos plus the 321 repos most often confused with them, all with code; 196 fresh questions | right component in the top 5: **55% → 66%** (product's units) and **58% → 66%** (experiment's units); top 30: 80% → 86% and 84% → 90% | evaluation write-up not published yet |
 | Fit judge, 30 duplicate tickets + 26 "nothing fits" controls, 109 assets | every findable duplicate caught; **0/26** false alarms | `experiments/scale/RESULTS_judge.md` |
 | Same at ~9,600 assets | every findable duplicate caught; 3/26 false alarms | same |
-| Meaning (vector) search latency, 300k vectors, under row-level security; keyword search was added later and is not yet timed at this size | **~0.1 s** (index), 1.5 s (exact scan) | `experiments/scale/search_load_100k.txt` |
+| Meaning (vector) search latency, 300k vectors (~100k components), under row-level security. Keyword (BM25) search is slower at scale: 0.8-1.75 s at 20,000 synthetic assets for queries with common words; an indexed version is in review | **~0.1 s** (index), 1.5 s (exact scan) | `experiments/scale/search_load_100k.txt` |
 | Freshness, one hour of all public GitHub pushes replayed (111k pushes to main) | change to processed: p95 **225 s**, max 509 s | `experiments/sync/RESULTS.md` |
 | Docs pages worth keeping (43 hand-labelled pages) | LLM: precision 0.60, recall 0.92; keyword rule: 0.26 / 0.46 | `experiments/pages/RESULTS.md` |
 
@@ -27,6 +27,9 @@ test set.
   the test questions; search, not the judge, loses most of them.
 - **Recall drops as the org grows.** Look-alike components from other teams are the main
   cause. The current search has not been measured beyond 5,000 assets.
+- **Keyword search time grows with the corpus.** BM25 over asset text and claims takes
+  0.8-1.75 s at 20,000 synthetic assets for queries with common words, growing linearly. An
+  indexed version with identical results (3-8x faster) is in review.
 - **Code-words search time grows with the corpus.** With the inverted index
   (`db/012_code_terms.sql`), 20,000 synthetic units of 1,500 words each take 75-106 ms for
   typical queries and up to 340 ms for a query made only of very common words
