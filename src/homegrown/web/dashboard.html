@@ -84,6 +84,9 @@ td:nth-child(2){white-space:nowrap}
 .empty{margin:0;padding:18px 16px;color:var(--muted);border-bottom:1px solid var(--line)}
 .notice{padding:16px 20px;border-radius:14px;background:var(--surface2);color:var(--muted)}
 .answer{padding:20px;display:flex;flex-direction:column;gap:14px}
+.why summary{cursor:pointer;font-weight:600}
+.why ul{margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:8px}
+.why .faint{font-size:13px}
 .answer h2{margin:0;font-size:20px}
 .match{border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
 .signin{max-width:440px;margin:12vh auto;padding:28px;display:flex;flex-direction:column;gap:14px}
@@ -381,7 +384,8 @@ td:nth-child(2){white-space:nowrap}
   function row(c) {
     const st = STAGES[c.stage] || STAGES.unknown;
     return el("tr", {},
-      el("td", {}, el("span", { class: "cname" }, c.name), c.path && el("span", { class: "cpath" }, c.path)),
+      el("td", {}, el("span", { class: "cname" }, c.name),
+        c.part_of ? el("span", { class: "cpath" }, `part of ${c.part_of}`) : (c.path && el("span", { class: "cpath" }, c.path))),
       el("td", { class: "muted" }, c.team || "—"),
       el("td", {}, el("span", { class: `pill ${st.cls}`, title: c.stage_confirmed ? "Confirmed by the owner" : "Inferred, not confirmed by the owner" },
         el("span", { class: "dot", style: `background:${st.color}` }), st.label)),
@@ -445,15 +449,50 @@ td:nth-child(2){white-space:nowrap}
         return el("div", { class: "match" },
           el("div", { style: "display:flex;flex-wrap:wrap;gap:8px;align-items:center" },
             el("strong", { style: "font-size:17px" }, m.name),
-            m.where && el("span", { class: "faint" }, m.where),
+            m.repo ? el("span", { class: "faint" }, `in ${m.repo}`) : (m.where && el("span", { class: "faint" }, m.where)),
             el("span", { class: `pill ${st.cls}` }, el("span", { class: "dot", style: `background:${st.color}` }), st.label),
             VERDICTS[m.verdict] && el("span", { class: "meta" }, VERDICTS[m.verdict])),
           el("span", { class: "muted" }, [m.owner_team, m.lob].filter(Boolean).join(" · ") + (m.team_manager ? ` · ask ${m.team_manager}` : "")),
           m.why && el("span", {}, m.why),
           el("span", {}, canRead ? el("span", { class: "pill open" }, "You can read the code")
                                  : el("span", { class: "pill lock" }, lockIcon(), "Ask for access")));
-      })));
+      }),
+      out.question_id && whyPanel(out.question_id, out.matches)));
   });
+
+  // ---------------------------------------------------------------- why these results
+  // Reads the answer's trace (GET /explain/{id}, only the asker can read it) and shows,
+  // per result, how it was found and why the judge kept it.
+  function whyPanel(qid, matches) {
+    const box = el("details", { class: "why" }, el("summary", {}, "Why these results?"));
+    let loaded = false;
+    box.addEventListener("toggle", async () => {
+      if (!box.open || loaded) return;
+      loaded = true;
+      let t;
+      try { t = await api("/explain/" + encodeURIComponent(qid)); }
+      catch (err) { box.append(el("p", { class: "muted" }, `Couldn't load the explanation. ${err.message}`)); return; }
+      const rows = matches.map((m) => {
+        const c = (t.candidates || {})[m.asset_id] || {};
+        const terms = ((c.keyword || {}).terms || []).slice(0, 3).map((x) => x.term).join(", ");
+        const field = ((c.vector || {}).best_fields || [])[0];
+        const src = c.source || {};
+        return el("li", {},
+          el("strong", {}, m.name), " ",
+          el("span", { class: "muted" }, [
+            c.keyword_rank ? `keyword rank ${c.keyword_rank}${terms ? ` (matched: ${terms})` : ""}` : "no keyword match",
+            c.vector_rank ? `meaning rank ${c.vector_rank}${field ? ` (closest: ${field.field})` : ""}` : null,
+            c.fused_rank ? `overall ${c.fused_rank}` : null,
+          ].filter(Boolean).join(" · ")),
+          (c.judge || {}).reason && el("div", { class: "faint" }, `Judge: ${c.judge.reason}`),
+          (src.areas || []).length ? el("div", { class: "faint" },
+            `From code in ${src.areas.slice(0, 3).map((a) => a.path).join(", ")}${src.profile ? ` at ${String(src.profile.commit || "").slice(0, 7)}` : ""}`) : null);
+      });
+      box.append(el("ul", {}, rows),
+        el("p", { class: "faint" }, `Question id ${qid}. Full trace: homegrown explain ${qid}`));
+    });
+    return box;
+  }
 
   SNAPSHOT ? loadDemo() : load();
 })();

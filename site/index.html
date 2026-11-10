@@ -218,7 +218,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
 
     <dl class="stats">
       <div class="stat"><dd>85–92%</dd><dt>right answer in the top 5, among 5,000</dt></div>
-      <div class="stat"><dd>26 of 26</dd><dt>says so when nothing fits</dt></div>
+      <div class="stat"><dd>26 of 26</dd><dt>says so when nothing fits, among 109</dt></div>
       <div class="stat"><dd>0.1 s</dd><dt>search across 300,000 vectors</dt></div>
       <div class="stat"><dd>Apache-2.0</dd><dt>license</dt></div>
     </dl>
@@ -239,13 +239,13 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
       <div class="card step">
         <span class="num">02</span>
         <h3 class="disp">Records each component</h3>
-        <p>What it's for, what its tests show, who built it and how ready it is. Every note points back to the file it came from.</p>
+        <p>What it's for, what its tests show, who built it and how ready it is. Turn on the code reader and it also reads the source and splits a big repository into the services and libraries inside it. Every note points back to the file it came from.</p>
         <div class="example">dskit: prod, 224 facts on record.</div>
       </div>
       <div class="card step">
         <span class="num">03</span>
         <h3 class="disp">Answers, or says nothing fits</h3>
-        <p>It finds likely matches and checks each one against your question. If nothing fits, it says so instead of guessing.</p>
+        <p>It finds likely matches and checks each one against your question. If nothing fits, it says so instead of guessing. You can ask why: each answer shows what matched and why it was kept.</p>
         <div class="example">Yes: xk6-kafka, beta. Ask the lead of team-xk6-kafka.</div>
       </div>
     </div>
@@ -309,7 +309,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
           <button type="button" class="copy" data-copy="mcpCmd">Copy</button>
         </div>
       </div>
-      <p style="margin:0;font-size:15px;line-height:1.7;color:var(--muted)">Reads GitHub repositories, and Confluence and Notion pages. Stores everything in PostgreSQL. Bring Anthropic, Groq, Gemini, or a local model through Ollama, or run with no model at all.</p>
+      <p style="margin:0;font-size:15px;line-height:1.7;color:var(--muted)">Reads GitHub repositories (including the source code, if you turn that on), and Confluence and Notion pages. Stores everything in PostgreSQL. Bring Anthropic, Groq, Gemini, or a local model through Ollama, or run with no model at all.</p>
     </div>
     <div class="card" style="padding:24px;display:flex;flex-direction:column;gap:14px">
       <div role="group" aria-label="Can the person asking read the code?" style="display:flex;flex-wrap:wrap;gap:8px">
@@ -334,7 +334,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
   <section id="results" class="wrap band">
     <div class="head">
       <h2 class="h2" style="max-width:16ch">Tested on real open-source code</h2>
-      <p class="lead">Each number comes from a script in the repository, with a write-up next to it. The weak spots are listed too.</p>
+      <p class="lead">Each number links to where it was measured. The weak spots are listed too.</p>
     </div>
     <div class="split" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))">
       <div class="tbl tbl-scroll" style="grid-column:1/-1">
@@ -342,7 +342,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
           <thead><tr><th scope="col">What we measured</th><th scope="col">Result</th><th scope="col">Where to check</th></tr></thead>
           <tbody>
             <tr><td>Right component in the top 5, out of 5,000 (profiles written by AI models during testing)</td><td class="big">85–92%</td><td class="src"><a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">docs/results.md</a></td></tr>
-            <tr><td>Says nothing fits, when nothing does</td><td class="big">26 of 26</td><td class="src">23 of 26 at about 9,600 · <a href="https://github.com/tancred27/home-grown/blob/main/experiments/scale/RESULTS_judge.md" target="_blank" rel="noopener">judge results</a></td></tr>
+            <tr><td>Says nothing fits, when nothing does (109 components, earlier search)</td><td class="big">26 of 26</td><td class="src">23 of 26 at about 9,600 · <a href="https://github.com/tancred27/home-grown/blob/main/experiments/scale/RESULTS_judge.md" target="_blank" rel="noopener">judge results</a></td></tr>
             <tr><td>Search time across 300,000 vectors, with permission checks on</td><td class="big">0.1 s</td><td class="src"><a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">docs/results.md</a></td></tr>
             <tr><td>From a push to processed, 95% of the time, replaying an hour of all public GitHub pushes</td><td class="big">225 s</td><td class="src"><a href="https://github.com/tancred27/home-grown/blob/main/experiments/sync/RESULTS.md" target="_blank" rel="noopener">experiments/sync</a></td></tr>
           </tbody>
@@ -354,7 +354,8 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
           <li>No company runs it in production yet.</li>
           <li>Accuracy drops as the company grows, mostly because of look-alike projects from other teams.</li>
           <li>No single sign-on, and code access isn't synced from GitHub yet.</li>
-          <li>With a model on, each question costs two model calls, and nothing is cached between questions.</li>
+          <li>With a model on, each question costs two model calls, and nothing is cached between questions. The code reader adds a cheap call for each changed part of the code and one per repository.</li>
+          <li>The code reader is new and off by default. It hasn't been run on a real company's code yet.</li>
         </ul>
       </div>
     </div>
@@ -363,10 +364,11 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
   <section id="faq" class="wrap band">
     <h2 class="h2" style="margin-bottom:40px">Questions</h2>
     <div class="faqs">
-      <div class="faq"><h3>Does our code leave our network?</h3><p>Only if you choose a hosted model. Search and embeddings run on your machines, and with a local model through Ollama nothing leaves them.</p></div>
-      <div class="faq"><h3>What does it cost?</h3><p>Nothing. It's Apache-2.0. A hosted model adds two calls per question.</p></div>
+      <div class="faq"><h3>Does our code leave our network?</h3><p>Only if you choose a hosted model. Search and embeddings run on your machines. With the code reader on, short extracts of your code (function and type declarations and their comments, with keys, passwords and internal hostnames removed) go to the model you pick. With a local model through Ollama nothing leaves your machines.</p></div>
+      <div class="faq"><h3>What does it cost?</h3><p>Nothing. It's Apache-2.0. A hosted model adds two calls per question, and the code reader a cheap call for each part of the code that changed. You bring your own model key.</p></div>
       <div class="faq"><h3>Does it need a model at all?</h3><p>No. Without one it answers from what it has found, and says "possibly" instead of "yes".</p></div>
       <div class="faq"><h3>Where can it read from?</h3><p>GitHub repositories, plus Confluence and Notion pages. GitLab and Bitbucket are planned.</p></div>
+      <div class="faq"><h3>Can I see why it gave an answer?</h3><p>Yes. Every answer has an id. <code>homegrown explain &lt;id&gt;</code>, or "Why these results?" in the dashboard, shows which words and parts of each result matched, how the results were ranked, what the judge decided and why, and which code each result came from. Only the person who asked can see it.</p></div>
       <div class="faq"><h3>How does it know what's in production?</h3><p>From releases and from use: a library that two other teams depend on counts. Until an owner confirms it, a stage is shown as inferred.</p></div>
       <div class="faq"><h3>Could someone see what they shouldn't?</h3><p>The database checks every query. Tests run every test user through real searches and fail if anything outside their access comes back.</p></div>
     </div>

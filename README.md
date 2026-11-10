@@ -72,6 +72,29 @@ With a local model, nothing leaves your machines. Free hosted tiers may train on
 prompts, so don't send private code to them. More in [docs/configuration.md](docs/configuration.md).
 </details>
 
+<details>
+<summary><b>Read the code too</b> (optional, bring your own model key)</summary>
+
+READMEs go stale; code doesn't. With the code reader on, each sync also reads the source,
+summarises it area by area with a cheap model, and splits each repository into the
+services, libraries, tools and integrations inside it, each with its own description.
+
+```bash
+HOMEGROWN_CRAWL_ENABLED=true
+HOMEGROWN_CRAWL_SUMMARY_MODEL=claude-haiku-5-5     # one short call per changed code area
+HOMEGROWN_CRAWL_COMPILE_MODEL=claude-sonnet-5-5    # one call per repository
+```
+
+Only short extracts go to the model: function and type declarations and their comments,
+with anything that looks like a key, token, password or internal hostname removed first.
+Unchanged code is never re-read or re-summarised.
+</details>
+
+**Why that answer?** Every answer has an id. `homegrown find` prints it, and
+`homegrown explain <id>` shows each step: which words and fields matched, how results were
+ranked, what the judge decided and why, and which code each result came from. Only the
+person who asked can see it.
+
 **Dashboard:** run `uvicorn homegrown.api:app --port 8080` and open
 <http://localhost:8080/ui>. There's no real sign-in yet: you type a user name, which is
 fine on your own machine and not for a shared server.
@@ -86,7 +109,7 @@ claude mcp add homegrown -e HOMEGROWN_USER=alice -- /path/to/.venv/bin/python -m
 
 Agents call `find_existing` before writing new code. Each match says whether the person
 asking can read its code; when they can't, the agent names the owner and offers to ask
-for access instead of writing a copy.
+for access instead of writing a copy. The `explain` tool shows why a result came back.
 
 ## How well it works
 
@@ -94,13 +117,14 @@ Tested on real public code from Grafana, Microsoft, Google, AWS and others:
 
 - **85–92%** of the time the right component is in the top 5, among 5,000 components
   (85% on the test questions, 92% on the same questions in casual wording).
-- **26 of 26** times it says nothing fits when nothing does.
+- **26 of 26** times it says nothing fits when nothing does (among 109 components, with
+  the earlier search).
 - **~0.1 s** search across 300,000 vectors, with permission checks on.
 
 These numbers use component profiles (capabilities, search terms, example questions) that
-AI models wrote during testing; the crawler that writes them is not in the product yet.
-No company runs it in production yet. Every number,
-script and known limit is in [docs/results.md](docs/results.md); what's next is in
+AI models wrote during testing. The code reader now writes such profiles itself, but its
+own results haven't been measured yet. No company runs it in production yet. Every number
+and known limit is in [docs/results.md](docs/results.md); what's next is in
 [VISION.md](VISION.md).
 
 ## Docs

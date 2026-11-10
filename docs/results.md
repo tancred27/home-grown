@@ -15,9 +15,10 @@ test set.
 
 ## Known limits
 
-- **Profiles are not built by the product yet.** The 85–92% uses component profiles
-  (capabilities, search terms, example questions) that AI models wrote during testing.
-  Until the crawler that writes them is in the product, expect lower accuracy.
+- **The product's own profiles are not measured yet.** The 85–92% uses component
+  profiles (capabilities, search terms, example questions) that AI models wrote during
+  testing. The code reader (`HOMEGROWN_CRAWL_ENABLED`) now writes them, but its results
+  have not been measured yet.
 - **Recall drops as the org grows.** Look-alike components from other teams are the main
   cause. The current search has not been measured beyond 5,000 assets.
 - **LLM cost.** Each question makes two model calls (rewrite and judge), and nothing is

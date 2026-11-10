@@ -104,3 +104,34 @@ def test_demo_page_matches_the_dashboard():
                             'content="snapshot.json">', 1).replace(
         "<title>HomeGrown · Org map</title>", "<title>HomeGrown · Org map demo</title>", 1)
     assert demo == expected
+
+
+def test_crawled_units_name_the_repo_they_belong_to(corpus):
+    """A unit written by the crawler (asset.parent_id) is listed with its repo."""
+    import uuid
+
+    from homegrown.db import admin_conn
+    from homegrown.orgmap import org_map
+    tag = uuid.uuid4().hex[:8]
+    with admin_conn() as conn:
+        team, user = conn.execute(
+            "select t.id, u.id from app_user u join team t on t.id = u.team_id "
+            "join membership m on m.user_id = u.id and m.group_id = t.id limit 1").fetchone()
+        root = conn.execute(
+            "insert into asset (kind, name, source_ref, unit_id, owner_team, discovery_scope) "
+            "values ('library', %s, %s, %s, %s, %s) returning id",
+            (f"orgmap-repo-{tag}", f"github:x/orgmap-{tag}", f"github:orgmap-{tag}:.", team,
+             team)).fetchone()[0]
+        conn.execute(
+            "insert into asset (kind, name, source_ref, unit_id, owner_team, discovery_scope, "
+            "parent_id) values ('service', 'Refund API', %s, %s, %s, %s, %s)",
+            (f"github:x/orgmap-{tag}", f"github:orgmap-{tag}:.#refund-api", team, team, root))
+    try:
+        comps = [c for lob in org_map(str(user))["lobs"] for c in lob["components"]]
+        unit = next(c for c in comps if c["name"] == "Refund API"
+                    and c["part_of"] == f"orgmap-repo-{tag}")
+        assert unit["path"] == ""
+    finally:
+        with admin_conn() as conn:
+            conn.execute("delete from asset where parent_id = %s", (root,))
+            conn.execute("delete from asset where id = %s", (root,))

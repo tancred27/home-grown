@@ -20,10 +20,13 @@ NO_LOB = "No line of business"
 def org_map(user_id: str) -> dict:
     with as_user(user_id) as conn:
         rows = fetch_all(conn, """
-            select a.id, a.name, a.unit_id, a.source_ref, a.stage, a.stage_confirmed,
+            select a.id, a.name, a.unit_id, a.source_ref,
+                   coalesce(a.stage, p.stage),
+                   case when a.stage is null then p.stage_confirmed else a.stage_confirmed end,
                    coalesce(a.purpose, a.summary), t.name, l.name,
-                   caller_can_read_source(a.source_ref)
+                   caller_can_read_source(a.source_ref), p.name
               from asset a
+              left join asset p on p.id = a.parent_id
               left join team t on t.id = a.owner_team
               left join lob l on l.id = t.lob_id
              where a.kind <> 'solved_problem'""")
@@ -41,9 +44,10 @@ def org_map(user_id: str) -> dict:
     by_stage = dict.fromkeys(STAGES, 0)
     repos = set()
     for (aid, name, unit_id, source_ref, stage, confirmed, purpose, team, lob,
-         can_read) in rows:
+         can_read, parent) in rows:
         parts = (unit_id or "").split(":", 2)
-        path = parts[2] if len(parts) == 3 and parts[2] not in ("", ".") else ""
+        path = parts[2].split("#", 1)[0] if len(parts) == 3 else ""
+        path = "" if path in ("", ".") else path
         stage = stage if stage in by_stage else "unknown"
         by_stage[stage] += 1
         repos.add(source_ref)
@@ -51,6 +55,7 @@ def org_map(user_id: str) -> dict:
             "id": str(aid),
             "name": display_name(name),
             "path": path,
+            "part_of": display_name(parent) if parent else None,   # crawled unit -> its repo
             "repo": source_ref,
             "team": team,
             "stage": stage,
