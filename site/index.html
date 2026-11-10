@@ -85,12 +85,18 @@ section{scroll-margin-top:16px}
 .stat dd{margin:0;font:700 36px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em}
 
 /* steps */
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px}
-.step{display:flex;flex-direction:column;gap:16px;padding:28px}
-.step h3{margin:0;font-size:25px;font-weight:700}
-.step p{margin:0;font-size:17px;line-height:1.6;color:var(--muted)}
-.num{font:600 14px 'JetBrains Mono',monospace;color:var(--accent-text)}
-.example{margin-top:auto;padding:12px 14px;border-radius:12px;background:var(--surface2);font-size:14px;line-height:1.6;color:var(--muted)}
+.flow{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.flow li{display:grid;grid-template-columns:56px minmax(0,1fr) minmax(0,1.05fr);gap:8px 28px;align-items:start;padding:26px 0;border-bottom:1px solid var(--line)}
+.flow h3{margin:0 0 6px;font-size:23px;font-weight:700}
+.flow p{margin:0;font-size:17px;line-height:1.6;color:var(--muted);max-width:46ch}
+.num{font:600 14px 'JetBrains Mono',monospace;color:var(--accent-text);padding-top:7px}
+.example{padding:12px 14px;border-radius:12px;background:var(--surface2);font-size:14px;line-height:1.6;color:var(--muted)}
+.example strong{color:var(--text);font-weight:600}
+.example code{font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{padding:3px 10px;border-radius:999px;border:1px solid var(--line2);background:var(--surface);color:var(--text);font-size:13px;font-weight:600;white-space:nowrap}
+.arrow{color:var(--faint)}
+@media (max-width:820px){.flow li{grid-template-columns:40px minmax(0,1fr)}.flow .example{grid-column:2}}
 
 /* tables */
 .tbl{border:1px solid var(--line2);border-radius:16px;overflow:hidden;background:var(--surface)}
@@ -227,28 +233,41 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
   <section id="how" class="wrap band">
     <div class="head">
       <h2 class="h2">How it works</h2>
-      <p class="lead">A collector keeps a record of every component. An answerer searches that record as the person asking, so each person sees only what they may see.</p>
+      <p class="lead">A collector keeps a record of every component. Search runs as the person asking, so each person sees only what they may see.</p>
     </div>
-    <div class="steps">
-      <div class="card step">
+    <ol class="flow">
+      <li>
         <span class="num">01</span>
-        <h3 class="disp">Watches your repositories</h3>
-        <p>When someone pushes to a repository, HomeGrown rereads only the folders that changed. A webhook or a poller tells it what moved.</p>
-        <div class="example">The poller lists an organization's repositories, most recently pushed first, a hundred per request.</div>
-      </div>
-      <div class="card step">
+        <div><h3 class="disp">Watches your repositories</h3>
+        <p>A push tells it what moved. It rereads only the folders that changed and leaves the rest alone.</p></div>
+        <div class="example">Push to <strong>kind</strong> touches <code>pkg/cluster</code> <span class="arrow">&rarr;</span> only that folder is read again.</div>
+      </li>
+      <li>
         <span class="num">02</span>
-        <h3 class="disp">Records each component</h3>
-        <p>What it's for, what its tests show, who built it and how ready it is. Turn on the code reader and it also reads the source and splits a big repository into the services and libraries inside it. Every note points back to the file it came from.</p>
-        <div class="example">dskit: prod, 224 facts on record.</div>
-      </div>
-      <div class="card step">
+        <div><h3 class="disp">Reads the code</h3>
+        <p>Optional. It reads the source and splits a big repository into the parts people would reuse on their own.</p></div>
+        <div class="example"><strong>kind</strong> becomes 4 components:
+          <div class="chips"><span class="chip">kind CLI</span><span class="chip">Cluster Management Library</span><span class="chip">kindnetd CNI Daemon</span><span class="chip">Shared Go Utilities</span></div></div>
+      </li>
+      <li>
         <span class="num">03</span>
-        <h3 class="disp">Answers, or says nothing fits</h3>
-        <p>It finds likely matches and checks each one against your question. If nothing fits, it says so instead of guessing. You can ask why: each answer shows what matched and why it was kept.</p>
-        <div class="example">Yes: xk6-kafka, beta. Ask the lead of team-xk6-kafka.</div>
-      </div>
-    </div>
+        <div><h3 class="disp">Records each component</h3>
+        <p>What it's for, who owns it and how ready it is. Every note links to the file or commit it came from.</p></div>
+        <div class="example"><strong>kind CLI</strong>: creates local Kubernetes clusters in containers. From <code>cmd/kind/app</code> at <code>46b5d28</code>.</div>
+      </li>
+      <li>
+        <span class="num">04</span>
+        <div><h3 class="disp">Searches, then checks</h3>
+        <p>It searches by keyword and by meaning, then a judge reads each candidate against the question. If nothing fits, it says so.</p></div>
+        <div class="example">&ldquo;Dual-stack networking in a local test cluster?&rdquo; Search ranks kindnetd first. The judge picks <strong>kind CLI</strong>: dual-stack is set in kind's cluster config.</div>
+      </li>
+      <li>
+        <span class="num">05</span>
+        <div><h3 class="disp">Shows its work</h3>
+        <p>Ask why any answer came back: which words matched, what text was closest and why the judge kept it.</p></div>
+        <div class="example"><code>homegrown explain &lt;id&gt;</code>, or &ldquo;Why these results?&rdquo; in the dashboard.</div>
+      </li>
+    </ol>
   </section>
 
   <section id="map" class="wrap band">
