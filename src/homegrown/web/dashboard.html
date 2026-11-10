@@ -91,6 +91,34 @@ td:nth-child(2){white-space:nowrap}
 .match{border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
 .signin{max-width:440px;margin:12vh auto;padding:28px;display:flex;flex-direction:column;gap:14px}
 .signin input{min-height:44px;padding:0 12px;border:1px solid var(--line2);border-radius:12px;background:var(--bg)}
+/* demo: one answer explained */
+.ex{padding:22px;display:flex;flex-direction:column;gap:18px}
+.ex h2{margin:0;font-size:22px}
+.ex-q{align-self:flex-start;margin:0;padding:12px 16px;border-radius:16px;border-bottom-left-radius:6px;background:var(--text);color:var(--bg);font-weight:500;font-size:16px;max-width:60ch}
+.ex-flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.ex-flow li{padding:12px 14px;border-radius:12px;background:var(--surface2);display:flex;flex-direction:column;gap:2px}
+.ex-flow b{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--accent-text)}
+.ex-flow span{font-size:14px;color:var(--muted)}
+.ex-flow strong{color:var(--text)}
+.ex-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:start}
+.ex-tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+.ex table{min-width:440px}
+.ex th,.ex td{padding:9px 12px}
+.ex td:first-child{min-width:0}
+.ex-pick{overflow-wrap:anywhere}
+.ex td.r{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.ex tr.sel td{background:color-mix(in srgb,var(--accent) 9%,transparent)}
+.ex-pick{border:0;background:none;padding:0;font-weight:700;text-align:left;cursor:pointer;min-height:28px;text-decoration:underline;text-decoration-color:var(--line2);text-underline-offset:3px}
+.ex-pick[aria-pressed="true"]{text-decoration-color:var(--accent)}
+.ex-why{padding:16px 18px;border-radius:12px;background:var(--surface2);display:flex;flex-direction:column;gap:12px}
+.ex-why dl{margin:0;display:flex;flex-direction:column;gap:10px}
+.ex-why dt{font-size:13px;font-weight:700;color:var(--faint)}
+.ex-why dd{margin:2px 0 0;line-height:1.5}
+.ex-chips{display:flex;flex-wrap:wrap;gap:6px}
+.ex-chip{padding:1px 10px;border-radius:999px;border:1px solid var(--line2);background:var(--surface);font-size:13px;font-weight:600}
+@media (max-width:980px){.ex-grid{grid-template-columns:1fr}}
+@media (max-width:560px){.ex table{min-width:0}.ex .kw{display:none}}
+@media (max-width:640px){.cards>.card{grid-column:auto!important}}
 /* light theme: filled surfaces need no outline */
 :root[data-theme="light"] .card,:root[data-theme="light"] .askform,:root[data-theme="light"] .f,:root[data-theme="light"] .count{border-color:transparent!important}
 :root[data-theme="light"] .side{border-right-color:transparent}
@@ -242,7 +270,60 @@ td:nth-child(2){white-space:nowrap}
       el("span", { id: "viewAsLabel", style: "font-weight:600" }, "View as"),
       select);
     $("main").insertBefore(banner, $("answer"));
+    if (snapshot.explain_example) $("main").insertBefore(explainExample(snapshot.explain_example), $("answer"));
     showDemoViewer();
+  }
+
+  // One recorded answer, shown the way "Why these results?" explains it: what search
+  // ranked, what the judge decided and why. Only in demo mode, from the snapshot.
+  const EX_VERDICT = { use_as_is: ["Use as-is", "prod"], extend: ["Related", "beta"], not_a_fit: ["Not a fit", "other"] };
+  function explainExample(x) {
+    const cands = [...x.candidates].sort((a, b) => a.search_rank - b.search_rank);
+    let pick = cands.find((c) => c.name === x.answer.name) || cands[0];
+    const verdict = (c) => { const [t, cls] = EX_VERDICT[c.verdict] || ["Not ruled out", "other"]; return el("span", { class: `pill ${cls}` }, t); };
+    const why = el("div", { class: "ex-why", "aria-live": "polite" });
+    const pickers = [];
+    const tbody = el("tbody", {}, cands.map((c) => {
+      const b = el("button", { type: "button", class: "ex-pick", "aria-pressed": String(c === pick), onclick: () => { pick = c; show(); } }, c.name);
+      pickers.push([c, b]);
+      return el("tr", {},
+        el("td", {}, b, c.repo && el("span", { class: "cpath" }, `in ${c.repo}`)),
+        el("td", { class: "r kw" }, `#${c.keyword_rank}`),
+        el("td", { class: "r kw" }, `#${c.meaning_rank}`),
+        el("td", { class: "r", style: "color:var(--text);font-weight:700" }, `#${c.search_rank}`),
+        el("td", {}, verdict(c)));
+    }));
+    function show() {
+      pickers.forEach(([c, b]) => { b.setAttribute("aria-pressed", String(c === pick)); b.closest("tr").classList.toggle("sel", c === pick); });
+      const c = pick;
+      why.replaceChildren(
+        el("div", { style: "display:flex;flex-wrap:wrap;gap:8px;align-items:center" },
+          el("strong", { style: "font-size:17px" }, `Why ${c.name}`), verdict(c)),
+        el("dl", {},
+          c.matched_words.length > 0 && el("div", {}, el("dt", {}, "Words that matched"),
+            el("dd", {}, el("span", { class: "ex-chips" }, c.matched_words.map((w) => el("span", { class: "ex-chip" }, w))))),
+          c.closest && c.closest.text && el("div", {}, el("dt", {}, `Closest in meaning: ${c.closest.what}`), el("dd", {}, `“${c.closest.text}”`)),
+          el("div", {}, el("dt", {}, "What the judge said"), el("dd", {}, c.reason)),
+          c.code.length > 0 && el("div", {}, el("dt", {}, "Where it came from"),
+            el("dd", {}, "Code in ", el("code", {}, c.code.join(", ")), c.commit ? ` at ${c.commit}` : ""))));
+    }
+    show();
+    const s = x.searched;
+    return el("section", { class: "card ex", "aria-labelledby": "exTitle" },
+      el("div", { style: "display:flex;flex-direction:column;gap:4px" },
+        el("h2", { class: "disp", id: "exTitle" }, "How one answer was chosen"),
+        el("span", { class: "muted", style: "font-size:14px" }, x.note)),
+      el("p", { class: "ex-q" }, x.question),
+      el("ol", { class: "ex-flow" },
+        el("li", {}, el("b", {}, "1 · Search"), el("span", {}, `${s.keyword_hits} hits by keyword, ${s.meaning_hits} by meaning, merged into one list`)),
+        el("li", {}, el("b", {}, "2 · Judge"), el("span", {}, `reads the top ${s.shortlist} against the question`)),
+        el("li", {}, el("b", {}, "3 · Answer"), el("span", {}, el("strong", {}, x.answer.name), `, ${(EX_VERDICT[x.answer.verdict] || ["?"])[0].toLowerCase()}. Search had it #${x.answer.search_rank}.`))),
+      el("div", { class: "ex-grid" },
+        el("div", { class: "ex-tbl" }, el("table", {},
+          el("caption", { class: "sr" }, "What search ranked and what the judge decided"),
+          el("thead", {}, el("tr", {}, ["Result", "Keyword", "Meaning", "Search", "Judge"].map((h) => el("th", { scope: "col", class: h === "Keyword" || h === "Meaning" ? "kw" : null }, h)))),
+          tbody)),
+        why));
   }
 
   function showDemoViewer() {

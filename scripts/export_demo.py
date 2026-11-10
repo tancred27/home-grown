@@ -10,6 +10,10 @@ under row-level security. Two viewers with different access show the permission 
 Run (needs a collected corpus):
     python -I scripts/export_demo.py
     python -I scripts/export_demo.py --viewer gate2-dev "Someone who can find everything" EV
+    python -I scripts/export_demo.py --explain example.json   # replace the explained answer
+
+The explained answer ("How one answer was chosen") is a recorded `homegrown explain`
+trace, simplified. It is kept from the previous snapshot unless --explain replaces it.
 """
 
 from __future__ import annotations
@@ -39,6 +43,8 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--viewer", nargs=3, action="append", metavar=("LOGIN", "LABEL", "INITIALS"),
                     help="a user to include (repeatable); defaults to two contrasting users")
+    ap.add_argument("--explain", type=Path, metavar="FILE",
+                    help="a simplified explain trace to show (default: keep the current one)")
     args = ap.parse_args()
     viewers = args.viewer or DEFAULT_VIEWERS
 
@@ -57,6 +63,14 @@ def main() -> None:
         "note": NOTE.format(date=f"{today.day} {today:%B %Y}", repos=repos),
         "viewers": out,
     }
+    example = None
+    if args.explain:
+        example = json.loads(args.explain.read_text(encoding="utf-8"))
+    elif (OUT / "snapshot.json").exists():
+        old = json.loads((OUT / "snapshot.json").read_text(encoding="utf-8"))
+        example = old.get("explain_example")
+    if example:
+        snapshot["explain_example"] = example
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "snapshot.json").write_text(json.dumps(snapshot, indent=1, ensure_ascii=False) + "\n",
                                        encoding="utf-8", newline="\n")

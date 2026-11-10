@@ -1044,5 +1044,127 @@
     ]
    }
   }
- ]
+ ],
+ "explain_example": {
+  "note": "A real answer from our test on 12 public repositories, read by the code reader. Search ranked another component first; the judge (Claude Haiku, recorded) picked the one that fits. Click a result to see why.",
+  "question": "How can I enable dual-stack IPv4 and IPv6 networking in a local test cluster?",
+  "answer": {
+   "name": "kind CLI",
+   "repo": "kind",
+   "keyword_rank": 3,
+   "meaning_rank": 5,
+   "search_rank": 3,
+   "matched_words": [
+    "local",
+    "cluster",
+    "enable"
+   ],
+   "closest": {
+    "what": "a question it answers",
+    "text": "How do I create a local Kubernetes cluster with kind?"
+   },
+   "verdict": "use_as_is",
+   "reason": "The kind CLI creates local Kubernetes clusters in container nodes. Dual-stack IPv4/IPv6 is enabled through kind's cluster networking configuration (ipFamily: dual), so the existing tool covers the request without new building.",
+   "code": [
+    "cmd/kind/app",
+    "pkg/cmd"
+   ],
+   "commit": "46b5d28"
+  },
+  "searched": {
+   "keyword_hits": 82,
+   "meaning_hits": 200,
+   "shortlist": 5
+  },
+  "candidates": [
+   {
+    "name": "kindnetd CNI Daemon",
+    "repo": "kind",
+    "keyword_rank": 1,
+    "meaning_rank": 3,
+    "search_rank": 1,
+    "matched_words": [
+     "dual",
+     "stack",
+     "network"
+    ],
+    "closest": {
+     "what": "a question it answers",
+     "text": "Does kind support dual-stack?"
+    },
+    "verdict": "not_a_fit",
+    "reason": "kindnetd is the internal CNI daemon that kind runs inside its nodes. Its description covers pod CIDR routing, CNI config and masquerading, but nothing about enabling IPv6 or dual-stack, and a developer does not enable dual-stack by using it",
+    "code": [
+     "images/kindnetd/cmd"
+    ],
+    "commit": "46b5d28"
+   },
+   {
+    "name": "AKS Extension Commands",
+    "repo": "vscode-aks-tools",
+    "keyword_rank": 5,
+    "meaning_rank": 1,
+    "search_rank": 2,
+    "matched_words": [
+     "cluster",
+     "network",
+     "test"
+    ],
+    "closest": {
+     "what": "a question it answers",
+     "text": "How do I set up Kaito on a cluster?"
+    },
+    "verdict": "not_a_fit",
+    "reason": "AKS extension commands manage Azure-hosted AKS clusters from VS Code. The request is about a local test cluster, so this does not apply.",
+    "code": [
+     "src",
+     "src/auth"
+    ],
+    "commit": "cdb451a"
+   },
+   {
+    "name": "kind CLI",
+    "repo": "kind",
+    "keyword_rank": 3,
+    "meaning_rank": 5,
+    "search_rank": 3,
+    "matched_words": [
+     "local",
+     "cluster",
+     "enable"
+    ],
+    "closest": {
+     "what": "a question it answers",
+     "text": "How do I create a local Kubernetes cluster with kind?"
+    },
+    "verdict": "use_as_is",
+    "reason": "The kind CLI creates local Kubernetes clusters in container nodes. Dual-stack IPv4/IPv6 is enabled through kind's cluster networking configuration (ipFamily: dual), so the existing tool covers the request without new building.",
+    "code": [
+     "cmd/kind/app",
+     "pkg/cmd"
+    ],
+    "commit": "46b5d28"
+   },
+   {
+    "name": "github.com/grafana/ckit",
+    "repo": "",
+    "keyword_rank": 8,
+    "meaning_rank": 12,
+    "search_rank": 4,
+    "matched_words": [
+     "cluster",
+     "test"
+    ],
+    "closest": {
+     "what": "its description",
+     "text": ""
+    },
+    "verdict": "not_a_fit",
+    "reason": "ckit is a clustering and workload distribution library using consistent hashing and gossip. It has no connection to Kubernetes cluster networking or dual-stack setup.",
+    "code": [],
+    "commit": ""
+   }
+  ],
+  "time_ms": 637
+ }
 }
