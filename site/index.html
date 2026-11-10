@@ -46,9 +46,7 @@ button{font:inherit;color:inherit}
 .icon-btn:hover{background:var(--surface2)}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px}
 section{scroll-margin-top:16px}
-.band{min-height:100svh;display:grid;align-content:center;padding-top:96px;padding-bottom:96px;border-top:1px solid var(--line)}
-.hero{min-height:calc(100svh - 84px);display:flex;flex-direction:column;justify-content:center;gap:56px;padding-top:32px;padding-bottom:40px}
-.hero-copy{margin-block:auto;max-width:900px;display:flex;flex-direction:column;gap:24px}
+.band{padding-top:64px;padding-bottom:64px;border-top:1px solid var(--line)}
 .split{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:40px 56px;align-items:start}
 .head{display:flex;flex-wrap:wrap;gap:20px 64px;align-items:end;justify-content:space-between;margin-bottom:40px}
 
@@ -88,10 +86,9 @@ section{scroll-margin-top:16px}
 
 /* steps */
 .flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px}
-.flow li{display:flex;flex-direction:column;gap:12px;padding:28px 24px;border-radius:16px;background:var(--surface);border:1px solid var(--line)}
-.flow h3{margin:0;font-size:23px;font-weight:700}
-@media (min-width:900px){.flow li{min-height:min(46svh,380px)}}
-.flow p{margin:0;font-size:16px;line-height:1.6;color:var(--muted)}
+.flow li{display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:16px;background:var(--surface);border:1px solid var(--line)}
+.flow h3{margin:0;font-size:19px;font-weight:700}
+.flow p{margin:0;font-size:15px;line-height:1.55;color:var(--muted)}
 .num{font:600 13px 'JetBrains Mono',monospace;color:var(--accent-text)}
 .example{margin-top:auto;padding-top:10px;border-top:1px solid var(--line);font-size:13px;line-height:1.55;color:var(--faint)}
 .example strong{color:var(--text);font-weight:600}
@@ -151,7 +148,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
   .asker{border-right:0;border-bottom:1px solid var(--line)}
   .field{grid-template-columns:1fr;gap:2px}
   .top nav .navlink{display:none}
-  .band{padding-top:64px;padding-bottom:64px}
+  .band{padding-top:48px;padding-bottom:48px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
@@ -175,8 +172,8 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
 </header>
 
 <main id="top">
-  <section class="wrap hero">
-    <div class="hero-copy">
+  <section class="wrap" style="padding-top:48px;padding-bottom:88px;display:flex;flex-direction:column;gap:48px">
+    <div style="max-width:900px;display:flex;flex-direction:column;gap:24px">
       <span class="eyebrow">Open source, Apache-2.0. Works with public and private repositories.</span>
       <h1 class="disp" style="margin:0;font-size:clamp(42px,5.4vw,76px);line-height:1;font-weight:700;letter-spacing:-.035em">Has anyone here<br><span style="color:var(--accent-text)">already built it?</span></h1>
       <p class="lead" style="font-size:20px">Ask HomeGrown before you build. It tells you whether another team has already built it, who looks after it, how ready it is and how to get the code. That works even for repositories you can't open.</p>
@@ -190,19 +187,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
       </div>
     </div>
 
-    <dl class="stats">
-      <div class="stat"><dd>85–92%</dd><dt>right component in the top 5, among 5,000 components</dt></div>
-      <div class="stat"><dd>23 of 26</dd><dt>says "nothing fits" when nothing does, among 9,600 components</dt></div>
-      <div class="stat"><dd>0.1 s</dd><dt>per search, among 100,000 components</dt></div>
-      <div class="stat"><dd>Apache-2.0</dd><dt>license</dt></div>
-    </dl>
-  </section>
-
-  <section id="ask" class="wrap band">
-    <div class="head">
-      <h2 class="h2">Same question. Different access.</h2>
-      <p class="lead">Both people learn it exists and who looks after it. Only the owning team can open the code. From a test on Grafana's public repositories, where the teams and access rules are generated.</p>
-    </div>
+    <div>
       <div class="card demo">
         <div class="demo-bar">
           <span style="font-size:15px;font-weight:700;color:var(--muted)">Ask as</span>
@@ -210,6 +195,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
             <button type="button" class="seg" data-asker="out" aria-pressed="true"><span class="avatar" style="background:#ff9a6b">CC</span>Someone on team-cloudcost-exporter</button>
             <button type="button" class="seg" data-asker="in" aria-pressed="false"><span class="avatar" style="background:#8fbcff">XK</span>Someone on team-xk6-kafka</button>
           </div>
+          <span style="margin-left:auto;font-size:14px;color:var(--faint)">Same question. Different access.</span>
         </div>
         <div class="demo-body">
           <div class="asker">
@@ -232,6 +218,15 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
           </div>
         </div>
       </div>
+      <p class="caption">From a test run on Grafana's public repositories. Public code has no org chart, so the teams, leads and access rules in that test are generated.</p>
+    </div>
+
+    <dl class="stats">
+      <div class="stat"><dd>85–92%</dd><dt>right component in the top 5, among 5,000 components</dt></div>
+      <div class="stat"><dd>23 of 26</dd><dt>says "nothing fits" when nothing does, among 9,600 components</dt></div>
+      <div class="stat"><dd>0.1 s</dd><dt>per search, among 100,000 components</dt></div>
+      <div class="stat"><dd>Apache-2.0</dd><dt>license</dt></div>
+    </dl>
   </section>
 
   <section id="how" class="wrap band">
@@ -344,7 +339,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
   </section>
 </main>
 
-<footer class="wrap" style="min-height:100svh;padding-top:96px;padding-bottom:40px;display:flex;flex-direction:column;justify-content:center;gap:56px;border-top:1px solid var(--line)">
+<footer class="wrap" style="padding-top:40px;padding-bottom:40px;display:flex;flex-direction:column;gap:56px">
   <div class="card cta">
     <h2 class="disp" style="margin:0;font-size:clamp(36px,4.2vw,58px);line-height:1.02;font-weight:700;letter-spacing:-.03em;max-width:12ch">Look before you build it <span style="color:var(--accent-text)">again.</span></h2>
     <div style="display:flex;flex-direction:column;gap:14px;flex:0 1 580px;min-width:min(100%,280px)">
