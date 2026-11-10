@@ -46,7 +46,7 @@ button{font:inherit;color:inherit}
 .icon-btn:hover{background:var(--surface2)}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px}
 section{scroll-margin-top:16px}
-.band{padding-top:88px;padding-bottom:88px;border-top:1px solid var(--line)}
+.band{padding-top:64px;padding-bottom:64px;border-top:1px solid var(--line)}
 .split{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:40px 56px;align-items:start}
 .head{display:flex;flex-wrap:wrap;gap:20px 64px;align-items:end;justify-content:space-between;margin-bottom:40px}
 
@@ -85,18 +85,14 @@ section{scroll-margin-top:16px}
 .stat dd{margin:0;font:700 36px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em}
 
 /* steps */
-.flow{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
-.flow li{display:grid;grid-template-columns:56px minmax(0,1fr) minmax(0,1.05fr);gap:8px 28px;align-items:start;padding:26px 0;border-bottom:1px solid var(--line)}
-.flow h3{margin:0 0 6px;font-size:23px;font-weight:700}
-.flow p{margin:0;font-size:17px;line-height:1.6;color:var(--muted);max-width:46ch}
-.num{font:600 14px 'JetBrains Mono',monospace;color:var(--accent-text);padding-top:7px}
-.example{padding:12px 14px;border-radius:12px;background:var(--surface2);font-size:14px;line-height:1.6;color:var(--muted)}
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px}
+.flow li{display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:16px;background:var(--surface);border:1px solid var(--line)}
+.flow h3{margin:0;font-size:19px;font-weight:700}
+.flow p{margin:0;font-size:15px;line-height:1.55;color:var(--muted)}
+.num{font:600 13px 'JetBrains Mono',monospace;color:var(--accent-text)}
+.example{margin-top:auto;padding-top:10px;border-top:1px solid var(--line);font-size:13px;line-height:1.55;color:var(--faint)}
 .example strong{color:var(--text);font-weight:600}
-.example code{font-size:13px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.chip{padding:3px 10px;border-radius:999px;border:1px solid var(--line2);background:var(--surface);color:var(--text);font-size:13px;font-weight:600;white-space:nowrap}
-.arrow{color:var(--faint)}
-@media (max-width:820px){.flow li{grid-template-columns:40px minmax(0,1fr)}.flow .example{grid-column:2}}
+.example code{font-size:12px}
 
 /* tables */
 .tbl{border:1px solid var(--line2);border-radius:16px;overflow:hidden;background:var(--surface)}
@@ -120,7 +116,10 @@ section{scroll-margin-top:16px}
 
 /* faq */
 .faqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));column-gap:56px}
-.faq{padding:22px 0;border-top:1px solid var(--line)}
+.faq{padding:16px 0;border-top:1px solid var(--line)}
+.faq summary{cursor:pointer;font-weight:700;font-size:17px}
+.faq summary::marker{color:var(--accent-text)}
+.faq[open] summary{margin-bottom:8px}
 .faq h3{margin:0 0 8px;font-size:18px;font-weight:700}
 .faq p{margin:0;color:var(--muted);line-height:1.6}
 
@@ -149,7 +148,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
   .asker{border-right:0;border-bottom:1px solid var(--line)}
   .field{grid-template-columns:1fr;gap:2px}
   .top nav .navlink{display:none}
-  .band{padding-top:64px;padding-bottom:64px}
+  .band{padding-top:48px;padding-bottom:48px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
@@ -233,82 +232,34 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
   <section id="how" class="wrap band">
     <div class="head">
       <h2 class="h2">How it works</h2>
-      <p class="lead">A collector keeps a record of every component. Search runs as the person asking, so each person sees only what they may see.</p>
+      <p class="lead">It keeps a record of every component, and every search runs as the person asking.</p>
     </div>
     <ol class="flow">
-      <li>
-        <span class="num">01</span>
-        <div><h3 class="disp">Watches your repositories</h3>
-        <p>A push tells it what moved. It rereads only the folders that changed and leaves the rest alone.</p></div>
-        <div class="example">Push to <strong>kind</strong> touches <code>pkg/cluster</code> <span class="arrow">&rarr;</span> only that folder is read again.</div>
-      </li>
-      <li>
-        <span class="num">02</span>
-        <div><h3 class="disp">Reads the code</h3>
-        <p>Optional. It reads the source and splits a big repository into the parts people would reuse on their own.</p></div>
-        <div class="example"><strong>kind</strong> becomes 4 components:
-          <div class="chips"><span class="chip">kind CLI</span><span class="chip">Cluster Management Library</span><span class="chip">kindnetd CNI Daemon</span><span class="chip">Shared Go Utilities</span></div></div>
-      </li>
-      <li>
-        <span class="num">03</span>
-        <div><h3 class="disp">Records each component</h3>
-        <p>What it's for, who owns it and how ready it is. Every note links to the file or commit it came from.</p></div>
-        <div class="example"><strong>kind CLI</strong>: creates local Kubernetes clusters in containers. From <code>cmd/kind/app</code> at <code>46b5d28</code>.</div>
-      </li>
-      <li>
-        <span class="num">04</span>
-        <div><h3 class="disp">Searches, then checks</h3>
-        <p>It searches by keyword and by meaning, then a judge reads each candidate against the question. If nothing fits, it says so.</p></div>
-        <div class="example">&ldquo;Dual-stack networking in a local test cluster?&rdquo; Search ranks kindnetd first. The judge picks <strong>kind CLI</strong>: dual-stack is set in kind's cluster config.</div>
-      </li>
-      <li>
-        <span class="num">05</span>
-        <div><h3 class="disp">Shows its work</h3>
-        <p>Ask why any answer came back: which words matched, what text was closest and why the judge kept it.</p></div>
-        <div class="example"><code>homegrown explain &lt;id&gt;</code>, or &ldquo;Why these results?&rdquo; in the dashboard.</div>
-      </li>
+      <li><span class="num">01</span><h3 class="disp">Watches repos</h3><p>Rereads only the folders a push changed.</p></li>
+      <li><span class="num">02</span><h3 class="disp">Reads the code</h3><p>Splits a big repo into the parts people reuse.</p><div class="example"><strong>kind</strong> &rarr; CLI, cluster library, kindnetd, Go utilities</div></li>
+      <li><span class="num">03</span><h3 class="disp">Records it</h3><p>Purpose, owner, stage. Every note links to its file or commit.</p></li>
+      <li><span class="num">04</span><h3 class="disp">Searches, then checks</h3><p>Keywords and meaning, then a judge reads each candidate. Says when nothing fits.</p><div class="example">Search ranked kindnetd first; the judge picked <strong>kind CLI</strong>.</div></li>
+      <li><span class="num">05</span><h3 class="disp">Shows its work</h3><p>Why each answer came back: matches, ranks, the judge's reason.</p><div class="example"><code>homegrown explain &lt;id&gt;</code></div></li>
     </ol>
-  </section>
-
-  <section id="map" class="wrap band">
-    <div class="head">
-      <h2 class="h2" style="max-width:16ch">A map of what your company has built</h2>
-      <div style="display:flex;flex-direction:column;gap:18px;align-items:flex-start">
-        <p class="lead">The dashboard lists every component you're allowed to find, by line of business, with its team, its stage and who else uses it.</p>
-        <a class="btn" href="demo/" target="_blank" rel="noopener">Open the demo dashboard
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      </div>
-    </div>
-    <div class="tbl tbl-scroll">
-      <table style="min-width:820px">
-        <caption class="label" style="text-align:left;padding:14px 18px;caption-side:top;border-bottom:1px solid var(--line2)">Platform Engineering, from the Grafana test run</caption>
-        <thead><tr><th scope="col">Component</th><th scope="col">Team</th><th scope="col">Stage</th><th scope="col">What it does</th><th scope="col">Used by</th></tr></thead>
-        <tbody>
-          <tr><td><strong>dskit</strong></td><td class="muted">team-dskit</td><td><span class="pill prod"><span class="dot" style="background:var(--prod)"></span>Prod</span></td><td class="muted">Utilities for building distributed Go services: backoff retries, cache, key-value store, request hedging, RPC middleware.</td><td><strong>2 teams</strong></td></tr>
-          <tr><td><strong>grafana-aws-sdk</strong></td><td class="muted">team-grafana-aws-sdk</td><td><span class="pill prod"><span class="dot" style="background:var(--prod)"></span>Prod</span></td><td class="muted">Shared AWS configuration for Grafana plugins that talk to Amazon services.</td><td><strong>1 team</strong></td></tr>
-          <tr><td><strong>authlib</strong></td><td class="muted">team-authlib</td><td><span class="pill dev"><span class="dot" style="background:var(--dev)"></span>Dev</span></td><td class="muted">A Grafana auth library for JWT authentication, passing identities along and checking permissions.</td><td><strong>1 team</strong></td></tr>
-          <tr><td><strong>cloud-setup</strong></td><td class="muted">team-cloud-setup</td><td><span class="pill beta"><span class="dot" style="background:var(--beta)"></span>Beta</span></td><td class="muted">Interactively set up Grafana Cloud Synthetics or Frontend Observability.</td><td class="muted">No other team</td></tr>
-        </tbody>
-      </table>
-    </div>
   </section>
 
   <section id="permissions" class="wrap band split">
     <div style="display:flex;flex-direction:column;gap:20px">
       <h2 class="h2">Everyone can find it. Only some can open it.</h2>
-      <p class="lead">Every search runs as the person asking, and the database itself checks each row. People learn that a private project exists and who to ask, while its code stays shut.</p>
-      <p style="margin:0;font-size:15px;line-height:1.6;color:var(--muted)">The rules live in one file you can read: <a href="https://github.com/tancred27/home-grown/blob/main/db/002_rls.sql" target="_blank" rel="noopener">db/002_rls.sql</a>.</p>
-      <div style="padding:14px 16px;border-radius:12px;background:color-mix(in srgb,var(--beta) 12%,transparent);font-size:15px;line-height:1.6"><strong>Not yet:</strong> you set up teams and code access yourself for now. Copying them from GitHub is next.</div>
+      <p class="lead">A map of everything your company has built, by line of business. The database checks every row, so people learn a private project exists and who to ask, while its code stays shut.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center">
+        <a class="btn" href="demo/" target="_blank" rel="noopener">Open the demo dashboard
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="https://github.com/tancred27/home-grown/blob/main/db/002_rls.sql" target="_blank" rel="noopener" style="font-size:15px">The rules: db/002_rls.sql</a>
+      </div>
     </div>
     <div style="display:flex;flex-direction:column;gap:12px">
       <span class="label">What each person sees about xk6-kafka</span>
       <div class="tbl tbl-scroll">
         <table>
-          <thead><tr><th scope="col">Detail</th><th scope="col">team-cloudcost-exporter</th><th scope="col">team-xk6-kafka</th></tr></thead>
+          <thead><tr><th scope="col">Detail</th><th scope="col">Another team</th><th scope="col">Its own team</th></tr></thead>
           <tbody>
-            <tr><th scope="row" style="background:none;text-transform:none;letter-spacing:0;font-size:16px;color:var(--text);font-weight:600;border-bottom:1px solid var(--line)">Name and what it does</th><td><span class="pill ok">Visible</span></td><td><span class="pill ok">Visible</span></td></tr>
-            <tr><th scope="row" style="background:none;text-transform:none;letter-spacing:0;font-size:16px;color:var(--text);font-weight:600;border-bottom:1px solid var(--line)">Who to ask</th><td><span class="pill ok">Visible</span></td><td><span class="pill ok">Visible</span></td></tr>
-            <tr><th scope="row" style="background:none;text-transform:none;letter-spacing:0;font-size:16px;color:var(--text);font-weight:600;border-bottom:1px solid var(--line)">Stage</th><td><span class="pill ok">Visible</span></td><td><span class="pill ok">Visible</span></td></tr>
+            <tr><th scope="row" style="background:none;text-transform:none;letter-spacing:0;font-size:16px;color:var(--text);font-weight:600;border-bottom:1px solid var(--line)">What it does, who to ask</th><td><span class="pill ok">Visible</span></td><td><span class="pill ok">Visible</span></td></tr>
             <tr><th scope="row" style="background:none;text-transform:none;letter-spacing:0;font-size:16px;color:var(--text);font-weight:600;border-bottom:1px solid var(--line)">Facts marked sensitive</th><td><span class="pill lock">Hidden</span></td><td><span class="pill ok">Visible</span></td></tr>
             <tr><th scope="row" style="background:none;text-transform:none;letter-spacing:0;font-size:16px;color:var(--text);font-weight:600">Reading the code</th><td><span class="pill lock">Ask for access</span></td><td><span class="pill ok">Allowed</span></td></tr>
           </tbody>
@@ -320,7 +271,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
   <section id="agents" class="wrap band split">
     <div style="display:flex;flex-direction:column;gap:20px">
       <h2 class="h2">Your coding agent checks first</h2>
-      <p class="lead">HomeGrown is an MCP server. Claude Code, Cursor and other agents that speak MCP can ask it before they write new code. Each answer says whether you can read the code. If you can't, the agent tells you who to ask instead of writing a copy.</p>
+      <p class="lead">Claude Code, Cursor and other MCP agents ask HomeGrown before writing new code. If the code is private to you, the agent tells you who to ask instead of writing a copy.</p>
       <div style="display:flex;flex-direction:column;gap:10px">
         <span class="label">Add it to Claude Code</span>
         <div class="cmd">
@@ -328,7 +279,6 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
           <button type="button" class="copy" data-copy="mcpCmd">Copy</button>
         </div>
       </div>
-      <p style="margin:0;font-size:15px;line-height:1.7;color:var(--muted)">Reads GitHub repositories (including the source code, if you turn that on), and Confluence and Notion pages. Stores everything in PostgreSQL. Bring Anthropic, Groq, Gemini, or a local model through Ollama, or run with no model at all.</p>
     </div>
     <div class="card" style="padding:24px;display:flex;flex-direction:column;gap:14px">
       <div role="group" aria-label="Can the person asking read the code?" style="display:flex;flex-wrap:wrap;gap:8px">
@@ -353,46 +303,38 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
   <section id="results" class="wrap band">
     <div class="head">
       <h2 class="h2" style="max-width:16ch">Tested on real open-source code</h2>
-      <p class="lead">Each number links to where it was measured. The weak spots are listed too.</p>
+      <p class="lead">Every number links to where it was measured, weak spots included.</p>
     </div>
-    <div class="split" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))">
-      <div class="tbl tbl-scroll" style="grid-column:1/-1">
-        <table style="min-width:640px">
-          <thead><tr><th scope="col">What we measured</th><th scope="col">Result</th><th scope="col">Where to check</th></tr></thead>
-          <tbody>
-            <tr><td>Right component in the top 5, out of 5,000, on our test questions (profiles written by AI models during testing)</td><td class="big">85–92%</td><td class="src"><a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">docs/results.md</a></td></tr>
-            <tr><td>Same, on 69 real Stack Overflow questions whose answer links one of the 5,000, with the judge</td><td class="big">81%</td><td class="src">100% on the 41 where the linked project really is the answer · <a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">docs/results.md</a></td></tr>
-            <tr><td>Code reader on 12 public repositories: right component among the 30 the judge reads, 63 questions about specific features</td><td class="big">62–65%</td><td class="src">69–77% with the finer splits from testing · <a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">docs/results.md</a></td></tr>
-            <tr><td>Says nothing fits, when nothing does (109 components, earlier search)</td><td class="big">26 of 26</td><td class="src">23 of 26 at about 9,600 · <a href="https://github.com/tancred27/home-grown/blob/main/experiments/scale/RESULTS_judge.md" target="_blank" rel="noopener">judge results</a></td></tr>
-            <tr><td>Meaning search across 300,000 vectors, with permission checks on (keyword search not yet timed at this size)</td><td class="big">0.1 s</td><td class="src"><a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">docs/results.md</a></td></tr>
-            <tr><td>From a push to processed, 95% of the time, replaying an hour of all public GitHub pushes</td><td class="big">225 s</td><td class="src"><a href="https://github.com/tancred27/home-grown/blob/main/experiments/sync/RESULTS.md" target="_blank" rel="noopener">experiments/sync</a></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="card limits" style="grid-column:1/-1">
-        <h3 class="disp" style="margin:0 0 8px;font-size:24px">Not there yet</h3>
-        <ul>
-          <li>No company runs it in production yet.</li>
-          <li>Accuracy drops as the company grows, mostly because of look-alike projects from other teams.</li>
-          <li>No single sign-on, and code access isn't synced from GitHub yet.</li>
-          <li>With a model on, each question costs two model calls. Only a repeated question is cached. The code reader adds a cheap call for each changed part of the code and one per repository.</li>
-          <li>Short real questions are harder: 81% on Stack Overflow titles, against 85–92% on our own test questions.</li>
-          <li>The code reader is new and off by default. It splits repositories more coarsely than it should, and it hasn't been run on a real company's code yet.</li>
-        </ul>
-      </div>
+    <div class="tbl tbl-scroll">
+      <table style="min-width:560px">
+        <thead><tr><th scope="col">What we measured</th><th scope="col">Result</th><th scope="col">Where to check</th></tr></thead>
+        <tbody>
+          <tr><td>Right component in the top 5, out of 5,000, on test questions</td><td class="big">85–92%</td><td class="src"><a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">docs/results.md</a></td></tr>
+          <tr><td>Same, on 69 real Stack Overflow questions, with the judge</td><td class="big">81%</td><td class="src">100% where the linked project is the real answer · <a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">results</a></td></tr>
+          <tr><td>Says nothing fits, when nothing does</td><td class="big">26 of 26</td><td class="src">109 components; 23 of 26 at ~9,600 · <a href="https://github.com/tancred27/home-grown/blob/main/experiments/scale/RESULTS_judge.md" target="_blank" rel="noopener">results</a></td></tr>
+          <tr><td>From a push to processed, 95% of the time</td><td class="big">225 s</td><td class="src">an hour of all public GitHub pushes · <a href="https://github.com/tancred27/home-grown/blob/main/experiments/sync/RESULTS.md" target="_blank" rel="noopener">results</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card limits" style="margin-top:24px">
+      <h3 class="disp" style="margin:0 0 8px;font-size:22px">Not there yet</h3>
+      <ul>
+        <li>No company runs it in production yet, and there's no single sign-on.</li>
+        <li>Accuracy drops as a company grows, mostly from look-alike projects.</li>
+        <li>Features only the code describes are found less often than ones a README describes.</li>
+        <li>The code reader is new, off by default, and not yet run on a real company's code.</li>
+      </ul>
     </div>
   </section>
 
   <section id="faq" class="wrap band">
-    <h2 class="h2" style="margin-bottom:40px">Questions</h2>
+    <h2 class="h2" style="margin-bottom:24px">Questions</h2>
     <div class="faqs">
-      <div class="faq"><h3>Does our code leave our network?</h3><p>Only if you choose a hosted model. Search and embeddings run on your machines. With the code reader on, short extracts of your code (function and type declarations and their comments, with keys, passwords and internal hostnames removed) go to the model you pick. With a local model through Ollama nothing leaves your machines.</p></div>
-      <div class="faq"><h3>What does it cost?</h3><p>Nothing. It's Apache-2.0. A hosted model adds two calls per question, and the code reader a cheap call for each part of the code that changed. You bring your own model key.</p></div>
-      <div class="faq"><h3>Does it need a model at all?</h3><p>No. Without one it answers from what it has found, and says "possibly" instead of "yes".</p></div>
-      <div class="faq"><h3>Where can it read from?</h3><p>GitHub repositories, plus Confluence and Notion pages. GitLab and Bitbucket are planned.</p></div>
-      <div class="faq"><h3>Can I see why it gave an answer?</h3><p>Yes. Every answer has an id. <code>homegrown explain &lt;id&gt;</code>, or "Why these results?" in the dashboard, shows which words and parts of each result matched, how the results were ranked, what the judge decided and why, and which code each result came from. Only the person who asked can see it.</p></div>
-      <div class="faq"><h3>How does it know what's in production?</h3><p>From releases and from use: a library that two other teams depend on counts. Until an owner confirms it, a stage is shown as inferred.</p></div>
-      <div class="faq"><h3>Could someone see what they shouldn't?</h3><p>The database checks every query. Tests run every test user through real searches and fail if anything outside their access comes back.</p></div>
+      <details class="faq"><summary>Does our code leave our network?</summary><p>Only if you choose a hosted model. Search runs on your machines. With the code reader on, short extracts (declarations and their comments, with keys, passwords and internal hostnames removed) go to the model you pick. With a local model through Ollama nothing leaves.</p></details>
+      <details class="faq"><summary>What does it cost?</summary><p>Nothing: it's Apache-2.0. A hosted model adds two calls per question, and the code reader a cheap call per changed part of the code. Bring your own key (Anthropic, Gemini, Groq or Ollama), or run with no model at all.</p></details>
+      <details class="faq"><summary>Where can it read from?</summary><p>GitHub repositories, including their source code if you turn that on, plus Confluence and Notion pages. GitLab and Bitbucket are planned.</p></details>
+      <details class="faq"><summary>How does it know what's in production?</summary><p>From releases and from use: a library two other teams depend on counts. Until an owner confirms it, a stage is shown as inferred.</p></details>
+      <details class="faq"><summary>Could someone see what they shouldn't?</summary><p>The database checks every query. Tests run every test user through real searches and fail if anything outside their access comes back.</p></details>
     </div>
   </section>
 </main>
