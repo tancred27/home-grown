@@ -36,6 +36,10 @@ All notable changes are listed here. The format follows
   multi-arch image on GHCR) and Dependabot.
 
 ### Changed
+- Keyword search is indexed: `db/013_bm25_index.sql` keeps (document, word, count) postings
+  and per-asset claim lengths with triggers, so a search reads only its words' postings.
+  Results are identical to before (`tests/test_bm25_index.py`); at 20,000 assets it is 3-8x
+  faster. Writes cost a little more. Apply after 012.
 - Search now ranks with BM25 keyword scoring, scores each component by its two
   best-matching vectors, and merges the two lists by reciprocal-rank fusion. At 5,000
   components the right one is in the top 5 for 85% of test questions (was 79%). BM25
