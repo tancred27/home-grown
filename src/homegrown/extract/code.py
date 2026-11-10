@@ -64,9 +64,10 @@ def looks_generated(text: str) -> bool:
 
 
 def extract(text: str, limit: int = MAX_FILE_CHARS) -> str:
-    """Declaration lines and doc comments of one file, at most `limit` characters."""
+    """Declaration lines and doc comments of one file, at most `limit` characters.
+    NUL bytes are dropped: Postgres text cannot hold them, so one would fail the crawl."""
     out, n = [], 0
-    for line in text.splitlines():
+    for line in text.replace("\x00", "").splitlines():
         s = line.strip()
         if not s or len(s) > 200 or not _DECL.match(line) or _LICENSE.match(s):
             continue
@@ -158,5 +159,5 @@ def split_identifier(tok: str) -> str:
 def code_words(text: str) -> str:
     """Text for the code-words keyword list: each identifier kept and followed by its parts,
     so both 'getUserToken' and 'user token' match. Input is already extracted and scrubbed."""
-    text = text[:CODE_WORDS_MAX_CHARS]
+    text = text[:CODE_WORDS_MAX_CHARS].replace("\x00", " ")
     return _IDENT.sub(lambda m: f"{m.group(0)} {split_identifier(m.group(0))}", text)
