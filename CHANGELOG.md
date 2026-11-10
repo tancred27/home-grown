@@ -14,6 +14,8 @@ All notable changes are listed here. The format follows
   words; which words matched is shown only to people who can read its source. Needs
   `db/011_code_words.sql`; `HOMEGROWN_CODE_WORDS_WEIGHT=0` turns it off. Repos crawled
   before this get code words on their next change, or on a forced re-crawl.
+  `db/012_code_terms.sql` adds the inverted index that keeps it fast (about 30x faster
+  than 011 alone at 5,000 units); apply it after 011.
 - A code-reading crawler (`HOMEGROWN_CRAWL_ENABLED`, bring your own model key). Sync
   passes read source code, summarise it by area with a cheap model, and split each repo
   into units with search profiles using a stronger model. Units are child assets of their
