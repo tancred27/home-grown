@@ -147,6 +147,7 @@ def model_mode(monkeypatch):
     import homegrown.search as S
     monkeypatch.setattr(settings, "llm_provider", "groq")
     monkeypatch.setattr(settings, "llm_model", "test-model")
+    monkeypatch.setattr(settings, "judge_model", "")   # another provider: no Claude pin
     monkeypatch.setattr(settings, "verdict_mode", "model")
     monkeypatch.setattr(settings, "query_rewrite", True)
     monkeypatch.setenv("GROQ_API_KEY", "test-key-not-real")

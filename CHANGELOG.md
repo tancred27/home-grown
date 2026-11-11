@@ -36,6 +36,10 @@ All notable changes are listed here. The format follows
   multi-arch image on GHCR) and Dependabot.
 
 ### Changed
+- The model judge is on by default (`HOMEGROWN_VERDICT_MODE=model`) and pinned to Sonnet
+  (`HOMEGROWN_JUDGE_MODEL=claude-sonnet-5-5`). Without a working model it fails safe and
+  results keep search order; `rules` mode needs no model. With another provider, set
+  `HOMEGROWN_JUDGE_MODEL` to a model that provider serves.
 - A new model judge (`HOMEGROWN_MODEL_JUDGE=requirements`, the default in model mode). One
   call splits the request into the kind of unit asked for and the requirements it states,
   and marks each result as showing, contradicting or not mentioning each one, with a quote

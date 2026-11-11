@@ -22,11 +22,11 @@ before exposing the database anywhere.
 | `HOMEGROWN_LLM_PROVIDER` | `anthropic` | `anthropic`, `groq`, `gemini`, `local` (any OpenAI-compatible server), `replay` (recorded outputs, for development) or `disabled` |
 | `HOMEGROWN_LLM_MODEL` | *(auto)* | Anthropic: `claude-opus-5-5`; Groq: `openai/gpt-oss-120b`; Gemini: newest stable flash model; `local`: required |
 | `HOMEGROWN_LLM_BASE_URL` | `http://localhost:11434/v1` | For `local`, e.g. Ollama |
-| `HOMEGROWN_VERDICT_MODE` | `rules` | `model` to have the LLM judge candidates. `rules` needs no model |
+| `HOMEGROWN_VERDICT_MODE` | `model` | `model`: the LLM judges candidates (without a working model it fails safe and results keep search order). `rules` needs no model |
 | `HOMEGROWN_QUERY_REWRITE` | `true` | Model mode only: restate the request before searching |
 | `HOMEGROWN_VERDICT_SHORTLIST` | `5` | Model mode only: how many results the judge reads |
 | `HOMEGROWN_MODEL_JUDGE` | `requirements` | Model mode only: `requirements` splits the request into the kind of unit and its requirements, marks each result against them with a quote, and orders results in code; `fit` is the older one-word verdict |
-| `HOMEGROWN_JUDGE_MODEL` | (empty) | Model for the judge; empty uses `HOMEGROWN_LLM_MODEL` |
+| `HOMEGROWN_JUDGE_MODEL` | `claude-sonnet-5-5` | Model for the judge. With a provider other than Anthropic, set a model it serves; empty uses `HOMEGROWN_LLM_MODEL` |
 
 Keys:
 - Anthropic reads `ANTHROPIC_API_KEY`.

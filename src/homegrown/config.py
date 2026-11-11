@@ -43,9 +43,10 @@ class Settings(BaseSettings):
     # beat profile search (best option in the top 5: 56 with it, 58 without). The addendum-37
     # gain came from a set later found to be off-goal. Re-test when profiles come from code.
     code_words_weight: float = 0.0
+    # "model" (default): an LLM judges each candidate against the request; fails safe to
+    # "unknown", and the results then keep search order.
     # "rules": verdict from the evidence alone, no model needed.
-    # "model": an LLM judges each candidate against the request; fails safe to "unknown".
-    verdict_mode: str = "rules"
+    verdict_mode: str = "model"
     # Vector search: "exact" scans every visible vector; "hnsw" uses the index to fetch
     # a candidate pool and ranks that exactly; "auto" switches to hnsw once the table
     # has hnsw_auto_threshold vectors and the index exists. At 300k vectors: exact
@@ -66,8 +67,10 @@ class Settings(BaseSettings):
     # of 63 benchmark questions, against 37 in search order). "fit" is the older one-word
     # verdict per candidate.
     model_judge: str = "requirements"
-    # Model for the judge; empty = llm_model. The benchmark judge was a Sonnet-class model.
-    judge_model: str = ""
+    # Model for the judge, pinned like the crawler's models (addendum 59: the shipped prompt
+    # put the best option first on 53 of 63 benchmark questions with Sonnet). With another
+    # provider, set a model that provider serves; empty = llm_model.
+    judge_model: str = "claude-sonnet-5-5"
 
     # How many results the answering agent shows: every candidate judged a fit, then
     # (to fill up) candidates the judge could not rule out. Not-a-fit is never shown.
