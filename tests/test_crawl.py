@@ -229,13 +229,14 @@ def test_each_unit_gets_its_own_code_words_without_secrets(repo):
     assert "'render'" in rows["Invoice PDF"] and "'pdf'" in rows["Invoice PDF"]
     assert "sk-live" not in rows["Invoice PDF"] and "abcdefghijklmnop" not in rows["Invoice PDF"]
 
-def test_search_finds_a_unit_by_a_word_only_its_code_has(repo):
+def test_search_finds_a_unit_by_a_word_only_its_code_has(repo, monkeypatch):
     """'layout17' appears only in the Invoice PDF unit's code, not in its card or profile.
-    The code-words list finds it; the trace shows the word only to someone who may read
-    the source."""
+    The code-words list (off by default, turned on here) finds it; the trace shows the word
+    only to someone who may read the source."""
     from homegrown import explain
     from homegrown.db import as_user
     from homegrown.search import search
+    monkeypatch.setattr(settings, "code_words_weight", 1.0)
     _run(repo)
     with admin_conn() as conn:
         user = conn.execute("insert into app_user (login, team_id) values (%s,%s) returning id",

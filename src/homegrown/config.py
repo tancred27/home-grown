@@ -38,9 +38,11 @@ class Settings(BaseSettings):
     # isn't cut off before the merge.
     fusion_depth: int = 200
     # The code's own words (db/011_code_words.sql) as a third keyword list, fused by RRF at
-    # this weight. Confirmed in experiments/scale/RESULTS_gate1.md, addendum 37. Only units
-    # the code reader has crawled have code words; 0 turns the list off.
-    code_words_weight: float = 1.0
+    # this weight. Only units the code reader has crawled have code words; 0 turns the list
+    # off. Off since addendum 54 (RESULTS_gate1.md): on the goal benchmark G1 the list never
+    # beat profile search (best option in the top 5: 56 with it, 58 without). The addendum-37
+    # gain came from a set later found to be off-goal. Re-test when profiles come from code.
+    code_words_weight: float = 0.0
     # "rules": verdict from the evidence alone, no model needed.
     # "model": an LLM judges each candidate against the request; fails safe to "unknown".
     verdict_mode: str = "rules"
