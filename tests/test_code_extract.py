@@ -148,3 +148,15 @@ def test_licence_block_is_dropped_but_a_normal_header_comment_is_kept():
     assert "// Refund refunds." in out and "func Refund() error" in out
     keep = "# Refund service: pays customers back.\ndef refund():\n"
     assert "# Refund service" in code.extract(keep, path="refund.py")
+
+
+def test_policy_hcl_json_cloudformation_and_tiny_repos_are_read():
+    assert code.is_source("policies/aws/require-tags.hcl")
+    assert not code.is_source(".terraform.lock.hcl")
+    cfn = ('{\n "AWSTemplateFormatVersion": "2010-09-09",\n "Resources": {\n  "Boundary": {\n'
+           '   "Type": "AWS::IAM::ManagedPolicy",\n   "Properties": {}\n  }\n }\n}\n')
+    assert '"Type": "AWS::IAM::ManagedPolicy",' in code.extract(cfn, path="cfn/boundary-cfn.json")
+    tiny = code.build_areas({"main.tf": 'resource "aws_s3_bucket" "logs"'})
+    assert set(tiny) == {"."}
+    big_and_tiny = code.build_areas({"src/a.py": "def a():\n" + "x" * 400, "lib/b.py": "def b():"})
+    assert set(big_and_tiny) == {"src"}

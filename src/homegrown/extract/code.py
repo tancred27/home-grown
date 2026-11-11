@@ -25,8 +25,8 @@ SOURCE_EXT = (".py", ".go", ".java", ".kt", ".scala", ".ts", ".tsx", ".js", ".js
               ".rb", ".cs", ".c", ".cc", ".cpp", ".h", ".hpp", ".swift", ".php", ".m")
 # Infrastructure code, scripts and notebooks: their declarations are resources, parameters and
 # functions (see _IAC).
-IAC_EXT = (".tf", ".bicep", ".ps1", ".psm1", ".sh", ".bash", ".rego", ".sql", ".ipynb", ".r",
-           ".cue", ".sentinel")
+IAC_EXT = (".tf", ".hcl", ".bicep", ".ps1", ".psm1", ".sh", ".bash", ".rego", ".sql", ".ipynb",
+           ".r", ".cue", ".sentinel")
 # YAML/JSON only where the path says deployment template (CloudFormation, SAM, ARM, GitHub
 # Action); extract() then checks the content, so other config files yield nothing.
 _TEMPLATE_PATH = re.compile(
@@ -72,7 +72,8 @@ _IAC = re.compile(
     r"|package|default\s+(allow|deny)|deny|allow|violation|function|filter|workflow|configuration"
     r"|description\s*=|\.synopsis|\.description|create\s+(or\s+replace\s+)?(table|view|function"
     r"|procedure|trigger)|[a-z_][\w-]*\s*\(\)\s*\{|[a-z_][\w.]*\s*<-\s*function"
-    r"|AWSTemplateFormatVersion|Description:|Type:\s*AWS::|Transform:|\"type\":\s*\"Microsoft\."
+    r"|AWSTemplateFormatVersion|Description:|Type:\s*AWS::|Transform:"
+    r"|\"type\":\s*\"(Microsoft\.|AWS::)"
     r"|\"description\":|runs:|inputs:|using:|--\s+\w)", re.I)
 
 MAX_FILE_CHARS = 1500       # extracted text kept per file
@@ -193,15 +194,18 @@ def build_areas(extracts: dict[str, str]) -> dict[str, dict]:
     """{area path: {"text", "files", "hash"}} from {file path: extracted text}.
 
     Each area's text is capped at AREA_MAX_CHARS, shared equally among its files so a large
-    area is not cut off alphabetically. Areas under AREA_MIN_CHARS are dropped."""
+    area is not cut off alphabetically. Areas under AREA_MIN_CHARS are dropped, unless every
+    area is that small (a tiny repo is still read)."""
     by: dict[str, list[tuple[str, str]]] = {}
     for path, ex in sorted(extracts.items()):
         if ex:
             by.setdefault(area_of(path), []).append((path, ex))
+    sizes = {a: sum(len(ex) + 4 for _, ex in fs) for a, fs in by.items()}
+    keep_small = bool(sizes) and max(sizes.values()) < AREA_MIN_CHARS
     out = {}
     for area, files in by.items():
         blocks = [f"## {PurePosixPath(p).name}\n{ex}" for p, ex in files]
-        if sum(len(b) for b in blocks) < AREA_MIN_CHARS:
+        if sum(len(b) for b in blocks) < AREA_MIN_CHARS and not keep_small:
             continue
         share = max(150, AREA_MAX_CHARS // len(blocks))
         text = "\n".join(b[:share] for b in blocks)[:AREA_MAX_CHARS]
