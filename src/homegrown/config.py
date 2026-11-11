@@ -60,10 +60,21 @@ class Settings(BaseSettings):
     query_rewrite: bool = True
     # Model mode only: how many search results the judge reads per question.
     verdict_shortlist: int = 5
+    # Model mode only: which judge. "requirements" splits the request into the kind of unit
+    # asked for and its requirements, marks each card against them with a quote, and orders
+    # the results in code (addenda 57-58, RESULTS_gate1.md: the best option at rank 1 for 51
+    # of 63 benchmark questions, against 37 in search order). "fit" is the older one-word
+    # verdict per candidate.
+    model_judge: str = "requirements"
+    # Model for the judge; empty = llm_model. The benchmark judge was a Sonnet-class model.
+    judge_model: str = ""
 
     # How many results the answering agent shows: every candidate judged a fit, then
     # (to fill up) candidates the judge could not rule out. Not-a-fit is never shown.
     answer_results: int = 5
+    # With the requirements judge: show this many, and up to answer_results when the
+    # options after it tie with the last one shown.
+    answer_show: int = 3
 
     # Sync (collector/state.py, collector/sync.py). A changed repo is processed once it
     # has been quiet for sync_quiet_s, or waiting for sync_max_wait_s, whichever is first.

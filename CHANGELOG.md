@@ -36,6 +36,16 @@ All notable changes are listed here. The format follows
   multi-arch image on GHCR) and Dependabot.
 
 ### Changed
+- A new model judge (`HOMEGROWN_MODEL_JUDGE=requirements`, the default in model mode). One
+  call splits the request into the kind of unit asked for and the requirements it states,
+  and marks each result as showing, contradicting or not mentioning each one, with a quote
+  from its card. Code then orders the results: right kind first, then most requirements
+  shown, then nothing contradicted. "Use as-is" means the kind and every requirement are
+  shown. A result whose card doesn't settle the kind but shows a requirement is listed
+  under "Not ruled out". Answers show 3 results, up to 5 when results tie. Each result's
+  "why" names what its card shows, contradicts and leaves unstated. On the 89-question
+  goal benchmark the best option came first for 51 of 63 answerable questions (37 in
+  search order). `HOMEGROWN_MODEL_JUDGE=fit` keeps the previous judge.
 - The crawler reads more of a repo. Infrastructure code, scripts and notebooks (Terraform,
   Bicep, PowerShell, shell, Rego, SQL, R, CUE, Sentinel, Jupyter) and deployment templates
   (CloudFormation, SAM, ARM, GitHub Action files) count as source, keeping their resource,

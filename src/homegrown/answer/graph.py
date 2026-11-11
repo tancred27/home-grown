@@ -4,7 +4,11 @@
 
 Lists up to settings.answer_results (5) results: use-as-is first, then related
 (extend), then candidates the judge could not rule out; not-a-fit candidates are never
-listed. For each: who built it, their team, line of business and manager, whether it is
+listed. With the requirements judge (settings.model_judge) the list is 3 long
+(answer_show), longer only when the next results tie with the third, and each result's
+"why" says which of the request's requirements its card shows.
+
+For each: who built it, their team, line of business and manager, whether it is
 in dev or prod (and how sure we are), and whether the asker can read the code or must
 request access.
 
@@ -208,7 +212,7 @@ def _compose(state: AnswerState) -> dict:
             lines.append("  used by: " + ", ".join(f"{u['asset']} ({u['team']})"
                                                    for u in m["used_by"][:5]))
         if m.get("why"):
-            lines.append(f"  why: {m['why'][:200]}")
+            lines.append(f"  why: {m['why'][:400]}")
         for r in list(dict.fromkeys(m["reasons"]))[:2]:      # dedupe, keep order
             lines.append(f"  - {r[:120]}")
         lines.append(f"  access: {m['access']}")

@@ -87,3 +87,4 @@ class Verdict(BaseModel):
     reasons: list[dict] = Field(default_factory=list)   # {text, claim_id, layer}
     unknowns: list[str] = Field(default_factory=list)
     score: float = 0.0
+    rank: int | None = None       # requirements judge: equal rank = tied (see search.py)

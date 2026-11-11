@@ -25,6 +25,8 @@ before exposing the database anywhere.
 | `HOMEGROWN_VERDICT_MODE` | `rules` | `model` to have the LLM judge candidates. `rules` needs no model |
 | `HOMEGROWN_QUERY_REWRITE` | `true` | Model mode only: restate the request before searching |
 | `HOMEGROWN_VERDICT_SHORTLIST` | `5` | Model mode only: how many results the judge reads |
+| `HOMEGROWN_MODEL_JUDGE` | `requirements` | Model mode only: `requirements` splits the request into the kind of unit and its requirements, marks each result against them with a quote, and orders results in code; `fit` is the older one-word verdict |
+| `HOMEGROWN_JUDGE_MODEL` | (empty) | Model for the judge; empty uses `HOMEGROWN_LLM_MODEL` |
 
 Keys:
 - Anthropic reads `ANTHROPIC_API_KEY`.
@@ -89,7 +91,8 @@ Every answer stores a trace of how it was produced; see the architecture page.
 | `HOMEGROWN_RERANK_ENABLED` | `false` | Cross-encoder reranking. It lowered recall in our evaluation |
 | `HOMEGROWN_RERANK_MODEL` | `jinaai/jina-reranker-v1-tiny-en` | |
 | `HOMEGROWN_RERANK_DEPTH` | `30` | |
-| `HOMEGROWN_ANSWER_RESULTS` | `5` | Results the answering agent shows |
+| `HOMEGROWN_ANSWER_RESULTS` | `5` | Most results the answering agent shows |
+| `HOMEGROWN_ANSWER_SHOW` | `3` | With the requirements judge: results shown, more (up to `ANSWER_RESULTS`) only when they tie with the last one |
 
 ## Sync
 
