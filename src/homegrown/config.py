@@ -92,6 +92,9 @@ class Settings(BaseSettings):
     crawl_compile_model: str = "claude-sonnet-5-5"
     crawl_max_files: int = 3000            # per repo; larger repos are crawled by area order
     crawl_area_vectors: int = 20           # area-summary vectors per unit
+    # README characters the unit compiler reads; 0 = the whole README. An excerpt hid most
+    # README claims in addendum 55 (RESULTS_gate1.md), and code is checked against all of them.
+    crawl_readme_chars: int = 0
 
     # Answer traces (explainability): every answer stores why it came out that way, readable
     # by the person who asked. Off switch and retention (prune with explain.prune()).

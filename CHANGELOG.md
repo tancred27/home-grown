@@ -36,6 +36,17 @@ All notable changes are listed here. The format follows
   multi-arch image on GHCR) and Dependabot.
 
 ### Changed
+- The crawler reads more of a repo. Infrastructure code, scripts and notebooks (Terraform,
+  Bicep, PowerShell, shell, Rego, SQL, R, CUE, Sentinel, Jupyter) and deployment templates
+  (CloudFormation, SAM, ARM, GitHub Action files) count as source, keeping their resource,
+  variable, parameter and function lines; tests, docs, fixtures and vendored code are still
+  skipped. A repo with no code outside `examples/`, `samples/`, `scripts/` or `tools/` is read
+  from those folders. Licence header blocks no longer fill the extracted text. The unit
+  compiler reads the whole README (`HOMEGROWN_CRAWL_README_CHARS`, 0 = no cap; was 1,400
+  characters). Areas change their content hash, so each crawled repo is summarised again on
+  its next pass.
+- Code words are off by default (`HOMEGROWN_CODE_WORDS_WEIGHT=0`): on a goal-level benchmark
+  they never beat profile search. Set the weight to 1 to turn them back on.
 - Keyword search is indexed: `db/013_bm25_index.sql` keeps (document, word, count) postings
   and per-asset claim lengths with triggers, so a search reads only its words' postings.
   Results are identical to before (`tests/test_bm25_index.py`); at 20,000 assets it is 3-8x

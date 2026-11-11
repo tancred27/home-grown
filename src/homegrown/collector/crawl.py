@@ -183,7 +183,11 @@ def crawl_repo(repo: str, sha: str, blobs: dict[str, str],
     root_uid = f"github:{name}:."
     stats = {"repo": repo, "status": "skipped", "files": 0, "areas": 0, "summarised": 0,
              "units": 0, "compiled": False}
-    src = sorted(p for p in blobs if code.is_source(p))[:settings.crawl_max_files]
+    # Sample and automation repos keep all their code under examples/ or scripts/: read those
+    # only when nothing else qualifies, so a library's examples never become its units.
+    src = (sorted(p for p in blobs if code.is_source(p))
+           or sorted(p for p in blobs if code.is_source(p, relaxed=True)))
+    src = src[:settings.crawl_max_files]
     fp = {p: blobs[p] for p in src}
     with admin_conn() as conn:
         row = conn.execute("select files from unit_fingerprint where unit_id = %s",
@@ -203,7 +207,7 @@ def crawl_repo(repo: str, sha: str, blobs: dict[str, str],
         text = read(p, blobs[p]) or ""
         if not text or code.looks_generated(text):
             continue
-        extracts[p] = code.scrub(code.extract(text))
+        extracts[p] = code.scrub(code.extract(text, path=p))
     areas = code.build_areas(extracts)
     stats.update(files=len(extracts), areas=len(areas))
 
@@ -234,7 +238,8 @@ def crawl_repo(repo: str, sha: str, blobs: dict[str, str],
 
     root_id, root_name, root_summary, owner, scope, source_ref = root
     readme_path = next((p for p in sorted(blobs) if "/" not in p and _README.match(p)), None)
-    readme = clean_readme(read(readme_path, blobs[readme_path]) or "", 1400) if readme_path else ""
+    readme = (clean_readme(read(readme_path, blobs[readme_path]) or "", settings.crawl_readme_chars)
+              if readme_path else "")
     with admin_conn() as conn:
         previous = [{"unit_id": u, "name": n, "areas": list(a or []), "input_hash": ih,
                      "asset_id": aid}

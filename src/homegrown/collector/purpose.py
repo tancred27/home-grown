@@ -48,13 +48,14 @@ _CAPABILITY_FILE = re.compile(
 
 
 def clean_readme(t: str, limit: int = 1400) -> str:
-    """README text -> plain excerpt: no comments, images, HTML, link targets or code."""
+    """README text -> plain excerpt: no comments, images, HTML, link targets or code.
+    `limit` 0 keeps the whole text."""
     t = re.sub(r"<!--.*?-->", " ", t, flags=re.S)
     t = re.sub(r"!\[[^\]]*\]\([^)]*\)", " ", t)
     t = re.sub(r"<[^>]+>", " ", t)
     t = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", t)
     t = re.sub(r"```.*?```", " [code] ", t, flags=re.S)
-    return re.sub(r"\s+", " ", t).strip()[:limit]
+    return re.sub(r"\s+", " ", t).strip()[:limit or None]
 
 
 def readme_excerpt(d: Path, limit: int = 1400) -> tuple[str, str | None]:

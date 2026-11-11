@@ -3,6 +3,8 @@ the secret filter and areas. No database, no model."""
 
 from __future__ import annotations
 
+import json
+
 from homegrown.extract import code
 
 
@@ -80,3 +82,69 @@ def test_code_words_keep_identifiers_and_add_their_parts():
     assert "http_retry.backoff http retry backoff" in out
     assert "XMLParser xml parser" in out
     assert code.split_identifier("parseHTTPResponse2") == "parse http response 2"
+
+
+def test_iac_scripts_and_templates_are_source_but_tests_and_docs_are_not():
+    for p in ("modules/vpc/main.tf", "infra/main.bicep", "src/Rotate-Keys.ps1", "policy/deny.rego",
+              "db/schema.sql", "notebooks/train.ipynb", "cfn/stack.yaml", "template.yaml",
+              "deploy/azuredeploy.json", "action.yml"):
+        assert code.is_source(p), p
+    for p in ("tests/main.tf", "docs/setup.sh", "src/Rotate-Keys.Tests.ps1", ".terraform/x.tf",
+              ".github/workflows/ci.yml", "config/app.yaml", "package.json", "k8s/values.yaml",
+              "examples/basic/main.tf", "scripts/deploy.sh"):
+        assert not code.is_source(p), p
+
+
+def test_relaxed_allows_examples_and_scripts_but_never_tests():
+    for p in ("examples/basic/main.tf", "samples/app.py", "scripts/deploy.sh", "tools/sync.py"):
+        assert code.is_source(p, relaxed=True), p
+    for p in ("tests/test_x.py", "examples/tests/main.tf", "docs/conf.py", "vendor/a.go"):
+        assert not code.is_source(p, relaxed=True), p
+
+
+def test_terraform_and_powershell_declarations_are_kept():
+    tf = ('# Copyright 2024 Someone\n# Licensed under the Apache License, Version 2.0\n'
+          '# you may not use this file except in compliance with the License.\n'
+          '#     http://www.apache.org/licenses/LICENSE-2.0\n\n'
+          'resource "aws_iam_access_key" "rotate" {\n  user = var.user\n}\n'
+          'variable "rotation_days" {\n  description = "Days between key rotations"\n}\n')
+    out = code.extract(tf, path="main.tf")
+    assert 'resource "aws_iam_access_key" "rotate"' in out
+    assert 'description = "Days between key rotations"' in out
+    assert "user = var.user" not in out
+    for word in ("Copyright", "Apache", "compliance", "apache.org"):
+        assert word not in out, word
+    ps = "<#\n.SYNOPSIS\nRotates storage keys.\n#>\nfunction Rotate-StorageKey {\n  $x = 1\n}\n"
+    out = code.extract(ps, path="Rotate.ps1")
+    assert ".SYNOPSIS" in out and "function Rotate-StorageKey" in out and "$x = 1" not in out
+
+
+def test_iac_lines_are_not_kept_for_ordinary_source():
+    assert code.extract("data = load()\nvariable = 3\n", path="app.py") == ""
+
+
+def test_yaml_and_json_count_only_when_they_are_templates():
+    cfn = ("AWSTemplateFormatVersion: '2010-09-09'\nDescription: Rotates keys\nResources:\n"
+           "  Fn:\n    Type: AWS::Lambda::Function\n")
+    out = code.extract(cfn, path="cfn/stack.yaml")
+    assert "Description: Rotates keys" in out and "Type: AWS::Lambda::Function" in out
+    assert code.extract("replicas: 3\nimage: nginx\n", path="deploy/values.yaml") == ""
+
+
+def test_notebook_cells_are_read():
+    nb = json.dumps({"cells": [{"cell_type": "markdown", "source": ["# Churn model\n"]},
+                               {"cell_type": "code", "source": ["def train(df):\n",
+                                                                "    return fit(df)\n"]}]})
+    out = code.extract(nb, path="nb/train.ipynb")
+    assert "# Churn model" in out and "def train(df):" in out and "fit(df)" not in out
+    assert code.extract("not json", path="x.ipynb") == ""
+
+
+def test_licence_block_is_dropped_but_a_normal_header_comment_is_kept():
+    lic = ("// Copyright (c) Acme\n// Permission is hereby granted, free of charge\n"
+           "// to deal in the Software\npackage pay\n// Refund refunds.\nfunc Refund() error\n")
+    out = code.extract(lic, path="pay.go")
+    assert "Acme" not in out and "deal in the Software" not in out
+    assert "// Refund refunds." in out and "func Refund() error" in out
+    keep = "# Refund service: pays customers back.\ndef refund():\n"
+    assert "# Refund service" in code.extract(keep, path="refund.py")
