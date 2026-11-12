@@ -67,6 +67,7 @@ and turn off anonymous viewing (`GF_AUTH_ANONYMOUS_ENABLED`). Configs live in
 | `search` | lexical, semantic and fused result counts, fusion, rerank on or off |
 | `search.embed`, `search.lexical`, `search.semantic` | result count; vector mode (`exact` or `hnsw`) |
 | `search.judge_with_model` | candidates, how many were judged, outcome, error type |
+| `search.judge_smart` | candidates, picks returned, outcome, error type |
 | `search.judge_requirements` | candidates, requirements found, how many were judged, outcome, error type |
 | `llm.call` | provider, model, max tokens, input and output tokens, retries, latency, outcome (`ok`, `refusal`, `quota`, `unavailable`, `error`) |
 | `sync.poll` | org, API calls, repos changed |

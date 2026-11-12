@@ -36,6 +36,12 @@ All notable changes are listed here. The format follows
   multi-arch image on GHCR) and Dependabot.
 
 ### Changed
+- A new default judge, `HOMEGROWN_MODEL_JUDGE=smart`: one call gives the model the goal and the
+  asker's preferences in plain words (has one inside counts as related; a different cloud than
+  the one asked for is not a fit; a cloud tie is mentioned), and the model picks and orders up
+  to 3 results itself with a plain-sentence reason each. In a blind review over 20 results the
+  user preferred it 16 to 3 against the requirements judge, which stays available. The judge
+  model default is now Opus, the model it was tested with.
 - The judge reads the top 20 search results instead of 5 (`HOMEGROWN_VERDICT_SHORTLIST=20`) and
   still shows 3. Answers found below rank 5 now reach the user; the call is about 4 times larger.
 - The requirements judge notes when a result is built for one platform the request did not

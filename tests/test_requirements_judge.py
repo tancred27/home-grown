@@ -139,6 +139,7 @@ def test_platform_tie_from_the_model_reaches_the_verdict(monkeypatch):
                   {"candidate": "C", "states": st("contradicted", "shown", "shown")}]}))
     _, judged = judge_requirements("multi-tenant cluster service, self-service", CARDS)
     assert [j["verdict"] for j in judged] == ["extend", "use_as_is", "not_a_fit"]
-    assert judged[0]["limited_to"] == "AWS only" and "built for AWS only only" not in judged[0]["reason"]
+    assert judged[0]["limited_to"] == "AWS only"
+    assert "built for AWS only only" not in judged[0]["reason"]
     ranked = order_by_requirements(list("ABC"), [j["key"] for j in judged])
     assert ranked[:2] == [("A", 1), ("B", 1)], "same marks, same rank"

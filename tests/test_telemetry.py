@@ -123,6 +123,10 @@ def _fake_groq(url, **kw):
     schema = kw["json"]["response_format"]["json_schema"]["schema"]
     if "purpose" in schema["properties"]:
         out = {"purpose": MARK_REWRITE}
+    elif "picks" in schema["properties"]:           # the smart judge
+        out = {"nothing_fits": False, "picks": [
+            {"candidate": "A", "label": "use as-is",
+             "reason": f"It retries HTTP calls {MARK_OUT}"}]}
     elif "marks" in schema["properties"]:           # the requirements judge
         letters = schema["properties"]["marks"]["items"]["properties"]["candidate"]["enum"]
         out = {"kind": "HTTP retry client", "requirements": ["backoff"],
@@ -218,7 +222,7 @@ def test_a_sync_pass_and_a_question_produce_the_expected_spans(otel, mono, asker
                  "answer.ask", "answer.retrieve_and_judge", "answer.enrich",
                  "answer.compose", "search.find_existing", "search.rewrite_query",
                  "search", "search.embed", "search.lexical", "search.semantic",
-                 "search.judge_requirements", "llm.call"):
+                 "search.judge_smart", "llm.call"):
         assert name in got, f"missing span {name}: {sorted(got)}"
 
     p = got["sync.pass"][0].attributes
@@ -236,7 +240,7 @@ def test_a_sync_pass_and_a_question_produce_the_expected_spans(otel, mono, asker
     assert parents("search.find_existing") == {"answer.retrieve_and_judge"}
     assert parents("answer.retrieve_and_judge") == {"answer.ask"}
     # The collector's purpose line is a model call too.
-    assert parents("llm.call") == {"search.rewrite_query", "search.judge_requirements",
+    assert parents("llm.call") == {"search.rewrite_query", "search.judge_smart",
                                    "collect.update_map"}
 
     assert got["search.semantic"][0].attributes["homegrown.vector_mode"] in ("exact", "hnsw")

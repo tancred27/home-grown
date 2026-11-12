@@ -68,11 +68,14 @@ class Settings(BaseSettings):
     # the results in code (addenda 57-58, RESULTS_gate1.md: the best option at rank 1 for 51
     # of 63 benchmark questions, against 37 in search order). "fit" is the older one-word
     # verdict per candidate.
-    model_judge: str = "requirements"
-    # Model for the judge, pinned like the crawler's models (addendum 59: the shipped prompt
-    # put the best option first on 53 of 63 benchmark questions with Sonnet). With another
+    # "smart" (default, addenda 63-64) gives the model the goal and the asker's preferences
+    # in plain words and lets it pick and order up to answer_show results itself, each with a
+    # label and a one-sentence reason. Over 20 results the user preferred it 16 to 3.
+    model_judge: str = "smart"
+    # Model for the judge, pinned like the crawler's models. The smart judge was tested with
+    # Opus (addenda 63-64); the requirements judge with Sonnet and Opus (59). With another
     # provider, set a model that provider serves; empty = llm_model.
-    judge_model: str = "claude-sonnet-5-5"
+    judge_model: str = "claude-opus-5-5"
 
     # How many results the answering agent shows: every candidate judged a fit, then
     # (to fill up) candidates the judge could not rule out. Not-a-fit is never shown.
