@@ -29,7 +29,10 @@ def test_verdicts_follow_the_marks():
     assert v("shown", "shown", "not_mentioned") == ("extend", (0, -1, False))
     assert v("shown", "shown", "contradicted") == ("extend", (0, -1, True))
     # The loosened gate: kind not settled, but a requirement shown and nothing against.
-    assert v("not_mentioned", "shown", "not_mentioned") == ("unknown", (1, -1, False))
+    # Has one inside (addendum 60): related, ranked between "is one" and "not ruled out".
+    assert v("contains", "shown", "not_mentioned") == ("extend", (1, -1, False))
+    assert v("contains", "not_mentioned", "contradicted") == ("extend", (1, 0, True))
+    assert v("not_mentioned", "shown", "not_mentioned") == ("unknown", (2, -1, False))
     assert v("not_mentioned", "not_mentioned", "not_mentioned") == ("not_a_fit", None)
     assert v("not_mentioned", "shown", "contradicted") == ("not_a_fit", None)
     assert v("contradicted", "shown", "shown") == ("not_a_fit", None)
@@ -41,6 +44,9 @@ def test_reason_names_shown_contradicted_and_missing_requirements():
                                     "cluster service", REQS)
     assert why.startswith('is a cluster service ("q0")')
     assert 'contradicts: multi-tenant ("q1")' in why and "not stated: self-service" in why
+    _, _, why = requirement_verdict(st("contains", "shown", "not_mentioned"),
+                                    "cluster service", REQS)
+    assert why.startswith('is not a standalone cluster service, but includes one ("q0")')
 
 
 def test_order_ranks_ties_and_puts_unkeyed_last():
@@ -78,6 +84,7 @@ def test_judge_maps_letters_and_orders_by_code(monkeypatch):
                   {"candidate": "A", "states": st("shown", "shown", "not_mentioned")},
                   {"candidate": "Candidate B", "states": st("not_mentioned", "shown",
                                                             "not_mentioned")}]}, seen))
+    # (B gets the "not ruled out" tier: its kind is not mentioned, one requirement shown.)
     split, judged = judge_requirements("multi-tenant cluster service, self-service", CARDS)
     assert split == {"kind": "cluster service", "requirements": REQS}
     assert [j["verdict"] for j in judged] == ["extend", "unknown", "not_a_fit"]
@@ -93,7 +100,8 @@ def test_incomplete_or_missing_marks_are_unknown_not_a_guess(monkeypatch):
     monkeypatch.setattr(llm, "structured", _fake({
         "kind": "cluster service", "requirements": REQS,
         "marks": [{"candidate": "A", "states": st("shown", "shown")},          # one short
-                  {"candidate": "B", "states": st("shown", "shown", "shown")}]}))
+                  {"candidate": "B", "states": st("shown", "shown", "shown")},
+                  {"candidate": "C", "states": st("shown", "contains", "shown")}]}))  # R0 only
     _, judged = judge_requirements("x", CARDS)
     assert [j["verdict"] for j in judged] == ["unknown", "use_as_is", "unknown"]
     assert judged[0]["key"] is None and judged[2]["reason"] == "judge returned no complete marks"

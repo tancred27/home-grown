@@ -36,6 +36,9 @@ All notable changes are listed here. The format follows
   multi-arch image on GHCR) and Dependabot.
 
 ### Changed
+- The requirements judge has a third kind state, "has one inside": a larger unit that builds,
+  sets up or deploys the kind of thing asked for as one part of it. It is listed as related
+  ("not a standalone X, but includes one"), below results of that kind and above "not ruled out".
 - The model judge is on by default (`HOMEGROWN_VERDICT_MODE=model`) and pinned to Sonnet
   (`HOMEGROWN_JUDGE_MODEL=claude-sonnet-5-5`). Without a working model it fails safe and
   results keep search order; `rules` mode needs no model. With another provider, set

@@ -25,7 +25,7 @@ before exposing the database anywhere.
 | `HOMEGROWN_VERDICT_MODE` | `model` | `model`: the LLM judges candidates (without a working model it fails safe and results keep search order). `rules` needs no model |
 | `HOMEGROWN_QUERY_REWRITE` | `true` | Model mode only: restate the request before searching |
 | `HOMEGROWN_VERDICT_SHORTLIST` | `5` | Model mode only: how many results the judge reads |
-| `HOMEGROWN_MODEL_JUDGE` | `requirements` | Model mode only: `requirements` splits the request into the kind of unit and its requirements, marks each result against them with a quote, and orders results in code; `fit` is the older one-word verdict |
+| `HOMEGROWN_MODEL_JUDGE` | `requirements` | Model mode only: `requirements` splits the request into the kind of unit and its requirements, marks each result against them with a quote, and orders results in code (a result that is not the kind asked for but builds one inside is listed as related, below results of that kind); `fit` is the older one-word verdict |
 | `HOMEGROWN_JUDGE_MODEL` | `claude-sonnet-5-5` | Model for the judge. With a provider other than Anthropic, set a model it serves; empty uses `HOMEGROWN_LLM_MODEL` |
 
 Keys:
