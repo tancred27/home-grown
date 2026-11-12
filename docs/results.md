@@ -10,6 +10,8 @@ test set.
 | Real developer questions: 69 Stack Overflow titles whose accepted or upvoted answer links one of the 5,000, search plus judge | right one (or another acceptable one) in the top 5: **81%** (95% range 70–89%), top 1: 72%. On the 41 where a blind reviewer agreed the linked project is the answer: **100%** (91–100%). Most misses never reach the judge's top 30 | evaluation write-up not published yet |
 | Code reader, end to end: 12 public repos crawled by the product into 60 components; 63 questions about specific features, both wordings, search only | right one in the top 30 (what the judge reads): **62%** tuning / **65%** held-out; top 5: 50% / 38%. One profile per repo from the same code: 61% / 62%. The finer splits made in testing (85 components): 69% / 77% | same |
 | Code words as a third search list, 12 public repos plus the 321 repos most often confused with them, all with code; 196 fresh questions | right component in the top 5: **55% → 66%** (product's units) and **58% → 66%** (experiment's units); top 30: 80% → 86% and 84% → 90% | evaluation write-up not published yet |
+| Judge, 89 goal-style questions written without seeing the corpus (5,000 assets); one reviewer, blind, comparing two judges' answers for 25 randomly ordered questions each | smart judge over the top 20 against a requirement-marking judge, both over the top 20: list preferred **16 to 3** (6 the same; sign test p = 0.004); first option good / okay / bad **20 / 3 / 2** against 17 / 6 / 2. Earlier, the requirement judge over 20 results against 5: preferred 15 to 4, first option good 20 against 15 | evaluation write-up not published yet |
+| Same 89 questions, model-written answer key | best option at rank 1: **54 of 63** answerable with an Opus requirement judge (53 Sonnet), against **37** for search order alone. The key agrees with the human reviewer on only 52–60% of individual cards, so read these as direction, not size | same |
 | Fit judge, 30 duplicate tickets + 26 "nothing fits" controls, 109 assets | every findable duplicate caught; **0/26** false alarms | `experiments/scale/RESULTS_judge.md` |
 | Same at ~9,600 assets | every findable duplicate caught; 3/26 false alarms | same |
 | Meaning (vector) search latency, 300k vectors (~100k components), under row-level security. Keyword (BM25) search, indexed (`db/013_bm25_index.sql`): 41-194 ms typical, 567 ms worst at 20,000 synthetic assets (0.8-1.75 s before the index) | **~0.1 s** (index), 1.5 s (exact scan) | `experiments/scale/search_load_100k.txt` |
@@ -39,5 +41,12 @@ test set.
   question's rewrite is cached.
 - **Evidence quality varies by language.** Test names are the main evidence. JavaScript
   `it("rejects a payload over 1 MB")` says a lot; Python `test_max_age` says less.
+- **The judge results are from one reviewer and one question set.** Each comparison had 25
+  answered questions, and the 89 questions were used for about fifteen design decisions,
+  so some of the gain may be fitted to them. A fresh question set has not been run yet.
+- **The smart judge's "nothing fits" hasn't been measured.** The 23 of 26 above used the
+  earlier judge; the reviews above covered questions that had an answer.
+- **Judge cost and wait are not measured.** The default judge is one Opus call over 20
+  cards per question.
 - **Not production-hardened.** There is no SSO, no syncing of real repo permissions,
   and no real users yet. See [production.md](production.md).

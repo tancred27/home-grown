@@ -121,6 +121,9 @@ Tested on real public code from Grafana, Microsoft, Google, AWS and others:
   (26 of 26 among 109), with the earlier search.
 - **81%** on 69 real Stack Overflow questions whose answer links one of those 5,000
   (100% on the 41 where the linked project really is the answer), with the judge.
+- **16 to 3**: how often a blind reviewer preferred the current judge's answers to the
+  answers of a judge that marks each requirement, on 25 goal-style questions; its first
+  option was good 20 times and bad twice.
 - **~0.1 s** per meaning search among about 100,000 components (300,000 vectors), with
   permission checks on.
 

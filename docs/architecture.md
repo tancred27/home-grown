@@ -133,8 +133,9 @@ Every model call fails safe: the previous summary or units stay.
      can discover, so hidden assets never shift anyone's ranking.
    - Each asset has several vectors (card, purpose, profile fields) and scores by the mean of its
      two best, so one lucky field can't carry it.
-   - A third list, code words (`code_words_hits`, `db/011_code_words.sql`), ranks crawled units
-     by BM25 over their own code: declarations and doc comments, scrubbed of secrets, with
+   - A third list, code words (`code_words_hits`, `db/011_code_words.sql`), off by default
+     (`HOMEGROWN_CODE_WORDS_WEIGHT=0`; on goal-style questions it never beat profile search),
+     ranks crawled units by BM25 over their own code: declarations and doc comments, scrubbed of secrets, with
      identifiers split into words. It is kept separate so long code never dilutes the normal
      keyword score. It ranks a unit for anyone who can discover it; a trace names the matched
      words only to people who can read the unit's source.
@@ -143,11 +144,17 @@ Every model call fails safe: the previous summary or units stay.
      user can see.
    - Above it, an HNSW index fetches a candidate pool with iterative scan, and the pool
      is ranked exactly.
-3. **Judge.** One model call reads the top `verdict_shortlist` candidates against the
-   request and labels each `use_as_is`, `extend`, `not_a_fit` or `unknown`. On any error,
-   everything is `unknown`.
-4. **Compose.** Fits come first, then candidates the judge couldn't rule out, up to
-   `answer_results`. Not-a-fit candidates are never shown. Each result gets owner, team,
+3. **Judge.** One model call (`judge_model`, Opus by default) reads the top
+   `verdict_shortlist` (20) candidates. The default smart judge (`judge_smart`) gets the
+   request and the asker's preferences in plain words: the kind of thing asked for matters
+   most, a larger system that contains one is only related, a part-match is related, and a
+   candidate built only for a different cloud than the one named is not a fit. It picks and orders up to `answer_show` (3) candidates, each labelled
+   use as-is or related with a one-sentence reason, or says nothing fits. Everything it
+   didn't pick is `not_a_fit`. On any error, everything is `unknown` and results keep
+   search order. `HOMEGROWN_MODEL_JUDGE=requirements` selects the older judge that marks
+   each requirement with a quote and orders results in code.
+4. **Compose.** The judge's picks, in its order; with no usable verdicts, search order up
+   to `answer_results`. Not-a-fit candidates are never shown. Each result gets owner, team,
    line of business, manager, stage and access.
 
 In rules mode (no model), verdicts come from the evidence alone, and the answer says
