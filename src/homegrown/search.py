@@ -491,7 +491,14 @@ _REQ_SYSTEM = (
     "\"contains\": the candidate is something larger (an app, platform, sample or "
     "solution), and its card shows that it builds, sets up or deploys this kind of thing as "
     "one part of its solution; only naming or calling a third-party product does not count. "
-    "Use \"contains\" for R0 only. For every state except \"not_mentioned\", give in "
+    "Use \"contains\" for R0 only. Use \"shown\" for R0 only when this kind of unit is "
+    "the candidate's main purpose; when it is one feature or part of a candidate whose main "
+    "purpose is something else (for example a CI server that also stores its own build "
+    "artifacts, or a chat app that sets up its own message queue), use \"contains\". "
+    "In \"limited_to\", name the single platform, cloud, vendor or product the card shows "
+    "the candidate is built only for, when the request does not name it (for example "
+    "\"Google Cloud\"); leave it empty when the candidate is not tied to one, or when "
+    "the request names that same platform. For every state except \"not_mentioned\", give in "
     "\"quote\" the few words of the card that support it; for \"not_mentioned\" give an "
     "empty quote. Judge only from the card, not from anything you "
     "know about the project, and judge each candidate on its own. Do not lean either way. "
@@ -513,8 +520,9 @@ _REQ_SCHEMA = {
                     "properties": {"state": {"type": "string", "enum": list(_R0_STATES)},
                                    "quote": {"type": "string"}},
                     "required": ["state", "quote"],
-                    "additionalProperties": False}}},
-            "required": ["candidate", "states"],
+                    "additionalProperties": False}},
+                "limited_to": {"type": "string"}},
+            "required": ["candidate", "states", "limited_to"],
             "additionalProperties": False}}},
     "required": ["kind", "requirements", "marks"],
     "additionalProperties": False,
@@ -522,8 +530,8 @@ _REQ_SCHEMA = {
 MAX_REQUIREMENTS = 8
 
 
-def requirement_verdict(states: list[dict], kind: str,
-                        requirements: list[str]) -> tuple[str, tuple | None, str]:
+def requirement_verdict(states: list[dict], kind: str, requirements: list[str],
+                        limited_to: str = "") -> tuple[str, tuple | None, str]:
     """(verdict, sort key, reason) for one card from its marks; states[0] is the kind (R0).
 
     R0 shown: use_as_is when every requirement is shown and none contradicted, else extend.
@@ -533,6 +541,9 @@ def requirement_verdict(states: list[dict], kind: str,
     ("not ruled out"), ranked below both (addendum 58: the strict gate hid the right option
     for 3 questions; most cards let in this way are still the wrong kind, so they are never
     called a fit). Anything else: not_a_fit, never shown.
+    `limited_to` (addendum 62): the one platform the card is built for when the request names
+    none. Such a card is never use_as_is and its reason says so; its rank is unchanged (as a
+    sort key it cost 3 benchmark questions: most cards in an org are tied to its cloud).
     The sort key is (tier, -requirements shown, any contradicted); equal keys tie.
     """
     r0, rest = states[0], states[1:]
@@ -566,6 +577,11 @@ def requirement_verdict(states: list[dict], kind: str,
         parts.append("contradicts: " + "; ".join(f"{r}{q(t)}" for r, t in against))
     if missing and tier is not None:
         parts.append("not stated: " + ", ".join(missing))
+    limited = re.sub(r"(?i)\s+only$", "", (limited_to or "").strip().rstrip("."))[:60]
+    if limited and tier is not None:
+        if verdict == "use_as_is":
+            verdict = "extend"
+        parts.append(f"built for {limited} only")
     key = None if tier is None else (tier, -len(shown), bool(against))
     return verdict, key, " | ".join(parts)
 
@@ -595,7 +611,7 @@ def judge_requirements(intent: str, cards: list[dict]) -> tuple[dict | None, lis
             f"Request: {intent}\n\n{body}\n\nMark every candidate, labelled with its letter "
             f"only ({', '.join(used)}). Each candidate's \"states\" list has one entry per R "
             "in order: R0 (the kind) first, then R1, R2, ...",
-            schema, max_tokens=4000, model=settings.judge_model or None)
+            schema, max_tokens=max(4000, 450 * len(cards)), model=settings.judge_model or None)
         kind = str(out["kind"]).strip()[:120]
         reqs = [str(r).strip()[:120] for r in out["requirements"] if str(r).strip()]
         if not kind or len(reqs) > MAX_REQUIREMENTS:
@@ -608,16 +624,17 @@ def judge_requirements(intent: str, cards: list[dict]) -> tuple[dict | None, lis
             if (letter and letter not in by_letter and len(states) == len(reqs) + 1
                     and states[0].get("state") in _R0_STATES
                     and all(s.get("state") in _STATES for s in states[1:])):
-                by_letter[letter] = states
+                by_letter[letter] = (states, str(m.get("limited_to") or ""))
         judged = []
         for L in used:
             if L not in by_letter:
                 judged.append({"verdict": "unknown", "key": None, "marks": None,
                                "reason": "judge returned no complete marks"})
                 continue
-            verdict, key, reason = requirement_verdict(by_letter[L], kind, reqs)
+            states, limited = by_letter[L]
+            verdict, key, reason = requirement_verdict(states, kind, reqs, limited)
             judged.append({"verdict": verdict, "key": key, "reason": reason,
-                           "marks": by_letter[L]})
+                           "marks": states, "limited_to": limited})
         telemetry.annotate({"homegrown.candidates": len(cards),
                             "homegrown.requirements": len(reqs),
                             "homegrown.judged": len(by_letter), "homegrown.outcome": "ok"})

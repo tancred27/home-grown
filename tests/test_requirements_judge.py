@@ -37,6 +37,12 @@ def test_verdicts_follow_the_marks():
     assert v("not_mentioned", "shown", "contradicted") == ("not_a_fit", None)
     assert v("contradicted", "shown", "shown") == ("not_a_fit", None)
     assert requirement_verdict(st("shown"), "cluster service", [])[0] == "use_as_is"
+    # Tied to one platform the request did not name (addendum 62): never use-as-is, its
+    # note says so, its rank is unchanged.
+    full = requirement_verdict(st("shown", "shown", "shown"), "cluster service", REQS,
+                               "AWS Bedrock")
+    assert full[:2] == ("extend", (0, -2, False)) and "built for AWS Bedrock only" in full[2]
+    assert requirement_verdict(st("contradicted"), "cluster service", [], "AWS")[1] is None
 
 
 def test_reason_names_shown_contradicted_and_missing_requirements():
@@ -122,3 +128,17 @@ def test_any_failure_fails_safe_to_unknown(monkeypatch):
     monkeypatch.setattr(llm, "structured", _fake({"kind": " ", "requirements": [],
                                                   "marks": []}))
     assert all(j["verdict"] == "unknown" for j in judge_requirements("x", CARDS)[1])
+
+
+def test_platform_tie_from_the_model_reaches_the_verdict(monkeypatch):
+    monkeypatch.setattr(llm, "structured", _fake({
+        "kind": "cluster service", "requirements": REQS,
+        "marks": [{"candidate": "A", "states": st("shown", "shown", "shown"),
+                   "limited_to": "AWS only"},
+                  {"candidate": "B", "states": st("shown", "shown", "shown"), "limited_to": ""},
+                  {"candidate": "C", "states": st("contradicted", "shown", "shown")}]}))
+    _, judged = judge_requirements("multi-tenant cluster service, self-service", CARDS)
+    assert [j["verdict"] for j in judged] == ["extend", "use_as_is", "not_a_fit"]
+    assert judged[0]["limited_to"] == "AWS only" and "built for AWS only only" not in judged[0]["reason"]
+    ranked = order_by_requirements(list("ABC"), [j["key"] for j in judged])
+    assert ranked[:2] == [("A", 1), ("B", 1)], "same marks, same rank"

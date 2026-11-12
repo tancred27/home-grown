@@ -36,6 +36,9 @@ All notable changes are listed here. The format follows
   multi-arch image on GHCR) and Dependabot.
 
 ### Changed
+- The requirements judge notes when a result is built for one platform the request did not
+  name ("built for Amazon Bedrock only"); such a result is never listed as use-as-is. It marks a
+  result as "is one" only when that is its main purpose, and "has one inside" when it is a part.
 - The requirements judge has a third kind state, "has one inside": a larger unit that builds,
   sets up or deploys the kind of thing asked for as one part of it. It is listed as related
   ("not a standalone X, but includes one"), below results of that kind and above "not ruled out".

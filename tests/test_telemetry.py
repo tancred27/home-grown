@@ -129,7 +129,8 @@ def _fake_groq(url, **kw):
                "marks": [{"candidate": x, "states": [
                    {"state": "shown" if x == "A" else "contradicted",
                     "quote": f"retries HTTP calls {MARK_OUT}"},
-                   {"state": "shown", "quote": "backoff"}]} for x in letters]}
+                   {"state": "shown", "quote": "backoff"}], "limited_to": ""}
+                         for x in letters]}
     else:
         letters = schema["properties"]["verdicts"]["items"]["properties"]["candidate"]["enum"]
         out = {"verdicts": [{"candidate": x, "verdict": "use_as_is" if x == "A" else
