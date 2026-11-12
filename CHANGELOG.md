@@ -36,6 +36,8 @@ All notable changes are listed here. The format follows
   multi-arch image on GHCR) and Dependabot.
 
 ### Changed
+- The judge reads the top 20 search results instead of 5 (`HOMEGROWN_VERDICT_SHORTLIST=20`) and
+  still shows 3. Answers found below rank 5 now reach the user; the call is about 4 times larger.
 - The requirements judge notes when a result is built for one platform the request did not
   name ("built for Amazon Bedrock only"); such a result is never listed as use-as-is. It marks a
   result as "is one" only when that is its main purpose, and "has one inside" when it is a part.

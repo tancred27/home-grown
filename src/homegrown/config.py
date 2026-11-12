@@ -59,8 +59,10 @@ class Settings(BaseSettings):
     # Model mode only: restate the request as a component's purpose line and search
     # both (one small model call per question).
     query_rewrite: bool = True
-    # Model mode only: how many search results the judge reads per question.
-    verdict_shortlist: int = 5
+    # Model mode only: how many search results the judge reads per question. 20, not 5:
+    # in a blind review the user preferred the 20-result lists 15 to 4 (6 the same, sign test
+    # p = 0.02), first option good 20 vs 15 of 25 (addendum 61). One larger call per question.
+    verdict_shortlist: int = 20
     # Model mode only: which judge. "requirements" splits the request into the kind of unit
     # asked for and its requirements, marks each card against them with a quote, and orders
     # the results in code (addenda 57-58, RESULTS_gate1.md: the best option at rank 1 for 51
