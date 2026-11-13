@@ -37,6 +37,12 @@ _TEMPLATE_PATH = re.compile(
 _TEMPLATE_BODY = re.compile(r"AWSTemplateFormatVersion|deploymentTemplate|^Resources:"
                             r"|\"Resources\"\s*:|^runs:|Transform:\s*AWS::Serverless", re.M)
 
+# A Helm chart: its Chart.yaml and the manifests under templates/, at any depth.
+_HELM_PATH = re.compile(r"(^|/)(Chart\.ya?ml|templates/.+\.ya?ml)$")
+_HELM_BODY = re.compile(r"^(apiVersion|kind):", re.M)
+# YAML/JSON at the top of a repo that has no other code may be its deployment template.
+_ROOT_TEMPLATE = re.compile(r"^[^/]+\.(ya?ml|json)$", re.I)
+
 _SKIP_ALWAYS = (
     r"(^|/)(tests?|__tests__|spec|specs|testdata|fixtures?|mocks?|docs?"
     r"|vendor|third_party|node_modules|dist|build|target|generated|gen|\.github|\.terraform)(/|$)"
@@ -75,7 +81,7 @@ _IAC = re.compile(
     r"|procedure|trigger)|[a-z_][\w-]*\s*\(\)\s*\{|[a-z_][\w.]*\s*<-\s*function"
     r"|AWSTemplateFormatVersion|Description:|Type:\s*AWS::|Transform:"
     r"|\"type\":\s*\"(Microsoft\.|AWS::)"
-    r"|\"description\":|runs:|inputs:|using:|--\s+\w)", re.I)
+    r"|\"description\":|runs:|inputs:|using:|kind:|--\s+\w)", re.I)
 
 MAX_FILE_CHARS = 1500       # extracted text kept per file
 AREA_DEPTH = 3              # folders merged to this many path levels
@@ -86,9 +92,11 @@ AREA_MAX_CHARS = 8000       # shared equally among the area's files
 def is_source(path: str, relaxed: bool = False) -> bool:
     """A source file worth reading: allowed extension (or a deployment template); not a test,
     vendored, built or config. `relaxed` also allows examples, samples and top-level scripts or
-    tools folders, for repos that have no other code (sample and automation repos)."""
+    tools folders and top-level YAML/JSON, for repos that have no other code (sample and
+    automation repos)."""
     p = path.replace("\\", "/")
-    if not (p.lower().endswith(SOURCE_EXT + IAC_EXT) or _TEMPLATE_PATH.search(p)):
+    if not (p.lower().endswith(SOURCE_EXT + IAC_EXT) or _TEMPLATE_PATH.search(p)
+            or _HELM_PATH.search(p) or (relaxed and _ROOT_TEMPLATE.search(p))):
         return False
     skip, noise = (_SKIP_RELAXED, _NOISE_RELAXED) if relaxed else (_SKIP, _NOISE)
     return not skip.search(p) and not noise.search(p)
@@ -133,7 +141,9 @@ def extract(text: str, limit: int = MAX_FILE_CHARS, path: str = "") -> str:
                              else str(c.get("source", "")) for c in cells if isinstance(c, dict))
         except (ValueError, AttributeError):
             return ""
-    elif low.endswith((".yaml", ".yml", ".json")) and not _TEMPLATE_BODY.search(text[:5000]):
+    elif low.endswith((".yaml", ".yml", ".json")) and not (
+            _TEMPLATE_BODY.search(text[:5000])
+            or (_HELM_PATH.search(path.replace("\\", "/")) and _HELM_BODY.search(text[:5000]))):
         return ""
     iac = bool(low) and not low.endswith(SOURCE_EXT)
     out, n = [], 0

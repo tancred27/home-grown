@@ -180,3 +180,25 @@ def test_module_style_javascript_and_typescript_are_source():
     assert not code.is_source("tests/runner.test.mjs")
     text = "\n".join(["/** Parses DDL into tables. */", "export function parseDdl(sql) {", "}"])
     assert "parseDdl" in code.extract(text, path="src/ddl/index.mjs")
+
+
+def test_helm_chart_files_are_read():
+    for p in ("charts/meta/Chart.yaml", "charts/meta/templates/grafana/deployment.yaml"):
+        assert code.is_source(p), p
+    assert not code.is_source("charts/meta/values.yaml")
+    chart = "\n".join(["apiVersion: v2", "name: meta", "description: Monitors the stack"])
+    assert "description: Monitors the stack" in code.extract(chart, path="charts/meta/Chart.yaml")
+    manifest = "\n".join(["{{- if .Values.on }}", "kind: Deployment", "spec:"])
+    got = code.extract(manifest, path="charts/meta/templates/grafana/deployment.yaml")
+    assert "kind: Deployment" in got and "spec" not in got
+    # The same manifest outside a chart is still ordinary config and yields nothing.
+    assert code.extract(manifest, path="deploy/app.yaml") == ""
+
+
+def test_top_level_template_counts_only_when_the_repo_has_no_other_code():
+    assert not code.is_source("transit-gateway.yaml")
+    assert code.is_source("transit-gateway.yaml", relaxed=True)
+    assert not code.is_source("src/settings.yaml", relaxed=True)
+    cfn = "\n".join(["AWSTemplateFormatVersion: 2010-09-09", "Description: Attaches VPCs"])
+    assert "Description: Attaches VPCs" in code.extract(cfn, path="transit-gateway.yaml")
+    assert code.extract('{"name": "x", "version": "1"}', path="package.json") == ""
