@@ -51,13 +51,16 @@ All notable changes are listed here. The format follows
   grouped under "Use as-is", "Related, check these" and "Not ruled out".
 - **Search** ranks with BM25 keyword scoring (statistics count only what the asker can
   see), scores each component by its two best-matching vectors, and merges the lists by
-  reciprocal-rank fusion: right component in the top 5 for 85% of test questions (was
-  79%). Needs `db/009_bm25.sql`; `db/013_bm25_index.sql` makes it 3–8x faster at 20,000
+  reciprocal-rank fusion. Needs `db/009_bm25.sql`; `db/013_bm25_index.sql` makes it 3–8x faster at 20,000
   components. A code-words list over crawled code exists but is off by default
   (`HOMEGROWN_CODE_WORDS_WEIGHT=0`, `db/011`–`012`).
 - Simpler README; results and limits in `docs/results.md`.
 
 ### Fixed
+- **The judge now sees a crawled component's capabilities.** They are stored as layer-1
+  claims and the judge's card took only layers 2 and 3, so a crawled component's card was one
+  sentence, sent twice (as description and purpose). The card now lists capabilities first
+  and drops a purpose that repeats the description.
 - With the crawler on, a crawled repo no longer shows the same code twice: a unit found
   from a package manifest points at the crawler unit covering its folder and search skips
   it. Needs `db/014_superseded.sql`.

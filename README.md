@@ -132,25 +132,24 @@ by default; see [How it works](docs/architecture.md#duplicates-across-teams-behi
 
 ## How well it works
 
-Tested on real public code from Grafana, Microsoft, Google, AWS and others, with the
-product as it ships:
+Tested on real public code from Grafana, Microsoft, Google, AWS and others. The answer
+tests ran in a test harness that uses the product's prompts, with component descriptions
+written by AI models from README files; they have not yet been repeated through a live
+installation.
 
-- **94%** of first answers rated good or okay (70% good, 6% bad) on 92 fresh questions
-  written the way engineers and coding agents ask, and **0** results wrongly labelled
-  "use as-is".
-- **Up to 92%**: the right component is in search's top 5 among 5,000 components (85% on
-  test questions, 92% on the same questions in casual wording).
-- **100%** of known look-alikes across teams found by the duplicates job (20 of 20 pairs),
-  and 9 of 9 sampled groups confirmed by a reviewer.
+- **94%** of first answers rated good or okay: 31 of the 33 one reviewer rated (23 good,
+  8 okay, 2 bad), from 92 questions written the way engineers and coding agents ask.
+- **20 of 20** known look-alike pairs across teams found by the duplicates job, and 9 of 9
+  sampled groups confirmed by a reviewer. "Same job" there includes units written for a
+  different language or cloud.
 - **16 to 3**: how often a blind reviewer preferred the current judge's answers to an
-  earlier judge's.
-- **0.1 s** to search 100,000 components (300,000 vectors) with permission checks on, and
+  earlier judge's, over 25 questions.
+- **0.1 s** for the meaning-search step over 100,000 components (300,000 vectors) with
+  permission checks on (one user at a time; a full answer adds two model calls), and
   **under 4 minutes** from a push to searchable, 95% of the time.
 
-The 85–92% uses component profiles that AI models wrote during testing. On questions about
-a feature inside a repository, the code reader's own components reach the judge's top 20 on
-67% (the testing profiles: 69%). No company runs HomeGrown in
-production yet. Every number and known limit is in [docs/results.md](docs/results.md);
+The code reader's own components have not yet been tested on realistic questions. No
+company runs HomeGrown in production yet. Every number and known limit is in [docs/results.md](docs/results.md);
 what's next is in [VISION.md](VISION.md).
 
 ## Docs

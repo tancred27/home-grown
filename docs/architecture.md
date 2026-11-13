@@ -145,7 +145,9 @@ Every model call fails safe: the previous summary or units stay.
    - Above it, an HNSW index fetches a candidate pool with iterative scan, and the pool
      is ranked exactly.
 3. **Judge.** One model call (`judge_model`, Opus by default) reads the top
-   `verdict_shortlist` (20) candidates. The default smart judge (`judge_smart`) gets the
+   `verdict_shortlist` (20) candidates. Each candidate's card is its name, description,
+   purpose and up to 8 evidence lines: a crawled component's capabilities first, then claims
+   from tests and discussions. The default smart judge (`judge_smart`) gets the
    request and the asker's preferences in plain words: the kind of thing asked for matters
    most, a larger system that contains one is only related, a part-match is related, and a
    candidate built only for a different cloud than the one named is not a fit. It picks and orders up to `answer_show` (3) candidates, each labelled

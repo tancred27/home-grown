@@ -778,6 +778,21 @@ def _clarify_from(out: dict) -> dict | None:
     return {"question": q[:300], "choices": choices}
 
 
+def judge_card(name: str, summary: str, purpose: str, claims: list[dict]) -> dict:
+    """The card a model judge reads for one candidate.
+
+    Evidence is the unit's capabilities (what the code reader wrote for a crawled unit,
+    stored as layer-1 `capability` claims) followed by its behaviour and experience claims
+    (layers 2 and 3). The judge was tested with capability lines on every card; without
+    them a crawled unit's card is one sentence. A purpose equal to the summary is dropped,
+    so the same sentence is not sent twice."""
+    caps = [c["body"] for c in claims if c["layer"] == 1 and c["kind"] == "capability"]
+    rest = [c["body"] for c in claims if c["layer"] > 1]
+    same = (purpose or "").strip() == (summary or "").strip()
+    return {"name": name, "summary": summary, "purpose": "" if same else purpose,
+            "evidence": caps + rest}
+
+
 @telemetry.traced("search.judge_smart")
 def judge_smart(intent: str, cards: list[dict], show: int = 3,
                 clarify: dict | None = None) -> list[dict]:
@@ -923,10 +938,8 @@ def find_existing(user_id: uuid.UUID | str, intent: str,
         out.append(v)
 
     if model_mode and out:
-        cards = [{"name": display_name(r["name"]), "summary": summaries[r["asset_id"]],
-                  "purpose": purposes[r["asset_id"]],
-                  "evidence": [c["body"] for c in claims_by[r["asset_id"]]
-                               if c["layer"] > 1]} for r in rows]
+        cards = [judge_card(display_name(r["name"]), summaries[r["asset_id"]],
+                            purposes[r["asset_id"]], claims_by[r["asset_id"]]) for r in rows]
         kind = settings.model_judge
         by_requirements = kind == "requirements"
         ordered = kind in ("requirements", "smart")

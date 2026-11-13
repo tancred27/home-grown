@@ -94,3 +94,17 @@ def test_clarify_unusable_or_empty_is_dropped(monkeypatch):
                                                       "clarify": c}))
         judge_smart("x", CARDS, clarify=box)
         assert box == {}
+
+
+def test_judge_card_carries_capabilities_and_no_repeated_sentence():
+    """A crawled unit's capabilities (layer-1 capability claims) reach the judge, ahead of
+    behaviour claims; other layer-1 claims do not; a purpose equal to the summary is dropped."""
+    from homegrown.search import judge_card
+    claims = [{"layer": 1, "kind": "capability", "body": "rotates keys on a schedule"},
+              {"layer": 1, "kind": "artifact", "body": "package.json"},
+              {"layer": 2, "kind": "limit", "body": "rejects payloads over 1 MB"}]
+    c = judge_card("Key rotator", "Rotates storage keys.", "Rotates storage keys.", claims)
+    assert c["evidence"] == ["rotates keys on a schedule", "rejects payloads over 1 MB"]
+    assert c["purpose"] == ""
+    c = judge_card("Key rotator", "A repo.", "Rotates storage keys.", [])
+    assert c["purpose"] == "Rotates storage keys." and c["evidence"] == []

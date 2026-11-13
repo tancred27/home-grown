@@ -222,10 +222,10 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
     </div>
 
     <dl class="stats">
-      <div class="stat"><dd>94%</dd><dt>of answers useful on the first try, across 92 real-world questions</dt></div>
-      <div class="stat"><dd>0</dd><dt>times it told someone to reuse something that didn't fit</dt></div>
-      <div class="stat"><dd>100%</dd><dt>of known cases where two teams built the same thing, spotted</dt></div>
-      <div class="stat"><dd>0.1 s</dd><dt>to search 100,000 projects, showing each person only what they may see</dt></div>
+      <div class="stat"><dd>94%</dd><dt>of first answers rated useful: 31 of the 33 a reviewer checked, on realistic test questions</dt></div>
+      <div class="stat"><dd>&lt; 4 min</dd><dt>from a code change to searchable, 95% of the time</dt></div>
+      <div class="stat"><dd>20 of 20</dd><dt>known pairs of projects doing the same job in different teams, found</dt></div>
+      <div class="stat"><dd>0.1 s</dd><dt>for the search step across 100,000 projects, showing each person only what they may see</dt></div>
     </dl>
   </section>
 
@@ -309,9 +309,8 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
       <table style="min-width:560px">
         <thead><tr><th scope="col">What we measured</th><th scope="col">Result</th><th scope="col">Where to check</th></tr></thead>
         <tbody>
-          <tr><td>Answers useful on the first try, across 92 real-world questions</td><td class="big">94%</td><td class="src">70% good, 24% okay, 6% bad. It never recommended reusing something that didn't fit · <a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">results</a></td></tr>
-          <tr><td>The right project among the first five results, out of 5,000</td><td class="big">up to 92%</td><td class="src">85% on test questions, 92% when asked casually · <a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">results</a></td></tr>
-          <tr><td>Spotting two teams that built the same thing</td><td class="big">100%</td><td class="src">all 20 known cases; every group checked by hand was right · <a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">results</a></td></tr>
+          <tr><td>First answers rated useful, on realistic test questions</td><td class="big">94%</td><td class="src">31 of 33 checked by one reviewer: 23 good, 8 okay, 2 bad (92 questions asked). Run in a test setup, with project descriptions written by AI from README files · <a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">results</a></td></tr>
+          <tr><td>Finding projects in different teams that do the same job</td><td class="big">20 of 20</td><td class="src">all 20 known pairs; a reviewer confirmed 9 of 9 sampled groups. "Same job" includes projects written for a different language or cloud · <a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">results</a></td></tr>
           <tr><td>From a code change to searchable, 95% of the time</td><td class="big">&lt; 4 min</td><td class="src">replaying an hour of all public GitHub activity · <a href="https://github.com/tancred27/home-grown/blob/main/experiments/sync/RESULTS.md" target="_blank" rel="noopener">results</a></td></tr>
         </tbody>
       </table>
@@ -321,7 +320,8 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
       <ul>
         <li>No company runs it in production yet. There's no single sign-on and no permission sync.</li>
         <li>Who to ask needs an export of your employee directory; there's no automatic link to Okta or Entra yet.</li>
-        <li>Accuracy drops as a company grows, mostly from look-alike projects.</li>
+        <li>The answer tests ran in a test setup, not through a live installation, and one person rated the answers.</li>
+        <li>Search has not been measured beyond 5,000 projects, and the time for a full answer has not been measured.</li>
         <li>Reading source code and spotting repeated builds are optional, and haven't run on a real company's code yet.</li>
       </ul>
     </div>
