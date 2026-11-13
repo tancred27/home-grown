@@ -21,7 +21,7 @@ reading the top 20 results and showing up to 3.
 | What | Result |
 |---|---|
 | Right component in the top 5, 5,000 components, 108 test questions | **85%**; **92%** with the same questions in casual wording |
-| Code reader end to end: 12 public repos crawled by the product into 60 components, 63 feature-level questions | right one in the top 30 (what the judge reads): **62%** tuning / **65%** held-out. The finer splits made in testing reach 69% / 77% |
+| Code reader end to end: 12 public repos crawled by the product into 103 components, 63 feature-level questions | right one in the top 20 (what the judge reads): **67%** (68% tuning / 67% held-out); the splits made in testing reach 69% |
 | Meaning (vector) search, 300k vectors (~100k components), under row-level security | **~0.1 s** with the HNSW index, 1.5 s exact scan (`experiments/scale/search_load_100k.txt`) |
 | Keyword (BM25) search, indexed (`db/013_bm25_index.sql`), 20,000 synthetic components | 41–194 ms typical, 567 ms for a query of only very common words |
 
@@ -52,8 +52,8 @@ pairs that a human-checked answer key credits for the same request.
   "related" rather than an empty answer, and said nothing fits on 2 of 92 fresh questions.
   How often it should say so has not been measured on enough questions.
 - **The 85–92% uses test profiles** written by AI models during testing, not by the
-  product. The code reader's own profiles reach the shortlist less often (above), and it
-  has not been run on a real company's code.
+  product. On feature-level questions the code reader's own components reach the top 20 on
+  67% (above); it has not been run on a real company's code.
 - **Recall drops as the org grows.** Look-alike components from other teams are the main
   cause. Search has not been measured beyond 5,000 components.
 - **Clarifying questions** were rated as a whole, not one by one, and the second search

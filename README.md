@@ -147,8 +147,9 @@ product as it ships:
 - **0.1 s** to search 100,000 components (300,000 vectors) with permission checks on, and
   **under 4 minutes** from a push to searchable, 95% of the time.
 
-The 85–92% uses component profiles that AI models wrote during testing; the code reader's
-own profiles reach the judge's shortlist less often (62–65%). No company runs HomeGrown in
+The 85–92% uses component profiles that AI models wrote during testing. On questions about
+a feature inside a repository, the code reader's own components reach the judge's top 20 on
+67% (the testing profiles: 69%). No company runs HomeGrown in
 production yet. Every number and known limit is in [docs/results.md](docs/results.md);
 what's next is in [VISION.md](VISION.md).
 
