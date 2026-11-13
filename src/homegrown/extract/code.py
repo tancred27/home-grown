@@ -21,8 +21,9 @@ import json
 import re
 from pathlib import PurePosixPath
 
-SOURCE_EXT = (".py", ".go", ".java", ".kt", ".scala", ".ts", ".tsx", ".js", ".jsx", ".rs",
-              ".rb", ".cs", ".c", ".cc", ".cpp", ".h", ".hpp", ".swift", ".php", ".m")
+SOURCE_EXT = (".py", ".go", ".java", ".kt", ".scala", ".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs",
+              ".mts", ".cts", ".rs", ".rb", ".cs", ".c", ".cc", ".cpp", ".h", ".hpp", ".swift",
+              ".php", ".m")
 # Infrastructure code, scripts and notebooks: their declarations are resources, parameters and
 # functions (see _IAC).
 IAC_EXT = (".tf", ".hcl", ".bicep", ".ps1", ".psm1", ".sh", ".bash", ".rego", ".sql", ".ipynb",

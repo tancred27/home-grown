@@ -29,9 +29,9 @@ MANIFESTS = ("go.mod", "package.json", "Cargo.toml", "pyproject.toml", "setup.py
 _SKIP_PARTS = {".git", ".github", "node_modules", "vendor", "dist", "build", "target",
                "third_party", "testdata", "fixtures", "__pycache__", ".venv", "docs",
                "examples", "example", "assets", "static", "public", "img", "images"}
-_SOURCE_EXT = {".go", ".py", ".rs", ".ts", ".tsx", ".js", ".jsx", ".java", ".kt", ".scala",
-               ".rb", ".cs", ".cpp", ".cc", ".c", ".h", ".hpp", ".swift", ".php", ".tf",
-               ".proto", ".sql", ".lua", ".ex", ".erl", ".clj"}
+_SOURCE_EXT = {".go", ".py", ".rs", ".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".mts", ".cts",
+               ".java", ".kt", ".scala", ".rb", ".cs", ".cpp", ".cc", ".c", ".h", ".hpp", ".swift",
+               ".php", ".tf", ".proto", ".sql", ".lua", ".ex", ".erl", ".clj"}
 _TEST = re.compile(r"(_test\.|\.test\.|\.spec\.|(^|/)test_|(^|/)tests?/)", re.I)
 _GENERIC = {"main", "index", "init", "__init__", "mod", "lib", "util", "utils", "helpers",
             "types", "constants", "config", "doc", "version", "errors", "setup"}

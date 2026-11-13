@@ -171,3 +171,12 @@ def test_manifest_with_inherited_fields_does_not_crash(tmp_path):
     assert name is None and summary is None and eco == ["cargo"]
     found = units.detect(tmp_path, "acme/vectors")
     assert len(found) == 1
+
+
+def test_module_style_javascript_and_typescript_are_source():
+    # Node ES-module and CommonJS files (.mjs, .cjs, .mts, .cts) are ordinary source code.
+    for p in ("src/ddl/index.mjs", "lib/config.cjs", "src/server.mts", "src/legacy.cts"):
+        assert code.is_source(p), p
+    assert not code.is_source("tests/runner.test.mjs")
+    text = "\n".join(["/** Parses DDL into tables. */", "export function parseDdl(sql) {", "}"])
+    assert "parseDdl" in code.extract(text, path="src/ddl/index.mjs")
