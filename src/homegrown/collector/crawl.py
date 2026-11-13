@@ -269,6 +269,7 @@ def crawl_repo(repo: str, sha: str, blobs: dict[str, str],
         with admin_conn() as conn:
             for p in previous:
                 _save_code_words(conn, p["asset_id"], p["areas"], areas, sha)
+        _supersede(name, root_id, [(p["asset_id"], p["areas"]) for p in previous])
         if complete:
             _save_fp(repo, fp)
         stats["status"] = "unchanged-units"
@@ -290,10 +291,43 @@ def crawl_repo(repo: str, sha: str, blobs: dict[str, str],
             taken.add(uid)
     _write_units(repo, sha, root_id, owner, scope, source_ref, units, ids, input_hash,
                  summaries, areas)
+    with admin_conn() as conn:
+        aid = dict(conn.execute("select unit_id, id from asset where unit_id = any(%s)",
+                                (ids,)).fetchall())
+    _supersede(name, root_id, [(aid[uid], u["areas"]) for u, uid in zip(units, ids, strict=True)])
     if complete:
         _save_fp(repo, fp)
     stats.update(status="crawled", units=len(units), compiled=True)
     return stats
+
+
+def covering_unit(folder: str, units: list[tuple]) -> object | None:
+    """The crawler unit covering a manifest unit's folder: the one whose areas share the
+    longest folder prefix with it, then the one with most areas (so the repo root goes to
+    the largest unit). `units` holds (asset_id, areas)."""
+    if not units:
+        return None
+    folder = "" if folder == "." else folder
+    return max(units, key=lambda u: (max((len(_common(folder, a)) for a in u[1]), default=0),
+                                     len(u[1])))[0]
+
+
+def _supersede(name: str, root_id, units: list[tuple]) -> None:
+    """Point every manifest unit of this repo at the crawler unit covering its folder, so
+    search shows the crawler's unit instead of both. Nothing is deleted."""
+    if not units:
+        return
+    prefix = f"github:{name}:"
+    with admin_conn() as conn:
+        rows = conn.execute(
+            "select id, unit_id from asset where unit_id like %s and kind <> 'repo' "
+            "and parent_id is distinct from %s",
+            (prefix.replace("_", r"\_") + "%", root_id)).fetchall()
+        for aid, uid in rows:
+            target = covering_unit(uid[len(prefix):], units)
+            if target is not None and target != aid:
+                conn.execute("update asset set superseded_by = %s where id = %s "
+                             "and superseded_by is distinct from %s", (target, aid, target))
 
 
 def _ensure_root(repo: str, name: str, root_uid: str, blobs: dict, read) -> tuple:

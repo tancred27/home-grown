@@ -102,6 +102,7 @@ def _lexical(cur, tsq: str, limit: int) -> list[tuple]:
                              coalesce(tsvector_to_array(to_tsvector('english', %(w)s)), '{}'),
                              %(l)s) b
               join asset a on a.id = b.asset_id
+             where a.superseded_by is null
              order by b.score desc, a.id
             """,
             {"q": tsq, "w": tsq.replace("|", " "), "l": limit},
@@ -114,6 +115,7 @@ def _lexical(cur, tsq: str, limit: int) -> list[tuple]:
         select a.id, a.name, f.arank, f.crank
           from fts_hits(to_tsquery('english', %(q)s), %(l)s) f
           join asset a on a.id = f.asset_id
+         where a.superseded_by is null
          order by f.arank desc, f.crank desc
         """,
         {"q": tsq, "l": limit},
@@ -135,6 +137,7 @@ def _code_lexical(cur, tsq: str, limit: int) -> list[tuple]:
                                coalesce(tsvector_to_array(to_tsvector('english', %(w)s)), '{}'),
                                %(l)s) w
           join asset a on a.id = w.asset_id
+         where a.superseded_by is null
          order by w.score desc, a.id
         """,
         {"q": tsq, "w": tsq.replace("|", " "), "l": limit},
@@ -173,7 +176,7 @@ def _semantic(cur, qvec, limit: int) -> list[tuple]:
                   from pool p)
             select a.id, a.name, 1 - avg(r.d) as sim
               from ranked r join asset a on a.id = r.asset_id
-             where r.rn <= %(top)s
+             where r.rn <= %(top)s and a.superseded_by is null
              group by a.id, a.name
              order by avg(r.d), a.id
              limit %(l)s
@@ -192,7 +195,7 @@ def _semantic(cur, qvec, limit: int) -> list[tuple]:
                          where e.model = %(m)s) x)      -- never compare across models
             select a.id, a.name, 1 - avg(r.d) as sim
               from ranked r join asset a on a.id = r.asset_id
-             where r.rn <= %(top)s
+             where r.rn <= %(top)s and a.superseded_by is null
              group by a.id, a.name
              order by avg(r.d), a.id
              limit %(l)s

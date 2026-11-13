@@ -35,6 +35,12 @@ All notable changes are listed here. The format follows
 - A Dockerfile, a release workflow (wheel, sdist and a GitHub Release, plus a
   multi-arch image on GHCR) and Dependabot.
 
+### Fixed
+- With the crawler on, a crawled repo no longer shows the same code twice in search: each
+  unit found from a package manifest now points at the crawler unit covering its folder
+  (`asset.superseded_by`) and search skips it. Nothing is deleted. Needs
+  `db/014_superseded.sql`. Found in a smoke test of the real crawler on five public repos.
+
 ### Changed
 - A new default judge, `HOMEGROWN_MODEL_JUDGE=smart`: one call gives the model the goal and the
   asker's preferences in plain words (has one inside counts as related; a different cloud than

@@ -63,6 +63,10 @@ keys, tokens, passwords or credentials in URLs, and masks internal hostnames and
 IP addresses. Summaries are cached by the hash of the code they describe, so a re-crawl
 only pays for areas that changed.
 
+In a crawled repo, the units found from package manifests are kept but hidden from search:
+each points at the crawler unit covering its folder (`asset.superseded_by`,
+`db/014_superseded.sql`), so the same code never shows up twice.
+
 ## Answer traces
 
 Every answer stores a trace of how it was produced; see the architecture page.

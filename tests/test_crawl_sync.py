@@ -90,6 +90,38 @@ def test_sync_crawls_code_and_a_source_only_change_reaches_the_crawler(repo):
     assert second["crawl"]["summarised"] == 1                 # only the changed area
 
 
+def test_crawler_units_supersede_manifest_units_in_search(repo):
+    from homegrown.db import as_user
+    from homegrown.search import search
+    full, r, name = repo
+    Syncer(LocalGitSource({full: r})).sync(full, None)
+    with admin_conn() as conn, conn.cursor() as cur:
+        root, sup = cur.execute("select id, superseded_by from asset where unit_id = %s",
+                                (f"github:{name}:.",)).fetchone()
+        unit = cur.execute("select id from asset where parent_id = %s", (root,)).fetchone()[0]
+        cur.execute("insert into app_user (login) values (%s) returning id", (f"{name}-asker",))
+        u = cur.fetchone()[0]
+        cur.execute("insert into membership (user_id, group_id) select %s, id from team", (u,))
+    try:
+        assert sup == unit                   # the manifest unit points at the crawler unit
+        with as_user(u) as conn:
+            hits = [h["asset_id"] for h in search(conn, f"{name} rate limiting token bucket")]
+        assert unit in hits and root not in hits
+    finally:
+        with admin_conn() as conn:
+            conn.execute("delete from membership where user_id = %s", (u,))
+            conn.execute("delete from app_user where id = %s", (u,))
+
+
+def test_covering_unit_prefers_the_longest_shared_folder_then_the_largest_unit():
+    units = [("a", ["svc/api", "svc/core"]), ("b", ["tools/cli"]), ("c", ["lib"])]
+    assert crawl.covering_unit("tools/cli/pkg", units) == "b"
+    assert crawl.covering_unit("svc", units) == "a"
+    assert crawl.covering_unit(".", units) == "a"          # repo root: the largest unit
+    assert crawl.covering_unit("docs/site", units) == "a"  # no shared folder: the largest
+    assert crawl.covering_unit("x", []) is None
+
+
 def test_crawl_off_by_default_changes_nothing(repo, monkeypatch):
     full, r, _ = repo
     monkeypatch.setattr(settings, "crawl_enabled", False)
