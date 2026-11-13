@@ -21,18 +21,22 @@ respect permissions, and stay current without anyone maintaining a catalog by ha
 
 Roughly in order:
 
-1. **Admin dashboard:** the org map is done. Still to come: where things are
-   duplicated, and what people ask for that doesn't exist yet.
-2. **Recall at scale:** better handling of look-alike components across teams, and
-   measuring the code reader's own profiles on a real company's code.
-3. **Lower model cost:** cache results across questions, scoped by permission.
-4. **Real permissions:** sign-in through each company's own identity provider (to be
-   decided: OIDC, SAML, or trusting the company's sign-in proxy), and team and access
-   sync from GitHub and directories. Until then the dashboard has no real sign-in.
-5. **More sources:** GitLab, Bitbucket, and more documentation systems.
+1. **Search again when the first pass is weak:** when the judge finds nothing good, a few
+   more searches before answering.
+2. **A test on a large real multi-team organization**, with duplicates turned on.
+3. **Real permissions:** sign-in through each company's own identity provider, team and
+   access sync from GitHub, and a SCIM, Okta or Entra connector feeding the directory
+   import. Until then the dashboard has no real sign-in.
+4. **Models in your own cloud:** Amazon Bedrock, Google Vertex AI and Microsoft Foundry.
+5. **Lower model cost:** cache results across questions, scoped by permission, and a
+   cheaper duplicates judge.
+6. **More of the admin view:** what people ask for that doesn't exist yet.
+7. **More sources:** GitLab, Bitbucket, and more documentation systems.
 
-Done so far: traces and metrics (OpenTelemetry), a separate "related, check these"
-group for `extend` verdicts, BM25 + vector search with rank fusion, a code reader that
-splits repositories into reusable units, and an explanation for every answer.
+Done so far: BM25 + vector search with rank fusion, a code reader that splits
+repositories into reusable units, a judge that picks and orders up to three results with
+a reason each, a clarifying question when the request is ambiguous, who to ask (recent
+committers and their managers, from a directory import), duplicates across teams (opt-in),
+an org map, an explanation for every answer, and traces and metrics (OpenTelemetry).
 
 Ideas and pull requests toward any of these are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).

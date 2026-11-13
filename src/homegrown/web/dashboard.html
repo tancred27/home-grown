@@ -533,7 +533,9 @@ td:nth-child(2){white-space:nowrap}
             m.repo ? el("span", { class: "faint" }, `in ${m.repo}`) : (m.where && el("span", { class: "faint" }, m.where)),
             el("span", { class: `pill ${st.cls}` }, el("span", { class: "dot", style: `background:${st.color}` }), st.label),
             VERDICTS[m.verdict] && el("span", { class: "meta" }, VERDICTS[m.verdict])),
-          el("span", { class: "muted" }, [m.owner_team, m.lob].filter(Boolean).join(" · ") + (m.team_manager ? ` · ask ${m.team_manager}` : "")),
+          el("span", { class: "muted" }, [m.owner_team, m.lob].filter(Boolean).join(" · ")),
+          (m.ask || []).map((p) => el("span", {}, "Ask ", el("strong", {}, p.name),
+            el("span", { class: "muted" }, (p.manager ? ` · manager ${p.manager}` : "") + (p.reason ? ` · ${p.reason}` : "")))),
           m.why && el("span", {}, m.why),
           el("span", {}, canRead ? el("span", { class: "pill open" }, "You can read the code")
                                  : el("span", { class: "pill lock" }, lockIcon(), "Ask for access")));

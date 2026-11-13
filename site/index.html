@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HomeGrown: has anyone here already built it?</title>
-<meta name="description" content="Open-source tool that tells engineers and coding agents whether another team already built what they need, who owns it, how ready it is and how to get the code.">
+<meta name="description" content="Open-source tool that tells engineers and coding agents whether another team already built what they need, who to ask about it, how ready it is and how to get the code.">
 <meta property="og:title" content="HomeGrown: has anyone here already built it?">
 <meta property="og:description" content="Ask before you build. HomeGrown finds what your company already has, even in repositories you can't open.">
 <meta property="og:type" content="website">
@@ -176,7 +176,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
     <div style="max-width:900px;display:flex;flex-direction:column;gap:24px">
       <span class="eyebrow">Open source, Apache-2.0. Works with public and private repositories.</span>
       <h1 class="disp" style="margin:0;font-size:clamp(42px,5.4vw,76px);line-height:1;font-weight:700;letter-spacing:-.035em">Has anyone here<br><span style="color:var(--accent-text)">already built it?</span></h1>
-      <p class="lead" style="font-size:20px">Ask HomeGrown before you build. It tells you whether another team has already built it, who looks after it, how ready it is and how to get the code. That works even for repositories you can't open.</p>
+      <p class="lead" style="font-size:20px">Ask HomeGrown before you build. It tells you whether another team has already built it, who to ask, how ready it is and how to get the code. That works even for repositories you can't open.</p>
       <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
         <a class="btn" href="https://github.com/tancred27/home-grown" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>Star on GitHub</a>
         <a class="ghost" href="demo/" target="_blank" rel="noopener">See the demo dashboard</a>
@@ -206,7 +206,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
             <div style="padding:6px 20px 16px"><span class="pill ok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Yes, this already exists</span></div>
             <div class="field"><span>Component</span><span style="font-weight:700;font-size:18px">xk6-kafka</span></div>
             <div class="field"><span>What it does</span><span>Load tests Apache Kafka with k6: produces and consumes messages, and manages topics and the schema registry, in pure Go.</span></div>
-            <div class="field"><span>Who to ask</span><span>The lead of team-xk6-kafka, in Developer Tools &amp; Testing</span></div>
+            <div class="field"><span>Who to ask</span><span>Its two most recent committers on team-xk6-kafka, and their manager</span></div>
             <div class="field"><span>Stage</span><span><span class="pill beta"><span class="dot" style="background:var(--beta)"></span>Beta</span> <span style="color:var(--faint);font-size:15px">inferred; the owner hasn't confirmed it</span></span></div>
             <div class="field"><span>Based on</span><span>21 facts on record, each linked to the file it came from</span></div>
             <div class="field"><span>Code</span>
@@ -218,14 +218,14 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
           </div>
         </div>
       </div>
-      <p class="caption">From a test run on Grafana's public repositories. Public code has no org chart, so the teams, leads and access rules in that test are generated.</p>
+      <p class="caption">From a test run on Grafana's public repositories. Public code has no org chart, so the teams, people, managers and access rules in that test are generated.</p>
     </div>
 
     <dl class="stats">
-      <div class="stat"><dd>85–92%</dd><dt>right component in the top 5, among 5,000 components</dt></div>
-      <div class="stat"><dd>23 of 26</dd><dt>says "nothing fits" when nothing does, among 9,600 components</dt></div>
-      <div class="stat"><dd>0.1 s</dd><dt>meaning search, among 100,000 components</dt></div>
-      <div class="stat"><dd>Apache-2.0</dd><dt>license</dt></div>
+      <div class="stat"><dd>94%</dd><dt>of first answers rated good or okay, on 92 fresh questions</dt></div>
+      <div class="stat"><dd>0</dd><dt>results wrongly labelled "use as-is"</dt></div>
+      <div class="stat"><dd>100%</dd><dt>of known look-alikes across teams found by the duplicates job</dt></div>
+      <div class="stat"><dd>0.1 s</dd><dt>to search 100,000 components, with permission checks on</dt></div>
     </dl>
   </section>
 
@@ -238,7 +238,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
       <li><span class="num">01</span><h3 class="disp">Watches repos</h3><p>Rereads only the folders a push changed.</p></li>
       <li><span class="num">02</span><h3 class="disp">Reads the code</h3><p>Splits a big repo into the parts people reuse.</p><div class="example"><strong>kind</strong> &rarr; CLI, cluster library, kindnetd, Go utilities</div></li>
       <li><span class="num">03</span><h3 class="disp">Records it</h3><p>Purpose, owner, stage. Every note links to its file or commit.</p></li>
-      <li><span class="num">04</span><h3 class="disp">Searches, then checks</h3><p>Keywords and meaning, then a judge reads each candidate. Says when nothing fits.</p><div class="example">Search ranked kindnetd first; the judge picked <strong>kind CLI</strong>.</div></li>
+      <li><span class="num">04</span><h3 class="disp">Searches, then checks</h3><p>Keywords and meaning, then a judge reads the top 20 and picks up to three, each with a reason. If the request is ambiguous, it asks back.</p><div class="example"><strong>Which cloud is the storage account in?</strong></div></li>
       <li><span class="num">05</span><h3 class="disp">Shows its work</h3><p>Why each answer came back: matches, ranks, the judge's reason.</p><div class="example"><code>homegrown explain &lt;id&gt;</code></div></li>
     </ol>
   </section>
@@ -246,7 +246,7 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
   <section id="permissions" class="wrap band split">
     <div style="display:flex;flex-direction:column;gap:20px">
       <h2 class="h2">Everyone can find it. Only some can open it.</h2>
-      <p class="lead">A map of everything your company has built, by line of business. The database checks every row, so people learn a private project exists and who to ask, while its code stays shut.</p>
+      <p class="lead">A map of everything your company has built, by line of business. The database checks every row, so people learn a private project exists and who to ask, while its code stays shut. Admins can also turn on a view of where teams built the same thing twice.</p>
       <div style="display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center">
         <a class="btn" href="demo/" target="_blank" rel="noopener">Open the demo dashboard
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -290,11 +290,11 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
         <span class="label">Agent calls find_existing</span>
         <span>“Produce and consume Kafka messages from k6 load tests”</span>
         <span style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><strong>xk6-kafka</strong><span class="pill beta">Beta</span><span class="muted" style="font-size:15px">team-xk6-kafka · use as-is</span></span>
-        <span data-case="private"><span class="pill lock">can_read_code: false</span> <span class="muted" style="font-size:15px">ask Lead, team-xk6-kafka for access</span></span>
+        <span data-case="private"><span class="pill lock">can_read_code: false</span> <span class="muted" style="font-size:15px">ask Engineer d94c3a (last commit 5 Nov) for access</span></span>
         <span data-case="readable" hidden><span class="pill ok">can_read_code: true</span> <span class="muted" style="font-size:15px">you can read the code</span></span>
       </div>
       <div aria-live="polite">
-        <p class="bubble" data-case="private" style="background:var(--surface2);border-bottom-left-radius:6px">team-xk6-kafka already built this: xk6-kafka, in beta. Its code is private to you, so I won't write a new Kafka client yet. Shall I draft an access request to their lead?</p>
+        <p class="bubble" data-case="private" style="background:var(--surface2);border-bottom-left-radius:6px">team-xk6-kafka already built this: xk6-kafka, in beta. Its code is private to you, so I won't write a new Kafka client yet. Shall I draft an access request to Engineer d94c3a, who committed to it on 5 November?</p>
         <p class="bubble" data-case="readable" hidden style="background:var(--surface2);border-bottom-left-radius:6px">xk6-kafka already does this, and you can read it. I'll build k6 with it instead of writing a new Kafka client.</p>
       </div>
     </div>
@@ -309,20 +309,21 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
       <table style="min-width:560px">
         <thead><tr><th scope="col">What we measured</th><th scope="col">Result</th><th scope="col">Where to check</th></tr></thead>
         <tbody>
-          <tr><td>Right component in the top 5, out of 5,000, on test questions</td><td class="big">85–92%</td><td class="src"><a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">docs/results.md</a></td></tr>
-          <tr><td>Same, on 69 real Stack Overflow questions, with the judge</td><td class="big">81%</td><td class="src">100% where the linked project is the real answer · <a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">results</a></td></tr>
-          <tr><td>Says nothing fits, when nothing does</td><td class="big">23 of 26</td><td class="src">among 9,600 components; 26 of 26 among 109 · <a href="https://github.com/tancred27/home-grown/blob/main/experiments/scale/RESULTS_judge.md" target="_blank" rel="noopener">results</a></td></tr>
-          <tr><td>From a push to processed, 95% of the time</td><td class="big">225 s</td><td class="src">an hour of all public GitHub pushes · <a href="https://github.com/tancred27/home-grown/blob/main/experiments/sync/RESULTS.md" target="_blank" rel="noopener">results</a></td></tr>
+          <tr><td>First answer good or okay, on 92 fresh questions asked the way engineers and agents ask</td><td class="big">94%</td><td class="src">70% good, 24% okay, 6% bad; none wrongly labelled use as-is · <a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">results</a></td></tr>
+          <tr><td>Right component in the top 5 of search, out of 5,000</td><td class="big">up to 92%</td><td class="src">85% on test questions, 92% in casual wording · <a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">results</a></td></tr>
+          <tr><td>Known look-alikes across teams found by the duplicates job</td><td class="big">100%</td><td class="src">20 of 20 pairs; 9 of 9 sampled groups confirmed by a reviewer · <a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">results</a></td></tr>
+          <tr><td>Answers a blind reviewer preferred, current judge against the earlier one</td><td class="big">16 to 3</td><td class="src">25 questions · <a href="https://github.com/tancred27/home-grown/blob/main/docs/results.md" target="_blank" rel="noopener">results</a></td></tr>
+          <tr><td>From a push to searchable, 95% of the time</td><td class="big">&lt; 4 min</td><td class="src">225 s, replaying an hour of all public GitHub pushes · <a href="https://github.com/tancred27/home-grown/blob/main/experiments/sync/RESULTS.md" target="_blank" rel="noopener">results</a></td></tr>
         </tbody>
       </table>
     </div>
     <div class="card limits" style="margin-top:24px">
       <h3 class="disp" style="margin:0 0 8px;font-size:22px">Not there yet</h3>
       <ul>
-        <li>No company runs it in production yet, and there's no single sign-on.</li>
+        <li>No company runs it in production yet. There's no single sign-on and no permission sync.</li>
+        <li>Who to ask needs your directory as an import file; there's no SCIM, Okta or Entra connector yet.</li>
         <li>Accuracy drops as a company grows, mostly from look-alike projects.</li>
-        <li>Features only the code describes are found less often than ones a README describes.</li>
-        <li>The code reader is new, off by default, and not yet run on a real company's code.</li>
+        <li>The code reader and the duplicates job are off by default and not yet run on a real company's code.</li>
       </ul>
     </div>
   </section>
@@ -333,6 +334,8 @@ footer .cta{padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px 64
       <details class="faq"><summary>Does our code leave our network?</summary><p>Only if you choose a hosted model. Search runs on your machines. With the code reader on, short extracts (declarations and their comments, with keys, passwords and internal hostnames removed) go to the model you pick. With a local model through Ollama nothing leaves.</p></details>
       <details class="faq"><summary>What does it cost?</summary><p>Nothing: it's Apache-2.0. A hosted model adds two calls per question, and the code reader a cheap call per changed part of the code. Bring your own key (Anthropic, Gemini, Groq or Ollama), or run with no model at all.</p></details>
       <details class="faq"><summary>Where can it read from?</summary><p>GitHub repositories, including their source code if you turn that on, plus Confluence and Notion pages. GitLab and Bitbucket are planned.</p></details>
+      <details class="faq"><summary>Who does it tell me to ask?</summary><p>The two people who committed to it most recently and are still in your company directory, with their manager. If no one fits, the owning team's lead.</p></details>
+      <details class="faq"><summary>Does it need our directory?</summary><p>Only for who to ask. You import a snapshot: id, name, team, manager, line of business and whether someone is active. Emails and logins are kept only as hashes, and nothing else is stored.</p></details>
       <details class="faq"><summary>How does it know what's in production?</summary><p>From releases and from use: a library two other teams depend on counts. Until an owner confirms it, a stage is shown as inferred.</p></details>
       <details class="faq"><summary>Could someone see what they shouldn't?</summary><p>The database checks every query. Tests run every test user through real searches and fail if anything outside their access comes back.</p></details>
     </div>

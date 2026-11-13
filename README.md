@@ -20,12 +20,12 @@
 
 Big companies build the same thing over and over, because most engineers, and their
 coding agents, can only see their own team's code. Ask HomeGrown before you build. It
-tells you what already exists, who owns it, how ready it is and how to get it, even when
-the code is in a repository you can't open.
+tells you what already exists, who to ask about it, how ready it is and how to get it,
+even when the code is in a repository you can't open.
 
-<img alt="Example answer: yes, xk6-kafka already does this. Beta, team-xk6-kafka in Developer Tools &amp; Testing, discoverable only: request access from the team lead." src="docs/assets/answer.svg">
+<img alt="Example answer: yes, xk6-kafka already does this. Beta, team-xk6-kafka in Developer Tools &amp; Testing. Ask its two most recent committers, with their manager. Discoverable only: request access from the team lead." src="docs/assets/answer.svg">
 
-<sub>A real answer from a test run on Grafana's public repositories. Public code has no org chart, so the teams, leads and access rules in that test are generated.</sub>
+<sub>A real answer from a test run on Grafana's public repositories. Public code has no org chart, so the teams, people, leads and access rules in that test are generated.</sub>
 
 Two agents share one PostgreSQL database. A collector keeps a record of every component
 as repositories change; an answerer searches it as the person asking, so row-level
@@ -58,7 +58,7 @@ than "yes".
 <details>
 <summary><b>Add a model</b> (Anthropic, Groq, Gemini or a local one)</summary>
 
-Set `HOMEGROWN_VERDICT_MODE=model` in `.env`, plus one of:
+`.env.example` starts with no model. Set `HOMEGROWN_VERDICT_MODE=model` in `.env`, plus one of:
 
 ```bash
 # pick one
@@ -68,8 +68,10 @@ HOMEGROWN_LLM_PROVIDER=gemini      # with GEMINI_API_KEY or HOMEGROWN_GEMINI_KEY
 HOMEGROWN_LLM_PROVIDER=local       # with HOMEGROWN_LLM_BASE_URL and HOMEGROWN_LLM_MODEL (e.g. Ollama)
 ```
 
-With a local model, nothing leaves your machines. Free hosted tiers may train on your
-prompts, so don't send private code to them. More in [docs/configuration.md](docs/configuration.md).
+The judge was tested with Claude Opus (`HOMEGROWN_JUDGE_MODEL=claude-opus-5-5`, the default).
+With another provider, set `HOMEGROWN_JUDGE_MODEL` to a model it serves. With a local model,
+nothing leaves your machines. Free hosted tiers may train on your prompts, so don't send
+private code to them. More in [docs/configuration.md](docs/configuration.md).
 </details>
 
 <details>
@@ -89,6 +91,16 @@ Only short extracts go to the model: function and type declarations and their co
 with anything that looks like a key, token, password or internal hostname removed first.
 Unchanged code is never re-read or re-summarised.
 </details>
+
+**Who to ask.** Each result names up to two people: its most recent committers who are
+in your company directory, each with their manager and when they last committed. Load the
+directory with `homegrown directory import people.json` (a snapshot of id, name, team,
+manager, line of business, active flag, emails and logins; emails and logins are stored
+only as hashes). Without a directory, it names the owning team's lead.
+
+**A question back.** When a request leaves open something that changes the best answer
+(which cloud, which language, a library or a running service), the answer ends with one
+short question and its choices. Ask again with your choice added.
 
 **Why that answer?** Every answer has an id. `homegrown find` prints it, and
 `homegrown explain <id>` shows each step: which words and fields matched, how results were
@@ -111,28 +123,34 @@ Agents call `find_existing` before writing new code. Each match says whether the
 asking can read its code; when they can't, the agent names the owner and offers to ask
 for access instead of writing a copy. The `explain` tool shows why a result came back.
 
+## Duplicates across teams (opt-in)
+
+With `HOMEGROWN_DUPLICATES_ENABLED=true`, `homegrown duplicates --run` finds units owned
+by different teams that do the same job and groups them, for admins listed in
+`HOMEGROWN_ADMIN_USERS` to confirm or reject. Nothing is deleted or deprecated. It is off
+by default; see [How it works](docs/architecture.md#duplicates-across-teams-behind-a-flag).
+
 ## How well it works
 
-Tested on real public code from Grafana, Microsoft, Google, AWS and others:
+Tested on real public code from Grafana, Microsoft, Google, AWS and others, with the
+product as it ships:
 
-- **85–92%** of the time the right component is in the top 5, among 5,000 components
-  (85% on the test questions, 92% on the same questions in casual wording).
-- **23 of 26** times it says nothing fits when nothing does, among about 9,600 components
-  (26 of 26 among 109), with the earlier search.
-- **81%** on 69 real Stack Overflow questions whose answer links one of those 5,000
-  (100% on the 41 where the linked project really is the answer), with the judge.
-- **16 to 3**: how often a blind reviewer preferred the current judge's answers to the
-  answers of a judge that marks each requirement, on 25 goal-style questions; its first
-  option was good 20 times and bad twice.
-- **~0.1 s** per meaning search among about 100,000 components (300,000 vectors), with
-  permission checks on.
+- **94%** of first answers rated good or okay (70% good, 6% bad) on 92 fresh questions
+  written the way engineers and coding agents ask, and **0** results wrongly labelled
+  "use as-is".
+- **Up to 92%**: the right component is in search's top 5 among 5,000 components (85% on
+  test questions, 92% on the same questions in casual wording).
+- **100%** of known look-alikes across teams found by the duplicates job (20 of 20 pairs),
+  and 9 of 9 sampled groups confirmed by a reviewer.
+- **16 to 3**: how often a blind reviewer preferred the current judge's answers to an
+  earlier judge's.
+- **0.1 s** to search 100,000 components (300,000 vectors) with permission checks on, and
+  **under 4 minutes** from a push to searchable, 95% of the time.
 
-The 85–92% uses component profiles (capabilities, search terms, example questions) that
-AI models wrote during testing. The code reader now writes profiles itself: on 12 public
-repositories its components reached the judge's shortlist for 62–65% of questions about
-specific features, against 69–77% for the finer splits made in testing. No company runs it in production yet. Every number
-and known limit is in [docs/results.md](docs/results.md); what's next is in
-[VISION.md](VISION.md).
+The 85–92% uses component profiles that AI models wrote during testing; the code reader's
+own profiles reach the judge's shortlist less often (62–65%). No company runs HomeGrown in
+production yet. Every number and known limit is in [docs/results.md](docs/results.md);
+what's next is in [VISION.md](VISION.md).
 
 ## Docs
 

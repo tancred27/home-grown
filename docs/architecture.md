@@ -159,7 +159,7 @@ Every model call fails safe: the previous summary or units stay.
    each requirement with a quote and orders results in code.
 4. **Compose.** The judge's picks, in its order; with no usable verdicts, search order up
    to `answer_results`. Not-a-fit candidates are never shown. Each result gets owner, team,
-   line of business, manager, stage and access.
+   line of business, manager, stage, access and who to ask (below).
 
 In rules mode (no model), verdicts come from the evidence alone, and the answer says
 "possibly" instead of "yes".
@@ -247,8 +247,8 @@ are ignored) and runs as admin, like any ingestion (`src/homegrown/directory_syn
 
 | | |
 |---|---|
-| `homegrown` CLI | `src/homegrown/cli.py`: `find`, `ask`, `explain`, `add-user` |
-| MCP server | `src/homegrown/mcp_server.py`, over stdio |
-| HTTP | `src/homegrown/api.py`: webhooks, `GET /ask` and `GET /explain/{id}` |
+| `homegrown` CLI | `src/homegrown/cli.py`: `find`, `ask`, `explain`, `add-user`, `directory import`, `duplicates` |
+| MCP server | `src/homegrown/mcp_server.py`, over stdio: `find_existing`, `ask`, `explain` |
+| HTTP | `src/homegrown/api.py`: webhooks, `GET /ask`, `GET /explain/{id}`, `GET /api/org-map`, `GET /ui`, `GET /api/duplicates` |
 | Sync worker | `scripts/sync_worker.py` |
 | Docs-page worker | `scripts/collector_worker.py` |

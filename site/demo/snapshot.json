@@ -1046,7 +1046,7 @@
   }
  ],
  "explain_example": {
-  "note": "A real answer from our test on 12 public repositories, read by the code reader. Search ranked another component first; the judge (Claude Haiku, recorded) picked the one that fits. Click a result to see why.",
+  "note": "A real answer from our test on 12 public repositories, read by the code reader. Search ranked another component first; an earlier version of the judge (recorded) picked the one that fits. Click a result to see why.",
   "question": "How can I enable dual-stack IPv4 and IPv6 networking in a local test cluster?",
   "answer": {
    "name": "kind CLI",

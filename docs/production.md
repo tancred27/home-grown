@@ -13,7 +13,12 @@ what is still missing, so you can decide what to add first.
 - **The API**, if you use webhooks or HTTP questions: `uvicorn homegrown.api:app`, behind
   TLS.
 - **An LLM provider** for model verdicts, query rewriting and purpose lines. Expect two
-  model calls per question (rewrite and judge).
+  model calls per question: the rewrite, and the judge (Claude Opus by default, reading 20
+  results).
+- **Your directory**, for who to ask: `homegrown directory import people.json` with a
+  snapshot of id, name, team, manager, line of business, active flag, emails and logins.
+  Run it on a schedule. Emails and logins are stored only as hashes; people missing from a
+  later snapshot are marked inactive, never deleted.
 - **Monitoring**, optional: traces and metrics over OpenTelemetry, with no question
   text or code in them. See [observability.md](observability.md).
 
@@ -42,6 +47,13 @@ Details: `experiments/sync/RESULTS.md` and `experiments/scale/RESULTS.md`.
 - **Permission sync.** Team membership (`membership`) and source access (`source_acl`)
   aren't synced from GitHub teams or your directory yet. Today, sync assigns one team
   per repo.
+- **A directory connector.** There is no SCIM, Okta or Entra connector yet; something
+  must write the import file. Teams loaded from a directory have no lead yet, so a result
+  with no recent committer in the directory names nobody.
 - **Caching.** Model calls are not cached across questions.
+
+Duplicates across teams is off by default (`HOMEGROWN_DUPLICATES_ENABLED`). Its judge is
+one Opus call per component, about 3.6M input tokens per 1,000 components, so plan its
+first run.
 
 If you run HomeGrown somewhere real, we'd like to hear how it goes. Please open an issue.

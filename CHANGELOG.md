@@ -7,94 +7,60 @@ All notable changes are listed here. The format follows
 ## [Unreleased]
 
 ### Added
-- Code words: search also looks in each crawled unit's own code (declarations and doc
-  comments, identifiers split into words) as a third ranked list, fused with keyword and
-  vector search. On 196 fresh test questions it put the right component in the top 5
-  8 to 11 points more often. Anyone who can find a unit can be matched through its code
-  words; which words matched is shown only to people who can read its source. Needs
-  `db/011_code_words.sql`; `HOMEGROWN_CODE_WORDS_WEIGHT=0` turns it off. Repos crawled
-  before this get code words on their next change, or on a forced re-crawl.
-  `db/012_code_terms.sql` adds the inverted index that keeps it fast (about 30x faster
-  than 011 alone at 5,000 units); apply it after 011.
-- A code-reading crawler (`HOMEGROWN_CRAWL_ENABLED`, bring your own model key). Sync
-  passes read source code, summarise it by area with a cheap model, and split each repo
-  into units with search profiles using a stronger model. Units are child assets of their
-  repo, their capabilities are claims backed by code-area evidence, and a secret filter
-  runs before anything is stored or sent to a model. Needs `db/010_units_profiles.sql`.
-- Answer traces: every answer returns a `question_id`, and `homegrown explain <id>`,
-  `GET /explain/{id}` or the MCP tool `explain` show how it was produced, step by step.
-  Only the asker can read a trace. `scripts/explain_report.py` shows where expected
-  answers were lost.
+- **Who to ask.** Each result names up to two people: its most recent committers who are in
+  the company directory, with their team, their manager and their last commit. The asker
+  and inactive people are skipped; with no one left it names the owning team's lead.
+  Shown in the answer text, the MCP results and the CLI.
+- **Directory import** (`homegrown directory import FILE.json`): a snapshot of id, name,
+  team, manager, line of business, active flag, emails and logins. Emails and logins are
+  stored only as hashes; commits map to people by author email, then login. People missing
+  from a later snapshot are marked inactive, never deleted. Needs `db/016_directory.sql`.
+- **Clarifying question** (`HOMEGROWN_JUDGE_CLARIFY`, on): when a request leaves open
+  something that changes the best answer, the judge adds one question with 2 to 4 choices
+  next to its results.
+- **Duplicates across teams**, off by default (`HOMEGROWN_DUPLICATES_ENABLED`): a batch job
+  finds units owned by different teams that do the same job, from search and model-written
+  capability labels, and a judge marks pairs same, overlapping or different. "Same" pairs
+  form groups that admins (`HOMEGROWN_ADMIN_USERS`) confirm or reject with
+  `homegrown duplicates` or `/api/duplicates`. Needs `db/015_duplicates.sql`.
+- **A code-reading crawler** (`HOMEGROWN_CRAWL_ENABLED`, bring your own model key). It
+  summarises source code by area with a cheap model and splits each repo into units with
+  search profiles using a stronger model. Infrastructure code, scripts and notebooks count
+  as source; a secret filter runs before anything is stored or sent to a model. Needs
+  `db/010_units_profiles.sql`.
+- **Answer traces:** every answer returns a `question_id`; `homegrown explain <id>`,
+  `GET /explain/{id}` or the MCP tool `explain` show how it was produced. Only the asker
+  can read a trace.
+- **Org map** dashboard (`GET /ui`, `GET /api/org-map`): everything the caller may
+  discover, by line of business and stage.
 - A `replay` model provider that serves recorded outputs, for development without API
   credits.
 - Optional traces and metrics over OpenTelemetry (`HOMEGROWN_OTEL_ENABLED`, the `[otel]`
-  extra). They record counts, durations, labels and model usage, never question text,
-  prompts, model output or user identity. A `docker compose --profile observability`
-  stack runs a collector, Tempo, Prometheus and a Grafana dashboard, keeping data for
-  30 days. See `docs/observability.md`.
-- A Dockerfile, a release workflow (wheel, sdist and a GitHub Release, plus a
-  multi-arch image on GHCR) and Dependabot.
-
-### Fixed
-- With the crawler on, a crawled repo no longer shows the same code twice in search: each
-  unit found from a package manifest now points at the crawler unit covering its folder
-  (`asset.superseded_by`) and search skips it. Nothing is deleted. Needs
-  `db/014_superseded.sql`. Found in a smoke test of the real crawler on five public repos.
+  extra), never carrying question text, prompts, model output or user identity. See
+  `docs/observability.md`.
+- A Dockerfile, a release workflow (wheel, sdist, GitHub Release and a multi-arch image on
+  GHCR) and Dependabot.
 
 ### Changed
-- A new default judge, `HOMEGROWN_MODEL_JUDGE=smart`: one call gives the model the goal and the
-  asker's preferences in plain words (has one inside counts as related; a different cloud than
-  the one asked for is not a fit; a cloud tie is mentioned), and the model picks and orders up
-  to 3 results itself with a plain-sentence reason each. In a blind review over 20 results the
-  user preferred it 16 to 3 against the requirements judge, which stays available. The judge
-  model default is now Opus, the model it was tested with.
-- The judge reads the top 20 search results instead of 5 (`HOMEGROWN_VERDICT_SHORTLIST=20`) and
-  still shows 3. Answers found below rank 5 now reach the user; the call is about 4 times larger.
-- The requirements judge notes when a result is built for one platform the request did not
-  name ("built for Amazon Bedrock only"); such a result is never listed as use-as-is. It marks a
-  result as "is one" only when that is its main purpose, and "has one inside" when it is a part.
-- The requirements judge has a third kind state, "has one inside": a larger unit that builds,
-  sets up or deploys the kind of thing asked for as one part of it. It is listed as related
-  ("not a standalone X, but includes one"), below results of that kind and above "not ruled out".
-- The model judge is on by default (`HOMEGROWN_VERDICT_MODE=model`) and pinned to Sonnet
-  (`HOMEGROWN_JUDGE_MODEL=claude-sonnet-5-5`). Without a working model it fails safe and
-  results keep search order; `rules` mode needs no model. With another provider, set
-  `HOMEGROWN_JUDGE_MODEL` to a model that provider serves.
-- A new model judge (`HOMEGROWN_MODEL_JUDGE=requirements`, the default in model mode). One
-  call splits the request into the kind of unit asked for and the requirements it states,
-  and marks each result as showing, contradicting or not mentioning each one, with a quote
-  from its card. Code then orders the results: right kind first, then most requirements
-  shown, then nothing contradicted. "Use as-is" means the kind and every requirement are
-  shown. A result whose card doesn't settle the kind but shows a requirement is listed
-  under "Not ruled out". Answers show 3 results, up to 5 when results tie. Each result's
-  "why" names what its card shows, contradicts and leaves unstated. On the 89-question
-  goal benchmark the best option came first for 51 of 63 answerable questions (37 in
-  search order). `HOMEGROWN_MODEL_JUDGE=fit` keeps the previous judge.
-- The crawler reads more of a repo. Infrastructure code, scripts and notebooks (Terraform,
-  Bicep, PowerShell, shell, Rego, SQL, R, CUE, Sentinel, Jupyter) and deployment templates
-  (CloudFormation, SAM, ARM, GitHub Action files) count as source, keeping their resource,
-  variable, parameter and function lines; tests, docs, fixtures and vendored code are still
-  skipped. A repo with no code outside `examples/`, `samples/`, `scripts/` or `tools/` is read
-  from those folders. Licence header blocks no longer fill the extracted text. The unit
-  compiler reads the whole README (`HOMEGROWN_CRAWL_README_CHARS`, 0 = no cap; was 1,400
-  characters). Areas change their content hash, so each crawled repo is summarised again on
-  its next pass.
-- Code words are off by default (`HOMEGROWN_CODE_WORDS_WEIGHT=0`): on a goal-level benchmark
-  they never beat profile search. Set the weight to 1 to turn them back on.
-- Keyword search is indexed: `db/013_bm25_index.sql` keeps (document, word, count) postings
-  and per-asset claim lengths with triggers, so a search reads only its words' postings.
-  Results are identical to before (`tests/test_bm25_index.py`); at 20,000 assets it is 3-8x
-  faster. Writes cost a little more. Apply after 012.
-- Search now ranks with BM25 keyword scoring, scores each component by its two
-  best-matching vectors, and merges the two lists by reciprocal-rank fusion. At 5,000
-  components the right one is in the top 5 for 85% of test questions (was 79%). BM25
-  statistics count only what the asker can see. Needs `db/009_bm25.sql`; the previous
-  behaviour stays available through `HOMEGROWN_LEXICAL`, `HOMEGROWN_DENSE_POOL` and
-  `HOMEGROWN_FUSION`.
-- In model mode, answers say "Yes" only when something fits as-is. When the best match
-  would need extending, the answer is "Related", and results are grouped under
-  "Use as-is", "Related, check these" and "Not ruled out".
-- Simpler README with images; detailed results moved to `docs/results.md`.
+- **The judge** (`HOMEGROWN_MODEL_JUDGE=smart`, model mode on by default): one Claude Opus
+  call reads the top 20 search results and picks and orders up to 3, each labelled use
+  as-is or related with a one-sentence reason, or says nothing fits. A blind reviewer
+  preferred its answers 16 to 3 against the earlier judge. With another provider, set
+  `HOMEGROWN_JUDGE_MODEL`. `requirements` and `fit` keep the earlier judges.
+- Answers say "Yes" only when something fits as-is; otherwise "Related", with results
+  grouped under "Use as-is", "Related, check these" and "Not ruled out".
+- **Search** ranks with BM25 keyword scoring (statistics count only what the asker can
+  see), scores each component by its two best-matching vectors, and merges the lists by
+  reciprocal-rank fusion: right component in the top 5 for 85% of test questions (was
+  79%). Needs `db/009_bm25.sql`; `db/013_bm25_index.sql` makes it 3–8x faster at 20,000
+  components. A code-words list over crawled code exists but is off by default
+  (`HOMEGROWN_CODE_WORDS_WEIGHT=0`, `db/011`–`012`).
+- Simpler README; results and limits in `docs/results.md`.
+
+### Fixed
+- With the crawler on, a crawled repo no longer shows the same code twice: a unit found
+  from a package manifest points at the crawler unit covering its folder and search skips
+  it. Needs `db/014_superseded.sql`.
 
 ## [0.1.0] - 2026-11-08
 
