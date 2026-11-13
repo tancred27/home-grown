@@ -13,7 +13,7 @@ All of this lives in PostgreSQL (`db/*.sql`, applied in order on first start).
 | `claim` | Facts about an asset, each with a link to its `evidence` (source, ref, version, excerpt) |
 | `embedding` | Vectors for each asset (fields `card`, `summary`, `purpose`; for crawled units also `capabilities`, `search_terms`, `question_N`, `area_N`), with the embedded text and its hash |
 | `area`, `profile` | Crawled code areas (summary, files, content hash) and each unit's search profile (purpose, capabilities, search terms, example questions) |
-| `team`, `lob`, `person`, `asset_contributor` | Who built what, their team, line of business and manager. People are pseudonymous |
+| `team`, `lob`, `person`, `asset_contributor` | Who built what, their team, line of business and manager. People are pseudonymous unless a directory is synced |
 | `app_user`, `membership`, `source_acl` | Who can ask, which scopes they can discover, which sources they can read |
 | `repo_state`, `unit_fingerprint` | Sync bookkeeping: which repos changed, and the Git SHAs last seen for each unit |
 | `question`, `query_trace` | Every question asked, with its route (CLI, MCP, HTTP), and the trace of how its answer was produced |
@@ -205,6 +205,43 @@ the application role cannot read (db/015_duplicates.sql) and are shown only to
 4. **Review.** An admin confirms or rejects a group (`homegrown duplicates --confirm ID`,
    or `POST /api/duplicates/{id}/review`). A reviewed group keeps its status when the same
    members come up again. Nothing is deleted or deprecated.
+
+## Who to ask
+
+For each result the answer names up to two people to ask: the most recent committers of
+the unit (a crawler unit uses its repo's), newest commit first and most commits breaking a
+tie. Each comes with their team, their manager and a reason built from data, such as
+"last commit 2026-10-30, 14 commits", with "; no recent activity" added when the newest
+commit is over a year old. It is no model call (`src/homegrown/contacts.py`).
+
+- When the org has a synced directory (any person with `synthetic = false`), only
+  directory people who are still active count. With only demo data (everyone synthetic),
+  active people count.
+- The asker is skipped, when they can be matched to a person (`app_user.person_id`, set
+  by the directory sync from their GitHub login).
+- With no one left, the result names the owning team's lead and says so; with no lead,
+  nothing.
+- It runs on the asker's connection, so row-level security decides what they can see.
+  `built_by` in the answer carries the same list as `ask`.
+
+## Directory sync (minimal)
+
+`homegrown directory import FILE.json` takes a full snapshot of the company directory
+(a JSON list of `{id, name, team, lob, manager_id, active, emails, logins}`; other fields
+are ignored) and runs as admin, like any ingestion (`src/homegrown/directory_sync.py`).
+
+- **Stored:** id (`person.external_id`), name, team, line of business, manager, active flag,
+  sync time. Emails and logins only as sha256 hashes in `source_identity`, hashed the same
+  way the collector hashes a commit's login or author email. A commit then maps to the
+  directory person, by email first and login second.
+- **Never stored:** raw emails or logins, and any other HR field.
+- **Merging:** if a hash already pointed at a pseudonymous person, the identity moves to
+  the directory person and that person's contributor rows are merged into theirs (commits
+  summed, dates widened). The old person row stays.
+- **Deactivation, not deletion:** people missing from a later snapshot get
+  `active = false`; nothing is deleted.
+- **Not built:** a SCIM, Okta or Entra connector. The import file is the generic feed such a
+  connector would write.
 
 ## Entry points
 

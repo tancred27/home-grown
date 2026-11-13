@@ -5,6 +5,7 @@ Usage:
               [--user alice] [--json]
   homegrown ask "has anyone built a rate limiter?" [--user alice]
   homegrown add-user <login> [--team team-<repo> ...]
+  homegrown directory import FILE.json   (admin; a full snapshot of the directory)
   homegrown duplicates [--json] [--run] [--confirm GROUP_ID] [--reject GROUP_ID]
               (admin; refuses unless HOMEGROWN_DUPLICATES_ENABLED=true)
 
@@ -131,6 +132,9 @@ def main(argv: list[str] | None = None) -> int:
     u.add_argument("login")
     u.add_argument("--team", action="append", default=[],
                    help="also see assets scoped to this team (repeatable)")
+    dr = sub.add_parser("directory", help="company directory (admin)")
+    dr.add_argument("action", choices=["import"])
+    dr.add_argument("file", help="JSON list of directory records (a full snapshot)")
     d = sub.add_parser("duplicates", help="units owned by different teams that do the same "
                        "job (admin; needs HOMEGROWN_DUPLICATES_ENABLED=true)")
     d.add_argument("--json", action="store_true")
@@ -144,6 +148,12 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.cmd == "duplicates":
         return _duplicates(args)
+
+    if args.cmd == "directory":
+        from .directory_sync import import_file
+        counts = import_file(args.file)
+        print("Directory imported: " + ", ".join(f"{k} {v}" for k, v in counts.items()))
+        return 0
 
     if args.cmd == "add-user":
         add_user(args.login, args.team)
@@ -181,12 +191,19 @@ def main(argv: list[str] | None = None) -> int:
     if not verdicts:
         print("Nothing found. Returning nothing is a valid answer.")
         return 0
+    from .contacts import ask_for_assets, format_ask
+    try:
+        asks = ask_for_assets(user, [v.asset_id for v in verdicts])
+    except Exception:       # who-to-ask is an extra; never break the find
+        asks = {}
     for i, v in enumerate(verdicts, 1):
         print(f"{i}. {v.name.rsplit('/', 1)[-1]}  [{ICON.get(v.verdict, v.verdict)}]")
         for r in v.reasons[:2]:
             print(f"     - {r['text'][:110]}")
         for u in v.unknowns[:1]:
             print(f"     ? {u[:110]}")
+        for p in asks.get(v.asset_id, []):
+            print(f"     ask: {format_ask(p)}")
     if clarify:
         print(f"\nTo narrow this down: {clarify['question']} "
               f"({' / '.join(clarify['choices'])}). Run again with your answer added.")

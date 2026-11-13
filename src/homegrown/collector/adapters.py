@@ -94,7 +94,7 @@ def github_recent_commits(full_name: str, limit: int = 5,
 
 def github_contributors(full_name: str, path: str | None = None,
                         limit: int = 100) -> list[dict]:
-    """[{login, commits, first_at, last_at}] from recent history, most active first."""
+    """[{login, commits, first_at, last_at, email?}] from recent history, most active first."""
     params = {"per_page": limit}
     if path and path != ".":
         params["path"] = path
@@ -110,6 +110,9 @@ def github_contributors(full_name: str, path: str | None = None,
             d = c["commit"]["author"].get("date")
             a = agg.setdefault(login, {"login": login, "commits": 0,
                                        "first_at": d, "last_at": d})
+            email = c["commit"]["author"].get("email")
+            if email and not a.get("email"):
+                a["email"] = email          # hashed by directory.resolve, never stored
             a["commits"] += 1
             a["first_at"] = min(a["first_at"], d)
             a["last_at"] = max(a["last_at"], d)

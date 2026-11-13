@@ -25,6 +25,7 @@ from mcp.types import ToolAnnotations
 
 from . import telemetry
 from .cli import log_question, resolve_user
+from .contacts import asker_person, who_to_ask
 from .db import as_user
 from .models import display_name
 from .search import CLARIFY_HOW
@@ -97,10 +98,15 @@ def _access(user: str, asset_ids: list[str]) -> dict[str, dict]:
               left join person lead on lead.team_id = t.id and lead.handle like 'lead-%%'
              where a.id = any(%s::uuid[])""", (asset_ids,))
         rows = cur.fetchall()
+        me = asker_person(cur, user)
+        asks = {r[0]: who_to_ask(cur, r[0], me) for r in rows}
     out = {}
     for aid, can_read, source_ref, team, lead in rows:
         contact = lead or team or "its owner"     # a lead's name already names the team
+        if asks[aid]:
+            contact = asks[aid][0]["name"]
         out[aid] = {
+            "ask": asks[aid],
             "owner_team": team,
             "can_read_code": bool(can_read),
             "how_to_get": (f"you can read the code: {source_ref}" if can_read else

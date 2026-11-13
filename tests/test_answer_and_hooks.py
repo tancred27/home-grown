@@ -153,6 +153,9 @@ def test_answer_says_who_built_it_their_team_lob_manager_and_stage(two_users_one
     assert m["lob"] and m["team_manager"].startswith("Lead,")
     assert m["built_by"] and m["built_by"][0]["manager"].startswith("Lead,")
     assert m["built_by"][0]["name"].startswith("Engineer "), "pseudonymous"
+    assert m["ask"] == m["built_by"] and m["ask"][0]["reason"].startswith("last commit 2026-10-01")
+    assert "  ask: Engineer " in out["text"] and ", manager Lead, " in out["text"]
+    assert "built by" not in out["text"]
 
 
 def test_answer_reveals_nothing_about_an_asset_the_asker_cannot_discover(

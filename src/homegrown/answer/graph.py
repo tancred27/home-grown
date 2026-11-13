@@ -8,9 +8,9 @@ listed. With the requirements judge (settings.model_judge) the list is 3 long
 (answer_show), longer only when the next results tie with the third, and each result's
 "why" says which of the request's requirements its card shows.
 
-For each: who built it, their team, line of business and manager, whether it is
-in dev or prod (and how sure we are), and whether the asker can read the code or must
-request access.
+For each: who to ask (recent committers in the directory, with their managers), the
+team and line of business, whether it is in dev or prod (and how sure we are),
+and whether the asker can read the code or must request access.
 
 The answer word is deliberately conservative:
   model verdicts (settings.verdict_mode = "model")
@@ -38,6 +38,7 @@ from langgraph.graph import END, START, StateGraph
 
 from .. import telemetry
 from ..config import settings
+from ..contacts import asker_person, format_ask, who_to_ask
 from ..db import as_user
 from ..models import display_name
 from ..search import find_existing
@@ -98,6 +99,7 @@ def _enrich(state: AnswerState) -> dict:
     shown = select_results(state["candidates"], settings.answer_results)
     out = []
     with as_user(state["user_id"]) as conn, conn.cursor() as cur:
+        me = asker_person(cur, state["user_id"])
         for c in shown:
             cur.execute("""
                 select a.stage, a.stage_confidence, a.stage_confirmed, e.excerpt,
@@ -119,9 +121,8 @@ def _enrich(state: AnswerState) -> dict:
              source_ref, unit_id, parent_id, parent_name) = row
             c = {**c, "where": _unit_path(unit_id),
                  "repo": display_name(parent_name) if parent_name else None}
-            # A crawler unit has no history of its own: who built it and its stage come
-            # from its repo.
-            people_of = parent_id or c["asset_id"]
+            # A crawler unit has no history of its own: its stage comes
+            # from its repo (who to ask falls back to the repo too).
             if parent_id and stage is None:
                 cur.execute("select a.stage, a.stage_confidence, a.stage_confirmed, e.excerpt "
                             "from asset a left join evidence e on e.id = a.stage_evidence_id "
@@ -129,18 +130,7 @@ def _enrich(state: AnswerState) -> dict:
                 prow = cur.fetchone()
                 if prow:
                     stage, conf, confirmed, basis = prow
-            cur.execute("""
-                select p.display_name, p.handle, pt.name, m.display_name,
-                       ac.commits, ac.last_at, ac.role
-                  from asset_contributor ac
-                  join person p on p.id = ac.person_id
-                  left join team pt on pt.id = p.team_id
-                  left join person m on m.id = p.manager_id
-                 where ac.asset_id = %s
-                 order by ac.commits desc nulls last limit 3""", (people_of,))
-            people = [{"name": n, "handle": h, "team": pt, "manager": m, "commits": k,
-                       "last_active": la.isoformat() if la else None, "role": r}
-                      for n, h, pt, m, k, la, r in cur.fetchall()]
+            people = who_to_ask(cur, c["asset_id"], me)
             # Who depends on it. The edge policy only returns an edge when BOTH ends are
             # visible to the asker, so a hidden dependent is never named or counted.
             cur.execute("""
@@ -156,7 +146,7 @@ def _enrich(state: AnswerState) -> dict:
                         "stage": {"stage": stage, "confidence": conf,
                                   "confirmed_by_owner": confirmed, "basis": basis},
                         "owner_team": team, "lob": lob, "team_manager": lead,
-                        "built_by": people, "used_by": used_by,
+                        "ask": people, "built_by": people, "used_by": used_by,
                         "access": ("you can read the code" if can_read else
                                    f"discoverable only: request access to {source_ref} "
                                    f"from {lead or team or 'its owner'}")})
@@ -207,9 +197,8 @@ def _compose(state: AnswerState) -> dict:
         lines.append(f"\n* {m['name']}{where}  [{m['verdict']}]  stage: {stage}")
         lines.append(f"  team: {m['owner_team']}  |  LOB: {m['lob']}  |  "
                      f"manager: {m['team_manager']}")
-        for p in m["built_by"]:
-            lines.append(f"  built by {p['name']} ({p['team']}, reports to {p['manager']},"
-                         f" {p['commits']} commits, last active {(p['last_active'] or '')[:10]})")
+        for p in m.get("ask") or m.get("built_by") or []:
+            lines.append(f"  ask: {format_ask(p)}")
         if m.get("used_by"):
             lines.append("  used by: " + ", ".join(f"{u['asset']} ({u['team']})"
                                                    for u in m["used_by"][:5]))

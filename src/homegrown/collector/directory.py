@@ -103,18 +103,45 @@ def team_lead(conn: psycopg.Connection, team_id) -> uuid.UUID | None:
         return r[0] if r else None
 
 
-def resolve(conn: psycopg.Connection, source: str, login: str, team_id) -> uuid.UUID:
-    """Source login -> pseudonymous person. New people join the given team."""
+def identity_hash(source: str, value: str) -> str:
+    """The one hash used for every identity: sha256 of '<source>:<value lower-cased>'."""
+    return _hash(f"{source}:{value.lower()}")
+
+
+def _usable_email(email: str | None) -> str | None:
+    e = (email or "").strip()
+    if not e or "@" not in e or e.lower().endswith("@users.noreply.github.com"):
+        return None
+    return e
+
+
+def resolve(conn: psycopg.Connection, source: str, login: str, team_id,
+            email: str | None = None) -> uuid.UUID:
+    """Source login (and commit email, when known) -> person. A person from the company
+    directory wins (the email is the strongest key); otherwise a pseudonymous person is
+    created in the given team. Only hashes are stored."""
     h = _hash(f"{source}:{login.lower()}")
+    email = _usable_email(email)
+    eh = identity_hash("email", email) if email else None
     with conn.cursor() as cur:
-        cur.execute("select person_id from source_identity where source=%s and "
-                    "login_hash=%s", (source, h))
-        r = cur.fetchone()
+        r = None
+        if eh:
+            cur.execute("select person_id from source_identity where source='email' and "
+                        "login_hash=%s", (eh,))
+            r = cur.fetchone()
+        if not r:
+            cur.execute("select person_id from source_identity where source=%s and "
+                        "login_hash=%s", (source, h))
+            r = cur.fetchone()
         if r:
-            return r[0]
-        lead = team_lead(conn, team_id)
-        pid = _person(cur, f"eng-{h[:6]}", f"Engineer {h[:6]}", "Software Engineer",
-                      team_id, lead)
-        cur.execute("insert into source_identity (source, login_hash, person_id) "
-                    "values (%s,%s,%s) on conflict do nothing", (source, h, pid))
+            pid = r[0]
+        else:
+            lead = team_lead(conn, team_id)
+            pid = _person(cur, f"eng-{h[:6]}", f"Engineer {h[:6]}", "Software Engineer",
+                          team_id, lead)
+            cur.execute("insert into source_identity (source, login_hash, person_id) "
+                        "values (%s,%s,%s) on conflict do nothing", (source, h, pid))
+        if eh:
+            cur.execute("insert into source_identity (source, login_hash, person_id) "
+                        "values ('email',%s,%s) on conflict do nothing", (eh, pid))
         return pid

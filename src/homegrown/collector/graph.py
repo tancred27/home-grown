@@ -473,7 +473,8 @@ def build_collector(deps: Deps, checkpointer=None):
                 with conn.cursor() as cur:
                     for i, p in enumerate(state["contributors"].get(t["unit_id"], [])):
                         pid = directory.resolve(conn, ev.source if ev.source != "docs-markdown"
-                                                else "github", p["login"], team_id)
+                                                else "github", p["login"], team_id,
+                                                email=p.get("email"))
                         role = "maintainer" if i == 0 else "contributor"
                         cur.execute(
                             "insert into asset_contributor (asset_id, person_id, role, "
