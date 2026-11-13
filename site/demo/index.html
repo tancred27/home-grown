@@ -266,7 +266,7 @@ td:nth-child(2){white-space:nowrap}
     const select = el("div", { role: "group", "aria-labelledby": "viewAsLabel", style: "display:flex;flex-wrap:wrap;gap:8px" }, buttons);
     const banner = el("div", { class: "card demo-banner", style: "padding:16px 20px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center" },
       el("div", { style: "display:flex;flex-direction:column;gap:2px;flex:1 1 360px" },
-        el("strong", {}, "Demo: a frozen snapshot"),
+        el("strong", {}, "Demo with sample data"),
         el("span", { class: "muted", style: "font-size:14px" }, snapshot.note)),
       el("span", { id: "viewAsLabel", style: "font-weight:600" }, "View as"),
       select);
@@ -277,7 +277,7 @@ td:nth-child(2){white-space:nowrap}
 
   // One recorded answer, shown the way "Why these results?" explains it: what search
   // ranked, what the judge decided and why. Only in demo mode, from the snapshot.
-  const EX_VERDICT = { use_as_is: ["Use as-is", "prod"], extend: ["Related", "beta"], not_a_fit: ["Not a fit", "other"] };
+  const EX_VERDICT = { use_as_is: ["Fits", "prod"], extend: ["Close", "beta"], not_a_fit: ["Doesn't fit", "other"] };
   function explainExample(x) {
     const cands = [...x.candidates].sort((a, b) => a.search_rank - b.search_rank);
     let pick = cands.find((c) => c.name === x.answer.name) || cands[0];
@@ -304,7 +304,7 @@ td:nth-child(2){white-space:nowrap}
           c.matched_words.length > 0 && el("div", {}, el("dt", {}, "Words that matched"),
             el("dd", {}, el("span", { class: "ex-chips" }, c.matched_words.map((w) => el("span", { class: "ex-chip" }, w))))),
           c.closest && c.closest.text && el("div", {}, el("dt", {}, `Closest in meaning: ${c.closest.what}`), el("dd", {}, `“${c.closest.text}”`)),
-          el("div", {}, el("dt", {}, "What the judge said"), el("dd", {}, c.reason)),
+          el("div", {}, el("dt", {}, "Why the AI review decided this"), el("dd", {}, c.reason)),
           c.code.length > 0 && el("div", {}, el("dt", {}, "Where it came from"),
             el("dd", {}, "Code in ", el("code", {}, c.code.join(", ")), c.commit ? ` at ${c.commit}` : ""))));
     }
@@ -317,12 +317,12 @@ td:nth-child(2){white-space:nowrap}
       el("p", { class: "ex-q" }, x.question),
       el("ol", { class: "ex-flow" },
         el("li", {}, el("b", {}, "1 · Search"), el("span", {}, `${s.keyword_hits} hits by keyword, ${s.meaning_hits} by meaning, merged into one list`)),
-        el("li", {}, el("b", {}, "2 · Judge"), el("span", {}, `reads the top ${s.shortlist} against the question`)),
-        el("li", {}, el("b", {}, "3 · Answer"), el("span", {}, el("strong", {}, x.answer.name), `, ${(EX_VERDICT[x.answer.verdict] || ["?"])[0].toLowerCase()}. Search had it #${x.answer.search_rank}.`))),
+        el("li", {}, el("b", {}, "2 · AI review"), el("span", {}, `reads the best ${s.shortlist} matches and checks each against the question`)),
+        el("li", {}, el("b", {}, "3 · Answer"), el("span", {}, el("strong", {}, x.answer.name), `: ${(EX_VERDICT[x.answer.verdict] || ["?"])[0].toLowerCase()}. Search alone ranked it #${x.answer.search_rank}.`))),
       el("div", { class: "ex-grid" },
         el("div", { class: "ex-tbl" }, el("table", {},
-          el("caption", { class: "sr" }, "What search ranked and what the judge decided"),
-          el("thead", {}, el("tr", {}, ["Result", "Keyword", "Meaning", "Search", "Judge"].map((h) => el("th", { scope: "col", class: h === "Keyword" || h === "Meaning" ? "kw" : null }, h)))),
+          el("caption", { class: "sr" }, "How search ranked each result and what the AI review decided"),
+          el("thead", {}, el("tr", {}, ["Result", "Words", "Meaning", "Overall", "AI review"].map((h) => el("th", { scope: "col", class: h === "Words" || h === "Meaning" ? "kw" : null }, h)))),
           tbody)),
         why));
   }

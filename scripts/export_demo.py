@@ -34,9 +34,9 @@ DEFAULT_VIEWERS = [
     ("gate2-dev", "Someone who can find everything", "EV"),
     ("dev-cloudcost-exporter", "Someone on team-cloudcost-exporter", "CC"),
 ]
-NOTE = ("Taken on {date} from a test run on {repos} of Grafana's public repositories. "
-        "Public code has no org chart, so the teams, lines of business and access rules "
-        "are generated. Nothing on this page talks to a server.")
+NOTE = ("Built from a test on {repos} of Grafana's public code repositories. Public code has "
+        "no org chart, so the teams, departments and access rules are made up. This page "
+        "doesn't connect to anything.")
 
 
 def main() -> None:

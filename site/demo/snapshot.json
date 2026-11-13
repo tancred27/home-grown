@@ -1,6 +1,6 @@
 {
  "taken": "2026-11-08",
- "note": "Taken on 8 November 2026 from a test run on 38 of Grafana's public repositories. Public code has no org chart, so the teams, lines of business and access rules are generated. Nothing on this page talks to a server.",
+ "note": "Built from a test on 38 of Grafana's public code repositories. Public code has no org chart, so the teams, departments and access rules are made up. This page doesn't connect to anything.",
  "viewers": [
   {
    "label": "Someone who can find everything",
@@ -1046,7 +1046,7 @@
   }
  ],
  "explain_example": {
-  "note": "A real answer from our test on 12 public repositories, read by the code reader. Search ranked another component first; an earlier version of the judge (recorded) picked the one that fits. Click a result to see why.",
+  "note": "A real answer from a test on 12 public code repositories. Search alone put another project first; the AI review picked the one that actually fits. Click a result to see why. Recorded with an earlier version of HomeGrown.",
   "question": "How can I enable dual-stack IPv4 and IPv6 networking in a local test cluster?",
   "answer": {
    "name": "kind CLI",
