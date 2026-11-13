@@ -27,6 +27,7 @@ from . import telemetry
 from .cli import log_question, resolve_user
 from .db import as_user
 from .models import display_name
+from .search import CLARIFY_HOW
 from .search import find_existing as _find
 from .tools_text import FIND_EXISTING_DESCRIPTION
 
@@ -54,7 +55,8 @@ def find_existing(intent: str, keywords: list[str] | None = None,
     user = _user()
     t0 = time.monotonic()
     trace = explain.new(intent, keywords) if settings.trace_enabled else None
-    verdicts = _find(user, intent, keywords or [], trace=trace)
+    clarify: dict = {}
+    verdicts = _find(user, intent, keywords or [], trace=trace, clarify=clarify)
     telemetry.record_question("mcp", "find", time.monotonic() - t0)
     qid = log_question(user, intent, keywords or [], "mcp", verdicts, trace)
     access = _access(user, [v.asset_id for v in verdicts])
@@ -64,6 +66,7 @@ def find_existing(intent: str, keywords: list[str] | None = None,
         **access.get(v.asset_id, {}),
     } for v in verdicts if v.asset_id in access],
         "question_id": qid,
+        "clarify": {**clarify, "how_to_answer": CLARIFY_HOW} if clarify else None,
         "note": None if verdicts else "nothing found"}, indent=1)
 
 
@@ -116,7 +119,7 @@ def _access(user: str, asset_ids: list[str]) -> dict[str, dict]:
 def ask_tool(question: str, keywords: list[str] | None = None) -> str:
     from .answer import ask
     out = ask(_user(), question, keywords or [], route="mcp")
-    return json.dumps({k: out[k] for k in ("answer", "verdict_source", "matches")},
+    return json.dumps({k: out[k] for k in ("answer", "verdict_source", "matches", "clarify")},
                       indent=1, default=str)
 
 

@@ -81,7 +81,8 @@ def test_clarify_on_returns_question_with_picks(monkeypatch):
     assert judged[0]["key"] == (0,), "picks are still returned"
     assert box == {"question": "Which cloud?", "choices": ["AWS", "Azure"]}
     assert "Clarifying question" in seen["system"]
-    assert "clarify" in seen["schema"]["required"]
+    assert "clarify" in seen["schema"]["properties"]
+    assert "clarify" not in seen["schema"]["required"], "a reply without it must not fail"
 
 
 def test_clarify_unusable_or_empty_is_dropped(monkeypatch):

@@ -37,6 +37,9 @@ test set.
   (`db/012_code_terms.sql`), 20,000 synthetic units of 1,500 words each take 75-106 ms for
   typical queries and up to 340 ms for a query made only of very common words
   (`scripts/code_words_load.py`). It has not been measured at 100,000 components.
+- **Clarifying questions are lightly tested.** On 92 fresh questions the judge asked on 25
+  (27%), mostly which cloud, tool or language. Whether those questions are useful has not been
+  rated yet, and the re-run after an answer has not been measured.
 - **LLM cost.** Each question makes two model calls (rewrite and judge). Only a repeated
   question's rewrite is cached.
 - **Evidence quality varies by language.** Test names are the main evidence. JavaScript

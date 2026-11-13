@@ -55,19 +55,21 @@ class AnswerState(TypedDict, total=False):
     verdict_source: str
     text: str
     trace: dict                     # explain.new(): filled as the answer is built
+    clarify: dict                   # the judge's clarifying question, or empty
 
 
 def _retrieve_and_judge(state: AnswerState) -> dict:
     model = settings.verdict_mode == "model"
+    clarify: dict = {}
     vs = find_existing(state["user_id"], state["question"], state.get("keywords") or [],
-                       top=settings.answer_results, trace=state.get("trace"))
+                       top=settings.answer_results, trace=state.get("trace"), clarify=clarify)
     # In model mode the judge's own reason is unknowns[0] (see search.find_existing).
     cands = [{"asset_id": v.asset_id, "name": display_name(v.name),
               "verdict": v.verdict, "reasons": [r["text"] for r in v.reasons[:3]],
               "why": (v.unknowns[0] if model and v.unknowns else ""),
               "unknowns": v.unknowns[:2]} for v in vs]
     return {"candidates": cands, "verdict_source": settings.verdict_mode,
-            "trace": state.get("trace")}
+            "trace": state.get("trace"), "clarify": clarify}
 
 
 def _unit_path(unit_id: str | None) -> str:
@@ -218,6 +220,10 @@ def _compose(state: AnswerState) -> dict:
         lines.append(f"  access: {m['access']}")
         if st.get("basis"):
             lines.append(f"  stage basis: {st['basis'][:140]}")
+    cq = state.get("clarify")
+    if cq:
+        lines.append(f"\nTo narrow this down: {cq['question']} "
+                     f"({' / '.join(cq['choices'])}). Ask again with your answer added.")
     return {"answer": answer, "text": "\n".join(lines)}
 
 
@@ -274,4 +280,4 @@ def ask(user_id: str | uuid.UUID, question: str, keywords: list[str] | None = No
                        [_V(m.get("asset_id"), m.get("verdict")) for m in out["matches"]], trace)
     return {"question_id": qid, "question": question, "answer": out["answer"],
             "verdict_source": out["verdict_source"], "matches": out["matches"],
-            "text": out["text"]}
+            "clarify": out.get("clarify") or None, "text": out["text"]}

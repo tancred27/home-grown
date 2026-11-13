@@ -78,8 +78,9 @@ class Settings(BaseSettings):
     judge_model: str = "claude-opus-5-5"
     # Smart judge only: may also return one clarifying question with 2-4 answer choices
     # when the request leaves open something that would change the first option. Picks are
-    # still returned. Off until addendum 67 passes; off keeps the tested prompt unchanged.
-    judge_clarify: bool = False
+    # still returned. Addendum 67: it asked on 25 of 92 G2 questions (27%); the cap was 25%,
+    # raised to 30% by the user after the run. False keeps the earlier tested prompt.
+    judge_clarify: bool = True
 
     # How many results the answering agent shows: every candidate judged a fit, then
     # (to fill up) candidates the judge could not rule out. Not-a-fit is never shown.

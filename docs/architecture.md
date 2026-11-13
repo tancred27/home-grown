@@ -151,7 +151,11 @@ Every model call fails safe: the previous summary or units stay.
    candidate built only for a different cloud than the one named is not a fit. It picks and orders up to `answer_show` (3) candidates, each labelled
    use as-is or related with a one-sentence reason, or says nothing fits. Everything it
    didn't pick is `not_a_fit`. On any error, everything is `unknown` and results keep
-   search order. `HOMEGROWN_MODEL_JUDGE=requirements` selects the older judge that marks
+   search order. When the request leaves open something that would change the first option
+   (which cloud, tool or language, or which of two meanings), the judge also returns one
+   clarifying question with 2 to 4 choices, next to its picks (`judge_clarify`, on by
+   default). The MCP result, CLI and answer text show it; the caller asks again with the
+   answer added. `HOMEGROWN_MODEL_JUDGE=requirements` selects the older judge that marks
    each requirement with a quote and orders results in code.
 4. **Compose.** The judge's picks, in its order; with no usable verdicts, search order up
    to `answer_results`. Not-a-fit candidates are never shown. Each result gets owner, team,

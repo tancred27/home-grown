@@ -764,6 +764,10 @@ _CLARIFY_SCHEMA = {
 }
 
 
+CLARIFY_HOW = ("Ask the user this question. Then call again with their answer added to the "
+               "request, for example: '<request>. <question> <answer>'.")
+
+
 def _clarify_from(out: dict) -> dict | None:
     """The model's clarifying question, if it is usable: a question and 2-4 choices."""
     c = out.get("clarify") or {}
@@ -799,8 +803,8 @@ def judge_smart(intent: str, cards: list[dict], show: int = 3,
         schema["properties"]["picks"]["items"]["properties"]["candidate"]["enum"] = used
         ask = settings.judge_clarify
         if ask:
+            # Optional, so a reply without it never fails the judge (picks still count).
             schema["properties"]["clarify"] = json.loads(json.dumps(_CLARIFY_SCHEMA))
-            schema["required"].append("clarify")
         out = structured(
             _SMART_SYSTEM + (_CLARIFY_RULE if ask else ""),
             f"Request: {intent}\n\n{body}\n\nShow at most {show} candidates, best first, each "

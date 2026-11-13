@@ -26,6 +26,7 @@ before exposing the database anywhere.
 | `HOMEGROWN_QUERY_REWRITE` | `true` | Model mode only: restate the request before searching |
 | `HOMEGROWN_VERDICT_SHORTLIST` | `20` | Model mode only: how many search results the judge reads (it still shows 3, up to 5 on ties) |
 | `HOMEGROWN_MODEL_JUDGE` | `smart` | Model mode only: `smart` gives the model the goal and the asker's preferences in plain words; it picks and orders up to 3 results itself, each with a label (use as-is / related) and a one-sentence reason, or says nothing fits. `requirements` splits the request into the kind of unit and its requirements, marks each result with a quote and orders results in code; `fit` is the older one-word verdict |
+| `HOMEGROWN_JUDGE_CLARIFY` | `true` | The smart judge may return one clarifying question with 2 to 4 choices when the request is ambiguous in a way that would change the first option. Results are still shown. `false` keeps the earlier prompt exactly |
 | `HOMEGROWN_JUDGE_MODEL` | `claude-opus-5-5` | Model for the judge (the smart judge was tested with Opus). With a provider other than Anthropic, set a model it serves; empty uses `HOMEGROWN_LLM_MODEL` |
 
 Keys:

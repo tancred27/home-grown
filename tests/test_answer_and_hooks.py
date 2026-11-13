@@ -212,3 +212,18 @@ def test_up_to_five_results_fits_first_never_not_a_fit():
     only_unknown = [m({"name": "u", "verdict": "unknown"})]
     assert _compose({"candidates": [{"verdict": "unknown"}], "matches": only_unknown,
                      "verdict_source": "model"})["answer"] == "unknown"
+
+
+def test_clarifying_question_is_shown_after_the_results():
+    from homegrown.answer.graph import _compose
+    match = {"name": "e", "verdict": "extend", "stage": {
+        "stage": "dev", "confidence": 0.3, "confirmed_by_owner": False, "basis": ""},
+        "owner_team": "t", "lob": "l", "team_manager": "m", "built_by": [], "used_by": [],
+        "reasons": [], "why": "", "access": "you can read the code"}
+    out = _compose({"candidates": [{"verdict": "extend"}], "matches": [match],
+                    "verdict_source": "model",
+                    "clarify": {"question": "Which cloud?", "choices": ["AWS", "Azure"]}})
+    assert out["text"].index("* e") < out["text"].index("Which cloud? (AWS / Azure)")
+    no_q = _compose({"candidates": [{"verdict": "extend"}], "matches": [match],
+                     "verdict_source": "model"})
+    assert "narrow" not in no_q["text"]

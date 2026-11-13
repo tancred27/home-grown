@@ -120,13 +120,15 @@ def main(argv: list[str] | None = None) -> int:
     from . import explain
     t0 = time.monotonic()
     trace = explain.new(args.intent, kws) if settings.trace_enabled else None
-    verdicts = find_existing(user, args.intent, kws, top=args.top, trace=trace)
+    clarify: dict = {}
+    verdicts = find_existing(user, args.intent, kws, top=args.top, trace=trace,
+                             clarify=clarify)
     telemetry.record_question("cli", "find", time.monotonic() - t0)
     qid = log_question(user, args.intent, kws, "cli", verdicts, trace)
 
     if args.json:
-        print(json.dumps({"question_id": qid, "results": [v.model_dump() for v in verdicts]},
-                         indent=1))
+        print(json.dumps({"question_id": qid, "results": [v.model_dump() for v in verdicts],
+                          "clarify": clarify or None}, indent=1))
         return 0
     if not verdicts:
         print("Nothing found. Returning nothing is a valid answer.")
@@ -137,6 +139,9 @@ def main(argv: list[str] | None = None) -> int:
             print(f"     - {r['text'][:110]}")
         for u in v.unknowns[:1]:
             print(f"     ? {u[:110]}")
+    if clarify:
+        print(f"\nTo narrow this down: {clarify['question']} "
+              f"({' / '.join(clarify['choices'])}). Run again with your answer added.")
     if qid:
         print(f"\nWhy these results: homegrown explain {qid}")
     return 0
