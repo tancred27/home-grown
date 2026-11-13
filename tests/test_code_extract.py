@@ -160,3 +160,14 @@ def test_policy_hcl_json_cloudformation_and_tiny_repos_are_read():
     assert set(tiny) == {"."}
     big_and_tiny = code.build_areas({"src/a.py": "def a():\n" + "x" * 400, "lib/b.py": "def b():"})
     assert set(big_and_tiny) == {"src"}
+
+
+def test_manifest_with_inherited_fields_does_not_crash(tmp_path):
+    """Cargo workspaces write `description.workspace = true`: a table, not text."""
+    from homegrown.extract import units
+    (tmp_path / "Cargo.toml").write_text(
+        '[package]\nname.workspace = true\ndescription.workspace = true\n', "utf-8")
+    name, summary, eco = units._read_manifest(tmp_path)
+    assert name is None and summary is None and eco == ["cargo"]
+    found = units.detect(tmp_path, "acme/vectors")
+    assert len(found) == 1

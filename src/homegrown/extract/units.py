@@ -75,6 +75,10 @@ def _read_manifest(d: Path) -> tuple[str | None, str | None, list[str]]:
         except (OSError, IndexError):
             pass
 
+    # A manifest may inherit a field (`description.workspace = true` in Cargo, a dynamic
+    # field elsewhere): the value is then a table, not text, and tells us nothing here.
+    name = name if isinstance(name, str) else None
+    summary = summary if isinstance(summary, str) else None
     return name, summary, eco
 
 
