@@ -76,6 +76,10 @@ class Settings(BaseSettings):
     # Opus (addenda 63-64); the requirements judge with Sonnet and Opus (59). With another
     # provider, set a model that provider serves; empty = llm_model.
     judge_model: str = "claude-opus-5-5"
+    # Smart judge only: may also return one clarifying question with 2-4 answer choices
+    # when the request leaves open something that would change the first option. Picks are
+    # still returned. Off until addendum 67 passes; off keeps the tested prompt unchanged.
+    judge_clarify: bool = False
 
     # How many results the answering agent shows: every candidate judged a fit, then
     # (to fill up) candidates the judge could not rule out. Not-a-fit is never shown.

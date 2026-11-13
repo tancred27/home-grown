@@ -57,3 +57,39 @@ def test_any_failure_fails_safe_to_search_order(monkeypatch):
     assert all(j["verdict"] == "unknown" and j["key"] is None for j in judged)
     assert "unavailable" in judged[0]["reason"]
     assert shown_with_ties([None] * 4, 3, 5) == 4, "no keys: results keep search order"
+
+
+def test_clarify_off_keeps_tested_prompt_and_schema(monkeypatch):
+    seen, box = {}, {}
+    monkeypatch.setattr(S.settings, "judge_clarify", False)
+    monkeypatch.setattr(llm, "structured", _fake({"nothing_fits": False, "picks": [],
+                                                  "clarify": {"question": "Which cloud?",
+                                                              "choices": ["AWS", "Azure"]}},
+                                                 seen))
+    judge_smart("x", CARDS, clarify=box)
+    assert seen["system"] == S._SMART_SYSTEM and "clarify" not in seen["schema"]["properties"]
+    assert box == {}
+
+
+def test_clarify_on_returns_question_with_picks(monkeypatch):
+    seen, box = {}, {}
+    monkeypatch.setattr(S.settings, "judge_clarify", True)
+    monkeypatch.setattr(llm, "structured", _fake({"nothing_fits": False, "picks": [
+        {"candidate": "A", "label": "related", "reason": "r"}],
+        "clarify": {"question": "Which cloud?", "choices": ["AWS", " ", "Azure"]}}, seen))
+    judged = judge_smart("x", CARDS, clarify=box)
+    assert judged[0]["key"] == (0,), "picks are still returned"
+    assert box == {"question": "Which cloud?", "choices": ["AWS", "Azure"]}
+    assert "Clarifying question" in seen["system"]
+    assert "clarify" in seen["schema"]["required"]
+
+
+def test_clarify_unusable_or_empty_is_dropped(monkeypatch):
+    monkeypatch.setattr(S.settings, "judge_clarify", True)
+    for c in ({"question": "", "choices": []}, {"question": "Which?", "choices": ["only"]},
+              {"question": "Which?", "choices": list("abcde")}, None):
+        box = {}
+        monkeypatch.setattr(llm, "structured", _fake({"nothing_fits": True, "picks": [],
+                                                      "clarify": c}))
+        judge_smart("x", CARDS, clarify=box)
+        assert box == {}

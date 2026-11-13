@@ -742,14 +742,48 @@ _SMART_SCHEMA = {
     "required": ["picks", "nothing_fits"],
     "additionalProperties": False,
 }
+# Addendum 67: an optional clarifying question, appended only when settings.judge_clarify is
+# on, so the tested prompt above is unchanged when it is off.
+_CLARIFY_RULE = (
+    '\n\nClarifying question: if the request leaves open something that would change which '
+    'candidate should be\n'
+    'first (for example which cloud, language or platform, or which of two different '
+    'meanings is meant), and\n'
+    'the candidates you show differ on it, also give "clarify": one short question to the '
+    'asker and 2 to 4\n'
+    'short answer choices. Still choose candidates as usual. Otherwise leave "clarify" with '
+    'an empty question\n'
+    'and no choices: when the request is clear enough, or its answer would not change your '
+    'choices.')
+_CLARIFY_SCHEMA = {
+    "type": "object",
+    "properties": {"question": {"type": "string"},
+                   "choices": {"type": "array", "items": {"type": "string"}}},
+    "required": ["question", "choices"],
+    "additionalProperties": False,
+}
+
+
+def _clarify_from(out: dict) -> dict | None:
+    """The model's clarifying question, if it is usable: a question and 2-4 choices."""
+    c = out.get("clarify") or {}
+    q = str(c.get("question") or "").strip()
+    choices = [str(x).strip()[:120] for x in (c.get("choices") or []) if str(x).strip()]
+    if not q or not 2 <= len(choices) <= 4:
+        return None
+    return {"question": q[:300], "choices": choices}
 
 
 @telemetry.traced("search.judge_smart")
-def judge_smart(intent: str, cards: list[dict], show: int = 3) -> list[dict]:
+def judge_smart(intent: str, cards: list[dict], show: int = 3,
+                clarify: dict | None = None) -> list[dict]:
     """One model call: the model picks and orders up to `show` candidates. Returns, per card,
     {verdict, key, reason}: picked cards get use_as_is or extend and key (position,), the
     rest not_a_fit. Fails safe: on any error every card is 'unknown' with no key, and the
-    results keep search order."""
+    results keep search order.
+
+    With settings.judge_clarify on and a `clarify` dict passed in, a usable clarifying
+    question is written into it as {question, choices}; otherwise it is left empty."""
     from .llm import structured
 
     letters = string.ascii_uppercase
@@ -763,8 +797,12 @@ def judge_smart(intent: str, cards: list[dict], show: int = 3) -> list[dict]:
             for i, c in enumerate(cards))
         schema = json.loads(json.dumps(_SMART_SCHEMA))
         schema["properties"]["picks"]["items"]["properties"]["candidate"]["enum"] = used
+        ask = settings.judge_clarify
+        if ask:
+            schema["properties"]["clarify"] = json.loads(json.dumps(_CLARIFY_SCHEMA))
+            schema["required"].append("clarify")
         out = structured(
-            _SMART_SYSTEM,
+            _SMART_SYSTEM + (_CLARIFY_RULE if ask else ""),
             f"Request: {intent}\n\n{body}\n\nShow at most {show} candidates, best first, each "
             f"labelled with its letter only ({', '.join(used)}). Set nothing_fits only when you "
             "show none.",
@@ -780,8 +818,11 @@ def judge_smart(intent: str, cards: list[dict], show: int = 3) -> list[dict]:
                    "reason": "not chosen by the judge"} for _ in cards]
         for pos, (i, verdict, reason) in enumerate(picks):
             judged[i] = {"verdict": verdict, "key": (pos,), "reason": reason[:400] or verdict}
+        cq = _clarify_from(out) if ask else None
+        if cq and clarify is not None:
+            clarify.update(cq)
         telemetry.annotate({"homegrown.candidates": len(cards), "homegrown.picks": len(picks),
-                            "homegrown.outcome": "ok"})
+                            "homegrown.clarify": bool(cq), "homegrown.outcome": "ok"})
         return judged
     except Exception as e:
         telemetry.annotate({"homegrown.candidates": len(cards),
@@ -831,8 +872,12 @@ def rewrite_query(intent: str) -> str | None:
 @telemetry.traced("search.find_existing")
 def find_existing(user_id: uuid.UUID | str, intent: str,
                   keywords: list[str] | None = None, top: int = 5,
-                  trace: dict | None = None) -> list[Verdict]:
+                  trace: dict | None = None,
+                  clarify: dict | None = None) -> list[Verdict]:
     """Search, then judge. The one function the MCP tool, CLI and API all call.
+
+    `clarify`: an empty dict the smart judge fills with {question, choices} when
+    settings.judge_clarify is on and the request is ambiguous (addendum 67).
 
     settings.verdict_mode picks the judge: "rules" (judge(), evidence only) or "model"
     (judge_with_model(), which reads the request and fails safe to "unknown").
@@ -884,7 +929,7 @@ def find_existing(user_id: uuid.UUID | str, intent: str,
         split = None
         with explain.step(trace, "judge"):
             if kind == "smart":
-                judged = judge_smart(intent, cards, settings.answer_show)
+                judged = judge_smart(intent, cards, settings.answer_show, clarify)
             elif by_requirements:
                 split, judged = judge_requirements(intent, cards)
             else:
@@ -901,6 +946,8 @@ def find_existing(user_id: uuid.UUID | str, intent: str,
                 "shortlist": [str(r["asset_id"]) for r in rows]}
             if split:
                 trace["judge"].update(split)
+            if clarify:
+                trace["judge"]["clarify"] = dict(clarify)
             for r, mv in zip(rows, judged, strict=True):
                 explain.candidate(trace, r["asset_id"])["judge"] = {
                     "verdict": mv["verdict"], "reason": mv.get("reason"),
