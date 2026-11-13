@@ -12,6 +12,8 @@ Webhook handlers only verify and record; the agents never run inside a request.
   POST /hooks/notion             X-Homegrown-Token checked
   GET  /ask?q=...                the answering agent
   GET  /api/org-map              every component the caller may discover, by line of business
+  GET  /api/duplicates           duplicate groups across teams (admin only; 404 unless enabled)
+  POST /api/duplicates/{id}/review?status=confirmed|rejected   (same)
   GET  /ui                       the dashboard (a static page that calls the two above)
   GET  /healthz
 
@@ -137,6 +139,41 @@ def explain_endpoint(question_id: str,
 @app.get("/api/org-map")
 def org_map_endpoint(x_homegrown_user: str | None = Header(default=None)) -> dict:
     return org_map(_caller(x_homegrown_user))
+
+
+def _admin(login: str | None) -> str:
+    """The caller's handle, after the flag (404) and the admin list (403) are checked."""
+    if not settings.duplicates_enabled:
+        raise HTTPException(status_code=404, detail="not found")
+    _caller(login)
+    if login not in settings.admin_users:
+        raise HTTPException(status_code=403, detail="admins only")
+    return login
+
+
+@app.get("/api/duplicates")
+def duplicates_endpoint(x_homegrown_user: str | None = Header(default=None)) -> dict:
+    _admin(x_homegrown_user)
+    from .duplicates import list_groups
+    return list_groups()
+
+
+@app.post("/api/duplicates/{group_id}/review")
+def duplicates_review(group_id: str, status: str,
+                      x_homegrown_user: str | None = Header(default=None)) -> dict:
+    who = _admin(x_homegrown_user)
+    if status not in ("confirmed", "rejected"):
+        raise HTTPException(status_code=422, detail="status must be confirmed or rejected")
+    import uuid
+
+    from .duplicates import review
+    try:
+        uuid.UUID(group_id)
+    except ValueError:
+        raise HTTPException(status_code=404, detail="no such group") from None
+    if not review(group_id, status, who):
+        raise HTTPException(status_code=404, detail="no such group")
+    return {"ok": True, "group_id": group_id, "status": status}
 
 
 @app.get("/ui", include_in_schema=False)

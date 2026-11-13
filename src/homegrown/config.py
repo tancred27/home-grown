@@ -138,6 +138,14 @@ class Settings(BaseSettings):
     docs_webhook_secret: str = ""
     github_org: str = "grafana"
 
+    # Duplicates across teams (docs/architecture.md). Off: the job, the CLI command and the
+    # API routes all refuse, and no other code path changes.
+    duplicates_enabled: bool = False
+    admin_users: list[str] = []         # handles (app_user.login) who may see duplicates
+    dup_search_top: int = 20            # search hits taken per unit as candidates
+    dup_label_cosine: float = 0.85      # label embeddings at least this close count as a match
+    dup_max_candidates: int = 30        # candidates the judge reads per unit
+
     # Traces and metrics over OpenTelemetry (docs/observability.md). Needs the [otel]
     # extra. The endpoint and service name come from the standard
     # OTEL_EXPORTER_OTLP_ENDPOINT and OTEL_SERVICE_NAME variables.

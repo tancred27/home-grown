@@ -59,6 +59,19 @@ path still runs.
 | `HOMEGROWN_CRAWL_AREA_VECTORS` | `20` | Code-area summaries indexed per unit |
 | `HOMEGROWN_REPLAY_FILE` | *(none)* | With `HOMEGROWN_LLM_PROVIDER=replay`: recorded outputs keyed by prompt hash; missing ones are logged to `<file>.missing.jsonl` |
 
+## Duplicates across teams
+
+Off by default. When off, the job, the `homegrown duplicates` command and the
+`/api/duplicates` routes all refuse (exit 2 and 404). Needs db/015_duplicates.sql.
+
+| Variable | Default | |
+|---|---|---|
+| `HOMEGROWN_DUPLICATES_ENABLED` | `false` | Turns the feature on |
+| `HOMEGROWN_ADMIN_USERS` | `[]` | JSON list of user handles allowed to see duplicates over the API, for example `["alice"]`. Anyone else gets 403 |
+| `HOMEGROWN_DUP_SEARCH_TOP` | `20` | Search hits per unit taken as candidates |
+| `HOMEGROWN_DUP_LABEL_COSINE` | `0.85` | Capability labels whose embeddings are at least this close count as a match |
+| `HOMEGROWN_DUP_MAX_CANDIDATES` | `30` | Candidates the judge reads per unit |
+
 Before anything is stored or sent to a model, the crawler removes strings that look like
 keys, tokens, passwords or credentials in URLs, and masks internal hostnames and private
 IP addresses. Summaries are cached by the hash of the code they describe, so a re-crawl

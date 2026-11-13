@@ -5,6 +5,8 @@ Usage:
               [--user alice] [--json]
   homegrown ask "has anyone built a rate limiter?" [--user alice]
   homegrown add-user <login> [--team team-<repo> ...]
+  homegrown duplicates [--json] [--run] [--confirm GROUP_ID] [--reject GROUP_ID]
+              (admin; refuses unless HOMEGROWN_DUPLICATES_ENABLED=true)
 
 The CLI, the API and the MCP server all call the same function, and every call is
 logged to the `question` table with its route.
@@ -68,6 +70,41 @@ def add_user(login: str, teams: list[str]) -> None:
     print(f"user {login!r} ready: org-wide" + "".join(f", {t}" for t in teams))
 
 
+def _duplicates(args) -> int:
+    from . import duplicates as D
+    if not settings.duplicates_enabled:
+        print("Duplicates are off. Set HOMEGROWN_DUPLICATES_ENABLED=true to use them.",
+              file=sys.stderr)
+        return 2
+    if args.run:
+        counts = D.run(args.limit)
+        print(json.dumps(counts) if args.json else
+              "Done: " + ", ".join(f"{k} {v}" for k, v in counts.items()))
+    for gid, status in ((args.confirm, "confirmed"), (args.reject, "rejected")):
+        if gid:
+            try:
+                ok = D.review(gid, status, args.user or "cli")
+            except Exception:
+                ok = False
+            if not ok:
+                print(f"No group {gid}.", file=sys.stderr)
+                return 1
+            print(f"Group {gid} {status}.")
+    if args.run or args.confirm or args.reject:
+        return 0
+    out = D.list_groups()
+    if args.json:
+        print(json.dumps(out, indent=1))
+        return 0
+    if not out["groups"]:
+        print("No duplicate groups. Run: homegrown duplicates --run")
+    for g in out["groups"]:
+        print(f"{g['id']}  [{g['status']}]  {g['capability']}")
+        for m in g["members"]:
+            print(f"    {m['name'].rsplit('/', 1)[-1]}  (team: {m['team'] or '-'})")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     # Model output can contain characters a Windows console can't encode; show '?'.
     for stream in (sys.stdout, sys.stderr):
@@ -94,8 +131,19 @@ def main(argv: list[str] | None = None) -> int:
     u.add_argument("login")
     u.add_argument("--team", action="append", default=[],
                    help="also see assets scoped to this team (repeatable)")
+    d = sub.add_parser("duplicates", help="units owned by different teams that do the same "
+                       "job (admin; needs HOMEGROWN_DUPLICATES_ENABLED=true)")
+    d.add_argument("--json", action="store_true")
+    d.add_argument("--run", action="store_true", help="run the job, then list the groups")
+    d.add_argument("--limit", type=int, default=None, help="with --run: first N units only")
+    d.add_argument("--confirm", metavar="GROUP_ID")
+    d.add_argument("--reject", metavar="GROUP_ID")
+    d.add_argument("--user", default=os.environ.get("HOMEGROWN_USER"))
     args = ap.parse_args(argv)
     telemetry.init("cli")
+
+    if args.cmd == "duplicates":
+        return _duplicates(args)
 
     if args.cmd == "add-user":
         add_user(args.login, args.team)

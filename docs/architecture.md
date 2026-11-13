@@ -185,6 +185,27 @@ theirs, and they contain only assets that person could already discover. Telemet
 carries any of it. `scripts/explain_report.py` reads traces to show where expected answers
 were lost (not indexed, not retrieved, ranked too low, judged not a fit, not shown).
 
+## Duplicates across teams (behind a flag)
+
+Off by default (`HOMEGROWN_DUPLICATES_ENABLED`). It finds units owned by different teams
+that do the same job, so an admin can decide whether they should share one. It is an admin
+batch job, so it reads the whole org with the owner connection; the results live in tables
+the application role cannot read (db/015_duplicates.sql) and are shown only to
+`HOMEGROWN_ADMIN_USERS`.
+
+1. **Two candidate paths.** For each unit, ordinary search with its purpose line as the
+   request (top 20), and a match on capability labels: a model writes 1 to 3 short labels
+   per unit ("secrets rotation"), and units whose labels match exactly or embed close
+   together (cosine 0.85) become candidates. Units of the same team are dropped, and the
+   two lists are merged (both first, then search only, then labels only) up to 30.
+2. **The judge.** One model call per unit reads the cards only and marks each candidate
+   `same`, `overlapping` or `different`, with a one-sentence reason. A failed call leaves
+   that unit unjudged.
+3. **Groups.** Units joined by `same` edges form a group, stored as `proposed`.
+4. **Review.** An admin confirms or rejects a group (`homegrown duplicates --confirm ID`,
+   or `POST /api/duplicates/{id}/review`). A reviewed group keeps its status when the same
+   members come up again. Nothing is deleted or deprecated.
+
 ## Entry points
 
 | | |
